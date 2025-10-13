@@ -42,6 +42,7 @@ class Config(BaseConfig):  # Inheritance
     """YAML config loader (Inheritance, Polymorphism)."""
 
     from .constants import DEFAULT_PDF_PATH
+
     _DEFAULT_PDF = DEFAULT_PDF_PATH
 
     def __str__(self) -> str:  # Magic Method

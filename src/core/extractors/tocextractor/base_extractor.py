@@ -45,7 +45,9 @@ class BaseTOCExtractor(ABC):  # Abstraction
 
         return self._create_toc_entry(section_id, title, page_str)
 
-    def _extract_groups(self, groups: tuple[str, ...], counter: int) -> tuple[str, str, str]:
+    def _extract_groups(
+        self, groups: tuple[str, ...], counter: int
+    ) -> tuple[str, str, str]:
         """Extract section_id, title, page_str from groups (Encapsulation)."""
         if len(groups) == 2:
             title, page_str = groups
@@ -55,7 +57,9 @@ class BaseTOCExtractor(ABC):  # Abstraction
             return section_id, title, page_str
         return "", "", ""
 
-    def _create_toc_entry(self, section_id: str, title: str, page_str: str) -> Optional[TOCEntry]:
+    def _create_toc_entry(
+        self, section_id: str, title: str, page_str: str
+    ) -> Optional[TOCEntry]:
         """Create TOC entry if valid (Encapsulation)."""
         try:
             page = int(page_str)
@@ -83,5 +87,3 @@ class BaseTOCExtractor(ABC):  # Abstraction
     def _calculate_level(self, section_id: str) -> int:
         """Calculate hierarchy level (Encapsulation)."""
         return section_id.count(".") + 1 if "." in section_id else 1
-
-

@@ -20,8 +20,7 @@ class TOCExtractor(BaseTOCExtractor):  # Inheritance
             doc: Any = fitz.open(str(pdf_path))
             doc_length: int = len(doc)
             content = "".join(
-                str(doc[page_num].get_text())
-                for page_num in range(min(20, doc_length))
+                str(doc[page_num].get_text()) for page_num in range(min(20, doc_length))
             )
             doc.close()
             return content

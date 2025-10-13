@@ -16,6 +16,7 @@ class BaseAnalyzer(ABC):  # Abstraction
 
 class PatternAnalyzer(BaseAnalyzer):  # Inheritance
     """Pattern-based content analyzer."""
+
     def __init__(self) -> None:
         patterns = {  # Encapsulation
             "requirement": r"\b(shall|must|required)\b",

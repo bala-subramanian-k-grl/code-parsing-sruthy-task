@@ -1,4 +1,3 @@
-
 """Base classes implementing OOP principles."""
 
 from abc import ABC, abstractmethod

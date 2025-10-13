@@ -1,4 +1,3 @@
-
 """Validation report generator with OOP principles."""
 
 import json

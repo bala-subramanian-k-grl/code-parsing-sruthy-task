@@ -21,7 +21,9 @@ class PDFExtractor(BaseExtractor):  # Inheritance
     def __repr__(self) -> str:  # Magic Method
         return f"PDFExtractor(pdf_path={self._pdf_path!r})"
 
-    def __call__(self, max_pages: Optional[int] = None) -> list[dict[str, Any]]:  # Magic Method
+    def __call__(
+        self, max_pages: Optional[int] = None
+    ) -> list[dict[str, Any]]:  # Magic Method
         return self.extract_content(max_pages)
 
     def __len__(self) -> int:  # Magic Method
@@ -68,7 +70,9 @@ class PDFExtractor(BaseExtractor):  # Inheritance
         except Exception as e:
             self._logger.warning("Error extracting page %s: %s", page_num, e)
 
-    def _process_block(self, block: dict[str, Any], block_num: int, page_num: int) -> Iterator[dict[str, Any]]:
+    def _process_block(
+        self, block: dict[str, Any], block_num: int, page_num: int
+    ) -> Iterator[dict[str, Any]]:
         """Process individual block (Encapsulation)."""
         if "lines" not in block:
             return
@@ -85,7 +89,12 @@ class PDFExtractor(BaseExtractor):  # Inheritance
         return bool(text.strip()) and len(text) > 5
 
     def _create_content_item(
-        self, text: str, content_type: str, block_num: int, page_num: int, block: dict[str, Any]
+        self,
+        text: str,
+        content_type: str,
+        block_num: int,
+        page_num: int,
+        block: dict[str, Any],
     ) -> dict[str, Any]:
         """Create content item dictionary (Encapsulation)."""
         title = self._get_title(text)

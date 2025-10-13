@@ -9,6 +9,7 @@ from .base_analyzer import PatternAnalyzer
 
 class ContentAnalyzer:  # Composition
     """Content analyzer using pattern matching."""
+
     def __init__(self) -> None:
         self._analyzer = PatternAnalyzer()  # Encapsulation
 

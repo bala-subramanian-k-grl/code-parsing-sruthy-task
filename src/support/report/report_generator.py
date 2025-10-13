@@ -31,8 +31,10 @@ class ReportFactory:  # Factory pattern
 
         if clean_type == "json":
             from .jsonreport_generator import JSONReportGenerator
+
             return JSONReportGenerator(output_dir)  # Polymorphism
         elif clean_type == "excel":
             from .excel_report import ExcelReportGenerator
+
             return ExcelReportGenerator(output_dir)  # Polymorphism
         raise ValueError(f"Invalid report type: {report_type}")

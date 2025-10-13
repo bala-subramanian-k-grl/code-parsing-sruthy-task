@@ -41,7 +41,7 @@ class XLSValidationTest(BaseValidationTest):  # Inheritance
             toc_file.unlink(missing_ok=True)
             spec_file.unlink(missing_ok=True)
             return result.exists()
-        except (ImportError):
+        except ImportError:
             # openpyxl not available - this is expected in some environments
             return True
         except Exception as e:

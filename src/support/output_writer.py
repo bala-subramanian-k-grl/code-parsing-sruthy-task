@@ -1,4 +1,3 @@
-
 """Output writers with OOP principles."""
 
 import json

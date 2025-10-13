@@ -19,5 +19,5 @@ __all__ = [
     "log_execution",
     "timing",
     "validate_path",
-    "retry"
+    "retry",
 ]

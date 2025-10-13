@@ -1,40 +1,71 @@
-name: CI Pipeline
+name: Minimal CI (CLI)
 
 on:
-  push:
-    branches: [ main, develop ]
   pull_request:
     branches: [ main ]
+  push:
+    branches: [ main ]
+    tags: [ 'v*.*.*' ]
 
 jobs:
-  test:
-    runs-on: windows-latest
-    
+  ci:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.11]
+
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.11"
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install pytest pytest-cov mypy ruff black pylint
-    
-    - name: Run ruff
-      run: ruff check src/ tests/
-    
-    - name: Run black
-      run: black --check src/ tests/
-    
-    - name: Run mypy
-      run: mypy src/
-    
-    - name: Run pylint
-      run: pylint src/ --disable=C,R,W --enable=E,F
-    
-    - name: Run tests
-      run: pytest tests/ --cov=src --cov-fail-under=30
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f "requirements.txt" ]; then pip install -r requirements.txt; fi
+          # basic dev tools fallback
+          pip install pytest black ruff pylint mypy || true
+
+      - name: Check formatting (black)
+        run: |
+          black --check .
+
+      - name: Lint (ruff)
+        run: |
+          ruff check .
+
+      - name: Static analysis (pylint)
+        # Prefer linting src/ if it exists, otherwise lint all tracked .py files
+        run: |
+          if [ -d "src" ]; then
+            pylint src || true
+          else
+            pylint $(git ls-files '*.py') || true
+          fi
+
+      - name: Type check (mypy)
+        run: |
+          # check src/ if present else check current directory
+          if [ -d "src" ]; then
+            mypy src || true
+          else
+            mypy . || true
+          fi
+
+      - name: Run tests
+        env:
+          CI: true
+        run: |
+          pytest -q

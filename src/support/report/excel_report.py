@@ -12,6 +12,7 @@ except ImportError:
     _has_openpyxl = False
     openpyxl = None  # type: ignore
 
+
 class ExcelReportGenerator(BaseReportGenerator):  # Inheritance
     def generate(self, data: dict[str, Any]) -> Path:  # Polymorphism
         if not _has_openpyxl or openpyxl is None:

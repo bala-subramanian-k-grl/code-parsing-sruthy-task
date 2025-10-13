@@ -22,4 +22,5 @@ class BaseExtractor(ABC):  # Abstraction
     def _get_fitz(self) -> Any:  # Encapsulation
         """Get fitz module."""
         import fitz
+
         return fitz

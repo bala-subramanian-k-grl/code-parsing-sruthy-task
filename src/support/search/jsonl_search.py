@@ -1,4 +1,3 @@
-
 import json
 from typing import Any
 
@@ -36,5 +35,7 @@ class JSONLSearcher(BaseSearcher):  # Inheritance
         except FileNotFoundError:
             self._logger.error(f"File not found: {self._file_path}")
 
-        self._logger.info(f"Search completed: Found {len(matches)} matches for '{term}'")
+        self._logger.info(
+            f"Search completed: Found {len(matches)} matches for '{term}'"
+        )
         return matches

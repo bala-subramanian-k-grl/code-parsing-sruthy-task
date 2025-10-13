@@ -18,6 +18,5 @@ __all__ = [
     "ExcelReportGenerator",
     "JSONReportGenerator",
     "SearchApp",
-    "SearchDisplay"
-
+    "SearchDisplay",
 ]
