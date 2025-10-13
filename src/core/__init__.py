@@ -1,4 +1,4 @@
-# Core business logic modules
+"""Core business logic modules."""
 from .models import TOCEntry, ContentItem
 from .orchestrator.pipeline_orchestrator import PipelineOrchestrator
 from .extractors.pdfextractor.pdf_extractor import PDFExtractor

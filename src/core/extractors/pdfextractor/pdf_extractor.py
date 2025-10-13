@@ -1,4 +1,4 @@
-
+"""PDF content extractor module."""
 from collections.abc import Iterator
 from pathlib import Path
 from typing import Any, Optional
@@ -14,20 +14,21 @@ class PDFExtractor(BaseExtractor):  # Inheritance
     def __init__(self, pdf_path: Path):
         super().__init__(pdf_path)
         self._analyzer = ContentAnalyzer()  # Composition
-    
+
     def __str__(self) -> str:  # Magic Method
         return f"PDFExtractor({self._pdf_path.name})"
-    
+
     def __repr__(self) -> str:  # Magic Method
         return f"PDFExtractor(pdf_path={self._pdf_path!r})"
-    
+
     def __call__(self, max_pages: Optional[int] = None) -> list[dict[str, Any]]:  # Magic Method
         return self.extract_content(max_pages)
-    
+
     def __len__(self) -> int:  # Magic Method
         return len(self.extract())
 
     def extract(self) -> list[dict[str, Any]]:  # Polymorphism
+        """Extract content from PDF."""
         return list(self.extract_structured_content())
 
     @timing
@@ -36,6 +37,7 @@ class PDFExtractor(BaseExtractor):  # Inheritance
         return list(self.extract_structured_content(max_pages))
 
     def _validate_path(self, path: Path) -> Path:  # Encapsulation
+        """Validate PDF path."""
         if not path.exists():
             raise FileNotFoundError(f"PDF not found: {path}")
         return path.resolve()  # Prevent path traversal
@@ -44,37 +46,37 @@ class PDFExtractor(BaseExtractor):  # Inheritance
         self, max_pages: Optional[int] = None
     ) -> Iterator[dict[str, Any]]:
         fitz = self._get_fitz()
-        doc = fitz.open(str(self._pdf_path))  # type: ignore
+        doc = fitz.open(str(self._pdf_path))
         try:
-            doc_length: int = len(doc)  # type: ignore
+            doc_length: int = len(doc)
             total_pages = (
                 doc_length if max_pages is None else min(max_pages, doc_length)
             )
             for page_num in range(total_pages):
                 yield from self._extract_page_content(doc[page_num], page_num)
         finally:
-            doc.close()  # type: ignore
+            doc.close()
 
     def _extract_page_content(
         self, page: Any, page_num: int
     ) -> Iterator[dict[str, Any]]:
         """Fast page content extraction (Encapsulation)."""
         try:
-            blocks = page.get_text("dict")["blocks"]  # type: ignore
+            blocks = page.get_text("dict")["blocks"]
             for block_num, block in enumerate(blocks):
                 yield from self._process_block(block, block_num, page_num)
         except Exception as e:
-            self._logger.warning(f"Error extracting page {page_num}: {e}")
+            self._logger.warning("Error extracting page %s: %s", page_num, e)
 
     def _process_block(self, block: dict[str, Any], block_num: int, page_num: int) -> Iterator[dict[str, Any]]:
         """Process individual block (Encapsulation)."""
         if "lines" not in block:
             return
-        
+
         text = self._get_block_text(block)
         if not self._is_valid_text(text):
             return
-        
+
         content_type = self._analyzer.classify(text)
         yield self._create_content_item(text, content_type, block_num, page_num, block)
 
@@ -82,7 +84,9 @@ class PDFExtractor(BaseExtractor):  # Inheritance
         """Check if text is valid for processing (Encapsulation)."""
         return bool(text.strip()) and len(text) > 5
 
-    def _create_content_item(self, text: str, content_type: str, block_num: int, page_num: int, block: dict[str, Any]) -> dict[str, Any]:
+    def _create_content_item(
+        self, text: str, content_type: str, block_num: int, page_num: int, block: dict[str, Any]
+    ) -> dict[str, Any]:
         """Create content item dictionary (Encapsulation)."""
         title = self._get_title(text)
         return {
@@ -130,4 +134,4 @@ class PDFExtractor(BaseExtractor):  # Inheritance
                             "bbox": [],
                         }
         except Exception as e:
-            self._logger.warning(f"Table extraction failed: {e}")
+            self._logger.warning("Table extraction failed: %s", e)

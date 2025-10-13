@@ -1,4 +1,4 @@
-
+"""USB PD Specification Parser - Pipeline Orchestrator Module"""
 from typing import Any
 
 from src.support.output_writer import JSONLWriter

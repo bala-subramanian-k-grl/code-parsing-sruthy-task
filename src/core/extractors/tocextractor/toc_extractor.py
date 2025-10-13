@@ -1,4 +1,4 @@
-
+"""TOC extractor implementation."""
 from pathlib import Path
 from typing import Any
 
@@ -15,20 +15,20 @@ class TOCExtractor(BaseTOCExtractor):  # Inheritance
 
     def _get_content(self, pdf_path: Path) -> str:  # Encapsulation
         try:
-            import fitz  # type: ignore
+            import fitz
 
-            doc: Any = fitz.open(str(pdf_path))  # type: ignore
-            doc_length: int = len(doc)  # type: ignore
+            doc: Any = fitz.open(str(pdf_path))
+            doc_length: int = len(doc)
             content = "".join(
-                str(doc[page_num].get_text())  # type: ignore
+                str(doc[page_num].get_text())
                 for page_num in range(min(20, doc_length))
             )
-            doc.close()  # type: ignore
+            doc.close()
             return content
         except Exception as e:
             import logging
 
-            logging.getLogger(__name__).warning(f"PDF read error: {e}")
+            logging.getLogger(__name__).warning("PDF read error: %s", e)
             return ""
 
     def _extract_entries(self, content: str) -> list[TOCEntry]:
@@ -47,6 +47,6 @@ class TOCExtractor(BaseTOCExtractor):  # Inheritance
                 continue
             entry = self._parse_line(line, counter)
             if entry:
-                entries.append(entry)  # type: ignore
+                entries.append(entry)
                 counter += 1
         return entries

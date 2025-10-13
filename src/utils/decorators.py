@@ -14,13 +14,13 @@ def log_execution(func: F) -> F:
     @functools.wraps(func)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
         logger = logging.getLogger(func.__module__)
-        logger.info(f"Executing {func.__name__}")
+        logger.info("Executing %s", func.__name__)
         try:
             result = func(*args, **kwargs)
-            logger.info(f"Completed {func.__name__} successfully")
+            logger.info("Completed %s successfully", func.__name__)
             return result
         except Exception as e:
-            logger.error(f"Error in {func.__name__}: {e}")
+            logger.error("Error in %s: %s", func.__name__, e)
             raise
     return wrapper  # type: ignore
 
@@ -33,7 +33,7 @@ def timing(func: F) -> F:
         result = func(*args, **kwargs)
         end_time = time.time()
         logger = logging.getLogger(func.__module__)
-        logger.info(f"{func.__name__} took {end_time - start_time:.2f} seconds")
+        logger.info("%s took %.2f seconds", func.__name__, end_time - start_time)
         return result
     return wrapper  # type: ignore
 
@@ -62,9 +62,9 @@ def retry(max_attempts: int = 3) -> Callable[[F], F]:
                     return func(*args, **kwargs)
                 except Exception as e:
                     if attempt == max_attempts - 1:
-                        logger.error(f"{func.__name__} failed after {max_attempts} attempts")
+                        logger.error("%s failed after %s attempts", func.__name__, max_attempts)
                         raise
-                    logger.warning(f"{func.__name__} attempt {attempt + 1} failed: {e}")
+                    logger.warning("%s attempt %s failed: %s", func.__name__, attempt + 1, e)
             return None
         return wrapper  # type: ignore
     return decorator

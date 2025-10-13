@@ -31,13 +31,13 @@ class TOCEntry(BaseModel):  # Encapsulation
     level: int = Field(gt=0)  # Encapsulation
     parent_id: Optional[str] = Field(default=None)  # Encapsulation
     tags: list[str] = Field(default_factory=list)  # Encapsulation
-    
+
     def __str__(self) -> str:  # Magic Method
         return f"TOCEntry({self.section_id}: {self.title})"
-    
+
     def __hash__(self) -> int:  # Magic Method
         return hash((self.section_id, self.page))
-    
+
     def __eq__(self, other: object) -> bool:  # Magic Method
         if not isinstance(other, TOCEntry):
             return False

@@ -1,4 +1,4 @@
-# Support modules for secondary features
+"""Support Module Initialization"""
 from src.support.output_writer import JSONLWriter
 from src.support.report.report_generator import ReportFactory
 from src.support.report.excel_report import ExcelReportGenerator

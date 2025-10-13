@@ -4,7 +4,7 @@
 from abc import ABC, abstractmethod
 
 from src.config import Config
-from src.models import BaseContent, PageContent
+from src.core.models import BaseContent, PageContent
 
 
 class BaseTestCase(ABC):  # Abstraction

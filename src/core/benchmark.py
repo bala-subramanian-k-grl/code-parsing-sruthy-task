@@ -9,7 +9,7 @@ from typing import Any
 
 
 class BaseBenchmark(ABC):  # Abstraction
-    def __init__(self, name: str):
+    def __init__(self, name: str) -> None:
         self._name = name  # Encapsulation
         self._logger = logging.getLogger(__name__)  # Encapsulation
 
@@ -42,7 +42,7 @@ class ModelBenchmark(BaseBenchmark):  # Inheritance
 
 
 class BenchmarkRunner:  # Encapsulation
-    def __init__(self):
+    def __init__(self) -> None:
         self._benchmarks: list[BaseBenchmark] = []  # Encapsulation
 
     def add(self, benchmark: BaseBenchmark) -> None:  # Polymorphism
@@ -54,7 +54,7 @@ class BenchmarkRunner:  # Encapsulation
             print(f"{result['name']}: {result['time']:.3f}s ({result['ops']} ops)")
 
 
-def main():
+def main() -> None:
     logging.basicConfig(level=logging.INFO)
     runner = BenchmarkRunner()
     runner.add(ConfigBenchmark("Config"))

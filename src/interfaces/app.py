@@ -10,7 +10,7 @@ from src.core.orchestrator.pipeline_orchestrator import PipelineOrchestrator
 
 
 class BaseApp(ABC):  # Abstraction
-    def __init__(self):
+    def __init__(self) -> None:
         self._logger = logging.getLogger(self.__class__.__name__)
         logging.basicConfig(level=logging.INFO)
 
@@ -20,7 +20,7 @@ class BaseApp(ABC):  # Abstraction
 
 
 class CLIApp(BaseApp):  # Inheritance
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self._parser = self._create_parser()  # Encapsulation
 
@@ -84,5 +84,5 @@ class CLIApp(BaseApp):  # Inheritance
             sys.exit(1)
 
 
-def main():
+def main() -> None:
     CLIApp().run()  # Factory pattern + Polymorphism

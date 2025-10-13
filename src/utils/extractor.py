@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Optional
 
 try:
-    import fitz  # type: ignore
+    import fitz
 except ImportError as e:
     raise ImportError("PyMuPDF required. Install: pip install PyMuPDF==1.24.9") from e
 
@@ -16,7 +16,7 @@ from ..config.constants import DEFAULT_DOC_TITLE
 
 
 class PDFNotFoundError(Exception):  # Encapsulation
-    pass
+    """PDF file not found error."""
 
 
 class BaseExtractor:  # Abstraction
@@ -27,6 +27,7 @@ class BaseExtractor:  # Abstraction
         self._logger = logging.getLogger(__name__)  # Encapsulation
 
     def _validate_path(self, path: Path) -> Path:  # Encapsulation
+        """Validate PDF path securely."""
         if not path.exists():
             raise PDFNotFoundError(f"PDF not found: {path}")
         safe_path = path.resolve()
@@ -44,51 +45,57 @@ class FrontPageExtractor(BaseExtractor):  # Inheritance
     def extract_pages(
         self, max_pages: Optional[int] = 10
     ) -> Iterator[str]:  # Polymorphism
-        doc: Optional[fitz.Document] = None  # type: ignore
+        """Extract pages from PDF."""
+        doc: Optional[fitz.Document] = None
         try:
-            doc = fitz.open(str(self._pdf_path))  # type: ignore
-            doc_len: int = len(doc)  # type: ignore
+            doc = fitz.open(str(self._pdf_path))
+            if doc is None:
+                return
+            doc_len: int = len(doc)
             total_pages = doc_len if max_pages is None else min(max_pages, doc_len)
             for i in range(total_pages):
                 try:
-                    yield str(doc[i].get_text("text") or "")  # type: ignore
-                except (fitz.FileDataError, fitz.FileNotFoundError) as e:  # type: ignore
-                    self._logger.warning(f"PDF error on page {i}: {e}")
+                    yield str(doc[i].get_text("text") or "")
+                except (fitz.FileDataError, fitz.FileNotFoundError) as e:
+                    self._logger.warning("PDF error on page %s: %s", i, e)
                     yield ""
-        except (fitz.FileDataError, fitz.FileNotFoundError, OSError) as e:  # type: ignore
-            self._logger.error(f"Cannot open PDF file: {e}")
+        except (fitz.FileDataError, fitz.FileNotFoundError, OSError) as e:
+            self._logger.error("Cannot open PDF file: %s", e)
             return
         finally:
             if doc:
-                doc.close()  # type: ignore
+                doc.close()
 
 
 class TitleExtractor(BaseExtractor):  # Inheritance
     """Title extractor (Inheritance, Polymorphism)."""
 
     def get_title(self) -> str:  # Polymorphism
+        """Get PDF title from metadata."""
         try:
-            with fitz.open(str(self._pdf_path)) as doc:  # type: ignore
-                metadata = doc.metadata  # type: ignore
-                title = metadata.get("title") if metadata else None  # type: ignore
+            with fitz.open(str(self._pdf_path)) as doc:
+                metadata = doc.metadata
+                title = metadata.get("title") if metadata else None
                 return (
                     title
                     if isinstance(title, str)
                     else DEFAULT_DOC_TITLE
                 )
-        except (fitz.FileDataError, fitz.FileNotFoundError, OSError) as e:  # type: ignore
-            self._logger.warning(f"Cannot read PDF metadata: {e}")
+        except (fitz.FileDataError, fitz.FileNotFoundError, OSError) as e:
+            self._logger.warning("Cannot read PDF metadata: %s", e)
             return DEFAULT_DOC_TITLE
 
 
 # Factory functions (Abstraction)
 def extract_front_pages(pdf_path: Path, max_pages: Optional[int] = 10) -> Iterator[str]:
+    """Extract front pages from PDF."""
     return FrontPageExtractor(pdf_path).extract_pages(max_pages)
 
 
 def get_doc_title(pdf_path: Path) -> str:
+    """Get document title from PDF."""
     try:
         return TitleExtractor(pdf_path).get_title()
     except (PDFNotFoundError, OSError, ValueError) as e:
-        logging.getLogger(__name__).error(f"Cannot extract title: {e}")
+        logging.getLogger(__name__).error("Cannot extract title: %s", e)
         return DEFAULT_DOC_TITLE

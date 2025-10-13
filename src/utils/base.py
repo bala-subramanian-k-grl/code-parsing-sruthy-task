@@ -1,4 +1,4 @@
-# USB PD Specification Parser - Base Classes Module
+
 """Base classes implementing OOP principles."""
 
 from abc import ABC, abstractmethod

@@ -30,7 +30,7 @@ class ConfigPerfTest(BasePerfTest):  # Inheritance
 
 class ModelPerfTest(BasePerfTest):  # Inheritance
     def measure(self) -> bool:  # Polymorphism
-        from src.models import BaseContent
+        from src.core.models import BaseContent
 
         time_taken = self._time_it(lambda: BaseContent(page=1, content="test"))
         return time_taken < 1.0

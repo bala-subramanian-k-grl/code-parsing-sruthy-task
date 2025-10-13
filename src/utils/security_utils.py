@@ -1,4 +1,4 @@
-# USB PD Specification Parser - Security Utilities Module
+    
 """Security utilities with OOP principles."""
 
 from pathlib import Path

@@ -54,8 +54,8 @@ def create_test_case(test_type: str = "mock") -> BaseTestCase:
     """Factory function for test cases (Polymorphism)."""
     if test_type == "mock":
         return MockTestCase()
-    else:
-        return MockTestCase()  # Default to mock
+    # Default case - could be extended for other test types
+    return MockTestCase()
 
 
 __all__ = ["BaseTestCase", "MockTestCase", "TestHelper", "create_test_case"]

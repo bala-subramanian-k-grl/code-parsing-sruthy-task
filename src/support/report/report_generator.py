@@ -1,4 +1,3 @@
-# USB PD Specification Parser - Report Generator Module
 """Minimal report generator with OOP principles."""
 
 

@@ -17,17 +17,18 @@ class BaseExtractorTest(ABC):  # Abstraction
 
 class MockExtractorTest(BaseExtractorTest):  # Inheritance
     def run_test(self) -> bool:  # Polymorphism
-        from src.pdf_extractor import BaseExtractor
+        from src.utils.base import BaseExtractor
 
         class MockExtractor(BaseExtractor):
-            def extract(self):
-                return ["mock"]
+            def extract(self, file_path: Path) -> list[dict[str, Any]]:
+                return [{"mock": "data"}]
 
         try:
             test_file = Path("test.pdf")
             test_file.touch()
-            extractor = MockExtractor(test_file)
-            self._result = extractor.extract()
+            config = {"test": "config"}
+            extractor = MockExtractor(config)
+            self._result = extractor.extract(test_file)
             test_file.unlink()
             return len(self._result) > 0
         except (OSError, ValueError, RuntimeError):

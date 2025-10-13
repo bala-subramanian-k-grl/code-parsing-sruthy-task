@@ -28,7 +28,7 @@ class ConfigEdgeTest(BaseEdgeTest):  # Inheritance
 
 class ModelEdgeTest(BaseEdgeTest):  # Inheritance
     def test_edge_case(self) -> bool:  # Polymorphism
-        from src.models import BaseContent
+        from src.core.models import BaseContent
 
         try:
             BaseContent(page=1, content="test")

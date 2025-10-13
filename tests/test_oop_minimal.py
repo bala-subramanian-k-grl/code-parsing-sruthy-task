@@ -35,7 +35,7 @@ class ModelTest(BaseTest):  # Inheritance
     """Model test (Inheritance, Polymorphism)."""
 
     def run(self) -> bool:  # Polymorphism
-        from src.models import BaseContent
+        from src.core.models import BaseContent
 
         content = BaseContent(page=1, content="test")
         return content.page == 1

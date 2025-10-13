@@ -4,8 +4,7 @@
 import logging
 from pathlib import Path
 from typing import Optional
-from .base_logger import BaseLoggerFactory 
-
+from .base_logger import BaseLoggerFactory
 
 
 class LoggerFactory(BaseLoggerFactory):  # Inheritance
@@ -79,5 +78,6 @@ class LoggerFactory(BaseLoggerFactory):  # Inheritance
 def get_logger(
     name: str = "usb_pd_parser", output_dir: Optional[Path] = None, debug: bool = False
 ) -> logging.Logger:  # Factory function
+    """Get logger instance."""
     factory = LoggerFactory(name)  # Polymorphism
     return factory.create_logger(output_dir, debug)

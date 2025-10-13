@@ -1,3 +1,4 @@
+"""Base logger implementation."""
 import logging
 from abc import ABC, abstractmethod
 from pathlib import Path
@@ -33,6 +34,7 @@ class BaseLoggerFactory(ABC):  # Abstraction
     def create_logger(
         self, output_dir: Optional[Path] = None, debug: bool = False
     ) -> logging.Logger:
+        """Create logger instance."""
         pass
 
     def _create_formatter(self) -> logging.Formatter:  # Encapsulation

@@ -1,4 +1,4 @@
-# USB PD Specification Parser - Validation Generator Module
+
 """Validation report generator with OOP principles."""
 
 import json

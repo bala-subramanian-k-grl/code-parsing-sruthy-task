@@ -1,3 +1,4 @@
+"""PDF extractor modules."""
 from .base_extractor import BaseExtractor
 from .pdf_extractor import PDFExtractor
 

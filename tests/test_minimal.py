@@ -23,7 +23,7 @@ class ConfigTest(BaseTest):  # Inheritance
 
 class ModelTest(BaseTest):  # Inheritance
     def execute(self) -> bool:  # Polymorphism
-        from src.models import BaseContent
+        from src.core.models import BaseContent
 
         return BaseContent(page=1, content="test").page == 1
 

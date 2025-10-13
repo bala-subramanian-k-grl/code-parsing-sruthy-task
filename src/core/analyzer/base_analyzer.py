@@ -7,13 +7,17 @@ from abc import ABC, abstractmethod
 
 
 class BaseAnalyzer(ABC):  # Abstraction
+    """Abstract base analyzer."""
+
     @abstractmethod  # Abstraction
     def analyze(self, text: str) -> str:
-        pass
+        """Analyze text and return content type."""
+        ...
 
 
 class PatternAnalyzer(BaseAnalyzer):  # Inheritance
-    def __init__(self):
+    """Pattern-based content analyzer."""
+    def __init__(self) -> None:
         patterns = {  # Encapsulation
             "requirement": r"\b(shall|must|required)\b",
             "definition": r":",
@@ -31,4 +35,3 @@ class PatternAnalyzer(BaseAnalyzer):  # Inheritance
             if pattern.search(text):
                 return str(content_type)
         return "paragraph"
-

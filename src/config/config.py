@@ -43,13 +43,13 @@ class Config(BaseConfig):  # Inheritance
 
     from .constants import DEFAULT_PDF_PATH
     _DEFAULT_PDF = DEFAULT_PDF_PATH
-    
+
     def __str__(self) -> str:  # Magic Method
         return f"Config(pdf={self.pdf_input_file.name}, output={self.output_directory.name})"
-    
+
     def __getitem__(self, key: str) -> Any:  # Magic Method
         return self._config[key]
-    
+
     def __contains__(self, key: str) -> bool:  # Magic Method
         return key in self._config
 
@@ -76,6 +76,7 @@ class Config(BaseConfig):  # Inheritance
 
     @property  # Encapsulation
     def pdf_input_file(self) -> Path:
+        """Get PDF input file path."""
         try:
             path = Path(self._config.get("pdf_input_file", self._DEFAULT_PDF))
             return self._validate_path(str(path))
@@ -84,12 +85,15 @@ class Config(BaseConfig):  # Inheritance
 
     @property  # Encapsulation
     def output_directory(self) -> Path:
+        """Get output directory path."""
         path = Path(self._config.get("output_directory", "outputs"))
         return self._validate_path(str(path))
 
     @property  # Encapsulation
     def max_pages(self) -> Optional[int]:
+        """Get max pages setting."""
         return self._config.get("max_pages")
 
     def get(self, key: str, default: Any = None) -> Any:  # Abstraction
+        """Get config value with default."""
         return self._config.get(key, default)

@@ -1,4 +1,4 @@
-# USB PD Specification Parser - Output Writer Module
+
 """Output writers with OOP principles."""
 
 import json
