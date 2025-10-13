@@ -7,16 +7,16 @@ import sys
 from abc import ABC, abstractmethod
 from pathlib import Path
 
-from src.support.search.jsonl_search import JSONLSearcher
-from src.support.search.search_display import SearchDisplay
-from src.support.search.search_app import SearchApp
-from src.utils.decorators import timing
 from src.config.constants import (
     DEFAULT_SEARCH_FILE,
     DEFAULT_OUTPUT_DIR,
     MAX_TERM_LENGTH,
 )
 from src.loggers.logger import get_logger
+from src.support.search.jsonl_search import JSONLSearcher
+from src.support.search.search_app import SearchApp
+from src.support.search.search_display import SearchDisplay
+from src.utils.decorators import timing
 
 
 class BaseRunner(ABC):  # Abstraction
