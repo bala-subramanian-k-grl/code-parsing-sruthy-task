@@ -5,7 +5,7 @@ from typing import Any, Optional
 
 from src.core.analyzer.content_analyzer import ContentAnalyzer
 from src.core.extractors.pdfextractor.base_extractor import BaseExtractor
-from src.utils.decorators import timing, log_execution
+from src.utils.decorators import log_execution, timing
 
 
 class PDFExtractor(BaseExtractor):  # Inheritance

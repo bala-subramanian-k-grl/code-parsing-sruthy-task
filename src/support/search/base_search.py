@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any
 
+
 class BaseSearcher(ABC):  # Abstraction
     def __init__(self, file_path: str):
         self._file_path = self._validate_path(file_path)  # Encapsulation

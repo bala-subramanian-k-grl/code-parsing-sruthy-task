@@ -6,7 +6,6 @@ from pathlib import Path
 from typing import Any
 
 
-
 class BaseReportGenerator(ABC):  # Abstraction
     def __init__(self, output_dir: Path):
         self._output_dir = output_dir  # Encapsulation

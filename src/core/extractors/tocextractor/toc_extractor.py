@@ -2,8 +2,8 @@
 from pathlib import Path
 from typing import Any
 
-from src.core.models import TOCEntry
 from src.core.extractors.tocextractor.base_extractor import BaseTOCExtractor
+from src.core.models import TOCEntry
 
 
 class TOCExtractor(BaseTOCExtractor):  # Inheritance

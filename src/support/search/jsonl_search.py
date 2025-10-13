@@ -1,8 +1,12 @@
 
 import json
 from typing import Any
+
+from src.utils.decorators import log_execution, timing
+
 from .base_search import BaseSearcher  # Importing the base class
-from src.utils.decorators import timing, log_execution
+
+
 class JSONLSearcher(BaseSearcher):  # Inheritance
     @timing
     @log_execution
@@ -31,6 +35,6 @@ class JSONLSearcher(BaseSearcher):  # Inheritance
                         continue
         except FileNotFoundError:
             self._logger.error(f"File not found: {self._file_path}")
-        
+
         self._logger.info(f"Search completed: Found {len(matches)} matches for '{term}'")
         return matches

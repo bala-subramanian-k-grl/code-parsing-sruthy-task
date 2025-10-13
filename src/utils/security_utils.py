@@ -1,4 +1,4 @@
-    
+
 """Security utilities with OOP principles."""
 
 from pathlib import Path

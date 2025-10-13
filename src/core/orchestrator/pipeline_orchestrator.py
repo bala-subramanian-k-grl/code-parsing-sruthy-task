@@ -1,13 +1,13 @@
 """USB PD Specification Parser - Pipeline Orchestrator Module"""
-from typing import Any
+from typing import Any, Optional
 
-from src.support.output_writer import JSONLWriter
-from src.utils.decorators import timing, log_execution
 from src.core.extractors.pdfextractor.pdf_extractor import PDFExtractor
-from src.support.report.report_generator import ReportFactory
 from src.core.extractors.tocextractor.toc_extractor import TOCExtractor
 from src.core.orchestrator.base_pipeline import BasePipeline  # Inheritance
-from typing import Optional
+from src.support.output_writer import JSONLWriter
+from src.support.report.report_generator import ReportFactory
+from src.utils.decorators import log_execution, timing
+
 
 class PipelineOrchestrator(BasePipeline):  # Inheritance
     @timing

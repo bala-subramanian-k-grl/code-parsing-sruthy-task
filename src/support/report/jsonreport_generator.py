@@ -1,9 +1,10 @@
 """JSON Report Generator Module"""
 import json
-from src.support.report.report_generator import BaseReportGenerator
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+from src.support.report.report_generator import BaseReportGenerator
 
 
 class JSONReportGenerator(BaseReportGenerator):  # Inheritance

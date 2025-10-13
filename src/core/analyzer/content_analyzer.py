@@ -3,8 +3,8 @@
 
 from collections.abc import Iterator
 from typing import Any
-from .base_analyzer import PatternAnalyzer
 
+from .base_analyzer import PatternAnalyzer
 
 
 class ContentAnalyzer:  # Composition

@@ -1,6 +1,7 @@
 import logging
 from typing import Any
 
+
 class SearchDisplay:  # Encapsulation
     def __init__(self, max_results: int = 10):
         self._max_results = max_results  # Encapsulation

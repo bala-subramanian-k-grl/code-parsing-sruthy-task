@@ -39,10 +39,10 @@ class BaseTOCExtractor(ABC):  # Abstraction
         """Process regex match (Encapsulation)."""
         groups = match.groups()
         section_id, title, page_str = self._extract_groups(groups, counter)
-        
+
         if not section_id:
             return None
-        
+
         return self._create_toc_entry(section_id, title, page_str)
 
     def _extract_groups(self, groups: tuple[str, ...], counter: int) -> tuple[str, str, str]:
@@ -61,7 +61,7 @@ class BaseTOCExtractor(ABC):  # Abstraction
             page = int(page_str)
             if not self._is_valid_entry(page, title):
                 return None
-            
+
             level = self._calculate_level(section_id)
             return TOCEntry(
                 doc_title=self._doc_title,

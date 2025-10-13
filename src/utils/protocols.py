@@ -1,8 +1,8 @@
 # USB PD Specification Parser - Protocols Module
 """Protocol interfaces for better abstraction."""
 
-from typing import Any, Protocol
 from pathlib import Path
+from typing import Any, Protocol
 
 
 class Extractable(Protocol):  # Protocol Abstraction

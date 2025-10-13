@@ -5,7 +5,6 @@ import re
 from abc import ABC, abstractmethod
 
 
-
 class BaseAnalyzer(ABC):  # Abstraction
     """Abstract base analyzer."""
 
