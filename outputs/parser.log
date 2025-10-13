@@ -1,0 +1,22 @@
+2025-10-13 16:28:48 [INFO] PipelineOrchestrator - Configuration loaded successfully from application.yml
+2025-10-13 16:28:48 [INFO] PipelineOrchestrator - Output directory prepared: D:\code parsing\outputs
+2025-10-13 16:29:05 [INFO] PipelineOrchestrator - Starting pipeline execution - Mode: Full Document
+2025-10-13 16:29:05 [INFO] PipelineOrchestrator - Extracting Table of Contents...
+2025-10-13 16:29:05 [INFO] PipelineOrchestrator - TOC extraction completed: 369 entries found
+2025-10-13 16:29:05 [INFO] PipelineOrchestrator - Extracting content from PDF (max pages: all)...
+2025-10-13 16:29:15 [INFO] PipelineOrchestrator - Content extraction completed: 23997 items processed
+2025-10-13 16:29:15 [INFO] PipelineOrchestrator - Writing JSONL output files...
+2025-10-13 16:29:15 [INFO] PipelineOrchestrator - JSONL files written successfully
+2025-10-13 16:29:15 [INFO] PipelineOrchestrator - Generating analysis reports...
+2025-10-13 16:29:16 [INFO] PipelineOrchestrator - Analysis reports generated successfully
+2025-10-13 16:29:16 [INFO] PipelineOrchestrator - Generating validation report...
+2025-10-13 16:29:16 [INFO] PipelineOrchestrator - Validation report generated successfully
+2025-10-13 16:29:16 [INFO] PipelineOrchestrator - Pipeline execution completed successfully
+2025-10-13 16:29:16 [INFO] CLIApp - Processing completed successfully: 369 TOC entries extracted, 23997 content items processed
+2025-10-13 16:30:21 [INFO] JSONLSearcher - Initialized searcher for file: usb_pd_spec.jsonl
+2025-10-13 16:30:41 [INFO] JSONLSearcher - Initialized searcher for file: usb_pd_spec.jsonl
+2025-10-13 16:32:06 [INFO] JSONLSearcher - Initialized searcher for file: usb_pd_spec.jsonl
+2025-10-13 16:32:06 [INFO] JSONLSearcher - Starting search for term: 'engine'
+2025-10-13 16:32:06 [INFO] JSONLSearcher - Search completed: Found 2353 matches for 'engine'
+2025-10-13 16:32:06 [INFO] SearchDisplay - Displaying 10 of 2353 matches for 'engine'
+2025-10-13 16:32:06 [INFO] SearchDisplay - Truncated display: showing 10 of 2353 total matches

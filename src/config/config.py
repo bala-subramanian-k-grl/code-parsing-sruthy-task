@@ -41,7 +41,8 @@ class BaseConfig(ABC):  # Abstraction
 class Config(BaseConfig):  # Inheritance
     """YAML config loader (Inheritance, Polymorphism)."""
 
-    _DEFAULT_PDF = "assets/USB_PD_R3_2 V1.1 2024-10.pdf"  # Encapsulation
+    from .constants import DEFAULT_PDF_PATH
+    _DEFAULT_PDF = DEFAULT_PDF_PATH
 
     def _load_config(self) -> dict[str, Any]:  # Polymorphism
         """Load config with defaults (Abstraction)."""

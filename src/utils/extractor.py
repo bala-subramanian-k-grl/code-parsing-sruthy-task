@@ -12,6 +12,9 @@ except ImportError as e:
     raise ImportError("PyMuPDF required. Install: pip install PyMuPDF==1.24.9") from e
 
 
+from ..config.constants import DEFAULT_DOC_TITLE
+
+
 class PDFNotFoundError(Exception):  # Encapsulation
     pass
 
@@ -71,11 +74,11 @@ class TitleExtractor(BaseExtractor):  # Inheritance
                 return (
                     title
                     if isinstance(title, str)
-                    else "USB Power Delivery Specification"
+                    else DEFAULT_DOC_TITLE
                 )
         except (fitz.FileDataError, fitz.FileNotFoundError, OSError) as e:  # type: ignore
             self._logger.warning(f"Cannot read PDF metadata: {e}")
-            return "USB Power Delivery Specification"
+            return DEFAULT_DOC_TITLE
 
 
 # Factory functions (Abstraction)
@@ -88,4 +91,4 @@ def get_doc_title(pdf_path: Path) -> str:
         return TitleExtractor(pdf_path).get_title()
     except (PDFNotFoundError, OSError, ValueError) as e:
         logging.getLogger(__name__).error(f"Cannot extract title: {e}")
-        return "USB Power Delivery Specification"
+        return DEFAULT_DOC_TITLE

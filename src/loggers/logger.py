@@ -2,29 +2,10 @@
 """Logger with OOP principles."""
 
 import logging
-from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Optional
+from loggers.base_logger import BaseLoggerFactory 
 
-
-class BaseLoggerFactory(ABC):  # Abstraction
-    """Abstract logger factory (Abstraction, Encapsulation)."""
-
-    def __init__(self, name: str = "usb_pd_parser"):
-        self._name = name  # Encapsulation
-        self._formatter = self._create_formatter()  # Encapsulation
-
-    @abstractmethod  # Abstraction
-    def create_logger(
-        self, output_dir: Optional[Path] = None, debug: bool = False
-    ) -> logging.Logger:
-        pass
-
-    def _create_formatter(self) -> logging.Formatter:  # Encapsulation
-        return logging.Formatter(
-            "%(asctime)s [%(levelname)s] %(name)s - %(message)s",
-            "%Y-%m-%d %H:%M:%S",
-        )
 
 
 class LoggerFactory(BaseLoggerFactory):  # Inheritance
@@ -68,7 +49,7 @@ class LoggerFactory(BaseLoggerFactory):  # Inheritance
             fh.setLevel(log_level)
             fh.setFormatter(self._formatter)
             logger.addHandler(fh)
-        except (OSError, PermissionError) as e:
+        except OSError as e:
             logger.warning(f"Could not create file handler: {e}")
 
     def _validate_output_dir(self, output_dir: Path) -> Path:  # Encapsulation

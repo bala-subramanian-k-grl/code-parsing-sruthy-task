@@ -4,7 +4,7 @@
 import json
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any, TextIO, Union
+from typing import Any, TextIO
 
 
 class BaseWriter(ABC):  # Abstraction: abstract base class
@@ -33,7 +33,7 @@ class BaseWriter(ABC):  # Abstraction: abstract base class
 class JSONLWriter(BaseWriter):  # Inheritance: extends BaseWriter
     """JSONL file writer (Inheritance, Polymorphism)."""
 
-    def write(self, data: Union[list[Any], Any]) -> None:  # Polymorphism
+    def write(self, data: Any) -> None:  # Polymorphism
         """Write data to JSONL file."""
         try:
             with open(self._output_path, "w", encoding="utf-8") as f:

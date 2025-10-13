@@ -1,9 +1,9 @@
 # Core business logic modules
 from .models import TOCEntry, ContentItem
 from .orchestrator.pipeline_orchestrator import PipelineOrchestrator
-from .extractors.pdf_extractor import PDFExtractor
-from .extractors.toc_extractor import TOCExtractor
-from .content_analyzer import ContentAnalyzer
+from .extractors.pdfextractor.pdf_extractor import PDFExtractor
+from .extractors.tocextractor.toc_extractor import TOCExtractor
+from .analyzer.content_analyzer import ContentAnalyzer
 
 __all__ = [
     "TOCEntry",

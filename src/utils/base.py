@@ -34,7 +34,7 @@ class BaseWriter(ABC):
         safe_path = path.resolve()  # Prevent path traversal
         try:
             safe_path.parent.mkdir(parents=True, exist_ok=True)
-        except (OSError, PermissionError) as e:
+        except OSError as e:
             raise RuntimeError(
                 f"Cannot create directory {safe_path.parent}: {e}"
             ) from e

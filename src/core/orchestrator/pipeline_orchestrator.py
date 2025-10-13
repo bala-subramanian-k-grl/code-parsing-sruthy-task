@@ -1,38 +1,13 @@
-# USB PD Specification Parser - Pipeline Orchestrator Module
-"""Simple pipeline orchestrator with OOP principles."""
 
-from abc import ABC, abstractmethod
-from typing import Any, Optional
+from typing import Any
 
-from src.config.config import Config
+
 from src.support.output_writer import JSONLWriter
-from src.core.extractors.pdf_extractor import PDFExtractor
-from src.support.report_generator import ReportFactory
-from src.core.extractors.toc_extractor import TOCExtractor
-
-
-class BasePipeline(ABC):  # Abstraction
-    def __init__(self, config_path: str):
-        import logging
-
-        self._logger = logging.getLogger(self.__class__.__name__)
-        try:
-            self._config = Config(config_path)  # Encapsulation
-            self._logger.info(f"Configuration loaded successfully from {config_path}")
-        except (ValueError, OSError) as e:
-            raise RuntimeError(f"Configuration error: {e}") from e
-        try:
-            self._config.output_directory.mkdir(parents=True, exist_ok=True)
-            self._logger.info(
-                f"Output directory prepared: {self._config.output_directory}"
-            )
-        except (OSError, PermissionError) as e:
-            raise RuntimeError(f"Cannot create output directory: {e}") from e
-
-    @abstractmethod  # Abstraction
-    def run(self, mode: int = 1) -> dict[str, Any]:
-        pass
-
+from src.core.extractors.pdfextractor.pdf_extractor import PDFExtractor
+from src.support.report.report_generator import ReportFactory
+from src.core.extractors.tocextractor.toc_extractor import TOCExtractor
+from src.core.orchestrator.base_pipeline import BasePipeline  # Inheritance
+from typing import Optional
 
 class PipelineOrchestrator(BasePipeline):  # Inheritance
     def run(self, mode: int = 1) -> dict[str, Any]:  # Polymorphism

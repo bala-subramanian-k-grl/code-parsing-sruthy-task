@@ -6,9 +6,9 @@ import logging
 import sys
 from abc import ABC, abstractmethod
 
-from src.support.search.search_content import JSONLSearcher, SearchApp, SearchDisplay
-
-
+from src.support.search.jsonl_search import JSONLSearcher
+from src.support.search.search_display import SearchDisplay
+from src.support.search.search_app import SearchApp
 class BaseRunner(ABC):  # Abstraction
     """Abstract runner (Abstraction, Encapsulation)."""
 
@@ -54,8 +54,24 @@ class RunnerFactory:  # Abstraction
 
 def main():
     """Main entry point using OOP principles."""
+    # Setup stream logger to capture all output to parser.log
+    from pathlib import Path
+    
+    log_file = Path("outputs") / "parser.log"
+    log_file.parent.mkdir(parents=True, exist_ok=True)
+    
+    # Configure root logger to write to file
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(name)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+        handlers=[
+            logging.FileHandler(log_file, mode='a'),  # Append to existing log
+            logging.StreamHandler()  # Also keep console output
+        ]
+    )
+    
     logger = logging.getLogger(__name__)
-    logging.basicConfig(level=logging.INFO)
 
     if len(sys.argv) < 2:
         logger.error("Usage: python search.py <search_term> [jsonl_file]")
