@@ -1,7 +1,6 @@
-# USB PD Specification Parser - MIT License
 MIT License
 
-Copyright (c) 2024 USB PD Parser Team
+Copyright (c) 2024 USB PD Specification Parser Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -20,3 +19,24 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## Third-Party Dependencies
+
+This project uses the following third-party libraries:
+
+- PyMuPDF (AGPL-3.0 License) - PDF processing
+- pdfplumber (MIT License) - Table extraction  
+- Pydantic (MIT License) - Data validation
+- PyYAML (MIT License) - Configuration management
+- click (BSD-3-Clause License) - CLI interface
+- openpyxl (MIT License) - Excel report generation
+
+## Security Notice
+
+This software includes security hardening measures to prevent:
+- Path traversal attacks (CWE-22)
+- Command injection (CWE-77, CWE-78)
+- Code injection (CWE-88)
+- Input validation vulnerabilities
+
+Users are advised to keep dependencies updated and follow security best practices.

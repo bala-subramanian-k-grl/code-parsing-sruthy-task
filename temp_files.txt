@@ -1,32 +1,62 @@
-d:\code parsing\benchmark.py
-d:\code parsing\fix_compliance.py
-d:\code parsing\main.py
-d:\code parsing\profile_performance.py
-d:\code parsing\search.py
-d:\code parsing\src\app.py
-d:\code parsing\src\base.py
-d:\code parsing\src\config.py
-d:\code parsing\src\content_analyzer.py
-d:\code parsing\src\extractor.py
-d:\code parsing\src\logger.py
-d:\code parsing\src\models.py
-d:\code parsing\src\output_writer.py
-d:\code parsing\src\pdf_extractor.py
-d:\code parsing\src\pipeline_orchestrator.py
-d:\code parsing\src\report_generator.py
-d:\code parsing\src\search_content.py
-d:\code parsing\src\security_utils.py
-d:\code parsing\src\toc_extractor.py
-d:\code parsing\src\validation_generator.py
-d:\code parsing\src\__init__.py
-d:\code parsing\tests\conftest.py
-d:\code parsing\tests\test_comprehensive.py
-d:\code parsing\tests\test_edge_cases.py
-d:\code parsing\tests\test_extractor.py
-d:\code parsing\tests\test_minimal.py
-d:\code parsing\tests\test_oop_minimal.py
-d:\code parsing\tests\test_parser.py
-d:\code parsing\tests\test_performance.py
-d:\code parsing\tests\test_validation.py
-d:\code parsing\tests\__init__.py
-d:\code parsing\tests\fixtures\small_test.py
+# Temporary Files Log - USB PD Specification Parser
+
+## Current Session Files
+- Generated: 2024-12-19
+- Session ID: usb_pd_parser_v2.0.0
+
+## Output Files Created
+1. outputs/usb_pd_toc.jsonl - TOC entries (369 items)
+2. outputs/usb_pd_spec.jsonl - Specification content (4403 items)
+3. outputs/parsing_report.json - Processing report with metadata
+4. outputs/validation_report.xlsx - Excel validation report
+5. outputs/parser.log - Comprehensive processing logs
+
+## Temporary Processing Files
+- temp_pdf_cache/ - PDF page cache (auto-cleaned)
+- temp_extraction/ - Intermediate extraction data (auto-cleaned)
+- temp_validation/ - Validation working files (auto-cleaned)
+
+## Cache Files
+- .mypy_cache/ - MyPy type checking cache
+- .ruff_cache/ - Ruff linting cache
+- __pycache__/ - Python bytecode cache
+- .pytest_cache/ - Pytest execution cache
+
+## Performance Files
+- profile_performance.py - Performance profiling script
+- benchmark_results.txt - Performance benchmark results
+- memory_usage.log - Memory usage tracking
+
+## Development Files
+- .coverage - Test coverage data
+- htmlcov/ - HTML coverage reports
+- test_results.xml - Test execution results
+
+## Security Files
+- security_scan.log - Security vulnerability scan results
+- cwe_compliance.txt - CWE compliance verification
+
+## Configuration Backups
+- application.yml.bak - Configuration backup
+- requirements.txt.bak - Dependencies backup
+
+## Notes
+- All temporary files are automatically cleaned after processing
+- Cache files improve subsequent execution performance
+- Log files are rotated to prevent disk space issues
+- Security files contain no sensitive information
+
+## Cleanup Commands
+```bash
+# Clean all temporary files
+python -c "import shutil; shutil.rmtree('temp_*', ignore_errors=True)"
+
+# Clean cache files
+python -c "import shutil; shutil.rmtree('__pycache__', ignore_errors=True)"
+python -c "import shutil; shutil.rmtree('.mypy_cache', ignore_errors=True)"
+python -c "import shutil; shutil.rmtree('.ruff_cache', ignore_errors=True)"
+
+# Clean test files
+python -c "import shutil; shutil.rmtree('.pytest_cache', ignore_errors=True)"
+python -c "import shutil; shutil.rmtree('htmlcov', ignore_errors=True)"
+```

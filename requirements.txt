@@ -1,7 +1,24 @@
 # USB PD Specification Parser - Dependencies
+# Core PDF Processing
 PyMuPDF==1.24.9
 pdfplumber==0.10.3
+
+# Data Validation & Models
 Pydantic==2.5.2
+pydantic-core==2.14.5
+
+# Configuration & CLI
 PyYAML==6.0.1
 click==8.1.7
+
+# Report Generation
 openpyxl==3.1.2
+
+# Development & Testing
+pytest==7.4.3
+pytest-cov==4.1.0
+mypy==1.7.1
+ruff==0.1.6
+
+# Type Hints
+typing-extensions==4.8.0

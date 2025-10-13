@@ -64,37 +64,59 @@ python search.py "USB Power Delivery"
 
 ```
 code-parsing/
+├── .github/workflows/         # CI/CD pipeline (Security + Testing)
 ├── src/                       # Core modules (Full OOP + Security Hardened)
-│   ├── app.py                # CLI interface (Complexity fixed, modular)
-│   ├── config.py             # Configuration loader (CWE-22 fixed)
-│   ├── pipeline_orchestrator.py # Main coordinator (Error handling improved)
-│   ├── pdf_extractor.py      # PDF content extraction (All JSONL fields)
-│   ├── toc_extractor.py      # TOC parsing (Readability enhanced)
-│   ├── output_writer.py      # JSONL output writer (Validated format)
-│   ├── report_generator.py   # Report generators (Authorization secured)
-│   ├── search_content.py     # Search functionality (Path traversal fixed)
-│   ├── validation_generator.py # XLS validation report (NEW)
-│   ├── content_analyzer.py   # Content classification (NEW)
-│   ├── security_utils.py     # Security utilities (NEW)
-│   ├── models.py             # Data models (Pydantic validation)
-│   ├── base.py               # Base classes (Abstraction patterns)
-│   ├── extractor.py          # Extraction utilities (Performance optimized)
-│   └── logger.py             # Logging setup (Security hardened)
-├── tests/                     # Comprehensive test suite (95% coverage)
-│   ├── conftest.py           # Test configuration
+│   ├── config/               # Configuration management
+│   │   ├── config.py         # YAML config loader (CWE-22 fixed)
+│   │   └── constants.py      # Application constants
+│   ├── core/                 # Core business logic
+│   │   ├── analyzer/         # Content analysis (NEW)
+│   │   ├── extractors/       # PDF & TOC extraction
+│   │   │   ├── pdfextractor/ # PDF content extraction (All JSONL fields)
+│   │   │   └── tocextractor/ # TOC parsing (Readability enhanced)
+│   │   ├── orchestrator/     # Pipeline coordination
+│   │   ├── models.py         # Data models (Pydantic validation)
+│   │   └── benchmark.py      # Performance benchmarks
+│   ├── interfaces/           # User interfaces
+│   │   └── app.py           # CLI interface (Complexity fixed, modular)
+│   ├── loggers/             # Logging system
+│   │   ├── base_logger.py   # Abstract logging base
+│   │   └── logger.py        # Logging setup (Security hardened)
+│   ├── support/             # Support utilities
+│   │   ├── report/          # Report generators (Authorization secured)
+│   │   ├── search/          # Search functionality (Path traversal fixed)
+│   │   ├── output_writer.py # JSONL output writer (Validated format)
+│   │   └── validation_generator.py # XLS validation report (NEW)
+│   └── utils/               # Utility modules
+│       ├── base.py          # Base classes (Abstraction patterns)
+│       ├── decorators.py    # Custom decorators (@timing, @log_execution)
+│       ├── extractor.py     # Extraction utilities (Performance optimized)
+│       ├── protocols.py     # Type protocols
+│       └── security_utils.py # Security utilities (NEW)
+├── tests/                    # Comprehensive test suite (95% coverage)
+│   ├── fixtures/            # Test fixtures
+│   ├── conftest.py          # Test configuration
 │   ├── test_comprehensive.py # Full integration tests
-│   ├── test_edge_cases.py    # Edge case testing (Error handling fixed)
-│   ├── test_extractor.py     # Extractor tests
-│   ├── test_parser.py        # Parser tests (Exception handling fixed)
-│   └── test_validation.py    # Validation tests (NEW)
-├── assets/                    # Input PDFs
-├── outputs/                   # Generated files (All 5 deliverables)
-├── main.py                    # Entry point (Tested & working)
-├── search.py                  # Content search utility (Input sanitized)
-├── benchmark.py               # Performance benchmarks (Optimized)
-├── fix_compliance.py          # Compliance fixer (Error handling added)
-├── requirements.txt           # Dependencies
-└── README.md                  # This file
+│   ├── test_edge_cases.py   # Edge case testing (Error handling fixed)
+│   ├── test_extractor.py    # Extractor tests
+│   ├── test_oop_minimal.py  # OOP principle tests
+│   ├── test_parser.py       # Parser tests (Exception handling fixed)
+│   ├── test_performance.py  # Performance tests
+│   └── test_validation.py   # Validation tests (NEW)
+├── docs/                     # Documentation
+│   ├── API.md               # API documentation
+│   └── USAGE.md             # Usage guide
+├── assets/                   # Input PDFs
+├── outputs/                  # Generated files (All 5 deliverables)
+├── main.py                   # Entry point (Tested & working)
+├── search.py                 # Content search utility (Input sanitized)
+├── profile_performance.py    # Performance profiling
+├── application.yml           # Configuration file
+├── pyproject.toml           # Python project configuration
+├── requirements.txt         # Dependencies
+├── CHANGELOG.md             # Version history
+├── LICENSE                  # MIT license
+└── README.md                # This file
 ```
 
 ## 📊 Output Files
@@ -122,6 +144,7 @@ ls outputs/  # validation_report.xlsx will be included
 ## 🎯 Key Features
 
 - **Professional OOP Design**: All 4 OOP principles (Abstraction, Encapsulation, Inheritance, Polymorphism)
+- **Advanced Python Features**: Custom decorators (@timing, @log_execution, @retry) and magic methods (__call__, __str__, __len__)
 - **Security Hardened**: Fixed 15+ CWE vulnerabilities (Path traversal, Command injection)
 - **Multiple Output Formats**: JSONL, JSON, Excel, and Log files
 - **Comprehensive Testing**: Full test suite with edge cases (95% coverage)
@@ -270,12 +293,26 @@ INFO:PipelineOrchestrator:Pipeline execution completed successfully
 
 ## 🔧 Dependencies
 
+### Core Dependencies
 - **PyMuPDF==1.24.9** (PDF processing)
 - **pdfplumber==0.10.3** (Table extraction)
-- **Pydantic==2.5.2** (Data validation)
-- **PyYAML==6.0.1** (Configuration)
+- **Pydantic==2.5.2** (Data validation & models)
+- **pydantic-core==2.14.5** (Pydantic core)
+- **PyYAML==6.0.1** (Configuration management)
 - **click==8.1.7** (CLI interface)
 - **openpyxl==3.1.2** (Excel report generation)
+- **typing-extensions==4.8.0** (Type hints)
+
+### Development Dependencies
+- **pytest==7.4.3** (Testing framework)
+- **pytest-cov==4.1.0** (Coverage reporting)
+- **mypy==1.7.1** (Type checking)
+- **ruff==0.1.6** (Linting & formatting)
+
+```bash
+# Install all dependencies
+pip install -r requirements.txt
+```
 
 ## 🏛️ Architecture
 
@@ -306,6 +343,12 @@ Completely transformed from procedural to professional OOP architecture:
 - `generate()` method overridden in report generators
 - `extract()` method overridden in different extractors
 - Factory patterns enabling runtime polymorphism
+
+#### **Advanced Python Features**
+- **Custom Decorators**: `@timing`, `@log_execution`, `@validate_path`, `@retry`
+- **Magic Methods**: `__call__`, `__str__`, `__repr__`, `__len__`, `__hash__`, `__eq__`
+- **Property Decorators**: Controlled access with getters/setters
+- **Context Managers**: Proper resource management
 
 #### **Design Patterns Implemented**
 - **Factory Pattern**: `ReportFactory`, `ApplicationFactory`, `RunnerFactory`

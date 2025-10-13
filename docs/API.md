@@ -1,474 +1,373 @@
-# API Reference
+# API Documentation
 
-Complete API documentation for USB PD Specification Parser.
+## Overview
+
+The USB PD Specification Parser provides a comprehensive API for extracting content from PDF documents with professional OOP design, advanced Python features, and security hardening.
 
 ## Core Classes
 
-### CLIInterface
+### Abstract Base Classes
 
-Main command-line interface class.
-
-```python
-from src.app import CLIInterface
-
-cli = CLIInterface()
-cli.run()
-```
-
-#### Methods
-
-##### `__init__()`
-Initialize CLI interface with argument parser.
-
-**Returns:** `None`
-
-##### `run()`
-Execute the CLI application with user arguments.
-
-**Returns:** `None`  
-**Raises:** `SystemExit` on error
-
----
-
-### PipelineOrchestrator
-
-Coordinates the complete PDF processing pipeline.
+#### `BaseExtractor`
+Abstract base class for all extractors implementing the Template Method pattern.
 
 ```python
-from src.pipeline_orchestrator import PipelineOrchestrator
-
-orchestrator = PipelineOrchestrator("config.yml", debug=True)
-results = orchestrator.run_full_pipeline(mode=1)
-```
-
-#### Constructor
-
-##### `__init__(config_path: str = "application.yml", debug: bool = False)`
-
-**Parameters:**
-- `config_path` (str): Path to configuration file
-- `debug` (bool): Enable debug logging
-
-#### Methods
-
-##### `run_full_pipeline(mode: int = 1) -> Dict[str, Any]`
-Run complete pipeline with TOC and content extraction.
-
-**Parameters:**
-- `mode` (int): Extraction mode (1=all pages, 2=600 pages, 3=200 pages)
-
-**Returns:** `Dict[str, Any]` - Results with counts and file paths
-
-**Example:**
-```python
-results = orchestrator.run_full_pipeline(mode=1)
-print(f"TOC entries: {results['toc_entries']}")
-print(f"Content items: {results['content_items']}")
-```
-
-##### `run_toc_only() -> List[TOCEntry]`
-Extract only TOC entries.
-
-**Returns:** `List[TOCEntry]` - List of TOC entries
-
-##### `run_content_only() -> int`
-Extract only content (paragraphs, images, tables).
-
-**Returns:** `int` - Number of content items extracted
-
----
-
-### PDFExtractor
-
-Handles PDF content extraction with different modes.
-
-```python
-from src.pdf_extractor import PDFExtractor
+from abc import ABC, abstractmethod
 from pathlib import Path
+from typing import Any
 
+class BaseExtractor(ABC):
+    def __init__(self, config: dict[str, Any]):
+        self._config = config  # Encapsulation
+    
+    @abstractmethod
+    def extract(self, file_path: Path) -> list[dict[str, Any]]:
+        """Abstract extraction method."""
+        pass
+```
+
+#### `BaseWriter`
+Abstract base class for output writers with path validation.
+
+```python
+class BaseWriter(ABC):
+    def __init__(self, output_path: Path):
+        self._output_path = self._validate_path(output_path)
+    
+    @abstractmethod
+    def write(self, data: Any) -> None:
+        """Abstract write method."""
+        pass
+```
+
+### Concrete Implementations
+
+#### `PDFExtractor`
+Main PDF content extraction class with magic methods and decorators.
+
+```python
+from src.core.extractors.pdfextractor.pdf_extractor import PDFExtractor
+
+# Initialize extractor
 extractor = PDFExtractor(Path("document.pdf"))
-pages = extractor.extract_pages(max_pages=10)
+
+# Magic methods
+print(extractor)  # PDFExtractor(document.pdf)
+print(len(extractor))  # Number of extracted items
+items = extractor(max_pages=200)  # Callable interface
+
+# Decorated methods
+@timing
+@log_execution
+def extract_content(self, max_pages=None):
+    return list(self.extract_structured_content(max_pages))
 ```
 
-#### Constructor
-
-##### `__init__(pdf_path: Path)`
-
-**Parameters:**
-- `pdf_path` (Path): Path to PDF file
-
-**Raises:** `PDFNotFoundError` if file doesn't exist
-
-#### Methods
-
-##### `get_doc_title() -> str`
-Extract document title from PDF metadata.
-
-**Returns:** `str` - Document title or default
-
-##### `extract_pages(max_pages: Optional[int] = None) -> List[str]`
-Extract text from PDF pages.
-
-**Parameters:**
-- `max_pages` (Optional[int]): Maximum pages to extract (None for all)
-
-**Returns:** `List[str]` - List of page text content
-
-##### `extract_structured_content(max_pages: Optional[int] = None) -> Iterator[Dict[str, Any]]`
-Extract structured content including paragraphs, images, and tables.
-
-**Parameters:**
-- `max_pages` (Optional[int]): Maximum pages to extract
-
-**Returns:** `Iterator[Dict[str, Any]]` - Iterator of content items
-
-**Content Item Structure:**
-```python
-{
-    "type": "paragraph|image|table",
-    "content": "text content or description",
-    "page": 1,
-    "block_id": "p1_0",
-    "bbox": [x1, y1, x2, y2]
-}
-```
-
----
-
-### TOCExtractor
-
-Handles TOC extraction from PDF content.
+#### `TOCExtractor`
+Table of Contents extraction with Pydantic validation.
 
 ```python
-from src.toc_extractor import TOCExtractor
+from src.core.extractors.tocextractor.toc_extractor import TOCExtractor
+from src.core.models import TOCEntry
 
-extractor = TOCExtractor("Document Title")
-entries = extractor.extract_from_content(content)
+extractor = TOCExtractor()
+entries: list[TOCEntry] = extractor.extract_toc(pdf_path)
+
+# TOCEntry with magic methods
+entry = TOCEntry(
+    doc_title="USB PD Spec",
+    section_id="1.1",
+    title="Introduction",
+    page=1,
+    level=1
+)
+print(entry)  # TOCEntry(1.1: Introduction)
+print(hash(entry))  # Hash for set operations
 ```
 
-#### Constructor
+## Decorators
 
-##### `__init__(doc_title: str)`
+### Custom Decorators
 
-**Parameters:**
-- `doc_title` (str): Document title for TOC entries
-
-#### Methods
-
-##### `extract_from_content(content: str) -> List[TOCEntry]`
-Extract TOC entries from text content.
-
-**Parameters:**
-- `content` (str): Text content to parse
-
-**Returns:** `List[TOCEntry]` - List of extracted TOC entries
-
----
-
-### ContentSearcher
-
-Search functionality for JSONL content files.
+#### `@timing`
+Measures and logs execution time.
 
 ```python
-from search_content import ContentSearcher
+from src.utils.decorators import timing
 
-searcher = ContentSearcher("outputs/content.jsonl")
-matches = searcher.search("USB Power Delivery")
-searcher.display_results("USB Power Delivery")
+@timing
+def process_document(self):
+    # Function implementation
+    pass
+# Logs: "process_document took 2.34 seconds"
 ```
 
-#### Constructor
-
-##### `__init__(jsonl_file: str = "outputs/usb_pd_spec.jsonl")`
-
-**Parameters:**
-- `jsonl_file` (str): Path to JSONL file to search
-
-#### Methods
-
-##### `search(search_term: str) -> List[Dict[str, Any]]`
-Search for term in JSONL content.
-
-**Parameters:**
-- `search_term` (str): Text to search for
-
-**Returns:** `List[Dict[str, Any]]` - List of matching items
-
-##### `display_results(search_term: str, max_results: int = 10) -> None`
-Display search results to console.
-
-**Parameters:**
-- `search_term` (str): Search term used
-- `max_results` (int): Maximum results to display
-
----
-
-### InputValidator
-
-Validates user inputs for security and correctness.
+#### `@log_execution`
+Logs function entry, success, and errors.
 
 ```python
-from src.input_validator import InputValidator
+from src.utils.decorators import log_execution
 
-# Validate PDF file
-pdf_path = InputValidator.validate_pdf_path("document.pdf")
-
-# Validate search term
-clean_term = InputValidator.validate_search_term("USB<script>")
+@log_execution
+def extract_content(self):
+    # Function implementation
+    pass
+# Logs: "Executing extract_content"
+# Logs: "Completed extract_content successfully"
 ```
 
-#### Static Methods
-
-##### `validate_pdf_path(pdf_path: Union[str, Path]) -> Path`
-Validate PDF file path and properties.
-
-**Parameters:**
-- `pdf_path` (Union[str, Path]): Path to PDF file
-
-**Returns:** `Path` - Validated path object
-
-**Raises:** 
-- `PDFNotFoundError` if file not found
-- `InvalidInputError` if file invalid
-
-##### `validate_search_term(search_term: str) -> str`
-Validate and sanitize search term.
-
-**Parameters:**
-- `search_term` (str): Search term to validate
-
-**Returns:** `str` - Sanitized search term
-
-**Raises:** `InvalidInputError` if term invalid
-
-##### `validate_page_range(start_page: int, end_page: Optional[int] = None) -> tuple`
-Validate page range parameters.
-
-**Parameters:**
-- `start_page` (int): Starting page number
-- `end_page` (Optional[int]): Ending page number
-
-**Returns:** `tuple` - Validated page range
-
-##### `sanitize_filename(filename: str) -> str`
-Sanitize filename for safe file operations.
-
-**Parameters:**
-- `filename` (str): Filename to sanitize
-
-**Returns:** `str` - Safe filename
-
----
-
-### ProgressBar
-
-Simple progress bar for console output.
+#### `@validate_path`
+Validates Path arguments before execution.
 
 ```python
-from src.progress_tracker import ProgressBar
+from src.utils.decorators import validate_path
 
-with ProgressBar(100, "Processing") as pbar:
-    for i in range(100):
-        # Do work
-        pbar.update(1)
+@validate_path
+def process_file(self, file_path: Path):
+    # Automatically validates file_path exists
+    pass
 ```
 
-#### Constructor
-
-##### `__init__(total: int, description: str = "Processing", width: int = 50)`
-
-**Parameters:**
-- `total` (int): Total number of items
-- `description` (str): Progress description
-- `width` (int): Progress bar width
-
-#### Methods
-
-##### `update(increment: int = 1) -> None`
-Update progress by increment.
-
-##### `set_progress(value: int) -> None`
-Set absolute progress value.
-
-##### `finish() -> None`
-Mark progress as complete.
-
----
-
-### AsyncProcessor
-
-Async processor for CPU and I/O bound tasks.
+#### `@retry`
+Retries function on failure with configurable attempts.
 
 ```python
-from src.async_processor import AsyncProcessor
-import asyncio
+from src.utils.decorators import retry
 
-async def main():
-    with AsyncProcessor(max_workers=4) as processor:
-        results = await processor.process_batch_async(func, items)
-
-asyncio.run(main())
+@retry(max_attempts=3)
+def unstable_operation(self):
+    # Will retry up to 3 times on failure
+    pass
 ```
-
-#### Constructor
-
-##### `__init__(max_workers: Optional[int] = None)`
-
-**Parameters:**
-- `max_workers` (Optional[int]): Maximum worker threads
-
-#### Methods
-
-##### `async process_batch_async(func: Callable, items: List, batch_size: int = 10) -> List`
-Process items in batches asynchronously.
-
-**Parameters:**
-- `func` (Callable): Function to apply to each item
-- `items` (List): Items to process
-- `batch_size` (int): Batch size for processing
-
-**Returns:** `List` - Processed results
-
----
 
 ## Data Models
 
-### TOCEntry
+### Pydantic Models with Validation
 
-Pydantic model for Table of Contents entries.
+#### `TOCEntry`
+Table of Contents entry with field validation and magic methods.
 
 ```python
-from src.models import TOCEntry
+from src.core.models import TOCEntry
 
-entry = TOCEntry(
-    doc_title="Document",
-    section_id="1.1",
-    title="Introduction",
-    full_path="Introduction",
-    page=15,
-    level=1,
-    parent_id=None,
-    tags=[]
-)
+class TOCEntry(BaseModel):
+    doc_title: str = Field()
+    section_id: str = Field()
+    title: str = Field()
+    page: int = Field(gt=0)
+    level: int = Field(gt=0)
+    parent_id: Optional[str] = Field(default=None)
+    
+    # Magic methods
+    def __str__(self) -> str:
+        return f"TOCEntry({self.section_id}: {self.title})"
+    
+    def __hash__(self) -> int:
+        return hash((self.section_id, self.page))
+    
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, TOCEntry):
+            return False
+        return self.section_id == other.section_id
+    
+    # Field validators
+    @field_validator("section_id")
+    @classmethod
+    def validate_section_id(cls, v: str) -> str:
+        if not re.match(r"^[A-Za-z0-9]+(?:\.[A-Za-z0-9]+)*$", v.strip()):
+            raise ValueError(f"Invalid format: {v}")
+        return v.strip()
 ```
 
-#### Fields
-
-- `doc_title` (str): Document title
-- `section_id` (str): Section identifier
-- `title` (str): Section title
-- `full_path` (str): Full hierarchical path
-- `page` (int): Page number
-- `level` (int): Hierarchy level
-- `parent_id` (Optional[str]): Parent section ID
-- `tags` (List[str]): Associated tags
-
----
-
-## Exception Hierarchy
-
-### Base Exceptions
-
-- `USBPDParserError` - Base exception for all parser errors
-- `PDFProcessingError` - PDF processing failures
-- `TOCExtractionError` - TOC extraction failures
-- `ContentProcessingError` - Content processing failures
-- `ValidationError` - Data validation failures
-- `ConfigurationError` - Configuration issues
-- `PDFNotFoundError` - PDF file not found
-- `InvalidInputError` - Invalid input data
-- `ProcessingTimeoutError` - Processing timeout
-- `MemoryLimitError` - Memory limit exceeded
-- `OutputWriteError` - Output writing failure
-
-### Usage Example
+#### `ContentItem`
+Content item with inheritance from BaseContent.
 
 ```python
-from src.exceptions import PDFNotFoundError, InvalidInputError
+from src.core.models import ContentItem, BaseContent
 
+class ContentItem(BaseContent):  # Inheritance
+    doc_title: str = Field()
+    content_id: str = Field()
+    type: str = Field()
+    block_id: str = Field()
+    bbox: list[float] = Field(default_factory=list)
+    metadata: dict[str, Any] = Field(default_factory=dict)
+```
+
+## Pipeline Orchestration
+
+### `PipelineOrchestrator`
+Main coordination class implementing the Facade pattern.
+
+```python
+from src.core.orchestrator.pipeline_orchestrator import PipelineOrchestrator
+
+# Initialize with configuration
+orchestrator = PipelineOrchestrator("application.yml")
+
+# Run different processing modes
+result = orchestrator.run_full_pipeline(mode=3)  # Standard mode
+toc_result = orchestrator.run_toc_only()
+content_result = orchestrator.run_content_only()
+
+# Results structure
+{
+    "toc_entries": 369,
+    "spec_counts": {
+        "content_items": 4403,
+        "pages_processed": 200
+    },
+    "processing_time": 8.45,
+    "files_generated": [
+        "outputs/usb_pd_toc.jsonl",
+        "outputs/usb_pd_spec.jsonl",
+        "outputs/parsing_report.json",
+        "outputs/validation_report.xlsx"
+    ]
+}
+```
+
+## CLI Interface
+
+### `CLIApp`
+Command-line interface with inheritance and polymorphism.
+
+```python
+from src.interfaces.app import CLIApp
+
+class CLIApp(BaseApp):  # Inheritance
+    def run(self) -> None:  # Polymorphism
+        args = self._parser.parse_args()
+        self._execute_pipeline(args)
+
+# Usage
+app = CLIApp()
+app.run()  # Polymorphic method call
+```
+
+## Security Features
+
+### Path Validation
+Prevents path traversal attacks (CWE-22).
+
+```python
+def _validate_path(self, path: Path) -> Path:
+    safe_path = path.resolve()  # Prevent path traversal
+    if not safe_path.is_relative_to(Path.cwd()):
+        raise SecurityError("Path traversal detected")
+    return safe_path
+```
+
+### Input Sanitization
+Sanitizes user input to prevent injection attacks.
+
+```python
+from src.utils.security_utils import sanitize_input
+
+def process_user_input(self, user_data: str) -> str:
+    return sanitize_input(user_data)  # Removes dangerous characters
+```
+
+## Error Handling
+
+### Specific Exception Handling
+No broad exception catches, specific error types.
+
+```python
 try:
-    extractor = PDFExtractor(Path("missing.pdf"))
-except PDFNotFoundError as e:
-    print(f"PDF not found: {e}")
-except InvalidInputError as e:
-    print(f"Invalid input: {e}")
+    result = self.extract_content()
+except FileNotFoundError as e:
+    self._logger.error(f"PDF file not found: {e}")
+    raise
+except PermissionError as e:
+    self._logger.error(f"Permission denied: {e}")
+    raise
+except Exception as e:
+    self._logger.error(f"Unexpected error: {e}")
+    raise RuntimeError(f"Content extraction failed: {e}") from e
 ```
 
----
+## Usage Examples
+
+### Basic Usage
+
+```python
+from pathlib import Path
+from src.core.orchestrator.pipeline_orchestrator import PipelineOrchestrator
+
+# Initialize and run
+orchestrator = PipelineOrchestrator("application.yml")
+result = orchestrator.run_full_pipeline(mode=3)
+
+print(f"Processed {result['spec_counts']['content_items']} items")
+print(f"Generated {len(result['files_generated'])} output files")
+```
+
+### Advanced Usage with Decorators
+
+```python
+from src.utils.decorators import timing, log_execution, retry
+
+class CustomProcessor:
+    @timing
+    @log_execution
+    @retry(max_attempts=3)
+    def process_with_decorators(self, data):
+        # Processing logic with automatic timing, logging, and retry
+        return self._complex_processing(data)
+```
+
+### Magic Methods Usage
+
+```python
+# Create extractor with magic methods
+extractor = PDFExtractor(Path("document.pdf"))
+
+# Use as callable
+items = extractor(max_pages=100)
+
+# Get length
+total_items = len(extractor)
+
+# String representation
+print(f"Using {extractor}")  # Uses __str__
+
+# TOC entries with magic methods
+entry1 = TOCEntry(section_id="1.1", title="Intro", page=1, level=1)
+entry2 = TOCEntry(section_id="1.1", title="Intro", page=1, level=1)
+
+# Equality and hashing
+assert entry1 == entry2  # Uses __eq__
+entry_set = {entry1, entry2}  # Uses __hash__
+print(len(entry_set))  # 1 (deduplicated)
+```
 
 ## Configuration
 
-### Configuration File Structure
+### YAML Configuration
+Comprehensive configuration with OOP and security settings.
 
 ```yaml
-# Input PDF file path
-pdf_input_file: "assets/USB_PD_R3_2 V1.1 2024-10.pdf"
+# OOP Configuration
+oop:
+  use_abstract_classes: true
+  enable_polymorphism: true
+  encapsulation_level: "strict"
+  magic_methods: true
+  property_decorators: true
 
-# Output settings
-output_directory: "outputs"
-toc_file: "outputs/usb_pd_toc.jsonl"
+# Processing with decorators
+processing:
+  decorators:
+    timing: true
+    logging: true
+    retry: true
+    validation: true
 
-# Processing options
-ocr_fallback: true
-max_pages: null
-
-# Parser settings
-parser:
-  min_line_length: 5
-  deduplicate: true
-```
-
-### Config Class
-
-```python
-from src.config import Config
-
-config = Config("application.yml")
-print(config.pdf_input_file)
-print(config.output_directory)
-```
-
----
-
-## Protocols and Interfaces
-
-### ExtractorProtocol
-
-```python
-from src.base import ExtractorProtocol
-
-class MyExtractor:
-    def extract_pages(self, max_pages: Optional[int] = None) -> List[str]:
-        # Implementation
-        pass
-    
-    def get_doc_title(self) -> str:
-        # Implementation
-        pass
-```
-
-### ValidatorProtocol
-
-```python
-from src.base import ValidatorProtocol
-
-class MyValidator:
-    def validate(self) -> bool:
-        # Implementation
-        pass
-```
-
-### SearcherProtocol
-
-```python
-from src.base import SearcherProtocol
-
-class MySearcher:
-    def search(self, search_term: str) -> List[Dict[str, Any]]:
-        # Implementation
-        pass
-    
-    def display_results(self, search_term: str, max_results: int = 10) -> None:
-        # Implementation
-        pass
+# Security settings
+security:
+  validate_paths: true
+  prevent_path_traversal: true
+  command_injection_protection: true
+  cwe_compliance: true
 ```

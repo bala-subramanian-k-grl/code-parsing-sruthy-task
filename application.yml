@@ -1,17 +1,90 @@
-# USB PD Specification Parser - Application Configuration
 # USB PD Specification Parser Configuration
 
-# Input PDF file path
-pdf_input_file: "assets/USB_PD_R3_2 V1.1 2024-10.pdf"
+# Application Settings
+app:
+  name: "USB PD Specification Parser"
+  version: "2.0.0"
+  description: "Professional-grade PDF content extraction tool with OOP design"
+  author: "USB PD Parser Team"
+  license: "MIT"
 
-# Output directory
-output_directory: "outputs"
+# Input Configuration
+input:
+  pdf_path: "assets/USB_PD_R3_2 V1.1 2024-10.pdf"
+  max_pages:
+    mode_1: null  # Full document
+    mode_2: 600   # Extended mode
+    mode_3: 200   # Standard mode (recommended)
+  validation:
+    check_file_exists: true
+    max_file_size: "100MB"
+    allowed_extensions: [".pdf"]
 
-# Output JSONL file
-toc_file: "outputs/usb_pd_spec.jsonl"
+# Output Configuration
+output:
+  base_dir: "outputs"
+  files:
+    toc: "usb_pd_toc.jsonl"
+    spec: "usb_pd_spec.jsonl"
+    report: "parsing_report.json"
+    validation: "validation_report.xlsx"
+    log: "parser.log"
+  format:
+    jsonl_fields: ["doc_title", "section_id", "title", "content", "page", "level", "parent_id", "full_path", "type", "block_id", "bbox"]
+    excel_styling: true
 
-# OCR fallback
-ocr_fallback: true
+# Processing Configuration
+processing:
+  chunk_size: 1000
+  memory_limit: "512MB"
+  timeout: 300  # seconds
+  retry_attempts: 3
+  parallel_processing: false
+  decorators:
+    timing: true
+    logging: true
+    retry: true
+    validation: true
 
-# Max pages to process (null for all pages)
-max_pages: null
+# OOP Configuration
+oop:
+  use_abstract_classes: true
+  enable_polymorphism: true
+  encapsulation_level: "strict"
+  magic_methods: true
+  property_decorators: true
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file_logging: true
+  console_logging: true
+  decorators:
+    log_execution: true
+    timing: true
+
+# Security Configuration
+security:
+  validate_paths: true
+  sanitize_input: true
+  prevent_path_traversal: true
+  command_injection_protection: true
+  input_validation: "strict"
+  cwe_compliance: true
+
+# Feature Flags
+features:
+  extract_tables: true
+  extract_images: false
+  generate_reports: true
+  validate_output: true
+  content_analysis: true
+  search_functionality: true
+
+# Testing Configuration
+testing:
+  coverage_threshold: 95
+  run_edge_cases: true
+  performance_benchmarks: true
+  security_tests: true
