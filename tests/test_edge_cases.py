@@ -1,4 +1,3 @@
-# USB PD Specification Parser - Edge Case Tests
 """Minimal edge case tests with OOP principles."""
 
 from abc import ABC, abstractmethod

@@ -10,7 +10,7 @@ class BaseWriter(ABC):  # Abstraction: abstract base class
     """Abstract writer (Abstraction, Encapsulation)."""
 
     def __init__(self, output_path: Path):
-        self._output_path = self._validate_path(output_path)  # Encapsulation
+        self._output_path = self._validate_path(output_path)  
 
     def _validate_path(self, path: Path) -> Path:  # Encapsulation
         """Validate and secure output path."""

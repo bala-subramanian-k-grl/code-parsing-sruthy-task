@@ -1,4 +1,3 @@
-# USB PD Specification Parser - Performance Tests
 """Minimal performance tests with OOP principles."""
 
 import time

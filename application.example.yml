@@ -1,5 +1,5 @@
 # USB PD Specification Parser Configuration
-# Copy this file to application.yml and customize as needed
+
 
 # Input PDF file path
 pdf_input_file: "assets/usb_pd_spec.pdf"

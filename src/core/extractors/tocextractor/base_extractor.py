@@ -1,5 +1,5 @@
 # USB PD Specification Parser - TOC Extractor Module
-
+"""Module for extracting Table of Contents (TOC) from USB PD Specification documents."""
 
 import re
 from abc import ABC, abstractmethod

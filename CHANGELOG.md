@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Custom decorators: `@timing`, `@log_execution`, `@validate_path`, `@retry`
   - Magic methods: `__call__`, `__str__`, `__repr__`, `__len__`, `__hash__`, `__eq__`
   - Property decorators for controlled access
-  - Context managers for resource management
+  - Context managers for resource management.
 
 - **Professional OOP Architecture**
   - 35+ classes with full OOP principles implementation

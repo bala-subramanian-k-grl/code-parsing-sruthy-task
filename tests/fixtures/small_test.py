@@ -1,5 +1,5 @@
 # USB PD Specification Parser - Small Test Fixtures
-
+"""Small test fixtures for USB PD Specification Parser."""
 
 from abc import ABC, abstractmethod
 from typing import Any

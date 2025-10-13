@@ -8,7 +8,7 @@ from typing import Any, Optional
 import yaml
 
 
-class BaseConfig(ABC):  # Abstraction
+class BaseConfig(ABC): 
     """Abstract config loader (Abstraction, Encapsulation)."""
 
     def __init__(self, config_path: str):

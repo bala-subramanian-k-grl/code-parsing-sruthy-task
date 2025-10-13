@@ -1,4 +1,4 @@
-# USB PD Specification Parser - Decorators Module
+
 """Useful decorators for enhancing functionality."""
 
 import functools

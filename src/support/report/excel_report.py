@@ -1,4 +1,5 @@
 """Excel report generator using openpyxl."""
+
 from pathlib import Path
 from typing import Any, Union
 

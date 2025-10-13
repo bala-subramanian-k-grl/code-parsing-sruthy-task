@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-# USB PD Specification Parser - Search Entry Point
+
 """Search entry point with OOP principles."""
 
 import logging

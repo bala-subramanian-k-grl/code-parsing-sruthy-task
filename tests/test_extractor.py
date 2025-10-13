@@ -1,4 +1,3 @@
-# USB PD Specification Parser - Extractor Tests
 """Minimal extractor tests with OOP principles."""
 
 from abc import ABC, abstractmethod

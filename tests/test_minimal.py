@@ -1,4 +1,3 @@
-# USB PD Specification Parser - Minimal Tests
 """Minimal tests with all 4 OOP principles."""
 
 from abc import ABC, abstractmethod

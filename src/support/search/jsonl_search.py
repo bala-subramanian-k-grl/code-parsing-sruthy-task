@@ -1,3 +1,5 @@
+"""Module for searching through JSONL files."""
+
 import json
 from typing import Any
 

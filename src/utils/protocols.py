@@ -1,4 +1,3 @@
-# USB PD Specification Parser - Protocols Module
 """Protocol interfaces for better abstraction."""
 
 from pathlib import Path

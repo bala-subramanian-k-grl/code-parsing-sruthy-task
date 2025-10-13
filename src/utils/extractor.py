@@ -1,4 +1,3 @@
-# USB PD Specification Parser - PDF Extraction Module
 """PDF extraction with OOP principles."""
 
 import logging

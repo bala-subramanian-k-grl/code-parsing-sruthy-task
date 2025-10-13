@@ -52,7 +52,6 @@ class BaseWriter(ABC):
 
 class Processor:
     """Base processor with common functionality."""
-
     def __init__(self, name: str):
         self._name = name  # Encapsulation
         self._processed_count = 0  # Encapsulation

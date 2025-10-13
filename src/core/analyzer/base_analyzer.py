@@ -5,10 +5,10 @@ import re
 from abc import ABC, abstractmethod
 
 
-class BaseAnalyzer(ABC):  # Abstraction
+class BaseAnalyzer(ABC):  
     """Abstract base analyzer."""
 
-    @abstractmethod  # Abstraction
+    @abstractmethod  
     def analyze(self, text: str) -> str:
         """Analyze text and return content type."""
         ...

@@ -1,3 +1,5 @@
+"""Base class for search implementations with security measures."""
+
 import logging
 from abc import ABC, abstractmethod
 from pathlib import Path

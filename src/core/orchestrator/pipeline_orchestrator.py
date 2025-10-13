@@ -1,4 +1,5 @@
 """USB PD Specification Parser - Pipeline Orchestrator Module"""
+
 from typing import Any, Optional
 
 from src.core.extractors.pdfextractor.pdf_extractor import PDFExtractor

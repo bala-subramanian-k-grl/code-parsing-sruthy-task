@@ -1,3 +1,5 @@
+"""Module for displaying search results with logging and encapsulation."""
+
 import logging
 from typing import Any
 

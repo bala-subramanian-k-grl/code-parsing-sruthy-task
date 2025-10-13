@@ -1,5 +1,5 @@
 # USB PD Specification Parser - Pipeline Orchestrator Module
-
+"""Base class for pipeline orchestrators in the USB PD Specification Parser project."""
 
 from abc import ABC, abstractmethod
 from typing import Any

@@ -1,4 +1,3 @@
-# USB PD Specification Parser - Test Configuration
 """Minimal test configuration with OOP principles."""
 
 from abc import ABC, abstractmethod

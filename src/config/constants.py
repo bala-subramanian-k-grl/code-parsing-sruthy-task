@@ -1,7 +1,7 @@
 # USB PD Specification Parser - Constants Module
 """Application constants."""
 
-# Document constants
+
 DEFAULT_DOC_TITLE = "USB Power Delivery Specification"
 
 # File constants

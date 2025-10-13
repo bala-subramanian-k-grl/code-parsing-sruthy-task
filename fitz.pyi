@@ -1,3 +1,6 @@
+"""This is a stub file for the 'fitz' module, providing type hints for its functions and classes."""
+
+
 from typing import Any
 
 def open(filename: str) -> Any: ...

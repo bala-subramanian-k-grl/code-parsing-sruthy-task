@@ -1,6 +1,6 @@
 # API Documentation
 
-## Overview
+
 
 The USB PD Specification Parser provides a comprehensive API for extracting content from PDF documents with professional OOP design, advanced Python features, and security hardening.
 

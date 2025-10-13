@@ -1,4 +1,3 @@
-# USB PD Specification Parser - Test Package
 """Test package with OOP principles."""
 
 from abc import ABC, abstractmethod

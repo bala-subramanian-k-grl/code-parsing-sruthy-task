@@ -1,3 +1,5 @@
+"""Search application that integrates search functionality and display."""
+
 from .base_search import BaseSearcher
 from .search_display import SearchDisplay
 

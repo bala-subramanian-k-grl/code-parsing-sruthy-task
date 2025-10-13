@@ -1,4 +1,4 @@
-<!-- USB PD Specification Parser - Documentation -->
+
 # USB PD Specification Parser
 
 A **professional-grade Python tool** that extracts content from USB Power Delivery specification PDFs with **comprehensive OOP design**, **security-hardened architecture**, and **95%+ compliance** with industry standards. Generates multiple output formats including JSONL, JSON reports, and Excel validation files.

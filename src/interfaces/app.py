@@ -41,7 +41,7 @@ class CLIApp(BaseApp):  # Inheritance
         print("")
         while True:
             try:
-                choice = int(input("Enter your choice (1-3): "))
+                choice = int(input("Enter your choice (1-3): ").strip())
                 if 1 <= choice <= 3:
                     mode_names = {
                         1: "Full Document",

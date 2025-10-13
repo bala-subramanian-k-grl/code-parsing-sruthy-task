@@ -1,4 +1,5 @@
 """TOC extractor implementation."""
+
 from pathlib import Path
 from typing import Any
 

@@ -1,5 +1,3 @@
-# Usage Guide
-
 ## Quick Start
 
 ### Installation

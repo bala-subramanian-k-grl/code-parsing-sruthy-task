@@ -3,7 +3,6 @@
 from pathlib import Path
 from typing import Union
 
-
 class PathValidator:  # Encapsulation
     """Secure path validation utility."""
 

@@ -18,6 +18,11 @@ class BaseProfiler(ABC):  # Abstraction
         self._profiler = cProfile.Profile()  # Encapsulation
         self._logger = logging.getLogger(self.__class__.__name__)  # Encapsulation
 
+    @property
+    def name(self) -> str:
+        """Get profiler name."""
+        return self._name
+
     @abstractmethod  # Abstraction
     def profile_operation(self) -> dict[str, Any]:
         pass
@@ -117,7 +122,7 @@ class ProfilerSuite:  # Encapsulation
     def add_profiler(self, profiler: BaseProfiler) -> None:  # Polymorphism
         """Add profiler to suite."""
         self._profilers.append(profiler)
-        self._logger.info(f"Added profiler: {profiler._name}")
+        self._logger.info(f"Added profiler: {profiler.name}")
 
     def run_all(self) -> dict[str, Any]:  # Abstraction
         """Run all profilers."""
@@ -127,7 +132,7 @@ class ProfilerSuite:  # Encapsulation
                 result = profiler.profile_operation()  # Polymorphism
                 results[result["profiler"]] = result
             except Exception as e:
-                self._logger.error(f"Profiler {profiler._name} failed: {e}")
+                self._logger.error(f"Profiler {profiler.name} failed: {e}")
         return results
 
 
