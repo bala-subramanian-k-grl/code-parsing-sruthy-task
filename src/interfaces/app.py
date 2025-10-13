@@ -6,7 +6,7 @@ import logging
 import sys
 from abc import ABC, abstractmethod
 
-from .pipeline_orchestrator import PipelineOrchestrator
+from src.core.orchestrator.pipeline_orchestrator import PipelineOrchestrator
 
 
 class BaseApp(ABC):  # Abstraction

@@ -4,11 +4,11 @@
 from abc import ABC, abstractmethod
 from typing import Any, Optional
 
-from .config import Config
-from .output_writer import JSONLWriter
-from .pdf_extractor import PDFExtractor
-from .report_generator import ReportFactory
-from .toc_extractor import TOCExtractor
+from src.config.config import Config
+from src.support.output_writer import JSONLWriter
+from src.core.extractors.pdf_extractor import PDFExtractor
+from src.support.report_generator import ReportFactory
+from src.core.extractors.toc_extractor import TOCExtractor
 
 
 class BasePipeline(ABC):  # Abstraction
@@ -89,7 +89,7 @@ class PipelineOrchestrator(BasePipeline):  # Inheritance
 
         # Validation report
         self._logger.info("Generating validation report...")
-        from .validation_generator import create_validation_report
+        from src.support.validation_generator import create_validation_report
 
         create_validation_report(
             self._config.output_directory,

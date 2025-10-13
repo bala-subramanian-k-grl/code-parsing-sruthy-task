@@ -89,7 +89,7 @@ class ModelProfiler(BaseProfiler):  # Inheritance
 
     def _model_operations(self) -> int:  # Encapsulation
         """Perform model operations."""
-        from src.models import BaseContent, TOCEntry
+        from src.core.models import BaseContent, TOCEntry
 
         count = 0
         for i in range(200):

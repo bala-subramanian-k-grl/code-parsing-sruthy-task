@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from src.report_generator import ReportFactory
+from src.support.report_generator import ReportFactory
 
 
 def fix_compliance():

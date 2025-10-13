@@ -3,8 +3,8 @@
 __version__ = "1.0.0"
 __author__ = "USB PD Parser Team"
 
-from .models import TOCEntry
-from .pipeline_orchestrator import PipelineOrchestrator
+from .core.models import TOCEntry
+from .core.orchestrator.pipeline_orchestrator import PipelineOrchestrator
 
 __all__ = [
     "PipelineOrchestrator",

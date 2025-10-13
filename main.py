@@ -5,7 +5,7 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-from src.app import CLIApp
+from src.interfaces.app import CLIApp
 
 
 class BaseRunner(ABC):  # Abstraction

@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any, Optional
 
-from .models import TOCEntry
+from src.core.models import TOCEntry
 
 
 class BaseTOCExtractor(ABC):  # Abstraction
