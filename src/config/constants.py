@@ -13,3 +13,10 @@ DEFAULT_MAX_PAGES_EXTENDED = 600
 DEFAULT_MAX_PAGES_STANDARD = 200
 MIN_TEXT_LENGTH = 5
 MAX_TOC_PAGES = 20
+
+# Search constants
+DEFAULT_SEARCH_FILE = "outputs/usb_pd_spec.jsonl"
+LOG_FILE_NAME = "parser.log"
+LOG_FORMAT = "%(asctime)s [%(levelname)s] %(name)s - %(message)s"
+LOG_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
+MAX_TERM_LENGTH = 100

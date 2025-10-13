@@ -5,6 +5,7 @@ from typing import Any, Optional
 
 from src.core.analyzer.content_analyzer import ContentAnalyzer
 from src.core.extractors.pdfextractor.base_extractor import BaseExtractor
+from src.utils.decorators import timing, log_execution
 
 
 class PDFExtractor(BaseExtractor):  # Inheritance
@@ -13,10 +14,24 @@ class PDFExtractor(BaseExtractor):  # Inheritance
     def __init__(self, pdf_path: Path):
         super().__init__(pdf_path)
         self._analyzer = ContentAnalyzer()  # Composition
+    
+    def __str__(self) -> str:  # Magic Method
+        return f"PDFExtractor({self._pdf_path.name})"
+    
+    def __repr__(self) -> str:  # Magic Method
+        return f"PDFExtractor(pdf_path={self._pdf_path!r})"
+    
+    def __call__(self, max_pages: Optional[int] = None) -> list[dict[str, Any]]:  # Magic Method
+        return self.extract_content(max_pages)
+    
+    def __len__(self) -> int:  # Magic Method
+        return len(self.extract())
 
     def extract(self) -> list[dict[str, Any]]:  # Polymorphism
         return list(self.extract_structured_content())
 
+    @timing
+    @log_execution
     def extract_content(self, max_pages: Optional[int] = None) -> list[dict[str, Any]]:
         return list(self.extract_structured_content(max_pages))
 

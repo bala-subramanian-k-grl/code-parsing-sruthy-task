@@ -1,8 +1,8 @@
 
 from typing import Any
 
-
 from src.support.output_writer import JSONLWriter
+from src.utils.decorators import timing, log_execution
 from src.core.extractors.pdfextractor.pdf_extractor import PDFExtractor
 from src.support.report.report_generator import ReportFactory
 from src.core.extractors.tocextractor.toc_extractor import TOCExtractor
@@ -10,6 +10,8 @@ from src.core.orchestrator.base_pipeline import BasePipeline  # Inheritance
 from typing import Optional
 
 class PipelineOrchestrator(BasePipeline):  # Inheritance
+    @timing
+    @log_execution
     def run(self, mode: int = 1) -> dict[str, Any]:  # Polymorphism
         mode_names = {
             1: "Full Document",

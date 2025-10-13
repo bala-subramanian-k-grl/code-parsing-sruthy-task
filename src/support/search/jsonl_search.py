@@ -2,7 +2,10 @@
 import json
 from typing import Any
 from .base_search import BaseSearcher  # Importing the base class
+from src.utils.decorators import timing, log_execution
 class JSONLSearcher(BaseSearcher):  # Inheritance
+    @timing
+    @log_execution
     def search(self, term: str) -> list[dict[str, Any]]:  # Polymorphism
         self._logger.info(f"Starting search for term: '{term}'")
         matches: list[dict[str, Any]] = []

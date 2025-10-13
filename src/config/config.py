@@ -43,6 +43,15 @@ class Config(BaseConfig):  # Inheritance
 
     from .constants import DEFAULT_PDF_PATH
     _DEFAULT_PDF = DEFAULT_PDF_PATH
+    
+    def __str__(self) -> str:  # Magic Method
+        return f"Config(pdf={self.pdf_input_file.name}, output={self.output_directory.name})"
+    
+    def __getitem__(self, key: str) -> Any:  # Magic Method
+        return self._config[key]
+    
+    def __contains__(self, key: str) -> bool:  # Magic Method
+        return key in self._config
 
     def _load_config(self) -> dict[str, Any]:  # Polymorphism
         """Load config with defaults (Abstraction)."""

@@ -45,10 +45,4 @@ class BaseLoggerFactory(ABC):  # Abstraction
 # Initialize stream logger when module is imported
 _logger_factory = None
 
-def _ensure_stream_logger():
-    global _logger_factory
-    if _logger_factory is None:
-        from .logger import LoggerFactory
-        _logger_factory = LoggerFactory()
-
-_ensure_stream_logger()
+# Removed circular import
