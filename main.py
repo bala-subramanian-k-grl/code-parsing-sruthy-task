@@ -54,10 +54,10 @@ def main():
     # Setup stream logger to capture all output to parser.log
     import logging
     from pathlib import Path
-    
+
     log_file = Path("outputs") / "parser.log"
     log_file.parent.mkdir(parents=True, exist_ok=True)
-    
+
     # Configure root logger to write to file
     logging.basicConfig(
         level=logging.INFO,
@@ -65,10 +65,10 @@ def main():
         datefmt="%Y-%m-%d %H:%M:%S",
         handlers=[
             logging.FileHandler(log_file),
-            logging.StreamHandler()  # Also keep console output
-        ]
+            logging.StreamHandler(),  # Also keep console output
+        ],
     )
-    
+
     # Factory pattern (Abstraction)
     runner = ApplicationFactory.create_runner("cli")  # Polymorphism
     runner.run()  # Polymorphism: calls concrete implementation
