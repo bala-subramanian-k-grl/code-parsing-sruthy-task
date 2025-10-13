@@ -11,8 +11,8 @@ try:
 
     _has_openpyxl = True
 except ImportError:
-    openpyxl = None 
-    Font = None  
+    openpyxl = None
+    Font = None
     _has_openpyxl = False
 
 

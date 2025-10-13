@@ -7,7 +7,7 @@ from typing import Any
 from .base_analyzer import PatternAnalyzer
 
 
-class ContentAnalyzer:  
+class ContentAnalyzer:
     """Content analyzer using pattern matching."""
 
     def __init__(self) -> None:

@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 
 from src.config import Config
 
+
 class BasePipelineTest(ABC):  # Abstraction
     def __init__(self):
         self._config = Config("application.yml")  # Encapsulation

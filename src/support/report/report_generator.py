@@ -36,5 +36,5 @@ class ReportFactory:  # Factory pattern
         elif clean_type == "excel":
             from .excel_report import ExcelReportGenerator
 
-            return ExcelReportGenerator(output_dir)  
+            return ExcelReportGenerator(output_dir)
         raise ValueError(f"Invalid report type: {report_type}")

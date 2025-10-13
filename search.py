@@ -7,8 +7,8 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 
 from src.config.constants import (
-    DEFAULT_SEARCH_FILE,
     DEFAULT_OUTPUT_DIR,
+    DEFAULT_SEARCH_FILE,
     MAX_TERM_LENGTH,
 )
 from src.loggers.logger import get_logger

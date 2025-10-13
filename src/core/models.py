@@ -6,7 +6,7 @@ from typing import Any, Optional
 from pydantic import BaseModel, Field, ValidationInfo, field_validator
 
 
-class BaseContent(BaseModel):  
+class BaseContent(BaseModel):
     """Base content (Abstraction, Encapsulation)."""
 
     page: int = Field(gt=0)  # Encapsulation

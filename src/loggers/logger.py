@@ -78,7 +78,7 @@ class LoggerFactory(BaseLoggerFactory):  # Inheritance
 
 def get_logger(
     name: str = "usb_pd_parser", output_dir: Optional[Path] = None, debug: bool = False
-) -> logging.Logger:  
+) -> logging.Logger:
     """Get logger instance."""
     factory = LoggerFactory(name)  # Polymorphism
     return factory.create_logger(output_dir, debug)
