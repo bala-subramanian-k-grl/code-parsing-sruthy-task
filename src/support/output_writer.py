@@ -41,21 +41,28 @@ class JSONLWriter(BaseWriter):  # Inheritance: extends BaseWriter
                 else:
                     self._write_single(f, data)
         except OSError as e:
-            raise RuntimeError(f"Cannot write to {self._output_path}: {e}") from e
+            error_msg = f"Cannot write to {self._output_path}: {e}"
+            raise RuntimeError(error_msg) from e
 
-    def _write_list(self, f: TextIO, data: list[Any]) -> None:  # Encapsulation: private
+    def _write_list(
+        self, f: TextIO, data: list[Any]
+    ) -> None:  # Encapsulation: private
         """Write list of items."""
         for item in data:
             self._write_single(f, item)
 
-    def _write_single(self, f: TextIO, item: Any) -> None:  # Encapsulation: private
+    def _write_single(
+        self, f: TextIO, item: Any
+    ) -> None:  # Encapsulation: private
         """Write single item."""
         try:
             if hasattr(item, "model_dump"):
                 f.write(item.model_dump_json() + "\n")
             else:
-                f.write(json.dumps(item, ensure_ascii=False) + "\n")
+                json_str = json.dumps(item, ensure_ascii=False)
+                f.write(json_str + "\n")
         except (TypeError, ValueError) as e:
             import logging
 
-            logging.getLogger(__name__).warning(f"Serialization error: {e}")
+            logger = logging.getLogger(__name__)
+            logger.warning(f"Serialization error: {e}")

@@ -1,12 +1,23 @@
 """PDF content extractor module."""
 
 from collections.abc import Iterator
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Optional
 
 from src.core.analyzer.content_analyzer import ContentAnalyzer
 from src.core.extractors.pdfextractor.base_extractor import BaseExtractor
 from src.utils.decorators import log_execution, timing
+
+
+@dataclass
+class ContentItemData:
+    """Data class for content item creation."""
+    text: str
+    content_type: str
+    block_num: int
+    page_num: int
+    block: dict[str, Any]
 
 
 class PDFExtractor(BaseExtractor):  # Inheritance
@@ -83,34 +94,28 @@ class PDFExtractor(BaseExtractor):  # Inheritance
             return
 
         content_type = self._analyzer.classify(text)
-        yield self._create_content_item(text, content_type, block_num, page_num, block)
+        item_data = ContentItemData(text, content_type, block_num, page_num, block)
+        yield self._create_content_item(item_data)
 
     def _is_valid_text(self, text: str) -> bool:
         """Check if text is valid for processing (Encapsulation)."""
         return bool(text.strip()) and len(text) > 5
 
-    def _create_content_item(
-        self,
-        text: str,
-        content_type: str,
-        block_num: int,
-        page_num: int,
-        block: dict[str, Any],
-    ) -> dict[str, Any]:
+    def _create_content_item(self, data: ContentItemData) -> dict[str, Any]:
         """Create content item dictionary (Encapsulation)."""
-        title = self._get_title(text)
+        title = self._get_title(data.text)
         return {
             "doc_title": "USB PD Specification",
-            "section_id": f"{content_type[0]}{page_num + 1}_{block_num}",
+            "section_id": f"{data.content_type[0]}{data.page_num + 1}_{data.block_num}",
             "title": title,
-            "content": text.strip(),
-            "page": page_num + 1,
+            "content": data.text.strip(),
+            "page": data.page_num + 1,
             "level": 1,
             "parent_id": None,
             "full_path": title,
-            "type": content_type,
-            "block_id": f"{content_type[0]}{page_num + 1}_{block_num}",
-            "bbox": list(block.get("bbox", [])),
+            "type": data.content_type,
+            "block_id": f"{data.content_type[0]}{data.page_num + 1}_{data.block_num}",
+            "bbox": list(data.block.get("bbox", [])),
         }
 
     def _get_title(self, text: str) -> str:

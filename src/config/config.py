@@ -46,7 +46,9 @@ class Config(BaseConfig):  # Inheritance
     _DEFAULT_PDF = DEFAULT_PDF_PATH
 
     def __str__(self) -> str:  # Magic Method
-        return f"Config(pdf={self.pdf_input_file.name}, output={self.output_directory.name})"
+        pdf_name = self.pdf_input_file.name
+        output_name = self.output_directory.name
+        return f"Config(pdf={pdf_name}, output={output_name})"
 
     def __getitem__(self, key: str) -> Any:  # Magic Method
         return self._config[key]

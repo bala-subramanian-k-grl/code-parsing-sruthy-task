@@ -8,7 +8,8 @@ from typing import Optional
 try:
     import fitz
 except ImportError as e:
-    raise ImportError("PyMuPDF required. Install: pip install PyMuPDF==1.24.9") from e
+    error_msg = "PyMuPDF required. Install: pip install PyMuPDF==1.24.9"
+    raise ImportError(error_msg) from e
 
 
 from ..config.constants import DEFAULT_DOC_TITLE
@@ -51,7 +52,9 @@ class FrontPageExtractor(BaseExtractor):  # Inheritance
             if doc is None:
                 return
             doc_len: int = len(doc)
-            total_pages = doc_len if max_pages is None else min(max_pages, doc_len)
+            total_pages = (
+                doc_len if max_pages is None else min(max_pages, doc_len)
+            )
             for i in range(total_pages):
                 try:
                     yield str(doc[i].get_text("text") or "")
@@ -82,7 +85,9 @@ class TitleExtractor(BaseExtractor):  # Inheritance
 
 
 # Factory functions (Abstraction)
-def extract_front_pages(pdf_path: Path, max_pages: Optional[int] = 10) -> Iterator[str]:
+def extract_front_pages(
+    pdf_path: Path, max_pages: Optional[int] = 10
+) -> Iterator[str]:
     """Extract front pages from PDF."""
     return FrontPageExtractor(pdf_path).extract_pages(max_pages)
 

@@ -16,7 +16,9 @@ class BaseProfiler(ABC):  # Abstraction
     def __init__(self, name: str):
         self._name = name  # Encapsulation
         self._profiler = cProfile.Profile()  # Encapsulation
-        self._logger = logging.getLogger(self.__class__.__name__)  # Encapsulation
+        self._logger = logging.getLogger(
+            self.__class__.__name__
+        )  # Encapsulation
 
     @property
     def name(self) -> str:
@@ -62,7 +64,9 @@ class ConfigProfiler(BaseProfiler):  # Inheritance
             "profiler": self._name,
             "operations": 100,
             "total_calls": profile_data["total_calls"],
-            "profile_stats": profile_data["profile_output"][:300] + "...",
+            "profile_stats": (
+                profile_data["profile_output"][:300] + "..."
+            ),
         }
 
     def _config_operations(self) -> int:  # Encapsulation
@@ -89,7 +93,9 @@ class ModelProfiler(BaseProfiler):  # Inheritance
             "profiler": self._name,
             "operations": 200,
             "total_calls": profile_data["total_calls"],
-            "profile_stats": profile_data["profile_output"][:300] + "...",
+            "profile_stats": (
+                profile_data["profile_output"][:300] + "..."
+            ),
         }
 
     def _model_operations(self) -> int:  # Encapsulation
@@ -117,7 +123,9 @@ class ProfilerSuite:  # Encapsulation
 
     def __init__(self):
         self._profilers: list[BaseProfiler] = []  # Encapsulation
-        self._logger = logging.getLogger(self.__class__.__name__)  # Encapsulation
+        self._logger = logging.getLogger(
+            self.__class__.__name__
+        )  # Encapsulation
 
     def add_profiler(self, profiler: BaseProfiler) -> None:  # Polymorphism
         """Add profiler to suite."""
@@ -158,15 +166,23 @@ def main():
         suite = ProfilerSuite()
 
         # Add profilers using factory
-        suite.add_profiler(ProfilerFactory.create_profiler("config", "Config Profiler"))
-        suite.add_profiler(ProfilerFactory.create_profiler("model", "Model Profiler"))
+        config_profiler = ProfilerFactory.create_profiler(
+            "config", "Config Profiler"
+        )
+        suite.add_profiler(config_profiler)
+        model_profiler = ProfilerFactory.create_profiler(
+            "model", "Model Profiler"
+        )
+        suite.add_profiler(model_profiler)
 
         # Run profiling
         results = suite.run_all()
 
         logger.info("Performance Profiling Results:")
         for name, result in results.items():
-            logger.info(f"Profiler: {name} - {result['operations']} operations")
+            logger.info(
+                f"Profiler: {name} - {result['operations']} operations"
+            )
             logger.info(f"  Total Calls: {result['total_calls']}")
 
         return 0

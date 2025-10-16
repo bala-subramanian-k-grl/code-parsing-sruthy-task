@@ -38,12 +38,15 @@ class LoggerFactory(BaseLoggerFactory):  # Inheritance
         try:
             safe_dir = self._validate_output_dir(output_dir)
             # Additional security check before mkdir
-            if not safe_dir.name.replace("_", "").replace("-", "").isalnum():
+            clean_name = safe_dir.name.replace("_", "").replace("-", "")
+            if not clean_name.isalnum():
                 raise ValueError(f"Invalid directory name: {safe_dir.name}")
             safe_dir.mkdir(parents=True, exist_ok=True)
             log_file = safe_dir / "parser.log"
             # Validate log file path to prevent traversal
-            if not log_file.resolve().is_relative_to(safe_dir.resolve()):
+            log_resolved = log_file.resolve()
+            safe_resolved = safe_dir.resolve()
+            if not log_resolved.is_relative_to(safe_resolved):
                 raise ValueError("Log file path traversal detected")
             fh = logging.FileHandler(log_file)
             fh.setLevel(log_level)
@@ -56,9 +59,9 @@ class LoggerFactory(BaseLoggerFactory):  # Inheritance
         """Validate output directory against security vulnerabilities."""
         try:
             # Sanitize input to prevent command injection
-            clean_path = Path(
-                str(output_dir).replace("..", "").replace(";", "").replace("|", "")
-            )
+            path_str = str(output_dir)
+            sanitized = path_str.replace("..", "").replace(";", "").replace("|", "")
+            clean_path = Path(sanitized)
             resolved_path = clean_path.resolve(strict=False)
             working_dir = Path.cwd().resolve()
 
@@ -68,12 +71,14 @@ class LoggerFactory(BaseLoggerFactory):  # Inheritance
 
             # Additional security check for suspicious patterns
             path_str = str(resolved_path)
-            if any(char in path_str for char in ["&", "`", "$", "(", ")", "<", ">"]):
+            suspicious_chars = ["&", "`", "$", "(", ")", "<", ">"]
+            if any(char in path_str for char in suspicious_chars):
                 raise ValueError(f"Suspicious characters in path: {output_dir}")
 
             return resolved_path
         except (OSError, ValueError) as e:
-            raise ValueError(f"Invalid output directory: {output_dir} - {e}") from e
+            error_msg = f"Invalid output directory: {output_dir} - {e}"
+            raise ValueError(error_msg) from e
 
 
 def get_logger(

@@ -103,3 +103,42 @@
 2025-10-13 21:33:14 [INFO] src.core.orchestrator.pipeline_orchestrator - Completed run successfully
 2025-10-13 21:33:14 [INFO] src.core.orchestrator.pipeline_orchestrator - run took 2.08 seconds
 2025-10-13 21:33:14 [INFO] CLIApp - Processing completed successfully: 369 TOC entries extracted, 4403 content items processed
+2025-10-16 16:00:08 [INFO] PipelineOrchestrator - Configuration loaded successfully from application.yml
+2025-10-16 16:00:08 [INFO] PipelineOrchestrator - Output directory prepared: D:\code parsing\outputs
+2025-10-16 16:00:08 [INFO] src.core.orchestrator.pipeline_orchestrator - Executing run
+2025-10-16 16:00:08 [INFO] PipelineOrchestrator - Starting pipeline execution - Mode: Standard (200 pages)
+2025-10-16 16:00:08 [INFO] PipelineOrchestrator - Extracting Table of Contents...
+2025-10-16 16:00:09 [INFO] PipelineOrchestrator - TOC extraction completed: 369 entries found
+2025-10-16 16:00:09 [INFO] PipelineOrchestrator - Extracting content from PDF (max pages: 200)...
+2025-10-16 16:00:09 [INFO] src.core.extractors.pdfextractor.pdf_extractor - Executing extract_content
+2025-10-16 16:00:12 [INFO] src.core.extractors.pdfextractor.pdf_extractor - Completed extract_content successfully
+2025-10-16 16:00:12 [INFO] src.core.extractors.pdfextractor.pdf_extractor - extract_content took 2.48 seconds
+2025-10-16 16:00:12 [INFO] PipelineOrchestrator - Content extraction completed: 4403 items processed
+2025-10-16 16:00:12 [INFO] PipelineOrchestrator - Writing JSONL output files...
+2025-10-16 16:00:12 [INFO] PipelineOrchestrator - JSONL files written successfully
+2025-10-16 16:00:12 [INFO] PipelineOrchestrator - Generating analysis reports...
+2025-10-16 16:00:12 [INFO] PipelineOrchestrator - Analysis reports generated successfully
+2025-10-16 16:00:12 [INFO] PipelineOrchestrator - Generating validation report...
+2025-10-16 16:00:12 [ERROR] src.core.orchestrator.pipeline_orchestrator - Error in run: name 'font' is not defined
+2025-10-16 16:00:12 [ERROR] CLIApp - Application execution failed: name 'font' is not defined
+2025-10-16 16:00:27 [INFO] PipelineOrchestrator - Configuration loaded successfully from application.yml
+2025-10-16 16:00:27 [INFO] PipelineOrchestrator - Output directory prepared: D:\code parsing\outputs
+2025-10-16 16:00:27 [INFO] src.core.orchestrator.pipeline_orchestrator - Executing run
+2025-10-16 16:00:27 [INFO] PipelineOrchestrator - Starting pipeline execution - Mode: Standard (200 pages)
+2025-10-16 16:00:27 [INFO] PipelineOrchestrator - Extracting Table of Contents...
+2025-10-16 16:00:28 [INFO] PipelineOrchestrator - TOC extraction completed: 369 entries found
+2025-10-16 16:00:28 [INFO] PipelineOrchestrator - Extracting content from PDF (max pages: 200)...
+2025-10-16 16:00:28 [INFO] src.core.extractors.pdfextractor.pdf_extractor - Executing extract_content
+2025-10-16 16:00:30 [INFO] src.core.extractors.pdfextractor.pdf_extractor - Completed extract_content successfully
+2025-10-16 16:00:30 [INFO] src.core.extractors.pdfextractor.pdf_extractor - extract_content took 2.27 seconds
+2025-10-16 16:00:30 [INFO] PipelineOrchestrator - Content extraction completed: 4403 items processed
+2025-10-16 16:00:30 [INFO] PipelineOrchestrator - Writing JSONL output files...
+2025-10-16 16:00:30 [INFO] PipelineOrchestrator - JSONL files written successfully
+2025-10-16 16:00:30 [INFO] PipelineOrchestrator - Generating analysis reports...
+2025-10-16 16:00:30 [INFO] PipelineOrchestrator - Analysis reports generated successfully
+2025-10-16 16:00:30 [INFO] PipelineOrchestrator - Generating validation report...
+2025-10-16 16:00:31 [INFO] PipelineOrchestrator - Validation report generated successfully
+2025-10-16 16:00:31 [INFO] PipelineOrchestrator - Pipeline execution completed successfully
+2025-10-16 16:00:31 [INFO] src.core.orchestrator.pipeline_orchestrator - Completed run successfully
+2025-10-16 16:00:31 [INFO] src.core.orchestrator.pipeline_orchestrator - run took 3.06 seconds
+2025-10-16 16:00:31 [INFO] CLIApp - Processing completed successfully: 369 TOC entries extracted, 4403 content items processed

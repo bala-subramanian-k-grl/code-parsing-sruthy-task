@@ -36,8 +36,12 @@ class CLIApp(BaseApp):  # Inheritance
         print("\n=== USB PD Specification Parser ===")
         print("Please select processing mode:")
         print("  [1] Full Document    - Process entire PDF (all pages)")
-        print("  [2] Extended Mode    - Process first 600 pages (balanced)")
-        print("  [3] Standard Mode    - Process first 200 pages (recommended)")
+        print(
+            "  [2] Extended Mode    - Process first 600 pages (balanced)"
+        )
+        print(
+            "  [3] Standard Mode    - Process first 200 pages (recommended)"
+        )
         print("")
         while True:
             try:
@@ -64,16 +68,19 @@ class CLIApp(BaseApp):  # Inheritance
             )
         elif args.content_only:
             result = orchestrator.run_content_only()
-            self._logger.info(f"Content extraction completed: {result} items processed")
+            self._logger.info(
+                f"Content extraction completed: {result} items processed"
+            )
         else:
             mode = args.mode or self._get_mode()
             result = orchestrator.run_full_pipeline(mode)
             toc_count = result["toc_entries"]
             content_count = result["spec_counts"]["content_items"]
-            self._logger.info(
+            success_msg = (
                 f"Processing completed successfully: {toc_count} TOC entries "
                 f"extracted, {content_count} content items processed"
             )
+            self._logger.info(success_msg)
 
     def run(self) -> None:  # Polymorphism
         try:

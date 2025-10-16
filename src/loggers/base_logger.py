@@ -17,7 +17,10 @@ class BaseLoggerFactory(ABC):  # Abstraction
     def _setup_stream_logger(self) -> None:  # Encapsulation
         """Setup stream logger to capture all logs to parser.log."""
         root_logger = logging.getLogger()
-        if not any(isinstance(h, logging.FileHandler) for h in root_logger.handlers):
+        has_file_handler = any(
+            isinstance(h, logging.FileHandler) for h in root_logger.handlers
+        )
+        if not has_file_handler:
             try:
                 log_file = Path("outputs") / "parser.log"
                 log_file.parent.mkdir(parents=True, exist_ok=True)
@@ -26,8 +29,9 @@ class BaseLoggerFactory(ABC):  # Abstraction
                 fh.setFormatter(self._formatter)
                 root_logger.addHandler(fh)
                 root_logger.setLevel(logging.INFO)
-            except OSError:
-                pass  # Silently fail if can't create log file
+            except OSError as e:
+                # Silently fail if can't create log file
+                logging.getLogger(__name__).debug(f"Failed to create log file: {e}")
 
     @abstractmethod  # Abstraction
     def create_logger(
