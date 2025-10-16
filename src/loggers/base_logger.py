@@ -18,9 +18,7 @@ class BaseLoggerFactory(ABC):  # Abstraction
         """Setup stream logger to capture all logs to parser.log."""
         root_logger = logging.getLogger()
         handlers = root_logger.handlers
-        has_file_handler = any(
-            isinstance(h, logging.FileHandler) for h in handlers
-        )
+        has_file_handler = any(isinstance(h, logging.FileHandler) for h in handlers)
         if not has_file_handler:
             try:
                 log_file = Path("outputs") / "parser.log"

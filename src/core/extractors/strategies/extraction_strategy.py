@@ -56,9 +56,7 @@ class ComprehensiveStrategy(ExtractionStrategy):
     def _get_block_text(self, block: dict[str, Any]) -> str:
         """Extract text from block."""
         return "".join(
-            str(span["text"])
-            for line in block["lines"]
-            for span in line["spans"]
+            str(span["text"]) for line in block["lines"] for span in line["spans"]
         )
 
 

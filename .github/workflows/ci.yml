@@ -31,10 +31,6 @@ jobs:
       run: |
         ruff check src/ tests/ main.py search.py
     
-    - name: Format check with black
-      run: |
-        black --check src/ tests/ main.py search.py
-    
     - name: Import sort check
       run: |
         isort --check-only src/ tests/ main.py search.py

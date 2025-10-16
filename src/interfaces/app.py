@@ -54,7 +54,8 @@ class CLIApp(BaseApp):  # Inheritance
             content_count = result["spec_counts"]["content_items"]
             self._logger.info(
                 "Processing completed: %s TOC entries, %s content items",
-                toc_count, content_count
+                toc_count,
+                content_count,
             )
 
     def run(self) -> None:  # Polymorphism

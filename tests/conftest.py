@@ -18,10 +18,7 @@ class BaseFixture(ABC):  # Abstraction
 class ConfigFixture(BaseFixture):  # Inheritance
     def create(self, tmp_path: Path) -> Path:  # Polymorphism
         config_file = tmp_path / "test.yml"
-        content = (
-            "pdf_input_file: test.pdf\n"
-            "output_directory: outputs"
-        )
+        content = "pdf_input_file: test.pdf\n" "output_directory: outputs"
         config_file.write_text(content)
 
         return config_file

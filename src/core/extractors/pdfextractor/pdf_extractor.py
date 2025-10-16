@@ -42,9 +42,7 @@ class PDFExtractor(BaseExtractor):  # Inheritance
         """Get PDF file path."""
         return self._pdf_path
 
-    def __call__(
-        self, max_pages: Optional[int] = None
-    ) -> list[dict[str, Any]]:
+    def __call__(self, max_pages: Optional[int] = None) -> list[dict[str, Any]]:
         return self.extract_content(max_pages)
 
     def __len__(self) -> int:  # Magic Method
@@ -56,9 +54,7 @@ class PDFExtractor(BaseExtractor):  # Inheritance
 
     @timing
     @log_execution
-    def extract_content(
-        self, max_pages: Optional[int] = None
-    ) -> list[dict[str, Any]]:
+    def extract_content(self, max_pages: Optional[int] = None) -> list[dict[str, Any]]:
         return list(self.extract_structured_content(max_pages))
 
     def _validate_path(self, path: Path) -> Path:  # Encapsulation
@@ -80,9 +76,7 @@ class PDFExtractor(BaseExtractor):  # Inheritance
         finally:
             doc.close()
 
-    def _calculate_total_pages(
-        self, doc: Any, max_pages: Optional[int]
-    ) -> int:
+    def _calculate_total_pages(self, doc: Any, max_pages: Optional[int]) -> int:
         """Calculate total pages to process."""
         doc_length = len(doc)
         return doc_length if max_pages is None else min(max_pages, doc_length)
@@ -110,9 +104,7 @@ class PDFExtractor(BaseExtractor):  # Inheritance
             return
 
         content_type = self.__analyzer.classify(text)  # Private access
-        item_data = ContentItemData(
-            text, content_type, block_num, page_num, block
-        )
+        item_data = ContentItemData(text, content_type, block_num, page_num, block)
         yield self._create_content_item(item_data)
 
     def _is_valid_text(self, text: str) -> bool:
@@ -148,9 +140,7 @@ class PDFExtractor(BaseExtractor):  # Inheritance
     def _get_block_text(self, block: dict[str, Any]) -> str:
         """Extract text from block."""
         return "".join(
-            str(span["text"])
-            for line in block["lines"]
-            for span in line["spans"]
+            str(span["text"]) for line in block["lines"] for span in line["spans"]
         )
 
     def _extract_tables(

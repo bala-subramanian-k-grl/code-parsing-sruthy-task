@@ -1,4 +1,3 @@
-
 """USB PD Specification Parser - Main Entry Point with OOP principles"""
 
 from abc import ABC, abstractmethod

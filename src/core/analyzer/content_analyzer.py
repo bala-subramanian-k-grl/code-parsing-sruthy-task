@@ -54,9 +54,7 @@ class ContentAnalyzer:
     def count_key_terms(self, text: str) -> int:
         """Count USB PD key terms in text."""
         text_upper = text.upper()
-        count = sum(
-            1 for term in self._key_terms if term.upper() in text_upper
-        )
+        count = sum(1 for term in self._key_terms if term.upper() in text_upper)
         return count
 
     def is_major_section(self, text: str) -> bool:

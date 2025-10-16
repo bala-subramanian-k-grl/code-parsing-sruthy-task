@@ -42,23 +42,18 @@ class PipelineOrchestrator(BasePipeline):  # Inheritance
         """Get max pages for processing."""
         return None  # Process all pages
 
-    def _calculate_counts(
-        self, toc: list[Any], content: list[Any]
-    ) -> dict[str, Any]:
+    def _calculate_counts(self, toc: list[Any], content: list[Any]) -> dict[str, Any]:
         """Calculate enhanced content statistics."""
         from src.core.analyzer.content_analyzer import ContentAnalyzer
 
         analyzer = ContentAnalyzer()
 
         major_sections = sum(
-            1
-            for item in content
-            if analyzer.is_major_section(item.get("content", ""))
+            1 for item in content if analyzer.is_major_section(item.get("content", ""))
         )
 
         total_key_terms = sum(
-            analyzer.count_key_terms(item.get("content", ""))
-            for item in content
+            analyzer.count_key_terms(item.get("content", "")) for item in content
         )
 
         return {
@@ -67,9 +62,7 @@ class PipelineOrchestrator(BasePipeline):  # Inheritance
             "toc_entries": len(toc),
             "major_sections": major_sections,
             "key_terms": min(total_key_terms, 100),  # Cap at 100
-            "paragraphs": sum(
-                1 for item in content if item.get("type") == "paragraph"
-            ),
+            "paragraphs": sum(1 for item in content if item.get("type") == "paragraph"),
         }
 
     def _create_analysis_reports(self, counts: dict[str, Any]) -> None:
@@ -91,9 +84,7 @@ class PipelineOrchestrator(BasePipeline):  # Inheritance
             output_dir / "usb_pd_spec.jsonl",
         )
 
-    def _extract_data(
-        self, max_pages: Optional[int]
-    ) -> tuple[list[Any], list[Any]]:
+    def _extract_data(self, max_pages: Optional[int]) -> tuple[list[Any], list[Any]]:
         """Extract TOC and content data using Strategy Pattern."""
         self._logger.info("Extracting Table of Contents...")
         pdf_file = self._config.pdf_input_file
@@ -132,9 +123,7 @@ class PipelineOrchestrator(BasePipeline):  # Inheritance
 
         self._logger.info("JSONL files written successfully")
 
-    def _generate_reports(
-        self, toc: list[Any], content: list[Any]
-    ) -> dict[str, Any]:
+    def _generate_reports(self, toc: list[Any], content: list[Any]) -> dict[str, Any]:
         """Generate analysis and validation reports."""
         self._logger.info("Generating analysis reports...")
         counts = self._calculate_counts(toc, content)

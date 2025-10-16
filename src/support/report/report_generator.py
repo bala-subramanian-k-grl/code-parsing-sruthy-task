@@ -20,9 +20,7 @@ class ReportFactory:  # Factory pattern
     _ALLOWED_TYPES = {"json", "excel"}  # Authorized report types
 
     @staticmethod
-    def create_generator(
-        report_type: str, output_dir: Path
-    ) -> BaseReportGenerator:
+    def create_generator(report_type: str, output_dir: Path) -> BaseReportGenerator:
         # Validate and sanitize input
         if not report_type.strip():
             raise ValueError("Report type must be a non-empty string")

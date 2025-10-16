@@ -86,9 +86,7 @@ class TitleExtractor(BaseExtractor):  # Inheritance
 
 
 # Factory functions (Abstraction)
-def extract_front_pages(
-    pdf_path: Path, max_pages: Optional[int] = 10
-) -> Iterator[str]:
+def extract_front_pages(pdf_path: Path, max_pages: Optional[int] = 10) -> Iterator[str]:
     """Extract front pages from PDF."""
     return FrontPageExtractor(pdf_path).extract_pages(max_pages)
 
