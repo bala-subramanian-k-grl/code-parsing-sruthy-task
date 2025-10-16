@@ -11,7 +11,6 @@ class BaseAnalyzer(ABC):
     @abstractmethod
     def analyze(self, text: str) -> str:
         """Analyze text and return content type."""
-        ...
 
 
 class PatternAnalyzer(BaseAnalyzer):  # Inheritance

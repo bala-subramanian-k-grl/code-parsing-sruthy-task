@@ -1,110 +1,73 @@
+# Usage Guide
+
 ## Quick Start
 
 ### Installation
 
 ```bash
-# Clone repository
 git clone https://github.com/sruthypanigrahi/code-parsing.git
 cd code-parsing
-
-# Install dependencies
 pip install -r requirements.txt
-
-# Run with interactive interface
-python main.py
 ```
 
 ### Basic Usage
 
 ```bash
-# Interactive mode (recommended)
+# Run with interactive interface
 python main.py
 
-# Direct mode selection
-python main.py --mode 3  # Standard mode (1046 pages)
-python main.py --mode 2  # Extended mode (1046 pages)
-python main.py --mode 1  # Full document (1046 pages)
+# Process entire document (1046 pages)
+python main.py --config application.yml
 
-# Specialized extraction
-python main.py --toc-only     # Extract only Table of Contents
-python main.py --content-only # Extract only content
+# Extract only TOC
+python main.py --toc-only
+
+# Extract only content
+python main.py --content-only
 ```
 
 ## Processing Modes
 
-### Mode 1: Full Document
-- Processes entire PDF (all pages)
-- Memory intensive
-- Complete extraction
-- Use for comprehensive analysis
+### Full Document Processing (Recommended)
 
 ```bash
-python main.py --mode 1
+python main.py
 ```
 
-### Mode 2: Extended Mode
-- Processes all 1046 pages (optimized)
-- Balanced performance/coverage
-- Good for large documents
-- Recommended for detailed analysis
-
-```bash
-python main.py --mode 2
-```
-
-### Mode 3: Standard Mode (Recommended)
+**Output:**
 - Processes all 1046 pages
-- Memory efficient
-- Fast processing
-- Ideal for most use cases
+- Generates 6 output files
+- Creates comprehensive reports
+
+### Specialized Extraction
 
 ```bash
-python main.py --mode 3
+# TOC only
+python main.py --toc-only
+
+# Content only  
+python main.py --content-only
 ```
 
 ## Output Files
 
-The parser generates 6 comprehensive output files:
+### Generated Files (6 total)
 
-### 1. TOC File (`usb_pd_toc.jsonl`)
-Table of Contents entries in JSONL format.
+1. **`usb_pd_toc.jsonl`** - Table of Contents (369 entries)
+2. **`usb_pd_spec.jsonl`** - Full content (25,760+ items)
+3. **`usb_pd_metadata.jsonl`** - Content statistics
+4. **`parsing_report.json`** - Processing metadata
+5. **`validation_report.xlsx`** - Excel validation report
+6. **`parser.log`** - Execution logs
 
-```json
-{
-  "doc_title": "USB PD Specification",
-  "section_id": "1.1",
-  "title": "Introduction",
-  "full_path": "1. Overview > 1.1 Introduction",
-  "page": 15,
-  "level": 2,
-  "parent_id": "1",
-  "tags": ["introduction", "overview"]
-}
-```
-
-### 2. Specification Content (`usb_pd_spec.jsonl`)
-Complete document content with metadata.
-
-### 3. Metadata File (`usb_pd_metadata.jsonl`)
-Content statistics and metadata.
-
-```json
-{
-  "doc_title": "USB PD Specification",
-  "section_id": "p1_0",
-  "page": 1,
-  "type": "paragraph",
-  "word_count": 3,
-  "char_count": 20
-}
-```
+### JSONL Format
 
 ```json
 {
   "doc_title": "USB PD Specification",
   "section_id": "p1_0",
   "title": "Universal Serial Bus",
-  "content": "Universal Serial Bus Power Delivery Specification...",
+  "content": "Universal Serial Bus",
   "page": 1,
   "level": 1,
   "parent_id": null,
@@ -115,330 +78,168 @@ Content statistics and metadata.
 }
 ```
 
-### 4. Parsing Report (`parsing_report.json`)
-Processing metadata and statistics.
-
-```json
-{
-  "processing_info": {
-    "start_time": "2024-12-19T10:30:00Z",
-    "end_time": "2024-12-19T10:30:08Z",
-    "duration_seconds": 8.45,
-    "mode": "Standard Mode (200 pages)",
-    "pages_processed": 200
-  },
-  "extraction_stats": {
-    "toc_entries": 369,
-    "content_items": 4403,
-    "tables_extracted": 45,
-    "images_found": 12
-  },
-  "validation_results": {
-    "jsonl_format_valid": true,
-    "required_fields_present": true,
-    "data_integrity_check": "passed"
-  }
-}
-```
-
-### 5. Validation Report (`validation_report.xlsx`)
-Excel report comparing TOC vs parsed content with styling.
-
-- **Summary Sheet**: Overview statistics
-- **TOC Analysis**: Table of Contents validation
-- **Content Analysis**: Content extraction validation
-- **Discrepancies**: Issues found during processing
-
-### 6. Processing Log (`parser.log`)
-Detailed processing logs with security tracking.
-
-```
-2024-12-19 10:30:00,123 - PipelineOrchestrator - INFO - Configuration loaded successfully
-2024-12-19 10:30:00,456 - PipelineOrchestrator - INFO - Starting pipeline execution - Mode: Standard (200 pages)
-2024-12-19 10:30:02,789 - PDFExtractor - INFO - Executing extract_content
-2024-12-19 10:30:05,012 - PDFExtractor - INFO - extract_content took 2.23 seconds
-2024-12-19 10:30:06,345 - TOCExtractor - INFO - TOC extraction completed: 369 entries found
-2024-12-19 10:30:08,678 - PipelineOrchestrator - INFO - Pipeline execution completed successfully
-```
-
 ## Search Functionality
 
-### Basic Search
+### Content Search
 
 ```bash
 # Search in extracted content
-python search.py "USB Power Delivery"
-
-# Search in specific file
-python search.py "connector" outputs/usb_pd_spec.jsonl
-
-# Case-sensitive search
-python search.py "USB" --case-sensitive
-```
-
-### Advanced Search Options
-
-```bash
-# Search with context
-python search.py "voltage" --context 2
-
-# Search with regex
-python search.py "USB.*PD" --regex
-
-# Search in TOC only
-python search.py "introduction" outputs/usb_pd_toc.jsonl
-```
-
-## Recent Improvements (v2.1.0)
-
-### ✅ **Major Updates**
-- **100% Page Coverage**: Now processes all 1046 pages instead of 200
-- **Complete File Set**: Added missing `usb_pd_metadata.jsonl` file
-- **Enhanced Documentation**: Improved docstring coverage for better code quality
-- **Code Quality**: Fixed line length violations and formatting issues
-- **Performance**: Optimized for full document processing
-
-### **Score Improvements**
-- Page Coverage: 19% → 100% (massive improvement)
-- Required Files: 67% → 100% (all 3 files now present)
-- Code Quality: Fixed 71 code smells
-- Documentation: Enhanced function and class docstrings
-- Expected Overall Score: 75% → 90%+
-
-### **Configuration Changes**
-```yaml
-# Updated page limits in application.yml
-input:
-  max_pages:
-    mode_1: null  # Full document (1046 pages)
-    mode_2: 1046  # Extended mode (1046 pages)
-    mode_3: 1046  # Standard mode (1046 pages)
+python search.py "Power Delivery"
+python search.py "USB" outputs/usb_pd_spec.jsonl
 ```
 
 ## Configuration
 
-### YAML Configuration (`application.yml`)
+### application.yml
 
 ```yaml
-# Processing mode settings
-input:
-  max_pages:
-    mode_1: null  # Full document
-    mode_2: 600   # Extended mode
-    mode_3: 200   # Standard mode
+pdf:
+  input_file: "assets/USB_PD_R3_2 V1.1 2024-10.pdf"
 
-# OOP features
-oop:
-  use_abstract_classes: true
-  enable_polymorphism: true
-  magic_methods: true
-  property_decorators: true
+output:
+  directory: "outputs"
 
-# Decorator settings
 processing:
-  decorators:
-    timing: true
-    logging: true
-    retry: true
-    validation: true
-
-# Security settings
-security:
-  validate_paths: true
-  prevent_path_traversal: true
-  cwe_compliance: true
+  max_pages: 1046  # All pages
 ```
 
 ## Advanced Usage
 
-### Custom Processing
+### Programmatic API
 
 ```python
 from src.core.orchestrator.pipeline_orchestrator import PipelineOrchestrator
 
-# Initialize with custom config
-orchestrator = PipelineOrchestrator("custom_config.yml")
+# Initialize orchestrator
+orchestrator = PipelineOrchestrator("application.yml")
 
-# Run with specific parameters
-result = orchestrator.run_full_pipeline(
-    mode=3,
-    extract_tables=True,
-    generate_reports=True
-)
+# Run full pipeline
+result = orchestrator.run()
 
-print(f"Processed {result['spec_counts']['content_items']} items")
+# Access results
+print(f"TOC entries: {result['toc_entries']}")
+print(f"Content items: {result['spec_counts']['content_items']}")
 ```
 
-### Using Decorators
-
-```python
-from src.utils.decorators import timing, log_execution, retry
-
-class CustomProcessor:
-    @timing
-    @log_execution
-    @retry(max_attempts=3)
-    def process_document(self, pdf_path):
-        # Your processing logic here
-        return self._extract_content(pdf_path)
-```
-
-### Magic Methods Usage
+### Custom Processing
 
 ```python
 from src.core.extractors.pdfextractor.pdf_extractor import PDFExtractor
-from pathlib import Path
 
-# Create extractor
-extractor = PDFExtractor(Path("document.pdf"))
+# Direct PDF extraction
+extractor = PDFExtractor(pdf_path)
+content = extractor.extract_content()
 
 # Use magic methods
-print(extractor)  # PDFExtractor(document.pdf)
-items = extractor(max_pages=100)  # Callable interface
-total = len(extractor)  # Get total items
+print(len(extractor))  # Number of items
+print(str(extractor))  # String representation
 ```
 
-## Performance Optimization
+## Performance
 
-### Memory Management
+### Processing Statistics
 
-```bash
-# For large documents, use extended mode
-python main.py --mode 2
+- **Pages**: 1046/1046 (100% coverage)
+- **Content Items**: 25,760+
+- **Processing Time**: ~30-60 seconds
+- **Memory Usage**: Optimized for large documents
 
-# For memory-constrained systems, use standard mode
-python main.py --mode 3
+### Optimization Tips
 
-# Monitor memory usage
-python profile_performance.py
-```
+1. **Memory**: Use default settings for optimal memory usage
+2. **Speed**: All modes process full document efficiently
+3. **Storage**: Ensure sufficient disk space for outputs
 
-### Processing Speed
-
-```bash
-# Fastest processing (recommended)
-python main.py --mode 3
-
-# Balance speed and coverage
-python main.py --mode 2
-
-# Complete but slower
-python main.py --mode 1
-```
-
-## Error Handling
+## Troubleshooting
 
 ### Common Issues
 
 #### File Not Found
 ```bash
-ERROR - PDF file not found: assets/missing.pdf
-Solution: Ensure PDF file exists in assets/ directory
+FileNotFoundError: PDF not found: assets/USB_PD_R3_2 V1.1 2024-10.pdf
 ```
+**Solution**: Ensure PDF file exists in assets/ directory
 
-#### Permission Denied
+#### Permission Error
 ```bash
-ERROR - Permission denied: outputs/
-Solution: Check write permissions for outputs/ directory
+PermissionError: Cannot write to outputs/
 ```
+**Solution**: Check write permissions for outputs/ directory
 
-#### Memory Issues
+#### Memory Error
 ```bash
-ERROR - Memory limit exceeded
-Solution: Use smaller processing mode (--mode 3)
+MemoryError: Cannot allocate memory
+```
+**Solution**: Close other applications, use 64-bit Python
+
+### Logging
+
+Check `outputs/parser.log` for detailed execution information:
+
+```
+2024-10-17 02:29:58 [INFO] PipelineOrchestrator - Configuration loaded successfully
+2024-10-17 02:29:58 [INFO] PipelineOrchestrator - Starting pipeline execution
+2024-10-17 02:30:45 [INFO] PipelineOrchestrator - TOC extraction completed: 369 entries
+2024-10-17 02:31:30 [INFO] PipelineOrchestrator - Content extraction completed: 25760 items
 ```
 
-### Debug Mode
+## Known Limitations
 
-```bash
-# Enable debug logging
-python main.py --mode 3 --debug
+### Current Issues
 
-# Check log file for details
-type outputs\parser.log
-```
+1. **Hierarchical Section Numbering**: Uses basic format (p1_0) instead of document structure (1.1, 1.1.1)
+2. **Parent-Child Relationships**: All items have null parent_id
+3. **Section Level Detection**: All items marked as level 1
 
-## Testing
+### Workarounds
 
-### Run Tests
+- **Section Analysis**: Use content text to identify section patterns
+- **Hierarchy Building**: Post-process JSONL to build relationships
+- **Level Detection**: Analyze font sizes and formatting
 
-```bash
-# Run all tests
-pytest tests/
+## Examples
 
-# Run with coverage
-pytest tests/ --cov=src --cov-report=html
-
-# Run specific test categories
-pytest tests/ -m "unit"        # Unit tests only
-pytest tests/ -m "integration" # Integration tests only
-pytest tests/ -m "not slow"    # Skip slow tests
-```
-
-### Performance Benchmarks
-
-```bash
-# Run performance benchmarks
-python profile_performance.py
-
-# View results
-type benchmark_results.txt
-```
-
-## Security Features
-
-### Path Validation
-- Automatic path traversal prevention
-- Input sanitization
-- File type validation
-
-### CWE Compliance
-- CWE-22: Path Traversal
-- CWE-77: Command Injection
-- CWE-78: OS Command Injection
-- CWE-88: Argument Injection
-
-### Security Scanning
+### View Results
 
 ```bash
-# Run security scan
-bandit -r src/
+# Windows - View first 3 lines of content
+type outputs\usb_pd_spec.jsonl | findstr /n "." | findstr "^[1-3]:"
 
-# Check dependencies
-safety check
-
-# Vulnerability assessment
-semgrep --config=auto src/
+# Search for specific content
+python search.py "USB Power Delivery"
 ```
 
-## Troubleshooting
+### Validation
 
-### Common Solutions
+```bash
+# Check output files
+dir outputs\
 
-1. **Import Errors**: Ensure all dependencies are installed
-   ```bash
-   pip install -r requirements.txt
-   ```
+# Verify content count
+python -c "
+import json
+with open('outputs/usb_pd_spec.jsonl') as f:
+    count = sum(1 for line in f)
+print(f'Content items: {count}')
+"
+```
 
-2. **PDF Processing Errors**: Check PDF file integrity
-   ```bash
-   python -c "import fitz; doc = fitz.open('assets/your_file.pdf'); print(f'Pages: {len(doc)}')"
-   ```
+## Best Practices
 
-3. **Output File Issues**: Verify write permissions
-   ```bash
-   mkdir outputs
-   chmod 755 outputs
-   ```
+### File Management
 
-4. **Memory Issues**: Use smaller processing mode
-   ```bash
-   python main.py --mode 3
-   ```
+1. **Backup**: Keep original PDF safe
+2. **Cleanup**: Remove old outputs before new runs
+3. **Validation**: Check all 6 output files are generated
 
-### Getting Help
+### Performance
 
-- Check the log file: `outputs/parser.log`
-- Run with debug mode: `--debug`
-- Review error messages for specific guidance
-- Consult API documentation: `docs/API.md`
+1. **Resources**: Ensure adequate RAM (4GB+ recommended)
+2. **Storage**: Reserve 100MB+ for outputs
+3. **Processing**: Run during low system usage
+
+### Integration
+
+1. **Automation**: Use in CI/CD pipelines
+2. **Monitoring**: Check parser.log for issues
+3. **Validation**: Verify output file completeness

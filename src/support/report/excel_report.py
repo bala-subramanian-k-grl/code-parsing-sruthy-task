@@ -8,15 +8,15 @@ from .report_generator import BaseReportGenerator  # Import base class
 try:
     import openpyxl
 
-    _has_openpyxl = True
+    HAS_OPENPYXL = True
 except ImportError:
-    _has_openpyxl = False
+    HAS_OPENPYXL = False
     openpyxl = None  # type: ignore
 
 
 class ExcelReportGenerator(BaseReportGenerator):  # Inheritance
     def generate(self, data: dict[str, Any]) -> Path:  # Polymorphism
-        if not _has_openpyxl or openpyxl is None:
+        if not HAS_OPENPYXL or openpyxl is None:
             msg = "openpyxl is required for Excel report generation"
             raise ImportError(msg)
 

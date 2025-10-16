@@ -9,7 +9,7 @@ from .support import JSONLWriter
 __version__ = "1.0.0"
 __all__ = [
     "Config",
-    "PipelineOrchestrator", 
+    "PipelineOrchestrator",
     "PDFExtractor",
     "TOCExtractor",
     "get_logger",

@@ -33,7 +33,7 @@ class BaseLoggerFactory(ABC):  # Abstraction
             except OSError as e:
                 # Log the error instead of silently failing
                 logger = logging.getLogger(__name__)
-                logger.warning(f"Failed to create log file: {e}")
+                logger.warning("Failed to create log file: %s", e)
 
     @abstractmethod  # Abstraction
     def create_logger(
@@ -50,6 +50,6 @@ class BaseLoggerFactory(ABC):  # Abstraction
 
 
 # Initialize stream logger when module is imported
-_logger_factory = None
+LOGGER_FACTORY = None
 
 # Removed circular import

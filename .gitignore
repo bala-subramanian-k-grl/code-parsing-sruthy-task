@@ -53,6 +53,26 @@ cover/
 *.mo
 *.pot
 
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+.pybuilder/
+target/
+
 # Jupyter Notebook
 .ipynb_checkpoints
 
@@ -75,6 +95,13 @@ poetry.lock
 # PEP 582
 __pypackages__/
 
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
 # Environments
 .env
 .venv
@@ -90,6 +117,9 @@ venv.bak/
 
 # Rope project settings
 .ropeproject
+
+# mkdocs documentation
+/site
 
 # mypy
 .mypy_cache/
@@ -111,15 +141,14 @@ cython_debug/
 # VS Code
 .vscode/
 
-# Project specific - USB PD Parser
+# Project specific
 outputs/*.jsonl
 outputs/*.json
 outputs/*.xlsx
 outputs/*.log
-assets/*.pdf
-temp_files/
-*.tmp
-*.temp
+temp_files.txt
+*.pdf
+.ruff_cache/
 
 # OS specific
 .DS_Store
@@ -130,16 +159,13 @@ temp_files/
 ehthumbs.db
 Thumbs.db
 
-# Ruff cache
-.ruff_cache/
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
 
-# Performance profiling
-*.prof
-profile_*.txt
-
-# Security
-*.key
-*.pem
-*.crt
-config/secrets.yml
-.secrets/
+# Backup files
+*.bak
+*.backup

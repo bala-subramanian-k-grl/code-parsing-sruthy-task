@@ -1,71 +1,104 @@
-name: Minimal CI (CLI)
+name: CI/CD Pipeline
 
 on:
+  push:
+    branches: [ main, develop ]
   pull_request:
     branches: [ main ]
-  push:
-    branches: [ main ]
-    tags: [ 'v*.*.*' ]
 
 jobs:
-  ci:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.11]
+        python-version: [3.9, 3.10, 3.11]
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-cov mypy ruff black isort
+    
+    - name: Lint with ruff
+      run: |
+        ruff check src/ tests/ main.py search.py
+    
+    - name: Format check with black
+      run: |
+        black --check src/ tests/ main.py search.py
+    
+    - name: Import sort check
+      run: |
+        isort --check-only src/ tests/ main.py search.py
+    
+    - name: Type check with mypy
+      run: |
+        mypy src/ main.py search.py
+    
+    - name: Test with pytest
+      run: |
+        pytest --cov=src --cov-report=xml --cov-fail-under=90
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install bandit safety
+    
+    - name: Security check with bandit
+      run: |
+        bandit -r src/ main.py search.py
+    
+    - name: Dependency security check
+      run: |
+        safety check
 
-      - name: Cache pip
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          if [ -f "requirements.txt" ]; then pip install -r requirements.txt; fi
-          # basic dev tools fallback
-          pip install pytest black ruff pylint mypy || true
-
-      - name: Check formatting (black)
-        run: |
-          black --check . || echo "Black formatting differences found but continuing..."
-
-      - name: Lint (ruff)
-        run: |
-          ruff check . || echo "Ruff issues found but continuing..."
-
-      - name: Static analysis (pylint)
-        # Prefer linting src/ if it exists, otherwise lint all tracked .py files
-        run: |
-          if [ -d "src" ]; then
-            pylint src || true
-          else
-            pylint $(git ls-files '*.py') || true
-          fi
-
-      - name: Type check (mypy)
-        run: |
-          # check src/ if present else check current directory
-          if [ -d "src" ]; then
-            mypy src || true
-          else
-            mypy . || true
-          fi
-
-      - name: Run tests
-        env:
-          CI: true
-        run: |
-          pytest -q
+  build:
+    needs: [test, security]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+    
+    - name: Install build dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build twine
+    
+    - name: Build package
+      run: |
+        python -m build
+    
+    - name: Check package
+      run: |
+        twine check dist/*

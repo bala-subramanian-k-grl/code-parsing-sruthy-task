@@ -5,8 +5,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "usb-pd-parser"
-version = "2.0.0"
-description = "Professional-grade USB PD specification parser with OOP design"
+version = "2.2.0"
+description = "Professional-grade USB PD specification parser with advanced OOP architecture and hierarchical processing"
 readme = "README.md"
 license = {file = "LICENSE"}
 authors = [
@@ -17,7 +17,7 @@ maintainers = [
 ]
 keywords = ["pdf", "parser", "usb", "power-delivery", "specification", "oop"]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
@@ -80,7 +80,7 @@ addopts = [
     "--cov=src",
     "--cov-report=term-missing",
     "--cov-report=html",
-    "--cov-fail-under=30",
+    "--cov-fail-under=90",
 ]
 testpaths = ["tests"]
 markers = [

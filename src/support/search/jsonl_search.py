@@ -12,7 +12,7 @@ class JSONLSearcher(BaseSearcher):  # Inheritance
     @timing
     @log_execution
     def search(self, term: str) -> list[dict[str, Any]]:  # Polymorphism
-        self._logger.info(f"Starting search for term: '{term}'")
+        self._logger.info("Starting search for term: '%s'", term)
         matches: list[dict[str, Any]] = []
         try:
             with open(self._file_path, encoding="utf-8") as f:
@@ -35,9 +35,9 @@ class JSONLSearcher(BaseSearcher):  # Inheritance
                     except json.JSONDecodeError:
                         continue
         except FileNotFoundError:
-            self._logger.error(f"File not found: {self._file_path}")
+            self._logger.error("File not found: %s", self._file_path)
 
         self._logger.info(
-            f"Search completed: Found {len(matches)} matches for '{term}'"
+            "Search completed: Found %s matches for '%s'", len(matches), term
         )
         return matches

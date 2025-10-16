@@ -1,24 +1,38 @@
-# USB PD Specification Parser - Dependencies
+# USB PD Specification Parser - Production Dependencies
+# Version 2.2.0 - Professional OOP Architecture
 
-PyMuPDF==1.24.9
-pdfplumber==0.10.3
+# Core PDF Processing
+PyMuPDF==1.24.9          # Fast PDF text extraction
+pdfplumber==0.10.3       # Table and structured content extraction
 
-# Data Validation & Models
-Pydantic==2.5.2
-pydantic-core==2.14.5
+# Data Validation & Models  
+Pydantic==2.5.2          # Data validation with type hints
+pydantic-core==2.14.5    # Pydantic core engine
 
 # Configuration & CLI
-PyYAML==6.0.1
-click==8.1.7
+PyYAML==6.0.1           # YAML configuration parsing
+click==8.1.7            # Command-line interface framework
 
 # Report Generation
-openpyxl==3.1.2
+openpyxl==3.1.2         # Excel report generation with styling
 
-# Development & Testing
-pytest==7.4.3
-pytest-cov==4.1.0
-mypy==1.7.1
-ruff==0.1.6
+# Type Hints & Compatibility
+typing-extensions==4.8.0 # Extended type hints for Python 3.9+
 
-# Type Hints
-typing-extensions==4.8.0
+# Development Dependencies (Optional)
+# Install with: pip install -r requirements.txt -r requirements-dev.txt
+
+# Testing Framework
+pytest>=7.4.3           # Testing framework
+pytest-cov>=4.1.0       # Coverage reporting
+pytest-mock>=3.12.0     # Mocking utilities
+
+# Code Quality
+mypy>=1.7.1             # Static type checking
+ruff>=0.1.6             # Fast Python linter
+black>=23.11.0          # Code formatting
+isort>=5.12.0           # Import sorting
+
+# Security
+bandit>=1.7.5           # Security linting
+safety>=2.3.0           # Dependency vulnerability scanning

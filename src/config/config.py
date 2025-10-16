@@ -33,15 +33,15 @@ class BaseConfig(ABC):
     def _load_config(self) -> dict[str, Any]:
         pass
 
-    @abstractmethod  # Protected abstract method  
+    @abstractmethod  # Protected abstract method
     def _get_defaults(self) -> dict[str, Any]:
         pass
-    
+
     # Public interface methods
     def get_config_path(self) -> Path:
         """Public method to get config path."""
         return self.__config_path
-    
+
     def get_config_data(self) -> dict[str, Any]:
         """Public method to get config data."""
         return self.__config.copy()  # Return copy to prevent modification

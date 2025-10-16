@@ -41,9 +41,7 @@ class TOCEntry(BaseModel):  # Encapsulation
     def __eq__(self, other: object) -> bool:  # Magic Method
         if not isinstance(other, TOCEntry):
             return False
-        return (
-            self.section_id == other.section_id and self.page == other.page
-        )
+        return self.section_id == other.section_id and self.page == other.page
 
     @field_validator("section_id")  # Encapsulation
     @classmethod

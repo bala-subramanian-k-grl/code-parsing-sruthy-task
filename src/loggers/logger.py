@@ -63,9 +63,7 @@ class LoggerFactory(BaseLoggerFactory):  # Inheritance
             # Sanitize input to prevent command injection
             path_str = str(output_dir)
             sanitized = (
-                path_str.replace("..", "")
-                .replace(";", "")
-                .replace("|", "")
+                path_str.replace("..", "").replace(";", "").replace("|", "")
             )
             clean_path = Path(sanitized)
             resolved_path = clean_path.resolve(strict=False)
@@ -93,7 +91,7 @@ class LoggerFactory(BaseLoggerFactory):  # Inheritance
 def get_logger(
     name: str = "usb_pd_parser",
     output_dir: Optional[Path] = None,
-    debug: bool = False
+    debug: bool = False,
 ) -> logging.Logger:
     """Get logger instance."""
     factory = LoggerFactory(name)  # Polymorphism

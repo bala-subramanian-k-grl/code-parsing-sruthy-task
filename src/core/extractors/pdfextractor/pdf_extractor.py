@@ -13,6 +13,7 @@ from src.utils.decorators import log_execution, timing
 @dataclass
 class ContentItemData:
     """Data class for content item creation."""
+
     text: str
     content_type: str
     block_num: int
@@ -32,11 +33,11 @@ class PDFExtractor(BaseExtractor):  # Inheritance
 
     def __repr__(self) -> str:  # Public magic method
         return f"PDFExtractor(pdf_path={self.get_pdf_path()!r})"
-    
+
     def get_pdf_name(self) -> str:  # Public method
         """Get PDF file name."""
         return self._pdf_path.name
-    
+
     def get_pdf_path(self) -> Path:  # Public method
         """Get PDF file path."""
         return self._pdf_path
@@ -78,8 +79,10 @@ class PDFExtractor(BaseExtractor):  # Inheritance
                 yield from self._extract_page_content(page, page_num)
         finally:
             doc.close()
-    
-    def _calculate_total_pages(self, doc: Any, max_pages: Optional[int]) -> int:
+
+    def _calculate_total_pages(
+        self, doc: Any, max_pages: Optional[int]
+    ) -> int:
         """Calculate total pages to process."""
         doc_length = len(doc)
         return doc_length if max_pages is None else min(max_pages, doc_length)
@@ -122,7 +125,7 @@ class PDFExtractor(BaseExtractor):  # Inheritance
         prefix = data.content_type[0]
         page = data.page_num + 1
         section_id = f"{prefix}{page}_{data.block_num}"
-        
+
         return {
             "doc_title": "USB PD Specification",
             "section_id": section_id,
@@ -140,14 +143,14 @@ class PDFExtractor(BaseExtractor):  # Inheritance
     def _get_title(self, text: str) -> str:
         """Get title from text (Encapsulation)."""
         stripped = text.strip()
-        return (
-            stripped[:50] + "..." if len(stripped) > 50 else stripped
-        )
+        return stripped[:50] + "..." if len(stripped) > 50 else stripped
 
     def _get_block_text(self, block: dict[str, Any]) -> str:
         """Extract text from block."""
         return "".join(
-            str(span["text"]) for line in block["lines"] for span in line["spans"]
+            str(span["text"])
+            for line in block["lines"]
+            for span in line["spans"]
         )
 
     def _extract_tables(
@@ -157,28 +160,27 @@ class PDFExtractor(BaseExtractor):  # Inheritance
         try:
             if page_num >= len(plumber_doc.pages):
                 return
-            
+
             page = plumber_doc.pages[page_num]
             tables = page.extract_tables()
-            
+
             for table_num, table in enumerate(tables or []):
                 if self._is_valid_table(table):
                     data = self._create_table_data(table, page_num, table_num)
                     yield data
         except Exception as e:
             self._logger.warning("Table extraction failed: %s", e)
-    
+
     def _is_valid_table(self, table: Any) -> bool:
         """Check if table is valid for processing."""
         return table and len(table) > 1
-    
+
     def _create_table_data(
         self, table: Any, page_num: int, table_num: int
     ) -> dict[str, Any]:
         """Create table data dictionary."""
         table_text = "\n".join(
-            " | ".join(str(cell or "") for cell in row)
-            for row in table
+            " | ".join(str(cell or "") for cell in row) for row in table
         )
         return {
             "type": "table",

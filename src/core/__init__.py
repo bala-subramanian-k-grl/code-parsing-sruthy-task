@@ -1,6 +1,6 @@
 """Core functionality exports"""
 
+from .models import BaseContent, PageContent, TOCEntry
 from .orchestrator import PipelineOrchestrator
-from .models import BaseContent, TOCEntry, PageContent
 
 __all__ = ["PipelineOrchestrator", "BaseContent", "TOCEntry", "PageContent"]

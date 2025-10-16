@@ -12,7 +12,7 @@ class BaseSearcher(ABC):  # Abstraction
         class_name = self.__class__.__name__
         self._logger = logging.getLogger(class_name)
         file_name = self._file_path.name
-        self._logger.info(f"Initialized searcher for file: {file_name}")
+        self._logger.info("Initialized searcher for file: %s", file_name)
 
     def _validate_path(self, file_path: str) -> Path:  # Encapsulation
         try:

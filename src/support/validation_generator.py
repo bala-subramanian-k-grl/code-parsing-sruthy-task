@@ -7,18 +7,17 @@ from typing import Any, Union
 
 try:
     import openpyxl
-    from openpyxl.styles import Font as font_style
-
-    _has_openpyxl = True
+    from openpyxl.styles import Font
 except ImportError:
-    openpyxl = None
-    font_style = None
-    _has_openpyxl = False
+    openpyxl = None  # type: ignore
+    Font = None  # type: ignore
+
+HAS_OPENPYXL = openpyxl is not None
 
 
 class BaseValidator(ABC):  # Abstraction
     """Abstract base class for validation report generators."""
-    
+
     def __init__(self, output_dir: Path):
         """Initialize validator with output directory."""
         self._output_dir = output_dir  # Encapsulation
@@ -33,12 +32,12 @@ class BaseValidator(ABC):  # Abstraction
 
 class XLSValidator(BaseValidator):  # Inheritance
     """Excel-based validation report generator."""
-    
+
     def generate_validation(
         self, toc_data: list[Any], spec_data: list[Any]
     ) -> Path:
         """Generate Excel validation report."""
-        if not _has_openpyxl or openpyxl is None:
+        if not HAS_OPENPYXL or openpyxl is None:
             raise ImportError("openpyxl required for Excel reports")
 
         wb = openpyxl.Workbook()
@@ -47,7 +46,7 @@ class XLSValidator(BaseValidator):  # Inheritance
 
         # Create summary
         ws["A1"] = "USB PD Validation Report"  # type: ignore
-        ws["A1"].font = font_style(bold=True, size=14)  # type: ignore
+        ws["A1"].font = Font(bold=True, size=14)  # type: ignore
 
         status = "PASS" if len(spec_data) > 1000 else "FAIL"
         metrics: list[tuple[str, Union[int, str]]] = [
@@ -79,8 +78,9 @@ def create_validation_report(
             toc_data = [json.loads(line) for line in lines]
     except (FileNotFoundError, json.JSONDecodeError) as e:
         import logging
+
         logger = logging.getLogger(__name__)
-        logger.debug(f"Failed to load TOC data: {e}")
+        logger.debug("Failed to load TOC data: %s", e)
         toc_data = []
 
     # Load spec data
@@ -90,8 +90,9 @@ def create_validation_report(
             spec_data = [json.loads(line) for line in lines]
     except (FileNotFoundError, json.JSONDecodeError) as e:
         import logging
+
         logger = logging.getLogger(__name__)
-        logger.debug(f"Failed to load spec data: {e}")
+        logger.debug("Failed to load spec data: %s", e)
         spec_data = []
 
     validator = XLSValidator(output_dir)

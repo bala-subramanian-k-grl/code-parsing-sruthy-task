@@ -8,9 +8,8 @@ from typing import Optional
 try:
     import fitz
 except ImportError as e:
-    msg = "PyMuPDF required. Install: pip install PyMuPDF==1.24.9"
-    raise ImportError(msg) from e
-
+    MSG = "PyMuPDF required. Install: pip install PyMuPDF==1.24.9"
+    raise ImportError(MSG) from e
 
 
 from ..config.constants import DEFAULT_DOC_TITLE
@@ -80,9 +79,7 @@ class TitleExtractor(BaseExtractor):  # Inheritance
             with fitz.open(str(self._pdf_path)) as doc:
                 metadata = doc.metadata
                 title = metadata.get("title") if metadata else None
-                return (
-                    title if isinstance(title, str) else DEFAULT_DOC_TITLE
-                )
+                return title if isinstance(title, str) else DEFAULT_DOC_TITLE
         except (fitz.FileDataError, fitz.FileNotFoundError, OSError) as e:
             self._logger.warning("Cannot read PDF metadata: %s", e)
             return DEFAULT_DOC_TITLE

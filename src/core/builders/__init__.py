@@ -1,5 +1,5 @@
 """Builders packages."""
 
-from .toc_builder import TOCBuilder, HierarchicalTOCBuilder
+from .toc_builder import HierarchicalTOCBuilder, TOCBuilder
 
 __all__ = ["TOCBuilder", "HierarchicalTOCBuilder"]

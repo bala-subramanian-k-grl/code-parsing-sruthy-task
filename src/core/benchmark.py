@@ -1,4 +1,3 @@
-
 # USB PD Specification Parser - Performance Benchmarking
 """Minimal benchmark with OOP principles."""
 
@@ -57,9 +56,9 @@ class BenchmarkRunner:  # Encapsulation
         """Run all benchmarks."""
         for benchmark in self._benchmarks:
             result = benchmark.run()  # Polymorphism
-            name = result['name']
-            time_val = result['time']
-            ops = result['ops']
+            name = result["name"]
+            time_val = result["time"]
+            ops = result["ops"]
             msg = f"{name}: {time_val:.3f}s ({ops} ops)"
             print(msg)
 

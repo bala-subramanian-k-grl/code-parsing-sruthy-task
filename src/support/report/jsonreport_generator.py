@@ -20,14 +20,16 @@ class JSONReportGenerator(BaseReportGenerator):  # Inheritance
                 "summary": data,
                 "validation": {
                     "status": (
-                        "PASS" if data.get("content_items", 0) > 1000 else "FAIL"
+                        "PASS"
+                        if data.get("content_items", 0) > 1000
+                        else "FAIL"
                     )
                 },
             }
         except (TypeError, ValueError) as e:
             raise RuntimeError(f"Cannot create report data: {e}") from e
         try:
-            with open(report_file, "w") as f:
+            with open(report_file, "w", encoding="utf-8") as f:
                 json.dump(report, f, indent=2)
         except OSError as e:
             raise RuntimeError(f"Cannot write JSON report: {e}") from e

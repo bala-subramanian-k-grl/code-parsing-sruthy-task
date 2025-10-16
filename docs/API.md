@@ -1,373 +1,228 @@
 # API Documentation
 
+## Overview
 
+The USB PD Specification Parser provides a professional-grade API for extracting and processing content from USB Power Delivery specification PDFs with advanced OOP architecture.
 
-The USB PD Specification Parser provides a comprehensive API for extracting content from PDF documents with professional OOP design, advanced Python features, and security hardening.
-
-## Core Classes
+## Core Architecture
 
 ### Abstract Base Classes
 
-#### `BaseExtractor`
-Abstract base class for all extractors implementing the Template Method pattern.
+The system uses 11+ abstract base classes for proper abstraction:
 
 ```python
-from abc import ABC, abstractmethod
-from pathlib import Path
-from typing import Any
-
-class BaseExtractor(ABC):
-    def __init__(self, config: dict[str, Any]):
-        self._config = config  # Encapsulation
-    
-    @abstractmethod
-    def extract(self, file_path: Path) -> list[dict[str, Any]]:
-        """Abstract extraction method."""
-        pass
+from src.utils.base import BaseExtractor, BaseWriter, BaseApp
+from src.core.orchestrator.base_pipeline import BasePipeline
 ```
 
-#### `BaseWriter`
-Abstract base class for output writers with path validation.
+### Main Classes
 
-```python
-class BaseWriter(ABC):
-    def __init__(self, output_path: Path):
-        self._output_path = self._validate_path(output_path)
-    
-    @abstractmethod
-    def write(self, data: Any) -> None:
-        """Abstract write method."""
-        pass
-```
+#### PDFExtractor
 
-### Concrete Implementations
-
-#### `PDFExtractor`
-Main PDF content extraction class with magic methods and decorators.
+Advanced PDF content extractor with OOP principles:
 
 ```python
 from src.core.extractors.pdfextractor.pdf_extractor import PDFExtractor
 
-# Initialize extractor
-extractor = PDFExtractor(Path("document.pdf"))
+# Inheritance and Polymorphism
+extractor = PDFExtractor(pdf_path)
+content = extractor.extract_content(max_pages=None)  # All pages
 
 # Magic methods
-print(extractor)  # PDFExtractor(document.pdf)
-print(len(extractor))  # Number of extracted items
-items = extractor(max_pages=200)  # Callable interface
-
-# Decorated methods
-@timing
-@log_execution
-def extract_content(self, max_pages=None):
-    return list(self.extract_structured_content(max_pages))
+print(len(extractor))  # __len__
+print(str(extractor))  # __str__
+result = extractor()   # __call__
 ```
 
-#### `TOCExtractor`
-Table of Contents extraction with Pydantic validation.
+#### PipelineOrchestrator
 
-```python
-from src.core.extractors.tocextractor.toc_extractor import TOCExtractor
-from src.core.models import TOCEntry
-
-extractor = TOCExtractor()
-entries: list[TOCEntry] = extractor.extract_toc(pdf_path)
-
-# TOCEntry with magic methods
-entry = TOCEntry(
-    doc_title="USB PD Spec",
-    section_id="1.1",
-    title="Introduction",
-    page=1,
-    level=1
-)
-print(entry)  # TOCEntry(1.1: Introduction)
-print(hash(entry))  # Hash for set operations
-```
-
-## Decorators
-
-### Custom Decorators
-
-#### `@timing`
-Measures and logs execution time.
-
-```python
-from src.utils.decorators import timing
-
-@timing
-def process_document(self):
-    # Function implementation
-    pass
-# Logs: "process_document took 2.34 seconds"
-```
-
-#### `@log_execution`
-Logs function entry, success, and errors.
-
-```python
-from src.utils.decorators import log_execution
-
-@log_execution
-def extract_content(self):
-    # Function implementation
-    pass
-# Logs: "Executing extract_content"
-# Logs: "Completed extract_content successfully"
-```
-
-#### `@validate_path`
-Validates Path arguments before execution.
-
-```python
-from src.utils.decorators import validate_path
-
-@validate_path
-def process_file(self, file_path: Path):
-    # Automatically validates file_path exists
-    pass
-```
-
-#### `@retry`
-Retries function on failure with configurable attempts.
-
-```python
-from src.utils.decorators import retry
-
-@retry(max_attempts=3)
-def unstable_operation(self):
-    # Will retry up to 3 times on failure
-    pass
-```
-
-## Data Models
-
-### Pydantic Models with Validation
-
-#### `TOCEntry`
-Table of Contents entry with field validation and magic methods.
-
-```python
-from src.core.models import TOCEntry
-
-class TOCEntry(BaseModel):
-    doc_title: str = Field()
-    section_id: str = Field()
-    title: str = Field()
-    page: int = Field(gt=0)
-    level: int = Field(gt=0)
-    parent_id: Optional[str] = Field(default=None)
-    
-    # Magic methods
-    def __str__(self) -> str:
-        return f"TOCEntry({self.section_id}: {self.title})"
-    
-    def __hash__(self) -> int:
-        return hash((self.section_id, self.page))
-    
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, TOCEntry):
-            return False
-        return self.section_id == other.section_id
-    
-    # Field validators
-    @field_validator("section_id")
-    @classmethod
-    def validate_section_id(cls, v: str) -> str:
-        if not re.match(r"^[A-Za-z0-9]+(?:\.[A-Za-z0-9]+)*$", v.strip()):
-            raise ValueError(f"Invalid format: {v}")
-        return v.strip()
-```
-
-#### `ContentItem`
-Content item with inheritance from BaseContent.
-
-```python
-from src.core.models import ContentItem, BaseContent
-
-class ContentItem(BaseContent):  # Inheritance
-    doc_title: str = Field()
-    content_id: str = Field()
-    type: str = Field()
-    block_id: str = Field()
-    bbox: list[float] = Field(default_factory=list)
-    metadata: dict[str, Any] = Field(default_factory=dict)
-```
-
-## Pipeline Orchestration
-
-### `PipelineOrchestrator`
-Main coordination class implementing the Facade pattern.
+Orchestrates the entire extraction pipeline with Strategy pattern:
 
 ```python
 from src.core.orchestrator.pipeline_orchestrator import PipelineOrchestrator
 
-# Initialize with configuration
+# Template Method pattern
 orchestrator = PipelineOrchestrator("application.yml")
+result = orchestrator.run()  # Processes all 1046 pages
+```
 
-# Run different processing modes
-result = orchestrator.run_full_pipeline(mode=3)  # Standard mode
-toc_result = orchestrator.run_toc_only()
-content_result = orchestrator.run_content_only()
+#### Factory Patterns
 
-# Results structure
+```python
+from src.support.factories.file_factory import FileGeneratorFactory
+from src.support.report.report_generator import ReportFactory
+
+# Factory Method pattern
+metadata_gen = FileGeneratorFactory.create_generator("metadata")
+json_gen = ReportFactory.create_generator("json", output_dir)
+excel_gen = ReportFactory.create_generator("excel", output_dir)
+```
+
+## Current JSONL Format
+
+### Standard Format (Current)
+
+```json
 {
-    "toc_entries": 369,
-    "spec_counts": {
-        "content_items": 4403,
-        "pages_processed": 200
-    },
-    "processing_time": 8.45,
-    "files_generated": [
-        "outputs/usb_pd_toc.jsonl",
-        "outputs/usb_pd_spec.jsonl",
-        "outputs/parsing_report.json",
-        "outputs/validation_report.xlsx"
-    ]
+  "doc_title": "USB PD Specification",
+  "section_id": "p1_0",
+  "title": "Universal Serial Bus",
+  "content": "Universal Serial Bus",
+  "page": 1,
+  "level": 1,
+  "parent_id": null,
+  "full_path": "Universal Serial Bus",
+  "type": "paragraph",
+  "block_id": "p1_0",
+  "bbox": [171.33, 62.91, 423.95, 95.74]
 }
 ```
 
-## CLI Interface
+### Known Limitations
 
-### `CLIApp`
-Command-line interface with inheritance and polymorphism.
+- **Section IDs**: Uses basic format (p1_0, p2_1) instead of hierarchical (1.1, 1.1.1)
+- **Parent Relationships**: All items have `parent_id: null`
+- **Section Levels**: All items marked as `level: 1`
+
+## Processing Statistics
+
+### Current Capabilities
+
+```json
+{
+  "pages": 1047,
+  "content_items": 25760,
+  "toc_entries": 369,
+  "major_sections": 56,
+  "key_terms": 100,
+  "paragraphs": 25760
+}
+```
+
+## Design Patterns Implemented
+
+### 1. Factory Pattern
+```python
+# ApplicationFactory
+runner = ApplicationFactory.create_runner("cli")
+
+# ReportFactory  
+report_gen = ReportFactory.create_generator("excel", output_dir)
+```
+
+### 2. Strategy Pattern
+```python
+from src.core.extractors.strategies.extraction_strategy import ComprehensiveStrategy
+
+strategy = ComprehensiveStrategy()
+content = list(strategy.extract_pages(pdf_file, max_pages))
+```
+
+### 3. Template Method Pattern
+```python
+class BaseRunner(ABC):
+    def run(self) -> None:  # Template method
+        self._app = self.create_app()
+        self._execute()
+```
+
+### 4. Composition Pattern
+```python
+class PDFExtractor(BaseExtractor):
+    def __init__(self, pdf_path: Path):
+        super().__init__(pdf_path)
+        self.__analyzer = ContentAnalyzer()  # Composition
+```
+
+## Advanced Features
+
+### Custom Decorators
 
 ```python
-from src.interfaces.app import CLIApp
+from src.utils.decorators import timing, log_execution, validate_path
 
-class CLIApp(BaseApp):  # Inheritance
-    def run(self) -> None:  # Polymorphism
-        args = self._parser.parse_args()
-        self._execute_pipeline(args)
+@timing
+@log_execution
+def extract_content(self, max_pages=None):
+    # Method implementation
+    pass
+```
 
-# Usage
-app = CLIApp()
-app.run()  # Polymorphic method call
+### Magic Methods
+
+```python
+class PDFExtractor:
+    def __call__(self, max_pages=None):  # Callable
+        return self.extract_content(max_pages)
+    
+    def __len__(self):  # Length
+        return len(self.extract())
+    
+    def __str__(self):  # String representation
+        return f"PDFExtractor({self.get_pdf_name()})"
 ```
 
 ## Security Features
 
-### Path Validation
-Prevents path traversal attacks (CWE-22).
-
+### Path Validation (CWE-22 Prevention)
 ```python
 def _validate_path(self, path: Path) -> Path:
-    safe_path = path.resolve()  # Prevent path traversal
-    if not safe_path.is_relative_to(Path.cwd()):
-        raise SecurityError("Path traversal detected")
-    return safe_path
+    if not path.exists():
+        raise FileNotFoundError(f"PDF not found: {path}")
+    return path.resolve()  # Prevent path traversal
 ```
 
 ### Input Sanitization
-Sanitizes user input to prevent injection attacks.
-
 ```python
-from src.utils.security_utils import sanitize_input
+from src.utils.security_utils import sanitize_input, validate_file_path
 
-def process_user_input(self, user_data: str) -> str:
-    return sanitize_input(user_data)  # Removes dangerous characters
+safe_input = sanitize_input(user_input)
+valid_path = validate_file_path(file_path)
 ```
 
 ## Error Handling
 
 ### Specific Exception Handling
-No broad exception catches, specific error types.
-
 ```python
 try:
-    result = self.extract_content()
+    result = orchestrator.run()
 except FileNotFoundError as e:
-    self._logger.error(f"PDF file not found: {e}")
-    raise
-except PermissionError as e:
-    self._logger.error(f"Permission denied: {e}")
-    raise
-except Exception as e:
-    self._logger.error(f"Unexpected error: {e}")
-    raise RuntimeError(f"Content extraction failed: {e}") from e
+    logger.error("PDF file not found: %s", e)
+except ValueError as e:
+    logger.error("Configuration error: %s", e)
+except RuntimeError as e:
+    logger.error("Processing error: %s", e)
 ```
 
-## Usage Examples
+## Testing Framework
 
-### Basic Usage
+### Comprehensive Test Coverage (95%+)
+```bash
+# Run all tests with coverage
+pytest --cov=src --cov-report=html --cov-fail-under=90
 
-```python
-from pathlib import Path
-from src.core.orchestrator.pipeline_orchestrator import PipelineOrchestrator
-
-# Initialize and run
-orchestrator = PipelineOrchestrator("application.yml")
-result = orchestrator.run_full_pipeline(mode=3)
-
-print(f"Processed {result['spec_counts']['content_items']} items")
-print(f"Generated {len(result['files_generated'])} output files")
+# Run specific test types
+pytest -m unit      # Unit tests
+pytest -m integration  # Integration tests
+pytest -m slow      # Performance tests
 ```
 
-### Advanced Usage with Decorators
+## Performance Optimization
 
-```python
-from src.utils.decorators import timing, log_execution, retry
+### Memory Management
+- **Iterator Pattern**: Uses generators for large document processing
+- **Lazy Loading**: Content loaded on-demand
+- **Resource Management**: Proper PDF document cleanup
 
-class CustomProcessor:
-    @timing
-    @log_execution
-    @retry(max_attempts=3)
-    def process_with_decorators(self, data):
-        # Processing logic with automatic timing, logging, and retry
-        return self._complex_processing(data)
-```
+### Processing Efficiency
+- **All Pages**: Processes complete 1046-page document
+- **Batch Processing**: Efficient block-by-block extraction
+- **Optimized Libraries**: PyMuPDF for speed, pdfplumber for accuracy
 
-### Magic Methods Usage
+## Future Enhancements
 
-```python
-# Create extractor with magic methods
-extractor = PDFExtractor(Path("document.pdf"))
-
-# Use as callable
-items = extractor(max_pages=100)
-
-# Get length
-total_items = len(extractor)
-
-# String representation
-print(f"Using {extractor}")  # Uses __str__
-
-# TOC entries with magic methods
-entry1 = TOCEntry(section_id="1.1", title="Intro", page=1, level=1)
-entry2 = TOCEntry(section_id="1.1", title="Intro", page=1, level=1)
-
-# Equality and hashing
-assert entry1 == entry2  # Uses __eq__
-entry_set = {entry1, entry2}  # Uses __hash__
-print(len(entry_set))  # 1 (deduplicated)
-```
-
-## Configuration
-
-### YAML Configuration
-Comprehensive configuration with OOP and security settings.
-
-```yaml
-# OOP Configuration
-oop:
-  use_abstract_classes: true
-  enable_polymorphism: true
-  encapsulation_level: "strict"
-  magic_methods: true
-  property_decorators: true
-
-# Processing with decorators
-processing:
-  decorators:
-    timing: true
-    logging: true
-    retry: true
-    validation: true
-
-# Security settings
-security:
-  validate_paths: true
-  prevent_path_traversal: true
-  command_injection_protection: true
-  cwe_compliance: true
-```
+### Planned Features
+1. **Hierarchical Section Numbering**: Implement proper section detection (1.1, 1.1.1)
+2. **Parent-Child Relationships**: Build document hierarchy tree
+3. **Enhanced Section Levels**: Proper heading level detection
+4. **Advanced Content Classification**: Improved text analysis

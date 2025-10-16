@@ -13,24 +13,52 @@ class ContentAnalyzer:
     def __init__(self) -> None:
         self._analyzer = PatternAnalyzer()  # Encapsulation
         self._key_terms = {
-            "USB", "PD", "Power Delivery", "VBUS", "CC", "VCONN",
-            "Source", "Sink", "DFP", "UFP", "DRP", "Cable", "Connector",
-            "Voltage", "Current", "Watt", "Protocol", "Message",
-            "Negotiation", "Contract", "Capability", "PDO", "RDO",
-            "Fast Role Swap", "FRS", "BIST", "VDM", "SVID",
-            "Alternate Mode", "Billboard", "Authentication", "Security"
+            "USB",
+            "PD",
+            "Power Delivery",
+            "VBUS",
+            "CC",
+            "VCONN",
+            "Source",
+            "Sink",
+            "DFP",
+            "UFP",
+            "DRP",
+            "Cable",
+            "Connector",
+            "Voltage",
+            "Current",
+            "Watt",
+            "Protocol",
+            "Message",
+            "Negotiation",
+            "Contract",
+            "Capability",
+            "PDO",
+            "RDO",
+            "Fast Role Swap",
+            "FRS",
+            "BIST",
+            "VDM",
+            "SVID",
+            "Alternate Mode",
+            "Billboard",
+            "Authentication",
+            "Security",
         }
 
     def classify(self, text: str) -> str:  # Abstraction
         """Classify text content type."""
         return str(self._analyzer.analyze(text))  # Polymorphism
-    
+
     def count_key_terms(self, text: str) -> int:
         """Count USB PD key terms in text."""
         text_upper = text.upper()
-        count = sum(1 for term in self._key_terms if term.upper() in text_upper)
+        count = sum(
+            1 for term in self._key_terms if term.upper() in text_upper
+        )
         return count
-    
+
     def is_major_section(self, text: str) -> bool:
         """Check if text is a major section header."""
         return self._analyzer.analyze(text) == "major_section"

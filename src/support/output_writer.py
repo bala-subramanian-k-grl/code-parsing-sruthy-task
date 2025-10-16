@@ -28,7 +28,7 @@ class BaseWriter(ABC):  # Abstraction: abstract base class
     def output_path(self) -> Path:
         """Get output path."""
         return self.__output_path
-    
+
     def get_output_directory(self) -> Path:  # Public method
         """Get output directory."""
         return self.__output_path.parent
@@ -36,7 +36,7 @@ class BaseWriter(ABC):  # Abstraction: abstract base class
 
 class JSONLWriter(BaseWriter):  # Inheritance: extends BaseWriter
     """JSONL file writer (Inheritance, Polymorphism)."""
-    
+
     def get_file_extension(self) -> str:  # Public method
         """Get file extension for this writer."""
         return ".jsonl"
@@ -70,4 +70,4 @@ class JSONLWriter(BaseWriter):  # Inheritance: extends BaseWriter
             import logging
 
             logger = logging.getLogger(__name__)
-            logger.warning(f"Serialization error: {e}")
+            logger.warning("Serialization error: %s", e)
