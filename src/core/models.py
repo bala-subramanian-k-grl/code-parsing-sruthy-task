@@ -41,7 +41,9 @@ class TOCEntry(BaseModel):  # Encapsulation
     def __eq__(self, other: object) -> bool:  # Magic Method
         if not isinstance(other, TOCEntry):
             return False
-        return self.section_id == other.section_id and self.page == other.page
+        return (
+            self.section_id == other.section_id and self.page == other.page
+        )
 
     @field_validator("section_id")  # Encapsulation
     @classmethod
@@ -51,7 +53,8 @@ class TOCEntry(BaseModel):  # Encapsulation
             raise ValueError("Empty section_id")
         import re
 
-        if not re.match(r"^[A-Za-z0-9]+(?:\.[A-Za-z0-9]+)*$", v.strip()):
+        pattern = r"^[A-Za-z0-9]+(?:\.[A-Za-z0-9]+)*$"
+        if not re.match(pattern, v.strip()):
             raise ValueError(f"Invalid format: {v}")
         return v.strip()
 
@@ -83,5 +86,5 @@ class ContentItem(BaseContent):  # Inheritance
     content_id: str = Field()  # Encapsulation
     type: str = Field()  # Encapsulation
     block_id: str = Field()  # Encapsulation
-    bbox: list[float] = Field(default_factory=lambda: [])  # Encapsulation
+    bbox: list[float] = Field(default_factory=list)  # Encapsulation
     metadata: dict[str, Any] = Field(default_factory=dict)  # Encapsulation

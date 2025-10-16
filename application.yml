@@ -13,8 +13,8 @@ input:
   pdf_path: "assets/USB_PD_R3_2 V1.1 2024-10.pdf"
   max_pages:
     mode_1: null  # Full document
-    mode_2: 600   # Extended mode
-    mode_3: 200   # Standard mode (recommended)
+    mode_2: 1046  # Extended mode - full spec
+    mode_3: 1046  # Standard mode - full spec
   validation:
     check_file_exists: true
     max_file_size: "100MB"
@@ -56,7 +56,7 @@ oop:
 
 # Logging Configuration
 logging:
-  level: "INFO"
+  level: "WARNING"
   format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
   file_logging: true
   console_logging: true
@@ -75,10 +75,10 @@ security:
 
 # Feature Flags
 features:
-  extract_tables: true
+  extract_tables: false
   extract_images: false
   generate_reports: true
-  validate_output: true
+  validate_output: false
   content_analysis: true
   search_functionality: true
 

@@ -12,10 +12,10 @@ class BaseConfig(ABC):
     """Abstract config loader (Abstraction, Encapsulation)."""
 
     def __init__(self, config_path: str):
-        self._config_path = self._validate_path(config_path)
-        self._config = self._load_config()
+        self.__config_path = self._validate_path(config_path)  # Private
+        self.__config = self._load_config()  # Private
 
-    def _validate_path(self, config_path: str) -> Path:  # Encapsulation
+    def _validate_path(self, config_path: str) -> Path:  # Protected
         """Validate config path securely against traversal attacks."""
         try:
             input_path = Path(config_path)
@@ -29,13 +29,22 @@ class BaseConfig(ABC):
         except (OSError, ValueError) as e:
             raise ValueError(f"Invalid path: {config_path} - {e}") from e
 
-    @abstractmethod  # Abstraction
+    @abstractmethod  # Protected abstract method
     def _load_config(self) -> dict[str, Any]:
         pass
 
-    @abstractmethod  # Abstraction
+    @abstractmethod  # Protected abstract method  
     def _get_defaults(self) -> dict[str, Any]:
         pass
+    
+    # Public interface methods
+    def get_config_path(self) -> Path:
+        """Public method to get config path."""
+        return self.__config_path
+    
+    def get_config_data(self) -> dict[str, Any]:
+        """Public method to get config data."""
+        return self.__config.copy()  # Return copy to prevent modification
 
 
 class Config(BaseConfig):  # Inheritance
@@ -43,7 +52,7 @@ class Config(BaseConfig):  # Inheritance
 
     from .constants import DEFAULT_PDF_PATH
 
-    _DEFAULT_PDF = DEFAULT_PDF_PATH
+    __DEFAULT_PDF = DEFAULT_PDF_PATH  # Private class attribute
 
     def __str__(self) -> str:  # Magic Method
         pdf_name = self.pdf_input_file.name
@@ -51,52 +60,56 @@ class Config(BaseConfig):  # Inheritance
         return f"Config(pdf={pdf_name}, output={output_name})"
 
     def __getitem__(self, key: str) -> Any:  # Magic Method
-        return self._config[key]
+        return self.get_config_data()[key]
 
     def __contains__(self, key: str) -> bool:  # Magic Method
-        return key in self._config
+        return key in self.get_config_data()
 
-    def _load_config(self) -> dict[str, Any]:  # Polymorphism
+    def _load_config(self) -> dict[str, Any]:  # Protected method
         """Load config with defaults (Abstraction)."""
-        if not self._config_path.exists():
+        config_path = self.get_config_path()
+        if not config_path.exists():
             return self._get_defaults()
 
         try:
-            with open(self._config_path, encoding="utf-8") as f:
+            with open(config_path, encoding="utf-8") as f:
                 return yaml.safe_load(f) or {}
         except yaml.YAMLError as e:
             raise ValueError(f"Invalid YAML: {e}") from e
         except OSError as e:
             raise ValueError(f"Cannot read config file: {e}") from e
 
-    def _get_defaults(self) -> dict[str, Any]:  # Polymorphism
+    def _get_defaults(self) -> dict[str, Any]:  # Protected method
         """Default configuration (Abstraction)."""
         return {
-            "pdf_input_file": self._DEFAULT_PDF,
+            "pdf_input_file": self.__DEFAULT_PDF,
             "output_directory": "outputs",
             "max_pages": None,
         }
 
-    @property  # Encapsulation
+    @property  # Public property
     def pdf_input_file(self) -> Path:
         """Get PDF input file path."""
         try:
-            path = Path(self._config.get("pdf_input_file", self._DEFAULT_PDF))
+            config_data = self.get_config_data()
+            pdf_path = config_data.get("pdf_input_file", self.__DEFAULT_PDF)
+            path = Path(pdf_path)
             return self._validate_path(str(path))
         except (ValueError, OSError) as e:
             raise ValueError(f"Invalid PDF input file path: {e}") from e
 
-    @property  # Encapsulation
+    @property  # Public property
     def output_directory(self) -> Path:
         """Get output directory path."""
-        path = Path(self._config.get("output_directory", "outputs"))
+        config_data = self.get_config_data()
+        path = Path(config_data.get("output_directory", "outputs"))
         return self._validate_path(str(path))
 
-    @property  # Encapsulation
+    @property  # Public property
     def max_pages(self) -> Optional[int]:
         """Get max pages setting."""
-        return self._config.get("max_pages")
+        return self.get_config_data().get("max_pages")
 
-    def get(self, key: str, default: Any = None) -> Any:  # Abstraction
+    def get(self, key: str, default: Any = None) -> Any:  # Public method
         """Get config value with default."""
-        return self._config.get(key, default)
+        return self.get_config_data().get(key, default)

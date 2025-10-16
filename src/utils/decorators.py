@@ -6,10 +6,10 @@ import logging
 import time
 from typing import Any, Callable, TypeVar
 
-FuncType = TypeVar("FuncType", bound=Callable[..., Any])
+func_type = TypeVar("func_type", bound=Callable[..., Any])
 
 
-def log_execution(func: FuncType) -> FuncType:
+def log_execution(func: func_type) -> func_type:
     """Decorator to log function execution."""
 
     @functools.wraps(func)
@@ -27,7 +27,7 @@ def log_execution(func: FuncType) -> FuncType:
     return wrapper  # type: ignore
 
 
-def timing(func: FuncType) -> FuncType:
+def timing(func: func_type) -> func_type:
     """Decorator to measure execution time."""
 
     @functools.wraps(func)
@@ -43,7 +43,7 @@ def timing(func: FuncType) -> FuncType:
     return wrapper  # type: ignore
 
 
-def validate_path(func: FuncType) -> FuncType:
+def validate_path(func: func_type) -> func_type:
     """Decorator to validate path arguments."""
 
     @functools.wraps(func)
@@ -59,10 +59,10 @@ def validate_path(func: FuncType) -> FuncType:
     return wrapper  # type: ignore
 
 
-def retry(max_attempts: int = 3) -> Callable[[FuncType], FuncType]:
+def retry(max_attempts: int = 3) -> Callable[[func_type], func_type]:
     """Decorator to retry function on failure."""
 
-    def decorator(func: FuncType) -> FuncType:
+    def decorator(func: func_type) -> func_type:
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             logger = logging.getLogger(func.__module__)

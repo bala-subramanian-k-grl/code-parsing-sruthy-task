@@ -19,6 +19,8 @@ class PatternAnalyzer(BaseAnalyzer):  # Inheritance
 
     def __init__(self) -> None:
         patterns = {  # Encapsulation
+            "major_section": r"\b(Overview|References|Terms|Definitions)\b",
+            "section_header": r"^\d+\.\d+",
             "requirement": r"\b(shall|must|required)\b",
             "definition": r":",
             "numbered_item": r"^\d+\.",

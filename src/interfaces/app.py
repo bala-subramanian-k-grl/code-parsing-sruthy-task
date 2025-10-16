@@ -30,64 +30,28 @@ class CLIApp(BaseApp):  # Inheritance
         """Create argument parser."""
         parser = argparse.ArgumentParser(description="USB PD Parser")
         parser.add_argument("--config", default="application.yml")
-        parser.add_argument("--mode", type=int, choices=[1, 2, 3])
         parser.add_argument("--toc-only", action="store_true")
         parser.add_argument("--content-only", action="store_true")
         return parser
 
-    def _get_mode(self) -> int:  # Encapsulation
-        """Get processing mode from user input."""
-        self._display_mode_options()
-        return self._get_user_choice()
-    
-    def _display_mode_options(self) -> None:
-        """Display available processing modes."""
-        print("\n=== USB PD Specification Parser ===")
-        print("Please select processing mode:")
-        print("  [1] Full Document    - Process entire PDF (all pages)")
-        print("  [2] Extended Mode    - Process first 600 pages")
-        print("  [3] Standard Mode    - Process first 200 pages")
-        print("")
-    
-    def _get_user_choice(self) -> int:
-        """Get and validate user choice."""
-        mode_names = {1: "Full Document", 2: "Extended Mode", 3: "Standard Mode"}
-        
-        while True:
-            try:
-                choice = int(input("Enter your choice (1-3): ").strip())
-                if self._is_valid_choice(choice):
-                    print(f"\nSelected: {mode_names[choice]}")
-                    return choice
-                print("Invalid selection. Please choose 1, 2, or 3.")
-            except (ValueError, KeyboardInterrupt):
-                self._handle_input_error()
-    
-    def _is_valid_choice(self, choice: int) -> bool:
-        """Check if choice is valid."""
-        return 1 <= choice <= 3
-    
-    def _handle_input_error(self) -> None:
-        """Handle input errors."""
-        self._logger.warning("User provided invalid input")
-        print("Invalid input. Please enter a valid number (1-3).")
+
 
     def _execute_pipeline(self, args: argparse.Namespace) -> None:
         """Execute pipeline based on arguments."""
+        print("\n=== USB PD Specification Parser ===")
+        print("Processing entire PDF document...\n")
+        
         orchestrator = PipelineOrchestrator(args.config)
         if args.toc_only:
             result = orchestrator.run_toc_only()
-            self._logger.info(
-                f"TOC extraction completed: {len(result)} entries extracted"
-            )
+            count = len(result)
+            self._logger.info(f"TOC extraction completed: {count} entries")
         elif args.content_only:
             result = orchestrator.run_content_only()
-            self._logger.info(
-                f"Content extraction completed: {result} items processed"
-            )
+            msg = f"Content extraction completed: {result} items processed"
+            self._logger.info(msg)
         else:
-            mode = args.mode or self._get_mode()
-            result = orchestrator.run_full_pipeline(mode)
+            result = orchestrator.run_full_pipeline()
             toc_count = result["toc_entries"]
             content_count = result["spec_counts"]["content_items"]
             msg = f"Processing completed: {toc_count} TOC entries, "

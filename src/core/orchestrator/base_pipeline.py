@@ -15,17 +15,18 @@ class BasePipeline(ABC):  # Abstraction
         self._logger = logging.getLogger(class_name)
         try:
             self._config = Config(config_path)  # Encapsulation
-            msg = f"Configuration loaded successfully from {config_path}"
-            self._logger.info(msg)
+            self._logger.info(f"Configuration loaded from {config_path}")
         except (ValueError, OSError) as e:
             raise RuntimeError(f"Configuration error: {e}") from e
         try:
-            self._config.output_directory.mkdir(parents=True, exist_ok=True)
             output_dir = self._config.output_directory
-            self._logger.info(f"Output directory prepared: {output_dir}")
+            output_dir.mkdir(parents=True, exist_ok=True)
+            msg = f"Output directory prepared: {output_dir}"
+            self._logger.info(msg)
         except OSError as e:
-            raise RuntimeError(f"Cannot create output directory: {e}") from e
+            msg = f"Cannot create output directory: {e}"
+            raise RuntimeError(msg) from e
 
     @abstractmethod  # Abstraction
-    def run(self, mode: int = 1) -> dict[str, Any]:
+    def run(self) -> dict[str, Any]:
         pass

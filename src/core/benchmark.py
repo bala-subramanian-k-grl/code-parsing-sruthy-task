@@ -60,7 +60,8 @@ class BenchmarkRunner:  # Encapsulation
             name = result['name']
             time_val = result['time']
             ops = result['ops']
-            print(f"{name}: {time_val:.3f}s ({ops} ops)")
+            msg = f"{name}: {time_val:.3f}s ({ops} ops)"
+            print(msg)
 
 
 def main() -> None:

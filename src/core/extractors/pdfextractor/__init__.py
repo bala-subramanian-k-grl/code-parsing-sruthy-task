@@ -1,4 +1,4 @@
-"""PDF extractor exports"""
+"""PDF extractors exports"""
 
 from .pdf_extractor import PDFExtractor
 

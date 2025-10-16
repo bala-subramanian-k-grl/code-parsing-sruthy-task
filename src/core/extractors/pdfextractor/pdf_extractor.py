@@ -25,13 +25,21 @@ class PDFExtractor(BaseExtractor):  # Inheritance
 
     def __init__(self, pdf_path: Path):
         super().__init__(pdf_path)
-        self._analyzer = ContentAnalyzer()  # Composition
+        self.__analyzer = ContentAnalyzer()  # Private composition
 
-    def __str__(self) -> str:  # Magic Method
-        return f"PDFExtractor({self._pdf_path.name})"
+    def __str__(self) -> str:  # Public magic method
+        return f"PDFExtractor({self.get_pdf_name()})"
 
-    def __repr__(self) -> str:  # Magic Method
-        return f"PDFExtractor(pdf_path={self._pdf_path!r})"
+    def __repr__(self) -> str:  # Public magic method
+        return f"PDFExtractor(pdf_path={self.get_pdf_path()!r})"
+    
+    def get_pdf_name(self) -> str:  # Public method
+        """Get PDF file name."""
+        return self._pdf_path.name
+    
+    def get_pdf_path(self) -> Path:  # Public method
+        """Get PDF file path."""
+        return self._pdf_path
 
     def __call__(
         self, max_pages: Optional[int] = None
@@ -64,14 +72,17 @@ class PDFExtractor(BaseExtractor):  # Inheritance
         fitz = self._get_fitz()
         doc = fitz.open(str(self._pdf_path))
         try:
-            doc_length: int = len(doc)
-            total_pages = (
-                doc_length if max_pages is None else min(max_pages, doc_length)
-            )
+            total_pages = self._calculate_total_pages(doc, max_pages)
             for page_num in range(total_pages):
-                yield from self._extract_page_content(doc[page_num], page_num)
+                page = doc[page_num]
+                yield from self._extract_page_content(page, page_num)
         finally:
             doc.close()
+    
+    def _calculate_total_pages(self, doc: Any, max_pages: Optional[int]) -> int:
+        """Calculate total pages to process."""
+        doc_length = len(doc)
+        return doc_length if max_pages is None else min(max_pages, doc_length)
 
     def _extract_page_content(
         self, page: Any, page_num: int
@@ -95,7 +106,7 @@ class PDFExtractor(BaseExtractor):  # Inheritance
         if not self._is_valid_text(text):
             return
 
-        content_type = self._analyzer.classify(text)
+        content_type = self.__analyzer.classify(text)  # Private access
         item_data = ContentItemData(
             text, content_type, block_num, page_num, block
         )
@@ -133,7 +144,8 @@ class PDFExtractor(BaseExtractor):  # Inheritance
             stripped[:50] + "..." if len(stripped) > 50 else stripped
         )
 
-    def _get_block_text(self, block: dict[str, Any]) -> str:  # Encapsulation
+    def _get_block_text(self, block: dict[str, Any]) -> str:
+        """Extract text from block."""
         return "".join(
             str(span["text"]) for line in block["lines"] for span in line["spans"]
         )
@@ -141,25 +153,37 @@ class PDFExtractor(BaseExtractor):  # Inheritance
     def _extract_tables(
         self, plumber_doc: Any, page_num: int
     ) -> Iterator[dict[str, Any]]:
-        """Extract tables using cached pdfplumber doc (Encapsulation)."""
+        """Extract tables from page."""
         try:
-            if page_num < len(plumber_doc.pages):
-                plumber_page = plumber_doc.pages[page_num]
-                tables = plumber_page.extract_tables()
-                for table_num, table in enumerate(tables or []):
-                    if table and len(table) > 1:
-                        table_text = "\n".join(
-                            " | ".join(
-                                str(cell or "") for cell in row
-                            )
-                            for row in table
-                        )
-                        yield {
-                            "type": "table",
-                            "content": table_text,
-                            "page": page_num + 1,
-                            "block_id": f"tbl{page_num + 1}_{table_num}",
-                            "bbox": [],
-                        }
+            if page_num >= len(plumber_doc.pages):
+                return
+            
+            page = plumber_doc.pages[page_num]
+            tables = page.extract_tables()
+            
+            for table_num, table in enumerate(tables or []):
+                if self._is_valid_table(table):
+                    data = self._create_table_data(table, page_num, table_num)
+                    yield data
         except Exception as e:
             self._logger.warning("Table extraction failed: %s", e)
+    
+    def _is_valid_table(self, table: Any) -> bool:
+        """Check if table is valid for processing."""
+        return table and len(table) > 1
+    
+    def _create_table_data(
+        self, table: Any, page_num: int, table_num: int
+    ) -> dict[str, Any]:
+        """Create table data dictionary."""
+        table_text = "\n".join(
+            " | ".join(str(cell or "") for cell in row)
+            for row in table
+        )
+        return {
+            "type": "table",
+            "content": table_text,
+            "page": page_num + 1,
+            "block_id": f"tbl{page_num + 1}_{table_num}",
+            "bbox": [],
+        }

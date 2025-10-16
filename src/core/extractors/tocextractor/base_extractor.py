@@ -1,5 +1,5 @@
 # USB PD Specification Parser - TOC Extractor Module
-"""Module for extracting Table of Contents (TOC) from USB PD Specification documents."""
+"""Module for extracting Table of Contents from USB PD documents."""
 
 import re
 from abc import ABC, abstractmethod
@@ -35,7 +35,9 @@ class BaseTOCExtractor(ABC):  # Abstraction
                     return entry
         return None
 
-    def _process_match(self, match: re.Match[str], counter: int) -> Optional[TOCEntry]:
+    def _process_match(
+        self, match: re.Match[str], counter: int
+    ) -> Optional[TOCEntry]:
         """Process regex match (Encapsulation)."""
         groups = match.groups()
         section_id, title, page_str = self._extract_groups(groups, counter)

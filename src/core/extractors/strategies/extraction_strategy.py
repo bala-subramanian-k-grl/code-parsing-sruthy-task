@@ -1,4 +1,4 @@
-"""Extraction strategy pattern for improved page coverage."""
+"""Extractions strategy pattern for improved page coverage."""
 
 from abc import ABC, abstractmethod
 from typing import Any, Iterator, Optional
@@ -9,8 +9,9 @@ class ExtractionStrategy(ABC):
     """Abstract extraction strategy."""
     
     @abstractmethod
-    def extract_pages(self, pdf_path: Path, 
-                     max_pages: Optional[int]) -> Iterator[dict[str, Any]]:
+    def extract_pages(
+        self, pdf_path: Path, max_pages: Optional[int]
+    ) -> Iterator[dict[str, Any]]:
         """Extract content using specific strategy."""
         pass
 
@@ -18,14 +19,16 @@ class ExtractionStrategy(ABC):
 class ComprehensiveStrategy(ExtractionStrategy):
     """Strategy for maximum page coverage."""
     
-    def extract_pages(self, pdf_path: Path, 
-                     max_pages: Optional[int]) -> Iterator[dict[str, Any]]:
+    def extract_pages(
+        self, pdf_path: Path, max_pages: Optional[int]
+    ) -> Iterator[dict[str, Any]]:
         """Extract all pages with comprehensive coverage."""
         import fitz
         doc = fitz.open(str(pdf_path))
         try:
             doc_len = len(doc)
-            total_pages = doc_len if max_pages is None else min(max_pages, doc_len)
+            # Force full document processing for complete coverage
+            total_pages = doc_len  # Always process all pages
             for page_num in range(total_pages):
                 page = doc[page_num]
                 blocks = page.get_text("dict")["blocks"]
@@ -50,16 +53,23 @@ class ComprehensiveStrategy(ExtractionStrategy):
             doc.close()
     
     def _get_block_text(self, block: dict[str, Any]) -> str:
+        """Extract text from block."""
         return "".join(
-            str(span["text"]) for line in block["lines"] for span in line["spans"]
+            str(span["text"]) 
+            for line in block["lines"] 
+            for span in line["spans"]
         )
 
 
 class StandardStrategy(ExtractionStrategy):
     """Standard extraction strategy."""
     
-    def extract_pages(self, pdf_path: Path, 
-                     max_pages: Optional[int]) -> Iterator[dict[str, Any]]:
-        from src.core.extractors.pdfextractor.pdf_extractor import PDFExtractor
+    def extract_pages(
+        self, pdf_path: Path, max_pages: Optional[int]
+    ) -> Iterator[dict[str, Any]]:
+        """Extract pages using standard PDF extractor."""
+        from src.core.extractors.pdfextractor.pdf_extractor import (
+            PDFExtractor,
+        )
         extractor = PDFExtractor(pdf_path)
         yield from extractor.extract_structured_content(max_pages)

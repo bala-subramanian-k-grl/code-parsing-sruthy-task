@@ -1,204 +1,66 @@
-2025-10-13 17:06:59 [INFO] PipelineOrchestrator - Configuration loaded successfully from application.yml
-2025-10-13 17:06:59 [INFO] PipelineOrchestrator - Output directory prepared: D:\code parsing\outputs
-2025-10-13 17:07:01 [INFO] src.core.orchestrator.pipeline_orchestrator - Executing run
-2025-10-13 17:07:01 [INFO] PipelineOrchestrator - Starting pipeline execution - Mode: Full Document
-2025-10-13 17:07:01 [INFO] PipelineOrchestrator - Extracting Table of Contents...
-2025-10-13 17:07:01 [INFO] PipelineOrchestrator - TOC extraction completed: 369 entries found
-2025-10-13 17:07:01 [INFO] PipelineOrchestrator - Extracting content from PDF (max pages: all)...
-2025-10-13 17:07:01 [INFO] src.core.extractors.pdfextractor.pdf_extractor - Executing extract_content
-2025-10-13 17:07:12 [INFO] src.core.extractors.pdfextractor.pdf_extractor - Completed extract_content successfully
-2025-10-13 17:07:12 [INFO] src.core.extractors.pdfextractor.pdf_extractor - extract_content took 10.06 seconds
-2025-10-13 17:07:12 [INFO] PipelineOrchestrator - Content extraction completed: 23997 items processed
-2025-10-13 17:07:12 [INFO] PipelineOrchestrator - Writing JSONL output files...
-2025-10-13 17:07:12 [INFO] PipelineOrchestrator - JSONL files written successfully
-2025-10-13 17:07:12 [INFO] PipelineOrchestrator - Generating analysis reports...
-2025-10-13 17:07:12 [INFO] PipelineOrchestrator - Analysis reports generated successfully
-2025-10-13 17:07:12 [INFO] PipelineOrchestrator - Generating validation report...
-2025-10-13 17:07:12 [INFO] PipelineOrchestrator - Validation report generated successfully
-2025-10-13 17:07:12 [INFO] PipelineOrchestrator - Pipeline execution completed successfully
-2025-10-13 17:07:12 [INFO] src.core.orchestrator.pipeline_orchestrator - Completed run successfully
-2025-10-13 17:07:12 [INFO] src.core.orchestrator.pipeline_orchestrator - run took 11.24 seconds
-2025-10-13 17:07:12 [INFO] CLIApp - Processing completed successfully: 369 TOC entries extracted, 23997 content items processed
-2025-10-13 17:11:49 [INFO] __main__ - Executing run
-2025-10-13 17:11:49 [INFO] __main__ - Executing run
-2025-10-13 17:11:49 [INFO] JSONLSearcher - Initialized searcher for file: usb_pd_spec.jsonl
-2025-10-13 17:11:49 [INFO] src.support.search.jsonl_search - Executing search
-2025-10-13 17:11:49 [INFO] JSONLSearcher - Starting search for term: 'engine'
-2025-10-13 17:11:49 [INFO] JSONLSearcher - Search completed: Found 2353 matches for 'engine'
-2025-10-13 17:11:49 [INFO] src.support.search.jsonl_search - Completed search successfully
-2025-10-13 17:11:49 [INFO] src.support.search.jsonl_search - search took 0.31 seconds
-2025-10-13 17:11:49 [INFO] SearchDisplay - Displaying 10 of 2353 matches for 'engine'
-2025-10-13 17:11:49 [INFO] SearchDisplay - Truncated display: showing 10 of 2353 total matches
-2025-10-13 17:11:49 [INFO] __main__ - Completed run successfully
-2025-10-13 17:11:49 [INFO] __main__ - Completed run successfully
-2025-10-13 17:11:49 [INFO] __main__ - run took 0.32 seconds
-2025-10-13 17:11:49 [INFO] __main__ - run took 0.32 seconds
-2025-10-13 17:11:49 [INFO] __main__ - Completed main successfully
-2025-10-13 17:11:49 [INFO] __main__ - Completed main successfully
-2025-10-13 17:11:49 [INFO] __main__ - main took 0.33 seconds
-2025-10-13 17:11:49 [INFO] __main__ - main took 0.33 seconds
-2025-10-13 17:13:42 [INFO] JSONLSearcher - Initialized searcher for file: usb_pd_spec.jsonl
-2025-10-13 17:13:42 [INFO] src.support.search.jsonl_search - Executing search
-2025-10-13 17:13:42 [INFO] JSONLSearcher - Starting search for term: 'engine'
-2025-10-13 17:13:42 [INFO] JSONLSearcher - Search completed: Found 2353 matches for 'engine'
-2025-10-13 17:13:42 [INFO] src.support.search.jsonl_search - Completed search successfully
-2025-10-13 17:13:42 [INFO] src.support.search.jsonl_search - search took 0.31 seconds
-2025-10-13 17:13:42 [INFO] SearchDisplay - Displaying 10 of 2353 matches for 'engine'
-2025-10-13 17:13:42 [INFO] SearchDisplay - Truncated display: showing 10 of 2353 total matches
-2025-10-13 17:13:42 [INFO] __main__ - run took 0.31 seconds
-2025-10-13 17:13:42 [INFO] __main__ - run took 0.31 seconds
-2025-10-13 17:13:43 [INFO] __main__ - main took 0.32 seconds
-2025-10-13 17:13:43 [INFO] __main__ - main took 0.32 seconds
-2025-10-13 17:14:40 [INFO] JSONLSearcher - Initialized searcher for file: usb_pd_spec.jsonl
-2025-10-13 17:14:40 [INFO] src.support.search.jsonl_search - Executing search
-2025-10-13 17:14:40 [INFO] JSONLSearcher - Starting search for term: 'engine'
-2025-10-13 17:14:40 [INFO] JSONLSearcher - Search completed: Found 2353 matches for 'engine'
-2025-10-13 17:14:40 [INFO] src.support.search.jsonl_search - Completed search successfully
-2025-10-13 17:14:40 [INFO] src.support.search.jsonl_search - search took 0.31 seconds
-2025-10-13 17:14:40 [INFO] SearchDisplay - Displaying 10 of 2353 matches for 'engine'
-2025-10-13 17:14:40 [INFO] SearchDisplay - Truncated display: showing 10 of 2353 total matches
-2025-10-13 17:14:40 [INFO] __main__ - run took 0.31 seconds
-2025-10-13 17:14:40 [INFO] __main__ - run took 0.31 seconds
-2025-10-13 17:14:40 [INFO] __main__ - main took 0.32 seconds
-2025-10-13 17:14:40 [INFO] __main__ - main took 0.32 seconds
-2025-10-13 21:31:28 [INFO] PipelineOrchestrator - Configuration loaded successfully from application.yml
-2025-10-13 21:31:28 [INFO] PipelineOrchestrator - Output directory prepared: D:\code parsing\outputs
-2025-10-13 21:31:31 [INFO] src.core.orchestrator.pipeline_orchestrator - Executing run
-2025-10-13 21:31:31 [INFO] PipelineOrchestrator - Starting pipeline execution - Mode: Full Document
-2025-10-13 21:31:31 [INFO] PipelineOrchestrator - Extracting Table of Contents...
-2025-10-13 21:31:31 [INFO] PipelineOrchestrator - TOC extraction completed: 369 entries found
-2025-10-13 21:31:31 [INFO] PipelineOrchestrator - Extracting content from PDF (max pages: all)...
-2025-10-13 21:31:31 [INFO] src.core.extractors.pdfextractor.pdf_extractor - Executing extract_content
-2025-10-13 21:31:43 [INFO] src.core.extractors.pdfextractor.pdf_extractor - Completed extract_content successfully
-2025-10-13 21:31:43 [INFO] src.core.extractors.pdfextractor.pdf_extractor - extract_content took 11.18 seconds
-2025-10-13 21:31:43 [INFO] PipelineOrchestrator - Content extraction completed: 23997 items processed
-2025-10-13 21:31:43 [INFO] PipelineOrchestrator - Writing JSONL output files...
-2025-10-13 21:31:43 [INFO] PipelineOrchestrator - JSONL files written successfully
-2025-10-13 21:31:43 [INFO] PipelineOrchestrator - Generating analysis reports...
-2025-10-13 21:31:43 [INFO] PipelineOrchestrator - Analysis reports generated successfully
-2025-10-13 21:31:43 [INFO] PipelineOrchestrator - Generating validation report...
-2025-10-13 21:31:43 [INFO] PipelineOrchestrator - Validation report generated successfully
-2025-10-13 21:31:43 [INFO] PipelineOrchestrator - Pipeline execution completed successfully
-2025-10-13 21:31:43 [INFO] src.core.orchestrator.pipeline_orchestrator - Completed run successfully
-2025-10-13 21:31:43 [INFO] src.core.orchestrator.pipeline_orchestrator - run took 12.55 seconds
-2025-10-13 21:31:43 [INFO] CLIApp - Processing completed successfully: 369 TOC entries extracted, 23997 content items processed
-2025-10-13 21:33:12 [INFO] PipelineOrchestrator - Configuration loaded successfully from application.yml
-2025-10-13 21:33:12 [INFO] PipelineOrchestrator - Output directory prepared: D:\code parsing\outputs
-2025-10-13 21:33:12 [INFO] src.core.orchestrator.pipeline_orchestrator - Executing run
-2025-10-13 21:33:12 [INFO] PipelineOrchestrator - Starting pipeline execution - Mode: Standard (200 pages)
-2025-10-13 21:33:12 [INFO] PipelineOrchestrator - Extracting Table of Contents...
-2025-10-13 21:33:12 [INFO] PipelineOrchestrator - TOC extraction completed: 369 entries found
-2025-10-13 21:33:12 [INFO] PipelineOrchestrator - Extracting content from PDF (max pages: 200)...
-2025-10-13 21:33:12 [INFO] src.core.extractors.pdfextractor.pdf_extractor - Executing extract_content
-2025-10-13 21:33:14 [INFO] src.core.extractors.pdfextractor.pdf_extractor - Completed extract_content successfully
-2025-10-13 21:33:14 [INFO] src.core.extractors.pdfextractor.pdf_extractor - extract_content took 1.56 seconds
-2025-10-13 21:33:14 [INFO] PipelineOrchestrator - Content extraction completed: 4403 items processed
-2025-10-13 21:33:14 [INFO] PipelineOrchestrator - Writing JSONL output files...
-2025-10-13 21:33:14 [INFO] PipelineOrchestrator - JSONL files written successfully
-2025-10-13 21:33:14 [INFO] PipelineOrchestrator - Generating analysis reports...
-2025-10-13 21:33:14 [INFO] PipelineOrchestrator - Analysis reports generated successfully
-2025-10-13 21:33:14 [INFO] PipelineOrchestrator - Generating validation report...
-2025-10-13 21:33:14 [INFO] PipelineOrchestrator - Validation report generated successfully
-2025-10-13 21:33:14 [INFO] PipelineOrchestrator - Pipeline execution completed successfully
-2025-10-13 21:33:14 [INFO] src.core.orchestrator.pipeline_orchestrator - Completed run successfully
-2025-10-13 21:33:14 [INFO] src.core.orchestrator.pipeline_orchestrator - run took 2.08 seconds
-2025-10-13 21:33:14 [INFO] CLIApp - Processing completed successfully: 369 TOC entries extracted, 4403 content items processed
-2025-10-16 16:00:08 [INFO] PipelineOrchestrator - Configuration loaded successfully from application.yml
-2025-10-16 16:00:08 [INFO] PipelineOrchestrator - Output directory prepared: D:\code parsing\outputs
-2025-10-16 16:00:08 [INFO] src.core.orchestrator.pipeline_orchestrator - Executing run
-2025-10-16 16:00:08 [INFO] PipelineOrchestrator - Starting pipeline execution - Mode: Standard (200 pages)
-2025-10-16 16:00:08 [INFO] PipelineOrchestrator - Extracting Table of Contents...
-2025-10-16 16:00:09 [INFO] PipelineOrchestrator - TOC extraction completed: 369 entries found
-2025-10-16 16:00:09 [INFO] PipelineOrchestrator - Extracting content from PDF (max pages: 200)...
-2025-10-16 16:00:09 [INFO] src.core.extractors.pdfextractor.pdf_extractor - Executing extract_content
-2025-10-16 16:00:12 [INFO] src.core.extractors.pdfextractor.pdf_extractor - Completed extract_content successfully
-2025-10-16 16:00:12 [INFO] src.core.extractors.pdfextractor.pdf_extractor - extract_content took 2.48 seconds
-2025-10-16 16:00:12 [INFO] PipelineOrchestrator - Content extraction completed: 4403 items processed
-2025-10-16 16:00:12 [INFO] PipelineOrchestrator - Writing JSONL output files...
-2025-10-16 16:00:12 [INFO] PipelineOrchestrator - JSONL files written successfully
-2025-10-16 16:00:12 [INFO] PipelineOrchestrator - Generating analysis reports...
-2025-10-16 16:00:12 [INFO] PipelineOrchestrator - Analysis reports generated successfully
-2025-10-16 16:00:12 [INFO] PipelineOrchestrator - Generating validation report...
-2025-10-16 16:00:12 [ERROR] src.core.orchestrator.pipeline_orchestrator - Error in run: name 'font' is not defined
-2025-10-16 16:00:12 [ERROR] CLIApp - Application execution failed: name 'font' is not defined
-2025-10-16 16:00:27 [INFO] PipelineOrchestrator - Configuration loaded successfully from application.yml
-2025-10-16 16:00:27 [INFO] PipelineOrchestrator - Output directory prepared: D:\code parsing\outputs
-2025-10-16 16:00:27 [INFO] src.core.orchestrator.pipeline_orchestrator - Executing run
-2025-10-16 16:00:27 [INFO] PipelineOrchestrator - Starting pipeline execution - Mode: Standard (200 pages)
-2025-10-16 16:00:27 [INFO] PipelineOrchestrator - Extracting Table of Contents...
-2025-10-16 16:00:28 [INFO] PipelineOrchestrator - TOC extraction completed: 369 entries found
-2025-10-16 16:00:28 [INFO] PipelineOrchestrator - Extracting content from PDF (max pages: 200)...
-2025-10-16 16:00:28 [INFO] src.core.extractors.pdfextractor.pdf_extractor - Executing extract_content
-2025-10-16 16:00:30 [INFO] src.core.extractors.pdfextractor.pdf_extractor - Completed extract_content successfully
-2025-10-16 16:00:30 [INFO] src.core.extractors.pdfextractor.pdf_extractor - extract_content took 2.27 seconds
-2025-10-16 16:00:30 [INFO] PipelineOrchestrator - Content extraction completed: 4403 items processed
-2025-10-16 16:00:30 [INFO] PipelineOrchestrator - Writing JSONL output files...
-2025-10-16 16:00:30 [INFO] PipelineOrchestrator - JSONL files written successfully
-2025-10-16 16:00:30 [INFO] PipelineOrchestrator - Generating analysis reports...
-2025-10-16 16:00:30 [INFO] PipelineOrchestrator - Analysis reports generated successfully
-2025-10-16 16:00:30 [INFO] PipelineOrchestrator - Generating validation report...
-2025-10-16 16:00:31 [INFO] PipelineOrchestrator - Validation report generated successfully
-2025-10-16 16:00:31 [INFO] PipelineOrchestrator - Pipeline execution completed successfully
-2025-10-16 16:00:31 [INFO] src.core.orchestrator.pipeline_orchestrator - Completed run successfully
-2025-10-16 16:00:31 [INFO] src.core.orchestrator.pipeline_orchestrator - run took 3.06 seconds
-2025-10-16 16:00:31 [INFO] CLIApp - Processing completed successfully: 369 TOC entries extracted, 4403 content items processed
-2025-10-17 00:21:18 [INFO] PipelineOrchestrator - Configuration loaded successfully from application.yml
-2025-10-17 00:21:18 [INFO] PipelineOrchestrator - Output directory prepared: D:\code parsing\outputs
-2025-10-17 00:21:18 [INFO] src.core.orchestrator.pipeline_orchestrator - Executing run
-2025-10-17 00:21:18 [INFO] PipelineOrchestrator - Starting pipeline execution - Mode: Standard (200 pages)
-2025-10-17 00:21:18 [INFO] PipelineOrchestrator - Extracting Table of Contents...
-2025-10-17 00:21:19 [INFO] PipelineOrchestrator - TOC extraction completed: 369 entries found
-2025-10-17 00:21:19 [INFO] PipelineOrchestrator - Extracting content from PDF (max pages: 200)...
-2025-10-17 00:21:21 [INFO] PipelineOrchestrator - Content extraction completed: 4593 items processed
-2025-10-17 00:21:21 [INFO] PipelineOrchestrator - Writing JSONL output files...
-2025-10-17 00:21:21 [INFO] PipelineOrchestrator - JSONL files written successfully
-2025-10-17 00:21:21 [INFO] PipelineOrchestrator - Generating analysis reports...
-2025-10-17 00:21:21 [INFO] PipelineOrchestrator - Analysis reports generated successfully
-2025-10-17 00:21:21 [INFO] PipelineOrchestrator - Generating validation report...
-2025-10-17 00:21:21 [INFO] PipelineOrchestrator - Validation report generated successfully
-2025-10-17 00:21:21 [INFO] PipelineOrchestrator - Pipeline execution completed successfully
-2025-10-17 00:21:21 [INFO] src.core.orchestrator.pipeline_orchestrator - Completed run successfully
-2025-10-17 00:21:21 [INFO] src.core.orchestrator.pipeline_orchestrator - run took 3.75 seconds
-2025-10-17 00:21:21 [INFO] CLIApp - Processing completed successfully: 369 TOC entries extracted, 4593 content items processed
-2025-10-17 00:37:48 [INFO] PipelineOrchestrator - Configuration loaded successfully from application.yml
-2025-10-17 00:37:48 [INFO] PipelineOrchestrator - Output directory prepared: D:\code parsing\outputs
-2025-10-17 00:37:52 [INFO] src.core.orchestrator.pipeline_orchestrator - Executing run
-2025-10-17 00:37:52 [INFO] PipelineOrchestrator - Starting pipeline execution - Mode: Full Document
-2025-10-17 00:37:52 [INFO] PipelineOrchestrator - Extracting Table of Contents...
-2025-10-17 00:37:52 [INFO] PipelineOrchestrator - TOC extraction completed: 369 entries found
-2025-10-17 00:37:52 [INFO] PipelineOrchestrator - Extracting content from PDF (max pages: all)...
-2025-10-17 00:38:09 [INFO] PipelineOrchestrator - Content extraction completed: 25760 items
-2025-10-17 00:38:09 [INFO] PipelineOrchestrator - Writing JSONL output files...
-2025-10-17 00:38:10 [INFO] PipelineOrchestrator - JSONL files written successfully
-2025-10-17 00:38:10 [INFO] PipelineOrchestrator - Generating analysis reports...
-2025-10-17 00:38:10 [INFO] PipelineOrchestrator - Analysis reports generated successfully
-2025-10-17 00:38:10 [INFO] PipelineOrchestrator - Generating validation report...
-2025-10-17 00:38:10 [INFO] PipelineOrchestrator - Validation report generated successfully
-2025-10-17 00:38:10 [INFO] PipelineOrchestrator - Pipeline execution completed successfully
-2025-10-17 00:38:10 [INFO] src.core.orchestrator.pipeline_orchestrator - Completed run successfully
-2025-10-17 00:38:10 [INFO] src.core.orchestrator.pipeline_orchestrator - run took 18.91 seconds
-2025-10-17 00:38:10 [INFO] CLIApp - Processing completed: 369 TOC entries, 25760 content items processed
-2025-10-17 00:40:37 [INFO] JSONLSearcher - Initialized searcher for file: usb_pd_spec.jsonl
-2025-10-17 00:40:37 [INFO] src.support.search.jsonl_search - Executing search
-2025-10-17 00:40:37 [INFO] JSONLSearcher - Starting search for term: 'engine'
-2025-10-17 00:40:38 [INFO] JSONLSearcher - Search completed: Found 2353 matches for 'engine'
-2025-10-17 00:40:38 [INFO] src.support.search.jsonl_search - Completed search successfully
-2025-10-17 00:40:38 [INFO] src.support.search.jsonl_search - search took 0.43 seconds
-2025-10-17 00:40:38 [INFO] SearchDisplay - Displaying 10 of 2353 matches for 'engine'
-2025-10-17 00:40:38 [INFO] SearchDisplay - Truncated display: showing 10 of 2353 total matches
-2025-10-17 00:40:38 [INFO] __main__ - run took 0.43 seconds
-2025-10-17 00:40:38 [INFO] __main__ - run took 0.43 seconds
-2025-10-17 00:40:38 [INFO] __main__ - main took 0.44 seconds
-2025-10-17 00:40:38 [INFO] __main__ - main took 0.44 seconds
-2025-10-17 00:40:55 [INFO] JSONLSearcher - Initialized searcher for file: usb_pd_spec.jsonl
-2025-10-17 00:40:55 [INFO] src.support.search.jsonl_search - Executing search
-2025-10-17 00:40:55 [INFO] JSONLSearcher - Starting search for term: 'USB'
-2025-10-17 00:40:55 [INFO] JSONLSearcher - Search completed: Found 1082 matches for 'USB'
-2025-10-17 00:40:55 [INFO] src.support.search.jsonl_search - Completed search successfully
-2025-10-17 00:40:55 [INFO] src.support.search.jsonl_search - search took 0.44 seconds
-2025-10-17 00:40:55 [INFO] SearchDisplay - Displaying 10 of 1082 matches for 'USB'
-2025-10-17 00:40:55 [INFO] SearchDisplay - Truncated display: showing 10 of 1082 total matches
-2025-10-17 00:40:55 [INFO] __main__ - run took 0.46 seconds
-2025-10-17 00:40:55 [INFO] __main__ - run took 0.46 seconds
-2025-10-17 00:40:55 [INFO] __main__ - main took 0.46 seconds
-2025-10-17 00:40:55 [INFO] __main__ - main took 0.46 seconds
+2025-10-17 02:09:11 [INFO] PipelineOrchestrator - Configuration loaded successfully from application.yml
+2025-10-17 02:09:11 [INFO] PipelineOrchestrator - Output directory prepared: D:\code parsing\outputs
+2025-10-17 02:09:14 [INFO] src.core.orchestrator.pipeline_orchestrator - Executing run
+2025-10-17 02:09:14 [INFO] PipelineOrchestrator - Starting pipeline execution - Mode: Full Document
+2025-10-17 02:09:14 [INFO] PipelineOrchestrator - Extracting Table of Contents...
+2025-10-17 02:09:14 [INFO] PipelineOrchestrator - TOC extraction completed: 12 entries
+2025-10-17 02:09:14 [INFO] PipelineOrchestrator - Extracting content (max pages: all)...
+2025-10-17 02:09:21 [INFO] PipelineOrchestrator - Content extraction completed: 25760 items
+2025-10-17 02:09:21 [INFO] PipelineOrchestrator - Writing JSONL output files...
+2025-10-17 02:09:21 [INFO] PipelineOrchestrator - JSONL files written successfully
+2025-10-17 02:09:21 [INFO] PipelineOrchestrator - Generating analysis reports...
+2025-10-17 02:09:22 [INFO] PipelineOrchestrator - Analysis reports generated successfully
+2025-10-17 02:09:22 [INFO] PipelineOrchestrator - Generating validation report...
+2025-10-17 02:09:22 [INFO] PipelineOrchestrator - Validation report generated successfully
+2025-10-17 02:09:22 [INFO] PipelineOrchestrator - Pipeline execution completed successfully
+2025-10-17 02:09:22 [INFO] src.core.orchestrator.pipeline_orchestrator - Completed run successfully
+2025-10-17 02:09:22 [INFO] src.core.orchestrator.pipeline_orchestrator - run took 8.28 seconds
+2025-10-17 02:09:22 [INFO] CLIApp - Processing completed: 12 TOC entries, 25760 content items processed
+2025-10-17 02:26:45 [INFO] PipelineOrchestrator - Configuration loaded from application.yml
+2025-10-17 02:26:45 [INFO] PipelineOrchestrator - Output directory prepared: D:\code parsing\outputs
+2025-10-17 02:26:47 [INFO] src.core.orchestrator.pipeline_orchestrator - Executing run
+2025-10-17 02:26:47 [INFO] PipelineOrchestrator - Starting pipeline execution - Mode: Extended (1046 pages)
+2025-10-17 02:26:47 [INFO] PipelineOrchestrator - Extracting Table of Contents...
+2025-10-17 02:26:47 [INFO] PipelineOrchestrator - TOC extraction completed: 12 entries
+2025-10-17 02:26:47 [INFO] PipelineOrchestrator - Extracting content (max pages: 1046)...
+2025-10-17 02:26:54 [INFO] PipelineOrchestrator - Content extraction completed: 25760 items
+2025-10-17 02:26:54 [INFO] PipelineOrchestrator - Writing JSONL output files...
+2025-10-17 02:26:55 [INFO] PipelineOrchestrator - JSONL files written successfully
+2025-10-17 02:26:55 [INFO] PipelineOrchestrator - Generating analysis reports...
+2025-10-17 02:26:55 [INFO] PipelineOrchestrator - Analysis reports generated successfully
+2025-10-17 02:26:55 [INFO] PipelineOrchestrator - Generating validation report...
+2025-10-17 02:26:55 [INFO] PipelineOrchestrator - Validation report generated successfully
+2025-10-17 02:26:55 [INFO] PipelineOrchestrator - Pipeline execution completed successfully
+2025-10-17 02:26:55 [INFO] src.core.orchestrator.pipeline_orchestrator - Completed run successfully
+2025-10-17 02:26:55 [INFO] src.core.orchestrator.pipeline_orchestrator - run took 8.78 seconds
+2025-10-17 02:26:55 [INFO] CLIApp - Processing completed: 12 TOC entries, 25760 content items processed
+2025-10-17 02:29:51 [INFO] PipelineOrchestrator - Configuration loaded from application.yml
+2025-10-17 02:29:51 [INFO] PipelineOrchestrator - Output directory prepared: D:\code parsing\outputs
+2025-10-17 02:29:51 [INFO] src.core.orchestrator.pipeline_orchestrator - Executing run
+2025-10-17 02:29:51 [INFO] PipelineOrchestrator - Starting pipeline execution - Full Document Processing
+2025-10-17 02:29:51 [INFO] PipelineOrchestrator - Extracting Table of Contents...
+2025-10-17 02:29:51 [INFO] PipelineOrchestrator - TOC extraction completed: 12 entries
+2025-10-17 02:29:51 [INFO] PipelineOrchestrator - Extracting content (max pages: all)...
+2025-10-17 02:29:57 [INFO] PipelineOrchestrator - Content extraction completed: 25760 items
+2025-10-17 02:29:57 [INFO] PipelineOrchestrator - Writing JSONL output files...
+2025-10-17 02:29:57 [INFO] PipelineOrchestrator - JSONL files written successfully
+2025-10-17 02:29:57 [INFO] PipelineOrchestrator - Generating analysis reports...
+2025-10-17 02:29:58 [INFO] PipelineOrchestrator - Analysis reports generated successfully
+2025-10-17 02:29:58 [INFO] PipelineOrchestrator - Generating validation report...
+2025-10-17 02:29:58 [INFO] PipelineOrchestrator - Validation report generated successfully
+2025-10-17 02:29:58 [INFO] PipelineOrchestrator - Pipeline execution completed successfully
+2025-10-17 02:29:58 [INFO] src.core.orchestrator.pipeline_orchestrator - Completed run successfully
+2025-10-17 02:29:58 [INFO] src.core.orchestrator.pipeline_orchestrator - run took 7.35 seconds
+2025-10-17 02:29:58 [INFO] CLIApp - Processing completed: 12 TOC entries, 25760 content items processed
+2025-10-17 02:30:09 [INFO] JSONLSearcher - Initialized searcher for file: usb_pd_spec.jsonl
+2025-10-17 02:30:09 [INFO] src.support.search.jsonl_search - Executing search
+2025-10-17 02:30:09 [INFO] JSONLSearcher - Starting search for term: 'USB'
+2025-10-17 02:30:10 [INFO] JSONLSearcher - Search completed: Found 1082 matches for 'USB'
+2025-10-17 02:30:10 [INFO] src.support.search.jsonl_search - Completed search successfully
+2025-10-17 02:30:10 [INFO] src.support.search.jsonl_search - search took 0.17 seconds
+2025-10-17 02:30:10 [INFO] SearchDisplay - Displaying 10 of 1082 matches for 'USB'
+2025-10-17 02:30:10 [INFO] SearchDisplay - Truncated display: showing 10 of 1082 total matches
+2025-10-17 02:30:10 [INFO] __main__ - run took 0.18 seconds
+2025-10-17 02:30:10 [INFO] __main__ - run took 0.18 seconds
+2025-10-17 02:30:10 [INFO] __main__ - main took 0.18 seconds
+2025-10-17 02:30:10 [INFO] __main__ - main took 0.18 seconds
