@@ -6,10 +6,10 @@ import logging
 import time
 from typing import Any, Callable, TypeVar
 
-func_type = TypeVar("func_type", bound=Callable[..., Any])
+FuncType = TypeVar("FuncType", bound=Callable[..., Any])
 
 
-def log_execution(func: func_type) -> func_type:
+def log_execution(func: FuncType) -> FuncType:
     """Decorator to log function execution."""
 
     @functools.wraps(func)
@@ -27,7 +27,7 @@ def log_execution(func: func_type) -> func_type:
     return wrapper  # type: ignore
 
 
-def timing(func: func_type) -> func_type:
+def timing(func: FuncType) -> FuncType:
     """Decorator to measure execution time."""
 
     @functools.wraps(func)
@@ -36,13 +36,14 @@ def timing(func: func_type) -> func_type:
         result = func(*args, **kwargs)
         end_time = time.time()
         logger = logging.getLogger(func.__module__)
-        logger.info("%s took %.2f seconds", func.__name__, end_time - start_time)
+        duration = end_time - start_time
+        logger.info("%s took %.2f seconds", func.__name__, duration)
         return result
 
     return wrapper  # type: ignore
 
 
-def validate_path(func: func_type) -> func_type:
+def validate_path(func: FuncType) -> FuncType:
     """Decorator to validate path arguments."""
 
     @functools.wraps(func)
@@ -58,10 +59,10 @@ def validate_path(func: func_type) -> func_type:
     return wrapper  # type: ignore
 
 
-def retry(max_attempts: int = 3) -> Callable[[func_type], func_type]:
+def retry(max_attempts: int = 3) -> Callable[[FuncType], FuncType]:
     """Decorator to retry function on failure."""
 
-    def decorator(func: func_type) -> func_type:
+    def decorator(func: FuncType) -> FuncType:
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             logger = logging.getLogger(func.__module__)
@@ -71,11 +72,16 @@ def retry(max_attempts: int = 3) -> Callable[[func_type], func_type]:
                 except Exception as e:
                     if attempt == max_attempts - 1:
                         logger.error(
-                            "%s failed after %s attempts", func.__name__, max_attempts
+                            "%s failed after %s attempts",
+                            func.__name__,
+                            max_attempts,
                         )
                         raise
                     logger.warning(
-                        "%s attempt %s failed: %s", func.__name__, attempt + 1, e
+                        "%s attempt %s failed: %s",
+                        func.__name__,
+                        attempt + 1,
+                        e,
                     )
             return None
 

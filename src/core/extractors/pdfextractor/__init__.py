@@ -1,6 +1,5 @@
-"""PDF extractor modules."""
+"""PDF extractor exports"""
 
-from .base_extractor import BaseExtractor
 from .pdf_extractor import PDFExtractor
 
-__all__ = ["BaseExtractor", "PDFExtractor"]
+__all__ = ["PDFExtractor"]

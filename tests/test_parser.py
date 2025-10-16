@@ -17,7 +17,9 @@ class BasePipelineTest(ABC):  # Abstraction
 
 class MockPipelineTest(BasePipelineTest):  # Inheritance
     def test_pipeline(self) -> bool:  # Polymorphism
-        from src.core.orchestrator.pipeline_orchestrator import PipelineOrchestrator
+        from src.core.orchestrator.pipeline_orchestrator import (
+            PipelineOrchestrator,
+        )
 
         try:
             orchestrator = PipelineOrchestrator("application.yml")

@@ -10,6 +10,7 @@ from typing import Any
 
 class BaseBenchmark(ABC):  # Abstraction
     def __init__(self, name: str) -> None:
+        """Initialize benchmark with name."""
         self._name = name  # Encapsulation
         self._logger = logging.getLogger(__name__)  # Encapsulation
 
@@ -20,6 +21,7 @@ class BaseBenchmark(ABC):  # Abstraction
 
 class ConfigBenchmark(BaseBenchmark):  # Inheritance
     def run(self) -> dict[str, Any]:  # Polymorphism
+        """Run config benchmark."""
         from src.config import Config
 
         config = Config("application.yml")  # Create once, reuse
@@ -32,6 +34,7 @@ class ConfigBenchmark(BaseBenchmark):  # Inheritance
 
 class ModelBenchmark(BaseBenchmark):  # Inheritance
     def run(self) -> dict[str, Any]:  # Polymorphism
+        """Run model benchmark."""
         start = time.perf_counter()
         from src.core.models import BaseContent
 
@@ -43,18 +46,25 @@ class ModelBenchmark(BaseBenchmark):  # Inheritance
 
 class BenchmarkRunner:  # Encapsulation
     def __init__(self) -> None:
+        """Initialize benchmark runner."""
         self._benchmarks: list[BaseBenchmark] = []  # Encapsulation
 
     def add(self, benchmark: BaseBenchmark) -> None:  # Polymorphism
+        """Add benchmark to runner."""
         self._benchmarks.append(benchmark)
 
     def run_all(self) -> None:  # Abstraction
+        """Run all benchmarks."""
         for benchmark in self._benchmarks:
             result = benchmark.run()  # Polymorphism
-            print(f"{result['name']}: {result['time']:.3f}s ({result['ops']} ops)")
+            name = result['name']
+            time_val = result['time']
+            ops = result['ops']
+            print(f"{name}: {time_val:.3f}s ({ops} ops)")
 
 
 def main() -> None:
+    """Main benchmark entry point."""
     logging.basicConfig(level=logging.INFO)
     runner = BenchmarkRunner()
     runner.add(ConfigBenchmark("Config"))

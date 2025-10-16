@@ -16,9 +16,8 @@ class BaseProfiler(ABC):  # Abstraction
     def __init__(self, name: str):
         self._name = name  # Encapsulation
         self._profiler = cProfile.Profile()  # Encapsulation
-        self._logger = logging.getLogger(
-            self.__class__.__name__
-        )  # Encapsulation
+        class_name = self.__class__.__name__
+        self._logger = logging.getLogger(class_name)
 
     @property
     def name(self) -> str:
@@ -123,9 +122,8 @@ class ProfilerSuite:  # Encapsulation
 
     def __init__(self):
         self._profilers: list[BaseProfiler] = []  # Encapsulation
-        self._logger = logging.getLogger(
-            self.__class__.__name__
-        )  # Encapsulation
+        class_name = self.__class__.__name__
+        self._logger = logging.getLogger(class_name)
 
     def add_profiler(self, profiler: BaseProfiler) -> None:  # Polymorphism
         """Add profiler to suite."""
@@ -140,7 +138,8 @@ class ProfilerSuite:  # Encapsulation
                 result = profiler.profile_operation()  # Polymorphism
                 results[result["profiler"]] = result
             except Exception as e:
-                self._logger.error(f"Profiler {profiler.name} failed: {e}")
+                msg = f"Profiler {profiler.name} failed: {e}"
+                self._logger.error(msg)
         return results
 
 
@@ -154,7 +153,8 @@ class ProfilerFactory:  # Factory pattern
             return ConfigProfiler(name)  # Polymorphism
         elif profiler_type == "model":
             return ModelProfiler(name)  # Polymorphism
-        raise ValueError(f"Invalid profiler type: {profiler_type}")
+        msg = f"Invalid profiler type: {profiler_type}"
+        raise ValueError(msg)
 
 
 def main():
@@ -180,10 +180,10 @@ def main():
 
         logger.info("Performance Profiling Results:")
         for name, result in results.items():
-            logger.info(
-                f"Profiler: {name} - {result['operations']} operations"
-            )
-            logger.info(f"  Total Calls: {result['total_calls']}")
+            ops = result['operations']
+            logger.info(f"Profiler: {name} - {ops} operations")
+            calls = result['total_calls']
+            logger.info(f"  Total Calls: {calls}")
 
         return 0
     except Exception as e:

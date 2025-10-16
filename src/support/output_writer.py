@@ -10,6 +10,7 @@ class BaseWriter(ABC):  # Abstraction: abstract base class
     """Abstract writer (Abstraction, Encapsulation)."""
 
     def __init__(self, output_path: Path):
+        """Initialize writer with output path."""
         self._output_path = self._validate_path(output_path)
 
     def _validate_path(self, path: Path) -> Path:  # Encapsulation
@@ -41,19 +42,15 @@ class JSONLWriter(BaseWriter):  # Inheritance: extends BaseWriter
                 else:
                     self._write_single(f, data)
         except OSError as e:
-            error_msg = f"Cannot write to {self._output_path}: {e}"
-            raise RuntimeError(error_msg) from e
+            msg = f"Cannot write to {self._output_path}: {e}"
+            raise RuntimeError(msg) from e
 
-    def _write_list(
-        self, f: TextIO, data: list[Any]
-    ) -> None:  # Encapsulation: private
+    def _write_list(self, f: TextIO, data: list[Any]) -> None:
         """Write list of items."""
         for item in data:
             self._write_single(f, item)
 
-    def _write_single(
-        self, f: TextIO, item: Any
-    ) -> None:  # Encapsulation: private
+    def _write_single(self, f: TextIO, item: Any) -> None:
         """Write single item."""
         try:
             if hasattr(item, "model_dump"):

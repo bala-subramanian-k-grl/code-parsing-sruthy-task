@@ -22,6 +22,7 @@ class BaseRunner(ABC):  # Abstraction
     """Abstract runner (Abstraction, Encapsulation)."""
 
     def __init__(self):
+        """Initialize base runner."""
         self._app = None  # Encapsulation
         self._logger = logging.getLogger(self.__class__.__name__)
 
@@ -31,6 +32,7 @@ class BaseRunner(ABC):  # Abstraction
 
     @timing
     def run(self, term: str, file_path: str) -> None:  # Template method
+        """Run search with sanitized inputs."""
         # Sanitize inputs to prevent command injection
         safe_term = self._sanitize_input(term)
         self._app = self.create_app(file_path)  # Encapsulation
@@ -47,6 +49,7 @@ class SearchRunner(BaseRunner):  # Inheritance
     """Search runner (Inheritance, Polymorphism)."""
 
     def create_app(self, file_path: str) -> SearchApp:  # Polymorphism
+        """Create search application."""
         searcher = JSONLSearcher(file_path)  # Factory pattern
         display = SearchDisplay()
         return SearchApp(searcher, display)
@@ -57,6 +60,7 @@ class RunnerFactory:  # Abstraction
 
     @staticmethod  # Encapsulation
     def create_runner(runner_type: str = "search") -> BaseRunner:
+        """Create runner instance."""
         if runner_type == "search":
             return SearchRunner()  # Polymorphism
         raise ValueError(f"Invalid runner type: {runner_type}")

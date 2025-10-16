@@ -1,6 +1,6 @@
-"""Extractor modules."""
+"""Extractor modules exports"""
 
-from .pdfextractor.pdf_extractor import PDFExtractor
-from .tocextractor.toc_extractor import TOCExtractor
+from .pdfextractor import PDFExtractor
+from .tocextractor import TOCExtractor
 
 __all__ = ["PDFExtractor", "TOCExtractor"]

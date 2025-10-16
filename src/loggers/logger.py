@@ -38,9 +38,11 @@ class LoggerFactory(BaseLoggerFactory):  # Inheritance
         try:
             safe_dir = self._validate_output_dir(output_dir)
             # Additional security check before mkdir
-            clean_name = safe_dir.name.replace("_", "").replace("-", "")
+            name = safe_dir.name
+            clean_name = name.replace("_", "").replace("-", "")
             if not clean_name.isalnum():
-                raise ValueError(f"Invalid directory name: {safe_dir.name}")
+                msg = f"Invalid directory name: {safe_dir.name}"
+                raise ValueError(msg)
             safe_dir.mkdir(parents=True, exist_ok=True)
             log_file = safe_dir / "parser.log"
             # Validate log file path to prevent traversal
@@ -60,20 +62,27 @@ class LoggerFactory(BaseLoggerFactory):  # Inheritance
         try:
             # Sanitize input to prevent command injection
             path_str = str(output_dir)
-            sanitized = path_str.replace("..", "").replace(";", "").replace("|", "")
+            sanitized = (
+                path_str.replace("..", "")
+                .replace(";", "")
+                .replace("|", "")
+            )
             clean_path = Path(sanitized)
             resolved_path = clean_path.resolve(strict=False)
             working_dir = Path.cwd().resolve()
 
             # Prevent path traversal attacks
             if not resolved_path.is_relative_to(working_dir):
-                raise ValueError(f"Path traversal detected: {output_dir}")
+                msg = f"Path traversal detected: {output_dir}"
+                raise ValueError(msg)
 
             # Additional security check for suspicious patterns
             path_str = str(resolved_path)
             suspicious_chars = ["&", "`", "$", "(", ")", "<", ">"]
-            if any(char in path_str for char in suspicious_chars):
-                raise ValueError(f"Suspicious characters in path: {output_dir}")
+            has_suspicious = any(char in path_str for char in suspicious_chars)
+            if has_suspicious:
+                msg = f"Suspicious characters in path: {output_dir}"
+                raise ValueError(msg)
 
             return resolved_path
         except (OSError, ValueError) as e:
@@ -82,7 +91,9 @@ class LoggerFactory(BaseLoggerFactory):  # Inheritance
 
 
 def get_logger(
-    name: str = "usb_pd_parser", output_dir: Optional[Path] = None, debug: bool = False
+    name: str = "usb_pd_parser",
+    output_dir: Optional[Path] = None,
+    debug: bool = False
 ) -> logging.Logger:
     """Get logger instance."""
     factory = LoggerFactory(name)  # Polymorphism

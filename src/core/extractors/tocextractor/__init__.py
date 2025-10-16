@@ -1,6 +1,5 @@
-"""TOC extractor modules."""
+"""TOC extractor exports"""
 
-from .base_extractor import BaseTOCExtractor
 from .toc_extractor import TOCExtractor
 
-__all__ = ["BaseTOCExtractor", "TOCExtractor"]
+__all__ = ["TOCExtractor"]

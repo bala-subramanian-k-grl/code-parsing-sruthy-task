@@ -1,16 +1,6 @@
-"""Core business logic modules."""
+"""Core functionality exports"""
 
-from .analyzer.content_analyzer import ContentAnalyzer
-from .extractors.pdfextractor.pdf_extractor import PDFExtractor
-from .extractors.tocextractor.toc_extractor import TOCExtractor
-from .models import ContentItem, TOCEntry
-from .orchestrator.pipeline_orchestrator import PipelineOrchestrator
+from .orchestrator import PipelineOrchestrator
+from .models import BaseContent, TOCEntry, PageContent
 
-__all__ = [
-    "TOCEntry",
-    "ContentItem",
-    "PipelineOrchestrator",
-    "PDFExtractor",
-    "TOCExtractor",
-    "ContentAnalyzer",
-]
+__all__ = ["PipelineOrchestrator", "BaseContent", "TOCEntry", "PageContent"]

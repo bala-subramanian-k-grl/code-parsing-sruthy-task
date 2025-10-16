@@ -8,8 +8,9 @@ from typing import Optional
 try:
     import fitz
 except ImportError as e:
-    error_msg = "PyMuPDF required. Install: pip install PyMuPDF==1.24.9"
-    raise ImportError(error_msg) from e
+    msg = "PyMuPDF required. Install: pip install PyMuPDF==1.24.9"
+    raise ImportError(msg) from e
+
 
 
 from ..config.constants import DEFAULT_DOC_TITLE
@@ -52,9 +53,10 @@ class FrontPageExtractor(BaseExtractor):  # Inheritance
             if doc is None:
                 return
             doc_len: int = len(doc)
-            total_pages = (
-                doc_len if max_pages is None else min(max_pages, doc_len)
-            )
+            if max_pages is None:
+                total_pages = doc_len
+            else:
+                total_pages = min(max_pages, doc_len)
             for i in range(total_pages):
                 try:
                     yield str(doc[i].get_text("text") or "")
@@ -78,7 +80,9 @@ class TitleExtractor(BaseExtractor):  # Inheritance
             with fitz.open(str(self._pdf_path)) as doc:
                 metadata = doc.metadata
                 title = metadata.get("title") if metadata else None
-                return title if isinstance(title, str) else DEFAULT_DOC_TITLE
+                return (
+                    title if isinstance(title, str) else DEFAULT_DOC_TITLE
+                )
         except (fitz.FileDataError, fitz.FileNotFoundError, OSError) as e:
             self._logger.warning("Cannot read PDF metadata: %s", e)
             return DEFAULT_DOC_TITLE

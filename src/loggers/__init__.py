@@ -1,5 +1,5 @@
-"""Logging infrastructure."""
+"""Logging utilities exports"""
 
-from .logger import LoggerFactory, get_logger
+from .logger import get_logger
 
-__all__ = ["LoggerFactory", "get_logger"]
+__all__ = ["get_logger"]

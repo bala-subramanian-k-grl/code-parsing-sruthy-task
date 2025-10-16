@@ -1,12 +1,17 @@
-"""USB PD Specification Parser - A modular PDF content extraction tool."""
+"""USB PD Specification Parser - Main Package"""
+
+from .config import Config
+from .core import PipelineOrchestrator
+from .core.extractors import PDFExtractor, TOCExtractor
+from .loggers import get_logger
+from .support import JSONLWriter
 
 __version__ = "1.0.0"
-__author__ = "USB PD Parser Team"
-
-from .core.models import TOCEntry
-from .core.orchestrator.pipeline_orchestrator import PipelineOrchestrator
-
 __all__ = [
-    "PipelineOrchestrator",
-    "TOCEntry",
+    "Config",
+    "PipelineOrchestrator", 
+    "PDFExtractor",
+    "TOCExtractor",
+    "get_logger",
+    "JSONLWriter",
 ]

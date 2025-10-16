@@ -11,7 +11,8 @@ class BaseExtractor(ABC):  # Abstraction
 
     def __init__(self, pdf_path: Path) -> None:
         self._pdf_path = pdf_path  # Encapsulation
-        self._logger = logging.getLogger(self.__class__.__name__)
+        class_name = self.__class__.__name__
+        self._logger = logging.getLogger(class_name)
         if not pdf_path.exists():
             raise FileNotFoundError(f"PDF not found: {pdf_path}")
 

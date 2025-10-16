@@ -41,9 +41,21 @@ class MockContentFixture(BaseFixture):  # Inheritance
     def generate_data(self) -> dict[str, Any]:  # Polymorphism
         return {
             "content_items": [
-                {"type": "paragraph", "content": "Test paragraph 1", "page": 1},
-                {"type": "paragraph", "content": "Test paragraph 2", "page": 2},
-                {"type": "image", "content": "[Image 100x50]", "page": 3},
+                {
+                    "type": "paragraph",
+                    "content": "Test paragraph 1",
+                    "page": 1,
+                },
+                {
+                    "type": "paragraph",
+                    "content": "Test paragraph 2",
+                    "page": 2,
+                },
+                {
+                    "type": "image",
+                    "content": "[Image 100x50]",
+                    "page": 3,
+                },
             ],
             "total_items": 3,
         }

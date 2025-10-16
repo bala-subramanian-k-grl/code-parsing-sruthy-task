@@ -35,7 +35,7 @@ class PDFExtractor(BaseExtractor):  # Inheritance
 
     def __call__(
         self, max_pages: Optional[int] = None
-    ) -> list[dict[str, Any]]:  # Magic Method
+    ) -> list[dict[str, Any]]:
         return self.extract_content(max_pages)
 
     def __len__(self) -> int:  # Magic Method
@@ -47,7 +47,9 @@ class PDFExtractor(BaseExtractor):  # Inheritance
 
     @timing
     @log_execution
-    def extract_content(self, max_pages: Optional[int] = None) -> list[dict[str, Any]]:
+    def extract_content(
+        self, max_pages: Optional[int] = None
+    ) -> list[dict[str, Any]]:
         return list(self.extract_structured_content(max_pages))
 
     def _validate_path(self, path: Path) -> Path:  # Encapsulation
@@ -94,7 +96,9 @@ class PDFExtractor(BaseExtractor):  # Inheritance
             return
 
         content_type = self._analyzer.classify(text)
-        item_data = ContentItemData(text, content_type, block_num, page_num, block)
+        item_data = ContentItemData(
+            text, content_type, block_num, page_num, block
+        )
         yield self._create_content_item(item_data)
 
     def _is_valid_text(self, text: str) -> bool:
@@ -104,9 +108,13 @@ class PDFExtractor(BaseExtractor):  # Inheritance
     def _create_content_item(self, data: ContentItemData) -> dict[str, Any]:
         """Create content item dictionary (Encapsulation)."""
         title = self._get_title(data.text)
+        prefix = data.content_type[0]
+        page = data.page_num + 1
+        section_id = f"{prefix}{page}_{data.block_num}"
+        
         return {
             "doc_title": "USB PD Specification",
-            "section_id": f"{data.content_type[0]}{data.page_num + 1}_{data.block_num}",
+            "section_id": section_id,
             "title": title,
             "content": data.text.strip(),
             "page": data.page_num + 1,
@@ -114,14 +122,16 @@ class PDFExtractor(BaseExtractor):  # Inheritance
             "parent_id": None,
             "full_path": title,
             "type": data.content_type,
-            "block_id": f"{data.content_type[0]}{data.page_num + 1}_{data.block_num}",
+            "block_id": section_id,
             "bbox": list(data.block.get("bbox", [])),
         }
 
     def _get_title(self, text: str) -> str:
         """Get title from text (Encapsulation)."""
         stripped = text.strip()
-        return stripped[:50] + "..." if len(stripped) > 50 else stripped
+        return (
+            stripped[:50] + "..." if len(stripped) > 50 else stripped
+        )
 
     def _get_block_text(self, block: dict[str, Any]) -> str:  # Encapsulation
         return "".join(
@@ -139,7 +149,10 @@ class PDFExtractor(BaseExtractor):  # Inheritance
                 for table_num, table in enumerate(tables or []):
                     if table and len(table) > 1:
                         table_text = "\n".join(
-                            " | ".join(str(cell or "") for cell in row) for row in table
+                            " | ".join(
+                                str(cell or "") for cell in row
+                            )
+                            for row in table
                         )
                         yield {
                             "type": "table",

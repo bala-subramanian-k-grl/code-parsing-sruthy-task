@@ -50,7 +50,9 @@ class OOPTestRunner:  # Encapsulation
         self._tests.append(test)
 
     def run_all(self) -> dict[str, bool]:  # Abstraction
-        results: dict[str, bool] = {test.name: test.run() for test in self._tests}
+        results: dict[str, bool] = {
+            test.name: test.run() for test in self._tests
+        }
         return results
 
 

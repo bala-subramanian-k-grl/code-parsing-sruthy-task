@@ -14,7 +14,8 @@ class PathValidator:  # Encapsulation
         try:
             safe_path.relative_to(base_dir.resolve())
         except ValueError:
-            raise ValueError(f"Path outside allowed directory: {path}") from None
+            msg = f"Path outside allowed directory: {path}"
+            raise ValueError(msg) from None
         return safe_path
 
     @staticmethod  # Abstraction

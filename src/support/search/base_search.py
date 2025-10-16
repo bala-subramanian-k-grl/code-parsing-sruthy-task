@@ -9,13 +9,16 @@ from typing import Any
 class BaseSearcher(ABC):  # Abstraction
     def __init__(self, file_path: str):
         self._file_path = self._validate_path(file_path)  # Encapsulation
-        self._logger = logging.getLogger(self.__class__.__name__)  # Encapsulation
-        self._logger.info(f"Initialized searcher for file: {self._file_path.name}")
+        class_name = self.__class__.__name__
+        self._logger = logging.getLogger(class_name)
+        file_name = self._file_path.name
+        self._logger.info(f"Initialized searcher for file: {file_name}")
 
     def _validate_path(self, file_path: str) -> Path:  # Encapsulation
         try:
             # Sanitize input to prevent path traversal
-            clean_path = Path(str(file_path).replace("..", "").replace("~", ""))
+            sanitized = str(file_path).replace("..", "").replace("~", "")
+            clean_path = Path(sanitized)
             resolved_path = clean_path.resolve(strict=False)
             working_dir = Path.cwd().resolve()
 

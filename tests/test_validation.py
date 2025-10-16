@@ -31,10 +31,18 @@ class XLSValidationTest(BaseValidationTest):  # Inheritance
             self._output_dir.mkdir(exist_ok=True)
 
             # Create mock JSONL files
-            toc_file.write_text('{"section_id": "1", "title": "Test"}\n')
-            spec_file.write_text('{"section_id": "1", "content": "Test content"}\n')
+            toc_content = (
+                '{"section_id": "1", "title": "Test"}\n'
+            )
+            toc_file.write_text(toc_content)
+            spec_content = (
+                '{"section_id": "1", "content": "Test content"}\n'
+            )
+            spec_file.write_text(spec_content)
 
-            result = create_validation_report(self._output_dir, toc_file, spec_file)
+            result = create_validation_report(
+                self._output_dir, toc_file, spec_file
+            )
 
             # Clean up test files
             toc_file.unlink(missing_ok=True)

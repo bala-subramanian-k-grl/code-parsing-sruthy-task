@@ -7,17 +7,18 @@ from typing import Any, Union
 
 try:
     import openpyxl
-    from openpyxl.styles import Font
+    from openpyxl.styles import Font as FontStyle
 
     _has_openpyxl = True
 except ImportError:
     openpyxl = None
-    font = None
+    FontStyle = None
     _has_openpyxl = False
 
 
 class BaseValidator(ABC):  # Abstraction
     def __init__(self, output_dir: Path):
+        """Initialize validator with output directory."""
         self._output_dir = output_dir  # Encapsulation
 
     @abstractmethod  # Abstraction
@@ -30,7 +31,8 @@ class BaseValidator(ABC):  # Abstraction
 class XLSValidator(BaseValidator):  # Inheritance
     def generate_validation(
         self, toc_data: list[Any], spec_data: list[Any]
-    ) -> Path:  # Polymorphism
+    ) -> Path:
+        """Generate Excel validation report."""
         if not _has_openpyxl or openpyxl is None:
             raise ImportError("openpyxl required for Excel reports")
 
@@ -40,7 +42,7 @@ class XLSValidator(BaseValidator):  # Inheritance
 
         # Create summary
         ws["A1"] = "USB PD Validation Report"  # type: ignore
-        ws["A1"].font = Font(bold=True, size=14)  # type: ignore
+        ws["A1"].font = FontStyle(bold=True, size=14)  # type: ignore
 
         status = "PASS" if len(spec_data) > 1000 else "FAIL"
         metrics: list[tuple[str, Union[int, str]]] = [
@@ -68,7 +70,8 @@ def create_validation_report(
     # Load TOC data
     try:
         with open(toc_file, encoding="utf-8") as f:
-            toc_data = [json.loads(line) for line in f if line.strip()]
+            lines = [line for line in f if line.strip()]
+            toc_data = [json.loads(line) for line in lines]
     except (FileNotFoundError, json.JSONDecodeError) as e:
         # Use empty data if file not found or invalid JSON
         import logging
@@ -77,7 +80,8 @@ def create_validation_report(
     # Load spec data
     try:
         with open(spec_file, encoding="utf-8") as f:
-            spec_data = [json.loads(line) for line in f if line.strip()]
+            lines = [line for line in f if line.strip()]
+            spec_data = [json.loads(line) for line in lines]
     except (FileNotFoundError, json.JSONDecodeError) as e:
         # Use empty data if file not found or invalid JSON
         import logging

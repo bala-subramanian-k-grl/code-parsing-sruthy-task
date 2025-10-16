@@ -1,4 +1,4 @@
-"""Pipeline orchestrator modules."""
+"""Pipeline orchestrator exports"""
 
 from .pipeline_orchestrator import PipelineOrchestrator
 

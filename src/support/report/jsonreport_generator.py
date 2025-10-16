@@ -19,7 +19,9 @@ class JSONReportGenerator(BaseReportGenerator):  # Inheritance
                 },
                 "summary": data,
                 "validation": {
-                    "status": "PASS" if data.get("content_items", 0) > 1000 else "FAIL"
+                    "status": (
+                        "PASS" if data.get("content_items", 0) > 1000 else "FAIL"
+                    )
                 },
             }
         except (TypeError, ValueError) as e:

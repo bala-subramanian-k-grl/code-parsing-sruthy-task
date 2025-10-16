@@ -17,7 +17,8 @@ except ImportError:
 class ExcelReportGenerator(BaseReportGenerator):  # Inheritance
     def generate(self, data: dict[str, Any]) -> Path:  # Polymorphism
         if not _has_openpyxl or openpyxl is None:
-            raise ImportError("openpyxl is required for Excel report generation")
+            msg = "openpyxl is required for Excel report generation"
+            raise ImportError(msg)
 
         excel_file = self._output_dir / "validation_report.xlsx"
         try:
@@ -37,7 +38,10 @@ class ExcelReportGenerator(BaseReportGenerator):  # Inheritance
                 ("Pages", data.get("pages", 0)),
                 ("Content Items", data.get("content_items", 0)),
                 ("TOC Entries", data.get("toc_entries", 0)),
-                ("Status", "PASS" if data.get("content_items", 0) > 1000 else "FAIL"),
+                (
+                    "Status",
+                    "PASS" if data.get("content_items", 0) > 1000 else "FAIL",
+                ),
             ]
 
             for i, (metric, value) in enumerate(metrics, 2):
