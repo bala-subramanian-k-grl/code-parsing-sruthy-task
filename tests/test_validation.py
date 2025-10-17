@@ -36,7 +36,9 @@ class XLSValidationTest(BaseValidationTest):  # Inheritance
             spec_content = '{"section_id": "1", "content": "Test content"}\n'
             spec_file.write_text(spec_content)
 
-            result = create_validation_report(self._output_dir, toc_file, spec_file)
+            result = create_validation_report(
+                self._output_dir, toc_file, spec_file
+            )
 
             # Clean up test files
             toc_file.unlink(missing_ok=True)

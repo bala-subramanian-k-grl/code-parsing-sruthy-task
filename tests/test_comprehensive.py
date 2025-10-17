@@ -31,7 +31,9 @@ class ModelTests(BaseTestCase):  # Inheritance
 
     def run_tests(self) -> bool:  # Polymorphism
         # Test inheritance and polymorphism
-        page = PageContent(page=1, content="test", image_count=0, table_count=0)
+        page = PageContent(
+            page=1, content="test", image_count=0, table_count=0
+        )
         base: BaseContent = page  # Polymorphism demonstration
         has_attr = hasattr(page, "image_count")
         return base.page == 1 and has_attr

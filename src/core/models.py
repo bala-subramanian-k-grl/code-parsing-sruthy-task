@@ -16,8 +16,8 @@ class BaseContent(BaseModel):
 class PageContent(BaseContent):  # Inheritance
     """Page content (Inheritance, Polymorphism)."""
 
-    image_count: int = Field(ge=0, description="Number of images on page")
-    table_count: int = Field(ge=0, description="Number of tables on page")
+    image_count: int = Field(ge=0, description="Number of images")
+    table_count: int = Field(ge=0, description="Number of tables")
 
 
 class TOCEntry(BaseModel):  # Encapsulation
@@ -41,7 +41,9 @@ class TOCEntry(BaseModel):  # Encapsulation
     def __eq__(self, other: object) -> bool:  # Magic Method
         if not isinstance(other, TOCEntry):
             return False
-        return self.section_id == other.section_id and self.page == other.page
+        same_id = self.section_id == other.section_id
+        same_page = self.page == other.page
+        return same_id and same_page
 
     @field_validator("section_id")  # Encapsulation
     @classmethod
@@ -60,9 +62,11 @@ class TOCEntry(BaseModel):  # Encapsulation
         section_id = str(info.data.get("section_id", ""))
         return len(section_id.split("."))
 
-    @field_validator("parent_id", mode="before")  # Encapsulation
+    @field_validator("parent_id", mode="before")
     @classmethod
-    def infer_parent(cls, v: Any, info: ValidationInfo) -> Optional[str]:
+    def infer_parent(
+        cls, v: Any, info: ValidationInfo
+    ) -> Optional[str]:
         """Infer parent (Abstraction)."""
         if v is not None:
             return str(v)
@@ -79,5 +83,5 @@ class ContentItem(BaseContent):  # Inheritance
     content_id: str = Field()  # Encapsulation
     type: str = Field()  # Encapsulation
     block_id: str = Field()  # Encapsulation
-    bbox: list[float] = Field(default_factory=list)  # Encapsulation
-    metadata: dict[str, Any] = Field(default_factory=dict)  # Encapsulation
+    bbox: list[float] = Field(default_factory=list)
+    metadata: dict[str, Any] = Field(default_factory=dict)

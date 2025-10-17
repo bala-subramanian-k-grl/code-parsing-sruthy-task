@@ -9,19 +9,26 @@ class TOCBuilder(ABC):
     """Abstract TOC builder."""
 
     @abstractmethod
-    def build_structure(self, entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    def build_structure(
+        self, entries: list[dict[str, Any]]
+    ) -> list[dict[str, Any]]:
+        """Build TOC structure from entries."""
         pass
 
 
 class HierarchicalTOCBuilder(TOCBuilder):
     """Builder for hierarchical TOC structure."""
 
-    def build_structure(self, entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    def build_structure(
+        self, entries: list[dict[str, Any]]
+    ) -> list[dict[str, Any]]:
         """Build hierarchical TOC with proper numbering."""
         enhanced_entries = self._enhance_entries(entries)
         return self._add_hierarchy(enhanced_entries)
 
-    def _enhance_entries(self, entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    def _enhance_entries(
+        self, entries: list[dict[str, Any]]
+    ) -> list[dict[str, Any]]:
         """Enhance all entries with structure info."""
         return [self._enhance_entry(entry) for entry in entries]
 
@@ -54,7 +61,9 @@ class HierarchicalTOCBuilder(TOCBuilder):
         match = re.match(r"^(\d+(?:\.\d+)*)", title)
         return match.group(1) if match else None
 
-    def _add_hierarchy(self, entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    def _add_hierarchy(
+        self, entries: list[dict[str, Any]]
+    ) -> list[dict[str, Any]]:
         """Add parent-child relationships."""
         for i, entry in enumerate(entries):
             if i > 0:

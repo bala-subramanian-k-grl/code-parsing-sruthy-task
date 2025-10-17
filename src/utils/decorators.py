@@ -52,7 +52,8 @@ def validate_path(func: F) -> F:
         # Validate first Path argument if exists
         if args and isinstance(args[0], Path):
             if not args[0].exists():
-                raise FileNotFoundError(f"Path not found: {args[0]}")
+                msg = f"Path not found: {args[0]}"
+                raise FileNotFoundError(msg)
         return func(*args, **kwargs)
 
     return wrapper  # type: ignore

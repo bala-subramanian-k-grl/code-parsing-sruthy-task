@@ -1,63 +1,18 @@
-2025-10-17 14:15:14 [INFO] PipelineOrchestrator - Configuration loaded from application.yml
-2025-10-17 14:15:14 [INFO] PipelineOrchestrator - Output directory prepared: D:\code parsing\outputs
-2025-10-17 14:15:14 [INFO] src.core.orchestrator.pipeline_orchestrator - Executing run
-2025-10-17 14:15:14 [INFO] PipelineOrchestrator - Starting pipeline execution - Full Document Processing
-2025-10-17 14:15:14 [INFO] PipelineOrchestrator - Extracting Table of Contents...
-2025-10-17 14:15:14 [INFO] PipelineOrchestrator - TOC extraction completed: 12 entries
-2025-10-17 14:15:14 [INFO] PipelineOrchestrator - Extracting content (max pages: all)...
-2025-10-17 14:15:24 [INFO] PipelineOrchestrator - Content extraction completed: 25760 items
-2025-10-17 14:15:24 [INFO] PipelineOrchestrator - Writing JSONL output files...
-2025-10-17 14:15:24 [INFO] PipelineOrchestrator - JSONL files written successfully
-2025-10-17 14:15:24 [INFO] PipelineOrchestrator - Generating analysis reports...
-2025-10-17 14:15:24 [INFO] PipelineOrchestrator - Analysis reports generated successfully
-2025-10-17 14:15:24 [INFO] PipelineOrchestrator - Generating validation report...
-2025-10-17 14:15:25 [INFO] PipelineOrchestrator - Validation report generated successfully
-2025-10-17 14:15:25 [INFO] PipelineOrchestrator - Pipeline execution completed successfully
-2025-10-17 14:15:25 [INFO] src.core.orchestrator.pipeline_orchestrator - Completed run successfully
-2025-10-17 14:15:25 [INFO] src.core.orchestrator.pipeline_orchestrator - run took 11.30 seconds
-2025-10-17 14:15:25 [INFO] CLIApp - Processing completed: 12 TOC entries, 25760 content items
-2025-10-17 14:22:57 [INFO] PipelineOrchestrator - Configuration loaded from application.yml
-2025-10-17 14:22:57 [INFO] PipelineOrchestrator - Output directory prepared: D:\code parsing\outputs
-2025-10-17 14:22:57 [INFO] src.core.orchestrator.pipeline_orchestrator - Executing run
-2025-10-17 14:22:57 [INFO] PipelineOrchestrator - Starting pipeline execution - Full Document Processing
-2025-10-17 14:22:57 [INFO] PipelineOrchestrator - Extracting Table of Contents...
-2025-10-17 14:22:58 [INFO] PipelineOrchestrator - TOC extraction completed: 12 entries
-2025-10-17 14:22:58 [INFO] PipelineOrchestrator - Extracting content (max pages: all)...
-2025-10-17 14:23:09 [INFO] PipelineOrchestrator - Content extraction completed: 25760 items
-2025-10-17 14:23:09 [INFO] PipelineOrchestrator - Writing JSONL output files...
-2025-10-17 14:23:09 [INFO] PipelineOrchestrator - JSONL files written successfully
-2025-10-17 14:23:09 [INFO] PipelineOrchestrator - Generating analysis reports...
-2025-10-17 14:23:09 [INFO] PipelineOrchestrator - Analysis reports generated successfully
-2025-10-17 14:23:09 [INFO] PipelineOrchestrator - Generating validation report...
-2025-10-17 14:23:10 [INFO] PipelineOrchestrator - Validation report generated successfully
-2025-10-17 14:23:10 [INFO] PipelineOrchestrator - Pipeline execution completed successfully
-2025-10-17 14:23:10 [INFO] src.core.orchestrator.pipeline_orchestrator - Completed run successfully
-2025-10-17 14:23:10 [INFO] src.core.orchestrator.pipeline_orchestrator - run took 12.32 seconds
-2025-10-17 14:23:10 [INFO] CLIApp - Processing completed: 12 TOC entries, 25760 content items
-2025-10-17 14:25:55 [INFO] PipelineOrchestrator - Configuration loaded from application.yml
-2025-10-17 14:25:55 [INFO] PipelineOrchestrator - Output directory prepared: D:\code parsing\outputs
-2025-10-17 14:25:55 [ERROR] CLIApp - Application execution failed: 1 validation error for TOCEntry
-section_id
-  Value error, Invalid format: Revision H [type=value_error, input_value='Revision H', input_type=str]
-    For further information visit https://errors.pydantic.dev/2.11/v/value_error
-2025-10-17 14:26:24 [INFO] PipelineOrchestrator - Configuration loaded from application.yml
-2025-10-17 14:26:24 [INFO] PipelineOrchestrator - Output directory prepared: D:\code parsing\outputs
-2025-10-17 14:26:25 [INFO] CLIApp - TOC extraction completed: 1360 entries
-2025-10-17 14:26:34 [INFO] PipelineOrchestrator - Configuration loaded from application.yml
-2025-10-17 14:26:34 [INFO] PipelineOrchestrator - Output directory prepared: D:\code parsing\outputs
-2025-10-17 14:26:34 [INFO] src.core.orchestrator.pipeline_orchestrator - Executing run
-2025-10-17 14:26:34 [INFO] PipelineOrchestrator - Starting pipeline execution - Full Document Processing
-2025-10-17 14:26:34 [INFO] PipelineOrchestrator - Extracting Table of Contents...
-2025-10-17 14:26:35 [INFO] PipelineOrchestrator - TOC extraction completed: 1360 entries
-2025-10-17 14:26:35 [INFO] PipelineOrchestrator - Extracting content (max pages: all)...
-2025-10-17 14:26:44 [INFO] PipelineOrchestrator - Content extraction completed: 25760 items
-2025-10-17 14:26:44 [INFO] PipelineOrchestrator - Writing JSONL output files...
-2025-10-17 14:26:44 [INFO] PipelineOrchestrator - JSONL files written successfully
-2025-10-17 14:26:44 [INFO] PipelineOrchestrator - Generating analysis reports...
-2025-10-17 14:26:45 [INFO] PipelineOrchestrator - Analysis reports generated successfully
-2025-10-17 14:26:45 [INFO] PipelineOrchestrator - Generating validation report...
-2025-10-17 14:26:45 [INFO] PipelineOrchestrator - Validation report generated successfully
-2025-10-17 14:26:45 [INFO] PipelineOrchestrator - Pipeline execution completed successfully
-2025-10-17 14:26:45 [INFO] src.core.orchestrator.pipeline_orchestrator - Completed run successfully
-2025-10-17 14:26:45 [INFO] src.core.orchestrator.pipeline_orchestrator - run took 10.90 seconds
-2025-10-17 14:26:45 [INFO] CLIApp - Processing completed: 1360 TOC entries, 25760 content items
+2025-10-17 17:07:33 [INFO] PipelineOrchestrator - Configuration loaded from application.yml
+2025-10-17 17:07:33 [INFO] PipelineOrchestrator - Output directory prepared: D:\code parsing\outputs
+2025-10-17 17:07:33 [INFO] src.core.orchestrator.pipeline_orchestrator - Executing run
+2025-10-17 17:07:33 [INFO] PipelineOrchestrator - Starting pipeline execution - Full Document Processing
+2025-10-17 17:07:33 [INFO] PipelineOrchestrator - Extracting Table of Contents...
+2025-10-17 17:07:34 [INFO] PipelineOrchestrator - TOC extraction completed: 1360 entries
+2025-10-17 17:07:34 [INFO] PipelineOrchestrator - Extracting content (max pages: all)...
+2025-10-17 17:07:51 [INFO] PipelineOrchestrator - Content extraction completed: 25760 items
+2025-10-17 17:07:51 [INFO] PipelineOrchestrator - Writing JSONL output files...
+2025-10-17 17:07:52 [INFO] PipelineOrchestrator - JSONL files written successfully
+2025-10-17 17:07:52 [INFO] PipelineOrchestrator - Generating analysis reports...
+2025-10-17 17:07:52 [INFO] PipelineOrchestrator - Analysis reports generated successfully
+2025-10-17 17:07:52 [INFO] PipelineOrchestrator - Generating validation report...
+2025-10-17 17:07:53 [INFO] PipelineOrchestrator - Validation report generated successfully
+2025-10-17 17:07:53 [INFO] PipelineOrchestrator - Pipeline execution completed successfully
+2025-10-17 17:07:53 [INFO] src.core.orchestrator.pipeline_orchestrator - Completed run successfully
+2025-10-17 17:07:53 [INFO] src.core.orchestrator.pipeline_orchestrator - run took 19.50 seconds
+2025-10-17 17:07:53 [INFO] CLIApp - Processing completed: 1360 TOC entries, 25760 content items

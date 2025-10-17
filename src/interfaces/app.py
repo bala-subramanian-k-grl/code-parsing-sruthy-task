@@ -6,7 +6,9 @@ import logging
 import sys
 from abc import ABC, abstractmethod
 
-from src.core.orchestrator.pipeline_orchestrator import PipelineOrchestrator
+from src.core.orchestrator.pipeline_orchestrator import (
+    PipelineOrchestrator,
+)
 
 
 class BaseApp(ABC):  # Abstraction
@@ -43,7 +45,8 @@ class CLIApp(BaseApp):  # Inheritance
         if args.toc_only:
             result = orchestrator.run_toc_only()
             count = len(result)
-            self._logger.info("TOC extraction completed: %s entries", count)
+            msg = "TOC extraction completed: %s entries"
+            self._logger.info(msg, count)
         elif args.content_only:
             result = orchestrator.run_content_only()
             msg = "Content extraction completed: %s items processed"
@@ -52,11 +55,10 @@ class CLIApp(BaseApp):  # Inheritance
             result = orchestrator.run_full_pipeline()
             toc_count = result["toc_entries"]
             content_count = result["spec_counts"]["content_items"]
-            self._logger.info(
-                "Processing completed: %s TOC entries, %s content items",
-                toc_count,
-                content_count,
+            msg = (
+                "Processing completed: %s TOC entries, %s content items"
             )
+            self._logger.info(msg, toc_count, content_count)
 
     def run(self) -> None:  # Polymorphism
         """Run CLI application."""
@@ -64,7 +66,8 @@ class CLIApp(BaseApp):  # Inheritance
             args = self._parser.parse_args()
             self._execute_pipeline(args)
         except Exception as e:
-            self._logger.error("Application execution failed: %s", e)
+            msg = "Application execution failed: %s"
+            self._logger.error(msg, e)
             sys.exit(1)
 
 

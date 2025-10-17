@@ -62,7 +62,9 @@ class LoggerFactory(BaseLoggerFactory):  # Inheritance
         try:
             # Sanitize input to prevent command injection
             path_str = str(output_dir)
-            sanitized = path_str.replace("..", "").replace(";", "").replace("|", "")
+            sanitized = path_str.replace("..", "").replace(
+                ";", ""
+            ).replace("|", "")
             clean_path = Path(sanitized)
             resolved_path = clean_path.resolve(strict=False)
             working_dir = Path.cwd().resolve()

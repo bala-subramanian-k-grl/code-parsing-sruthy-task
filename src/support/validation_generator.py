@@ -23,7 +23,9 @@ class BaseValidator(ABC):  # Abstraction
         self._output_dir = output_dir  # Encapsulation
 
     @abstractmethod  # Abstraction
-    def generate_validation(self, toc_data: list[Any], spec_data: list[Any]) -> Path:
+    def generate_validation(
+        self, toc_data: list[Any], spec_data: list[Any]
+    ) -> Path:
         """Generate validation report from TOC and spec data."""
         pass
 
@@ -31,7 +33,9 @@ class BaseValidator(ABC):  # Abstraction
 class XLSValidator(BaseValidator):  # Inheritance
     """Excel-based validation report generator."""
 
-    def generate_validation(self, toc_data: list[Any], spec_data: list[Any]) -> Path:
+    def generate_validation(
+        self, toc_data: list[Any], spec_data: list[Any]
+    ) -> Path:
         """Generate Excel validation report."""
         if not HAS_OPENPYXL or openpyxl is None:
             raise ImportError("openpyxl required for Excel reports")
@@ -60,7 +64,9 @@ class XLSValidator(BaseValidator):  # Inheritance
         return xlsx_file
 
 
-def create_validation_report(output_dir: Path, toc_file: Path, spec_file: Path) -> Path:
+def create_validation_report(
+    output_dir: Path, toc_file: Path, spec_file: Path
+) -> Path:
     """Factory function to create validation report."""
     toc_data: list[Any] = []
     spec_data: list[Any] = []

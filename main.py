@@ -1,4 +1,4 @@
-"""USB PD Specification Parser - Main Entry Point with OOP principles"""
+"""USB PD Specification Parser - Main Entry Point with OOP."""
 
 from abc import ABC, abstractmethod
 from typing import Any, Optional
@@ -7,43 +7,43 @@ from src.interfaces.app import CLIApp
 
 
 class BaseRunner(ABC):  # Abstraction
-    """Abstract application runner (Abstraction, Encapsulation)."""
+    """Abstract application runner."""
 
     def __init__(self) -> None:
-        self._app: Optional[Any] = None  # Encapsulation: protected attribute
+        self._app: Optional[Any] = None  # Protected attribute
 
-    @abstractmethod  # Abstraction: must be implemented
+    @abstractmethod
     def create_app(self) -> Any:
         """Create application instance."""
         pass
 
-    def run(self) -> None:  # Abstraction: template method
-        """Run the application (Template Method pattern)."""
-        self._app = self.create_app()  # Encapsulation
-        self._execute()  # Encapsulation: protected method
+    def run(self) -> None:
+        """Run the application."""
+        self._app = self.create_app()
+        self._execute()
 
-    def _execute(self) -> None:  # Encapsulation: protected method
+    def _execute(self) -> None:
         """Execute the application."""
         if self._app:
             self._app.run()
 
 
 class CLIRunner(BaseRunner):  # Inheritance
-    """CLI application runner (Inheritance, Polymorphism)."""
+    """CLI application runner."""
 
-    def create_app(self) -> CLIApp:  # Polymorphism: implements abstract method
+    def create_app(self) -> CLIApp:
         """Create CLI application instance."""
         return CLIApp()
 
 
-class ApplicationFactory:  # Abstraction: Factory pattern
-    """Application factory (Abstraction, Encapsulation)."""
+class ApplicationFactory:
+    """Application factory."""
 
-    @staticmethod  # Encapsulation: static factory method
+    @staticmethod
     def create_runner(runner_type: str = "cli") -> BaseRunner:
-        """Create runner instance (Factory Method pattern)."""
+        """Create runner instance."""
         if runner_type == "cli":
-            return CLIRunner()  # Polymorphism: returns concrete implementation
+            return CLIRunner()
         raise ValueError(f"Invalid runner type: {runner_type}")
 
 
@@ -63,13 +63,13 @@ def main() -> None:
         datefmt="%Y-%m-%d %H:%M:%S",
         handlers=[
             logging.FileHandler(log_file),
-            logging.StreamHandler(),  # Also keep console output
+            logging.StreamHandler(),
         ],
     )
 
-    # Factory pattern (Abstraction)
-    runner = ApplicationFactory.create_runner("cli")  # Polymorphism
-    runner.run()  # Polymorphism: calls concrete implementation
+    # Factory pattern
+    runner = ApplicationFactory.create_runner("cli")
+    runner.run()
 
 
 if __name__ == "__main__":

@@ -15,7 +15,10 @@ class SearchDisplay:  # Encapsulation
         """Display search results with pagination."""
         display_count = min(len(matches), self._max_results)
         total_count = len(matches)
-        msg = f"Displaying {display_count} of {total_count} matches for '{term}'"
+        msg = (
+            f"Displaying {display_count} of {total_count} "
+            f"matches for '{term}'"
+        )
         self._logger.info(msg)
         count = len(matches)
         print(f"Found {count} matches for '{term}':")

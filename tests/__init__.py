@@ -8,14 +8,16 @@ class BaseTestCase(ABC):  # Abstraction
     """Abstract base test case (Abstraction, Encapsulation)."""
 
     def __init__(self):
-        self._test_data: dict[str, Any] = {}  # Encapsulation: protected test data
+        self._test_data: dict[str, Any] = {}  # Encapsulation
 
     @abstractmethod  # Abstraction: must be implemented
     def setup_test_data(self) -> None:
         """Setup test data."""
         pass
 
-    def _add_test_data(self, key: str, value: Any) -> None:  # Encapsulation: protected
+    def _add_test_data(
+        self, key: str, value: Any
+    ) -> None:  # Encapsulation: protected
         """Add test data."""
         self._test_data[key] = value
 
@@ -28,7 +30,7 @@ class BaseTestCase(ABC):  # Abstraction
 class MockTestCase(BaseTestCase):  # Inheritance
     """Mock test case (Inheritance, Polymorphism)."""
 
-    def setup_test_data(self) -> None:  # Polymorphism: implements abstract method
+    def setup_test_data(self) -> None:  # Polymorphism
         """Setup mock test data."""
         self._add_test_data("mock_key", "mock_value")
         self._add_test_data("test_count", 42)

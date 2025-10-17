@@ -1,4 +1,4 @@
-"""This is a stub file for the 'fitz' module, providing type hints for its functions and classes."""
+"""Stub file for 'fitz' module with type hints."""
 
 
 from typing import Any

@@ -42,27 +42,31 @@ class PipelineOrchestrator(BasePipeline):  # Inheritance
         """Get max pages for processing."""
         return None  # Process all pages
 
-    def _calculate_counts(self, toc: list[Any], content: list[Any]) -> dict[str, Any]:
+    def _calculate_counts(
+        self, toc: list[Any], content: list[Any]
+    ) -> dict[str, Any]:
         """Calculate enhanced content statistics."""
         from src.core.analyzer.content_analyzer import ContentAnalyzer
 
         analyzer = ContentAnalyzer()
 
         major_sections = sum(
-            1 for item in content if analyzer.is_major_section(item.get("content", ""))
+            1
+            for item in content
+            if analyzer.is_major_section(item.get("content", ""))
         )
 
-        total_key_terms = sum(
-            analyzer.count_key_terms(item.get("content", "")) for item in content
-        )
+        # Remove key terms counting - not needed
 
         return {
             "pages": len({item.get("page", 0) for item in content}),
             "content_items": len(content),
             "toc_entries": len(toc),
             "major_sections": major_sections,
-            "key_terms": min(total_key_terms, 100),  # Cap at 100
-            "paragraphs": sum(1 for item in content if item.get("type") == "paragraph"),
+            "key_terms": 0,
+            "paragraphs": sum(
+                1 for item in content if item.get("type") == "paragraph"
+            ),
         }
 
     def _create_analysis_reports(self, counts: dict[str, Any]) -> None:
@@ -84,16 +88,20 @@ class PipelineOrchestrator(BasePipeline):  # Inheritance
             output_dir / "usb_pd_spec.jsonl",
         )
 
-    def _extract_data(self, max_pages: Optional[int]) -> tuple[list[Any], list[Any]]:
+    def _extract_data(
+        self, max_pages: Optional[int]
+    ) -> tuple[list[Any], list[Any]]:
         """Extract TOC and content data using Strategy Pattern."""
         self._logger.info("Extracting Table of Contents...")
         pdf_file = self._config.pdf_input_file
         toc = TOCExtractor().extract_toc(pdf_file)
         toc_count = len(toc)
-        self._logger.info(f"TOC extraction completed: {toc_count} entries")
+        msg = f"TOC extraction completed: {toc_count} entries"
+        self._logger.info(msg)
 
         pages_info = max_pages or "all"
-        self._logger.info("Extracting content (max pages: %s)...", pages_info)
+        msg = "Extracting content (max pages: %s)..."
+        self._logger.info(msg, pages_info)
 
         # Use Strategy Pattern for comprehensive extraction
         strategy = ComprehensiveStrategy()
@@ -117,7 +125,9 @@ class PipelineOrchestrator(BasePipeline):  # Inheritance
 
         self._logger.info("JSONL files written successfully")
 
-    def _generate_reports(self, toc: list[Any], content: list[Any]) -> dict[str, Any]:
+    def _generate_reports(
+        self, toc: list[Any], content: list[Any]
+    ) -> dict[str, Any]:
         """Generate analysis and validation reports."""
         self._logger.info("Generating analysis reports...")
         counts = self._calculate_counts(toc, content)
@@ -137,14 +147,16 @@ class PipelineOrchestrator(BasePipeline):  # Inheritance
     @log_execution
     def run(self) -> dict[str, Any]:  # Polymorphism
         mode_name = self._get_mode_name()
-        self._logger.info("Starting pipeline execution - %s", mode_name)
+        msg = "Starting pipeline execution - %s"
+        self._logger.info(msg, mode_name)
 
         max_pages = self._get_max_pages()
         toc, content = self._extract_data(max_pages)
         self._write_files(toc, content)
         counts = self._generate_reports(toc, content)
 
-        self._logger.info("Pipeline execution completed successfully")
+        msg = "Pipeline execution completed successfully"
+        self._logger.info(msg)
         return {"toc_entries": len(toc), "spec_counts": counts}
 
     def run_toc_only(self) -> Any:  # Polymorphism
