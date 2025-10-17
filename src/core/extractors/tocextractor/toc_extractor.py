@@ -57,6 +57,7 @@ class TOCExtractor(BaseTOCExtractor):  # Inheritance
     def _extract_section_id(self, title: str) -> str:
         """Extract section ID from title."""
         import re
+
         # Try numeric section pattern first
         match = re.match(r'^(\d+(?:\.\d+)*)', title.strip())
         if match:
