@@ -1,7 +1,7 @@
 """USB PD Specification Parser - Main Entry Point with OOP principles"""
 
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, Optional
 
 from src.interfaces.app import CLIApp
 
@@ -10,7 +10,7 @@ class BaseRunner(ABC):  # Abstraction
     """Abstract application runner (Abstraction, Encapsulation)."""
 
     def __init__(self) -> None:
-        self._app = None  # Encapsulation: protected attribute
+        self._app: Optional[Any] = None  # Encapsulation: protected attribute
 
     @abstractmethod  # Abstraction: must be implemented
     def create_app(self) -> Any:

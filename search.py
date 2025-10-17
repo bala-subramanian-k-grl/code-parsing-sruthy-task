@@ -4,6 +4,7 @@ import logging
 import sys
 from abc import ABC, abstractmethod
 from pathlib import Path
+from typing import Optional
 
 from src.config.constants import (
     DEFAULT_OUTPUT_DIR,
@@ -22,7 +23,7 @@ class BaseRunner(ABC):  # Abstraction
 
     def __init__(self) -> None:
         """Initialize base runner."""
-        self._app = None  # Encapsulation
+        self._app: Optional[SearchApp] = None  # Encapsulation
         self._logger = logging.getLogger(self.__class__.__name__)
 
     @abstractmethod  # Abstraction
