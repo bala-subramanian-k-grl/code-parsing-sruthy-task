@@ -49,11 +49,6 @@ class TOCEntry(BaseModel):  # Encapsulation
         """Validate section ID (Abstraction)."""
         if not v.strip():
             raise ValueError("Empty section_id")
-        import re
-
-        pattern = r"^[A-Za-z0-9]+(?:\.[A-Za-z0-9]+)*$"
-        if not re.match(pattern, v.strip()):
-            raise ValueError(f"Invalid format: {v}")
         return v.strip()
 
     @field_validator("level", mode="before")  # Encapsulation

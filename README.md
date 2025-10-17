@@ -121,14 +121,13 @@ code-parsing/
 
 ## 📊 Output Files
 
-The tool generates **6 comprehensive output files**:
+The tool generates **5 comprehensive output files**:
 
 1. **`outputs/usb_pd_toc.jsonl`** - Table of Contents entries
 2. **`outputs/usb_pd_spec.jsonl`** - Complete specification content
-3. **`outputs/usb_pd_metadata.jsonl`** - Content metadata and statistics
-4. **`outputs/parsing_report.json`** - Professional JSON report with metadata
-5. **`outputs/validation_report.xlsx`** - Excel validation report (mandatory)
-6. **`outputs/parser.log`** - Detailed processing logs
+3. **`outputs/parsing_report.json`** - Professional JSON report with metadata
+4. **`outputs/validation_report.xlsx`** - Excel validation report (mandatory)
+5. **`outputs/parser.log`** - Detailed processing logs
 
 ### 🔄 Regenerating Output Files
 
@@ -139,7 +138,7 @@ To regenerate all output files including the validation Excel report:
 python main.py --mode 3
 
 # Files will be created in outputs/ directory
-ls outputs/  # validation_report.xlsx will be included
+dir outputs  # validation_report.xlsx will be included
 ```
 
 ## 🎯 Key Features

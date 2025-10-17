@@ -11,7 +11,7 @@ from src.core.extractors.strategies.extraction_strategy import (
 )
 from src.core.extractors.tocextractor.toc_extractor import TOCExtractor
 from src.core.orchestrator.base_pipeline import BasePipeline
-from src.support.factories.file_factory import FileGeneratorFactory
+
 from src.support.output_writer import JSONLWriter
 from src.support.report.report_generator import ReportFactory
 from src.utils.decorators import log_execution, timing
@@ -103,7 +103,7 @@ class PipelineOrchestrator(BasePipeline):  # Inheritance
         return toc, content
 
     def _write_files(self, toc: list[Any], content: list[Any]) -> None:
-        """Write JSONL output files including metadata."""
+        """Write JSONL output files."""
         self._logger.info("Writing JSONL output files...")
         output_dir = self._config.output_directory
 
@@ -114,12 +114,6 @@ class PipelineOrchestrator(BasePipeline):  # Inheritance
         spec_path = output_dir / "usb_pd_spec.jsonl"
         spec_writer = JSONLWriter(spec_path)
         spec_writer.write(content)
-
-        # Generate missing metadata file using Factory Pattern
-        metadata_path = output_dir / "usb_pd_metadata.jsonl"
-        factory = FileGeneratorFactory
-        metadata_gen = factory.create_generator("metadata")
-        metadata_gen.generate(content, metadata_path)
 
         self._logger.info("JSONL files written successfully")
 

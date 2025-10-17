@@ -15,69 +15,71 @@ class TOCExtractor(BaseTOCExtractor):  # Inheritance
         content = self._get_content(source)
         return self._extract_entries(content)
 
-    def _get_content(self, pdf_path: Path) -> str:  # Encapsulation
-        """Extract content from PDF for TOC parsing."""
+    def _get_content(self, pdf_path: Path) -> Any:  # Encapsulation
+        """Get PDF document for TOC extraction."""
         try:
             import fitz
-
-            doc: Any = fitz.open(str(pdf_path))
-            doc_length: int = len(doc)
-            content = "".join(
-                str(doc[page_num].get_text()) for page_num in range(min(20, doc_length))
-            )
-            doc.close()
-            return content
+            return fitz.open(str(pdf_path))
         except Exception as e:
             import logging
-
             logging.getLogger(__name__).warning("PDF read error: %s", e)
-            return ""
+            return None
 
-    def _extract_entries(self, _: str) -> list[TOCEntry]:
-        """Extract TOC entries with hierarchical structure."""
+    def _extract_entries(self, doc: Any) -> list[TOCEntry]:
+        """Extract TOC entries from PDF document."""
+        if not doc:
+            return []
+        
         entries: list[TOCEntry] = []
-
-        # Add structured entries with proper section numbering
-        sections: list[tuple[str, str, int, int, Optional[str]]] = [
-            ("1", "Overview", 34, 1, None),
-            ("2", "Normative References", 35, 1, None),
-            ("2.1", "USB Type-C Specification", 35, 2, "2"),
-            ("3", "Terms and Definitions", 36, 1, None),
-            ("3.1", "General Terms", 36, 2, "3"),
-            ("4", "Symbols and Abbreviations", 40, 1, None),
-            ("5", "Power Delivery Protocol", 45, 1, None),
-            ("5.1", "Protocol Overview", 45, 2, "5"),
-            ("5.2", "Message Format", 50, 2, "5"),
-            ("6", "Power Delivery Messages", 60, 1, None),
-            ("6.1", "Control Messages", 60, 2, "6"),
-            ("6.2", "Data Messages", 70, 2, "6"),
-        ]
-
-        for section_id, title, page, level, parent_id in sections:
-            entry = self._create_structured_entry(
-                section_id, title, page, level, parent_id
+        toc = doc.get_toc()
+        
+        for level, title, page in toc:
+            section_id = self._extract_section_id(title)
+            clean_title = self._clean_title(title, section_id)
+            parent_id = self._get_parent_id(section_id)
+            full_path = self._build_full_path(section_id, clean_title)
+            
+            entry = TOCEntry(
+                doc_title="USB PD Specification",
+                section_id=section_id,
+                title=clean_title,
+                full_path=full_path,
+                page=page,
+                level=level,
+                parent_id=parent_id,
+                tags=[]
             )
             entries.append(entry)
-
+        
+        doc.close()
         return entries
 
-    def _create_structured_entry(
-        self,
-        section_id: str,
-        title: str,
-        page: int,
-        level: int,
-        parent_id: Optional[str],
-    ) -> TOCEntry:
-        """Create structured TOC entry."""
-        full_path = f"{section_id} {title}" if level > 1 else title
-        return TOCEntry(
-            doc_title="USB PD Specification",
-            section_id=section_id,
-            title=title,
-            full_path=full_path,
-            page=page,
-            level=level,
-            parent_id=parent_id,
-            tags=[],
-        )
+    def _extract_section_id(self, title: str) -> str:
+        """Extract section ID from title."""
+        import re
+        # Try numeric section pattern first
+        match = re.match(r'^([0-9]+(?:\.[0-9]+)*)', title.strip())
+        if match:
+            return match.group(1)
+        # Try alphanumeric pattern
+        match = re.match(r'^([A-Za-z0-9]+(?:\.[A-Za-z0-9]+)*)', title.strip())
+        if match:
+            return match.group(1)
+        # Generate simple ID from title
+        clean = re.sub(r'[^A-Za-z0-9]', '', title.strip())
+        return clean[:10] if clean else 'section'
+    
+    def _clean_title(self, title: str, section_id: str) -> str:
+        """Clean title by removing section ID."""
+        if section_id in title:
+            return title.replace(section_id, '').strip().lstrip('.')
+        return title.strip()
+    
+    def _get_parent_id(self, section_id: str) -> Optional[str]:
+        """Get parent section ID."""
+        parts = section_id.split('.')
+        return '.'.join(parts[:-1]) if len(parts) > 1 else None
+    
+    def _build_full_path(self, section_id: str, title: str) -> str:
+        """Build full path for section."""
+        return f"{section_id} {title}" if '.' in section_id else title
