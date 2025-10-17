@@ -142,10 +142,12 @@ cython_debug/
 .vscode/
 
 # Project specific
-outputs/*.jsonl
-outputs/*.json
-outputs/*.xlsx
-outputs/*.log
+# Keep sample output files for demonstration
+!outputs/usb_pd_metadata.jsonl
+!outputs/usb_pd_toc.jsonl
+!outputs/usb_pd_spec.jsonl
+!outputs/parsing_report.json
+!outputs/validation_report.xlsx
 temp_files.txt
 *.pdf
 .ruff_cache/
