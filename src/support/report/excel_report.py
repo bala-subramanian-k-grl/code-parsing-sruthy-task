@@ -42,7 +42,11 @@ class ExcelReportGenerator(BaseReportGenerator):  # Inheritance
                 ("TOC Entries", data.get("toc_entries", 0)),
                 (
                     "Status",
-                    "PASS" if data.get("content_items", 0) > MIN_CONTENT_THRESHOLD else "FAIL",
+                    (
+                        "PASS"
+                        if data.get("content_items", 0) > MIN_CONTENT_THRESHOLD
+                        else "FAIL"
+                    ),
                 ),
             ]
 
