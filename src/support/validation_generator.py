@@ -5,6 +5,8 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any, Union
 
+from src.config.constants import MIN_CONTENT_THRESHOLD
+
 try:
     import openpyxl
     from openpyxl.styles import Font
@@ -48,7 +50,7 @@ class XLSValidator(BaseValidator):  # Inheritance
         ws["A1"] = "USB PD Validation Report"  # type: ignore
         ws["A1"].font = Font(bold=True, size=14)  # type: ignore
 
-        status = "PASS" if len(spec_data) > 1000 else "FAIL"
+        status = "PASS" if len(spec_data) > MIN_CONTENT_THRESHOLD else "FAIL"
         metrics: list[tuple[str, Union[int, str]]] = [
             ("TOC Entries", len(toc_data)),
             ("Content Items", len(spec_data)),

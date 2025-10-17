@@ -10,6 +10,7 @@ from src.config.constants import (
     DEFAULT_OUTPUT_DIR,
     DEFAULT_SEARCH_FILE,
     MAX_TERM_LENGTH,
+    MIN_ARGS_COUNT,
 )
 from src.loggers.logger import get_logger
 from src.support.search.jsonl_search import JSONLSearcher
@@ -71,12 +72,12 @@ def main() -> None:
     """Main entry point using OOP principles."""
     logger = get_logger(__name__, Path(DEFAULT_OUTPUT_DIR))
 
-    if len(sys.argv) < 2:
+    if len(sys.argv) < MIN_ARGS_COUNT:
         logger.error("Usage: python search.py <search_term> [jsonl_file]")
         sys.exit(1)
 
     term = sys.argv[1]
-    file_path = sys.argv[2] if len(sys.argv) > 2 else DEFAULT_SEARCH_FILE
+    file_path = sys.argv[2] if len(sys.argv) > MIN_ARGS_COUNT else DEFAULT_SEARCH_FILE
 
     try:
         # Factory pattern (Abstraction)

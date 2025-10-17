@@ -3,6 +3,7 @@
 import json
 from typing import Any
 
+from src.config.constants import CONTENT_PREVIEW_LENGTH
 from src.utils.decorators import log_execution, timing
 
 from .base_search import BaseSearcher  # Importing the base class
@@ -26,8 +27,8 @@ class JSONLSearcher(BaseSearcher):  # Inheritance
                                     "page": item.get("page", "N/A"),
                                     "type": item.get("type", "N/A"),
                                     "content": (
-                                        content[:100] + "..."
-                                        if len(content) > 100
+                                        content[:CONTENT_PREVIEW_LENGTH] + "..."
+                                        if len(content) > CONTENT_PREVIEW_LENGTH
                                         else content
                                     ),
                                 }

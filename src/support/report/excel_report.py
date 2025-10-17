@@ -3,6 +3,7 @@
 from pathlib import Path
 from typing import Any, Union
 
+from src.config.constants import MIN_CONTENT_THRESHOLD
 from .report_generator import BaseReportGenerator  # Import base class
 
 try:
@@ -40,7 +41,7 @@ class ExcelReportGenerator(BaseReportGenerator):  # Inheritance
                 ("TOC Entries", data.get("toc_entries", 0)),
                 (
                     "Status",
-                    "PASS" if data.get("content_items", 0) > 1000 else "FAIL",
+                    "PASS" if data.get("content_items", 0) > MIN_CONTENT_THRESHOLD else "FAIL",
                 ),
             ]
 

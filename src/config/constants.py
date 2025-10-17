@@ -20,3 +20,14 @@ LOG_FILE_NAME = "parser.log"
 LOG_FORMAT = "%(asctime)s [%(levelname)s] %(name)s - %(message)s"
 LOG_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 MAX_TERM_LENGTH = 100
+
+# Magic number constants for better encapsulation
+MIN_ARGS_COUNT = 2
+MIN_LINE_LENGTH = 10
+MAX_TITLE_LENGTH = 50
+MIN_TOC_GROUPS = 2
+MAX_TOC_GROUPS = 3
+MAX_PAGE_NUMBER = 2000
+MIN_TITLE_LENGTH = 3
+CONTENT_PREVIEW_LENGTH = 100
+MIN_CONTENT_THRESHOLD = 1000

@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Optional
 
+from src.config.constants import MAX_TITLE_LENGTH, MIN_TEXT_LENGTH
 from src.core.analyzer.content_analyzer import ContentAnalyzer
 from src.core.extractors.pdfextractor.base_extractor import BaseExtractor
 from src.utils.decorators import log_execution, timing
@@ -28,8 +29,6 @@ class PDFExtractor(BaseExtractor):  # Inheritance
         super().__init__(pdf_path)
         self.__analyzer = ContentAnalyzer()  # Private composition
         self.__page_cache: dict[int, Any] = {}  # Private cache
-        self.__extraction_stats = {"pages": 0, "blocks": 0}  # Private stats
-
     def __str__(self) -> str:  # Public magic method
         return f"PDFExtractor({self.get_pdf_name()})"
 
@@ -120,7 +119,7 @@ class PDFExtractor(BaseExtractor):  # Inheritance
 
     def _is_valid_text(self, text: str) -> bool:
         """Check if text is valid for processing (Encapsulation)."""
-        return bool(text.strip()) and len(text) > 5
+        return bool(text.strip()) and len(text) > MIN_TEXT_LENGTH
 
     def _create_content_item(self, data: ContentItemData) -> dict[str, Any]:
         """Create content item dictionary (Encapsulation)."""
@@ -146,8 +145,8 @@ class PDFExtractor(BaseExtractor):  # Inheritance
     def _get_title(self, text: str) -> str:
         """Get title from text (Encapsulation)."""
         stripped = text.strip()
-        if len(stripped) > 50:
-            return stripped[:50] + "..."
+        if len(stripped) > MAX_TITLE_LENGTH:
+            return stripped[:MAX_TITLE_LENGTH] + "..."
         return stripped
 
     def _get_block_text(self, block: dict[str, Any]) -> str:

@@ -6,6 +6,12 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Optional
 
+from src.config.constants import (
+    MAX_PAGE_NUMBER,
+    MAX_TOC_GROUPS,
+    MIN_TITLE_LENGTH,
+    MIN_TOC_GROUPS,
+)
 from src.core.models import TOCEntry
 
 
@@ -51,10 +57,10 @@ class BaseTOCExtractor(ABC):  # Abstraction
         self, groups: tuple[str, ...], counter: int
     ) -> tuple[str, str, str]:
         """Extract section_id, title, page_str from groups (Encapsulation)."""
-        if len(groups) == 2:
+        if len(groups) == MIN_TOC_GROUPS:
             title, page_str = groups
             return f"S{counter}", title, page_str
-        elif len(groups) == 3:
+        elif len(groups) == MAX_TOC_GROUPS:
             section_id, title, page_str = groups
             return section_id, title, page_str
         return "", "", ""
@@ -84,7 +90,7 @@ class BaseTOCExtractor(ABC):  # Abstraction
 
     def _is_valid_entry(self, page: int, title: str) -> bool:
         """Check if entry is valid (Encapsulation)."""
-        return 1 <= page <= 2000 and len(title.strip()) >= 3
+        return 1 <= page <= MAX_PAGE_NUMBER and len(title.strip()) >= MIN_TITLE_LENGTH
 
     def _calculate_level(self, section_id: str) -> int:
         """Calculate hierarchy level (Encapsulation)."""

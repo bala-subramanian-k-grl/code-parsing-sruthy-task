@@ -5,6 +5,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+from src.config.constants import MIN_CONTENT_THRESHOLD
 from src.support.report.report_generator import BaseReportGenerator
 
 
@@ -21,7 +22,7 @@ class JSONReportGenerator(BaseReportGenerator):  # Inheritance
                 "validation": {
                     "status": (
                         "PASS"
-                        if data.get("content_items", 0) > 1000
+                        if data.get("content_items", 0) > MIN_CONTENT_THRESHOLD
                         else "FAIL"
                     )
                 },

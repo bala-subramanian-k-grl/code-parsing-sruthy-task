@@ -4,6 +4,7 @@
 from collections.abc import Iterator
 from typing import Any
 
+from src.config.constants import MIN_LINE_LENGTH
 from .base_analyzer import PatternAnalyzer
 
 
@@ -29,7 +30,7 @@ class ContentAnalyzer:
         """Extract content items from text."""
         for i, line in enumerate(text.split("\n")):
             line = line.strip()
-            if len(line) > 10:
+            if len(line) > MIN_LINE_LENGTH:
                 content_type = self.classify(line)
                 if content_type != "paragraph":
                     yield {
