@@ -9,7 +9,7 @@ from src.interfaces.app import CLIApp
 class BaseRunner(ABC):  # Abstraction
     """Abstract application runner (Abstraction, Encapsulation)."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._app = None  # Encapsulation: protected attribute
 
     @abstractmethod  # Abstraction: must be implemented

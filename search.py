@@ -20,7 +20,7 @@ from src.utils.decorators import timing
 class BaseRunner(ABC):  # Abstraction
     """Abstract runner (Abstraction, Encapsulation)."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize base runner."""
         self._app = None  # Encapsulation
         self._logger = logging.getLogger(self.__class__.__name__)
