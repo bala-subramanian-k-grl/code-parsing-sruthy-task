@@ -27,7 +27,7 @@ class PDFExtractor(BaseExtractor):  # Inheritance
     def __init__(self, pdf_path: Path):
         super().__init__(pdf_path)
         self.__analyzer = ContentAnalyzer()  # Private composition
-        self.__page_cache = {}  # Private cache
+        self.__page_cache: dict[int, Any] = {}  # Private cache
         self.__extraction_stats = {"pages": 0, "blocks": 0}  # Private stats
 
     def __str__(self) -> str:  # Public magic method
