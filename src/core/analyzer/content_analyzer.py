@@ -5,6 +5,7 @@ from collections.abc import Iterator
 from typing import Any
 
 from src.config.constants import MIN_LINE_LENGTH
+
 from .base_analyzer import PatternAnalyzer
 
 

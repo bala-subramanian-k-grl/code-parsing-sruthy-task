@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Any, Union
 
 from src.config.constants import MIN_CONTENT_THRESHOLD
+
 from .report_generator import BaseReportGenerator  # Import base class
 
 try:
