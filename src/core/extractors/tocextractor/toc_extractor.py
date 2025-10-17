@@ -29,16 +29,16 @@ class TOCExtractor(BaseTOCExtractor):  # Inheritance
         """Extract TOC entries from PDF document."""
         if not doc:
             return []
-        
+
         entries: list[TOCEntry] = []
         toc = doc.get_toc()
-        
+
         for level, title, page in toc:
             section_id = self._extract_section_id(title)
             clean_title = self._clean_title(title, section_id)
             parent_id = self._get_parent_id(section_id)
             full_path = self._build_full_path(section_id, clean_title)
-            
+
             entry = TOCEntry(
                 doc_title="USB PD Specification",
                 section_id=section_id,
@@ -50,7 +50,7 @@ class TOCExtractor(BaseTOCExtractor):  # Inheritance
                 tags=[]
             )
             entries.append(entry)
-        
+
         doc.close()
         return entries
 
@@ -58,28 +58,28 @@ class TOCExtractor(BaseTOCExtractor):  # Inheritance
         """Extract section ID from title."""
         import re
         # Try numeric section pattern first
-        match = re.match(r'^([0-9]+(?:\.[0-9]+)*)', title.strip())
+        match = re.match(r'^(\d+(?:\.\d+)*)', title.strip())
         if match:
             return match.group(1)
         # Try alphanumeric pattern
-        match = re.match(r'^([A-Za-z0-9]+(?:\.[A-Za-z0-9]+)*)', title.strip())
+        match = re.match(r'^([A-Za-z\d]+(?:\.[A-Za-z\d]+)*)', title.strip())
         if match:
             return match.group(1)
         # Generate simple ID from title
-        clean = re.sub(r'[^A-Za-z0-9]', '', title.strip())
+        clean = re.sub(r'[^A-Za-z\d]', '', title.strip())
         return clean[:10] if clean else 'section'
-    
+
     def _clean_title(self, title: str, section_id: str) -> str:
         """Clean title by removing section ID."""
         if section_id in title:
             return title.replace(section_id, '').strip().lstrip('.')
         return title.strip()
-    
+
     def _get_parent_id(self, section_id: str) -> Optional[str]:
         """Get parent section ID."""
         parts = section_id.split('.')
         return '.'.join(parts[:-1]) if len(parts) > 1 else None
-    
+
     def _build_full_path(self, section_id: str, title: str) -> str:
         """Build full path for section."""
         return f"{section_id} {title}" if '.' in section_id else title

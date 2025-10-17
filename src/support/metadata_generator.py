@@ -25,12 +25,12 @@ class JSONLMetadataGenerator(BaseMetadataGenerator):
     def generate_metadata(self, spec_file: Path) -> Path:
         """Generate metadata from spec file."""
         metadata_file = self._output_dir / "usb_pd_metadata.jsonl"
-        
+
         if not spec_file.exists():
             return metadata_file
-            
+
         try:
-            with open(spec_file, 'r', encoding='utf-8') as f:
+            with open(spec_file, encoding='utf-8') as f:
                 with open(metadata_file, 'w', encoding='utf-8') as out:
                     for line in f:
                         if line.strip():
@@ -39,7 +39,7 @@ class JSONLMetadataGenerator(BaseMetadataGenerator):
                             out.write(json.dumps(metadata) + '\n')
         except (OSError, json.JSONDecodeError):
             pass
-            
+
         return metadata_file
 
     def _create_metadata(self, data: dict[str, Any]) -> dict[str, Any]:

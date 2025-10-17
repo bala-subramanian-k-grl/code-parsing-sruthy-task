@@ -3,15 +3,12 @@
 from typing import Any, Optional
 
 from src.config.config import Config
-from src.core.extractors.pdfextractor.pdf_extractor import (
-    PDFExtractor,
-)
+from src.core.extractors.pdfextractor.pdf_extractor import PDFExtractor
 from src.core.extractors.strategies.extraction_strategy import (
     ComprehensiveStrategy,
 )
 from src.core.extractors.tocextractor.toc_extractor import TOCExtractor
 from src.core.orchestrator.base_pipeline import BasePipeline
-
 from src.support.output_writer import JSONLWriter
 from src.support.report.report_generator import ReportFactory
 from src.utils.decorators import log_execution, timing
