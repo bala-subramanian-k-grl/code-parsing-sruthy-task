@@ -10,7 +10,7 @@ from src.support.report.report_generator import BaseReportGenerator
 
 class JSONReportGenerator(BaseReportGenerator):  # Inheritance
     def generate(self, data: dict[str, Any]) -> Path:  # Polymorphism
-        report_file = self._output_dir / "parsing_report.json"
+        report_file = self.output_dir / "parsing_report.json"
         try:
             report: dict[str, Any] = {
                 "metadata": {

@@ -16,6 +16,10 @@ from src.support.output_writer import JSONLWriter
 from src.support.report.report_generator import ReportFactory
 from src.utils.decorators import log_execution, timing
 
+# File name constants
+USB_PD_TOC_FILE = "usb_pd_toc.jsonl"
+USB_PD_SPEC_FILE = "usb_pd_spec.jsonl"
+
 
 class PipelineOrchestrator(BasePipeline):  # Inheritance
     def __init__(self, config_path: str):
@@ -84,9 +88,17 @@ class PipelineOrchestrator(BasePipeline):  # Inheritance
         output_dir = self._config.output_directory
         create_validation_report(
             output_dir,
-            output_dir / "usb_pd_toc.jsonl",
-            output_dir / "usb_pd_spec.jsonl",
+            output_dir / USB_PD_TOC_FILE,
+            output_dir / USB_PD_SPEC_FILE,
         )
+
+    def _create_metadata_file(self) -> None:
+        """Create metadata file."""
+        from src.support.metadata_generator import create_metadata_file
+
+        output_dir = self._config.output_directory
+        spec_file = output_dir / USB_PD_SPEC_FILE
+        create_metadata_file(output_dir, spec_file)
 
     def _extract_data(
         self, max_pages: Optional[int]
@@ -116,10 +128,10 @@ class PipelineOrchestrator(BasePipeline):  # Inheritance
         output_dir = self._config.output_directory
 
         # Write TOC and spec files
-        toc_path = output_dir / "usb_pd_toc.jsonl"
+        toc_path = output_dir / USB_PD_TOC_FILE
         toc_writer = JSONLWriter(toc_path)
         toc_writer.write(toc)
-        spec_path = output_dir / "usb_pd_spec.jsonl"
+        spec_path = output_dir / USB_PD_SPEC_FILE
         spec_writer = JSONLWriter(spec_path)
         spec_writer.write(content)
 
@@ -137,6 +149,10 @@ class PipelineOrchestrator(BasePipeline):  # Inheritance
         self._logger.info("Generating validation report...")
         self._create_validation_report()
         self._logger.info("Validation report generated successfully")
+
+        self._logger.info("Generating metadata file...")
+        self._create_metadata_file()
+        self._logger.info("Metadata file generated successfully")
         return counts
 
     def _get_mode_name(self) -> str:

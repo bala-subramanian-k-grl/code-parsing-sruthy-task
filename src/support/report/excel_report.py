@@ -20,7 +20,7 @@ class ExcelReportGenerator(BaseReportGenerator):  # Inheritance
             msg = "openpyxl is required for Excel report generation"
             raise ImportError(msg)
 
-        excel_file = self._output_dir / "validation_report.xlsx"
+        excel_file = self.output_dir / "validation_report.xlsx"
         try:
             wb = openpyxl.Workbook()
             ws = wb.active

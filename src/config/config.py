@@ -55,6 +55,11 @@ class Config(BaseConfig):  # Inheritance
     from .constants import DEFAULT_PDF_PATH
 
     __DEFAULT_PDF = DEFAULT_PDF_PATH
+    
+    def __init__(self, config_path: str):
+        super().__init__(config_path)
+        self.__pdf_cache = None  # Private cache
+        self.__output_cache = None  # Private cache
 
     def __str__(self) -> str:  # Magic Method
         pdf_name = self.pdf_input_file.name

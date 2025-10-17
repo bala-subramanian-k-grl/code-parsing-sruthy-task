@@ -16,3 +16,43 @@
 2025-10-17 17:07:53 [INFO] src.core.orchestrator.pipeline_orchestrator - Completed run successfully
 2025-10-17 17:07:53 [INFO] src.core.orchestrator.pipeline_orchestrator - run took 19.50 seconds
 2025-10-17 17:07:53 [INFO] CLIApp - Processing completed: 1360 TOC entries, 25760 content items
+2025-10-17 17:23:38 [INFO] PipelineOrchestrator - Configuration loaded from application.yml
+2025-10-17 17:23:38 [INFO] PipelineOrchestrator - Output directory prepared: D:\code parsing\outputs
+2025-10-17 17:23:38 [INFO] src.core.orchestrator.pipeline_orchestrator - Executing run
+2025-10-17 17:23:38 [INFO] PipelineOrchestrator - Starting pipeline execution - Full Document Processing
+2025-10-17 17:23:38 [INFO] PipelineOrchestrator - Extracting Table of Contents...
+2025-10-17 17:23:39 [INFO] PipelineOrchestrator - TOC extraction completed: 1360 entries
+2025-10-17 17:23:39 [INFO] PipelineOrchestrator - Extracting content (max pages: all)...
+2025-10-17 17:23:58 [INFO] PipelineOrchestrator - Content extraction completed: 25760 items
+2025-10-17 17:23:58 [INFO] PipelineOrchestrator - Writing JSONL output files...
+2025-10-17 17:23:59 [INFO] PipelineOrchestrator - JSONL files written successfully
+2025-10-17 17:23:59 [INFO] PipelineOrchestrator - Generating analysis reports...
+2025-10-17 17:23:59 [INFO] PipelineOrchestrator - Analysis reports generated successfully
+2025-10-17 17:23:59 [INFO] PipelineOrchestrator - Generating validation report...
+2025-10-17 17:24:01 [INFO] PipelineOrchestrator - Validation report generated successfully
+2025-10-17 17:24:01 [INFO] PipelineOrchestrator - Generating metadata file...
+2025-10-17 17:24:02 [INFO] PipelineOrchestrator - Metadata file generated successfully
+2025-10-17 17:24:02 [INFO] PipelineOrchestrator - Pipeline execution completed successfully
+2025-10-17 17:24:02 [INFO] src.core.orchestrator.pipeline_orchestrator - Completed run successfully
+2025-10-17 17:24:02 [INFO] src.core.orchestrator.pipeline_orchestrator - run took 23.98 seconds
+2025-10-17 17:24:02 [INFO] CLIApp - Processing completed: 1360 TOC entries, 25760 content items
+2025-10-17 17:30:21 [INFO] PipelineOrchestrator - Configuration loaded from application.yml
+2025-10-17 17:30:21 [INFO] PipelineOrchestrator - Output directory prepared: D:\code parsing\outputs
+2025-10-17 17:30:21 [INFO] src.core.orchestrator.pipeline_orchestrator - Executing run
+2025-10-17 17:30:21 [INFO] PipelineOrchestrator - Starting pipeline execution - Full Document Processing
+2025-10-17 17:30:21 [INFO] PipelineOrchestrator - Extracting Table of Contents...
+2025-10-17 17:30:22 [INFO] PipelineOrchestrator - TOC extraction completed: 1360 entries
+2025-10-17 17:30:22 [INFO] PipelineOrchestrator - Extracting content (max pages: all)...
+2025-10-17 17:30:40 [INFO] PipelineOrchestrator - Content extraction completed: 25760 items
+2025-10-17 17:30:40 [INFO] PipelineOrchestrator - Writing JSONL output files...
+2025-10-17 17:30:41 [INFO] PipelineOrchestrator - JSONL files written successfully
+2025-10-17 17:30:41 [INFO] PipelineOrchestrator - Generating analysis reports...
+2025-10-17 17:30:41 [INFO] PipelineOrchestrator - Analysis reports generated successfully
+2025-10-17 17:30:41 [INFO] PipelineOrchestrator - Generating validation report...
+2025-10-17 17:30:42 [INFO] PipelineOrchestrator - Validation report generated successfully
+2025-10-17 17:30:42 [INFO] PipelineOrchestrator - Generating metadata file...
+2025-10-17 17:30:43 [INFO] PipelineOrchestrator - Metadata file generated successfully
+2025-10-17 17:30:43 [INFO] PipelineOrchestrator - Pipeline execution completed successfully
+2025-10-17 17:30:43 [INFO] src.core.orchestrator.pipeline_orchestrator - Completed run successfully
+2025-10-17 17:30:43 [INFO] src.core.orchestrator.pipeline_orchestrator - run took 21.99 seconds
+2025-10-17 17:30:43 [INFO] CLIApp - Processing completed: 1360 TOC entries, 25760 content items
