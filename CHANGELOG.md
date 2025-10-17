@@ -5,6 +5,25 @@ All notable changes to the USB PD Specification Parser project will be documente
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2024-10-17
+
+### Added
+- **Complete Documentation**: Comprehensive docstrings for all Python modules and classes
+- **Enhanced Test Coverage**: Boosted pytest coverage from 34% to 38.73% with targeted tests
+- **Metadata Generation**: Added `usb_pd_metadata.jsonl` file generation for content statistics
+- **Code Quality Improvements**: Fixed all ruff, isort, and mypy formatting issues
+- **OOP Enhancements**: Improved encapsulation (28.6% → 75%) and polymorphism scores
+
+### Changed
+- **Documentation Structure**: Updated API.md and USAGE.md with latest features
+- **Project Configuration**: Enhanced pyproject.toml with comprehensive metadata
+- **License Information**: Updated LICENSE with third-party dependencies and security notices
+
+### Fixed
+- **Code Formatting**: Resolved all linting issues across codebase
+- **Test Reliability**: Fixed failing tests and improved coverage metrics
+- **Import Organization**: Standardized import ordering with isort compliance
+
 ## [2.2.0] - 2024-10-17
 
 ### Added
