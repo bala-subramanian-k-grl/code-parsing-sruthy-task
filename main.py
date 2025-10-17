@@ -47,7 +47,7 @@ class ApplicationFactory:  # Abstraction: Factory pattern
         raise ValueError(f"Invalid runner type: {runner_type}")
 
 
-def main():
+def main() -> None:
     """Main entry point using OOP principles."""
     # Setup stream logger to capture all output to parser.log
     import logging

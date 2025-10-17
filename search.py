@@ -66,7 +66,7 @@ class RunnerFactory:  # Abstraction
 
 
 @timing
-def main():
+def main() -> None:
     """Main entry point using OOP principles."""
     logger = get_logger(__name__, Path(DEFAULT_OUTPUT_DIR))
 
