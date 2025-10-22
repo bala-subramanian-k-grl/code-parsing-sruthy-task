@@ -60,7 +60,7 @@ class SearchApp:  # Composition
         """Get results from cache or perform new search."""
         if term in self.__result_cache:
             return self.__result_cache[term]
-        
+
         results = self._perform_search(term)
         self.__result_cache[term] = results
         return results

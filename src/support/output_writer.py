@@ -3,7 +3,7 @@
 import json
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any, TextIO, Protocol, Type, Dict, cast
+from typing import Any, Protocol, TextIO, cast
 
 
 class BaseWriter(ABC):  # Abstraction: abstract base class
@@ -50,11 +50,11 @@ class BaseWriter(ABC):  # Abstraction: abstract base class
 
 class WriterProtocol(Protocol):  # Protocol for polymorphism
     """Protocol for writer implementations."""
-    
+
     def write(self, data: Any) -> None:
         """Write data to output."""
         ...
-    
+
     def get_format(self) -> str:
         """Get format name."""
         ...
@@ -196,11 +196,11 @@ class HTMLWriter(BaseWriter):  # Polymorphic implementation
 
 class WriterFactory:  # Factory for polymorphism
     """Factory to create writer instances."""
-    
+
     @staticmethod
     def create(format_type: str, output_path: Path) -> BaseWriter:
         """Create writer - runtime polymorphism."""
-        writers: Dict[str, Type[BaseWriter]] = {
+        writers: dict[str, type[BaseWriter]] = {
             "jsonl": JSONLWriter,
             "csv": CSVWriter,
             "xml": XMLWriter,

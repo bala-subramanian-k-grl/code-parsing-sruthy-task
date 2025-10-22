@@ -3,6 +3,7 @@
 from typing import Any, Optional
 
 from src.config.config import Config
+from src.config.constants import USB_PD_SPEC_FILE, USB_PD_TOC_FILE
 from src.core.extractors.pdfextractor.pdf_extractor import PDFExtractor
 from src.core.extractors.strategies.extraction_strategy import (
     ComprehensiveStrategy,
@@ -12,7 +13,6 @@ from src.core.orchestrator.base_pipeline import BasePipeline
 from src.support.output_writer import JSONLWriter
 from src.support.report.report_generator import ReportFactory
 from src.utils.decorators import log_execution, timing
-from src.config.constants import USB_PD_TOC_FILE, USB_PD_SPEC_FILE
 
 
 class PipelineOrchestrator(BasePipeline):  # Inheritance
@@ -41,7 +41,7 @@ class PipelineOrchestrator(BasePipeline):  # Inheritance
         """Get configuration (read-only access)."""
         return self.__config
 
-    @property  
+    @property
     def logger(self):
         """Get logger (read-only access)."""
         return self.__logger

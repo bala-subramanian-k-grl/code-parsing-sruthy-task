@@ -3,7 +3,6 @@ from pathlib import Path
 from typing import Any
 
 
-
 class BaseConfig(ABC):
     """Abstract config loader."""
 

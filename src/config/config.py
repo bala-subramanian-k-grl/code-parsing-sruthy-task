@@ -3,8 +3,10 @@
 
 from pathlib import Path
 from typing import Any, Optional
-from src.config.base_config import BaseConfig
+
 import yaml
+
+from src.config.base_config import BaseConfig
 
 
 class Config(BaseConfig):  # Inheritance

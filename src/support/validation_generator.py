@@ -106,9 +106,9 @@ class JSONValidator(BaseValidator):  # Inheritance
         report: dict[str, Any] = {
             "validation_report": validation_data
         }
-        
+
         self._store_results(validation_data)
-        
+
         json_file = self.output_dir / "validation_report.json"
         with open(json_file, 'w', encoding='utf-8') as f:
             json.dump(report, f, indent=2)
@@ -117,12 +117,12 @@ class JSONValidator(BaseValidator):  # Inheritance
 
 class ValidationGeneratorFactory:
     """Factory for validation generators."""
-    
+
     __VALIDATORS: dict[str, type[BaseValidator]] = {
         "excel": XLSValidator,
         "json": JSONValidator  # Polymorphism - different implementations
     }
-    
+
     @classmethod
     def create(cls, validator_type: str, output_dir: Path) -> BaseValidator:
         """Create validator instance."""

@@ -3,7 +3,7 @@
 import json
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any, Type
+from typing import Any
 
 
 class BaseMetadataGenerator(ABC):
@@ -57,7 +57,9 @@ class JSONLMetadataGenerator(BaseMetadataGenerator):
                             entry_count += 1
         except (OSError, json.JSONDecodeError) as e:
             import logging
-            logging.getLogger(__name__).debug("Metadata generation error: %s", e)
+            logging.getLogger(__name__).debug(
+                "Metadata generation error: %s", e
+            )
 
         self._update_stats("entries_processed", entry_count)
         return metadata_file
@@ -91,7 +93,7 @@ class CSVMetadataGenerator(BaseMetadataGenerator):
             with open(metadata_file, 'w', encoding='utf-8') as out:
                 # Write CSV header
                 out.write("doc_title,section_id,page,type,word_count,char_count\n")
-                
+
                 with open(spec_file, encoding='utf-8') as f:
                     for line in f:
                         if line.strip():
@@ -115,20 +117,25 @@ class CSVMetadataGenerator(BaseMetadataGenerator):
         data_type = data.get("type", "paragraph")
         word_count = len(content.split())
         char_count = len(content)
-        
-        return f"{doc_title},{section_id},{page},{data_type},{word_count},{char_count}"
+
+        return (
+            f"{doc_title},{section_id},{page},{data_type},"
+            f"{word_count},{char_count}"
+        )
 
 
 class MetadataGeneratorFactory:
     """Factory for metadata generators."""
-    
-    __GENERATORS: dict[str, Type[BaseMetadataGenerator]] = {
+
+    __GENERATORS: dict[str, type[BaseMetadataGenerator]] = {
         "jsonl": JSONLMetadataGenerator,
         "csv": CSVMetadataGenerator  # Polymorphism - different implementations
     }
-    
+
     @classmethod
-    def create(cls, generator_type: str, output_dir: Path) -> BaseMetadataGenerator:
+    def create(
+        cls, generator_type: str, output_dir: Path
+    ) -> BaseMetadataGenerator:
         """Create metadata generator instance."""
         if generator_type not in cls.__GENERATORS:
             raise ValueError(f"Unknown generator type: {generator_type}")

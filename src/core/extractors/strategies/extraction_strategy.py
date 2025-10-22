@@ -3,7 +3,7 @@
 from abc import ABC, abstractmethod
 from collections.abc import Iterator
 from pathlib import Path
-from typing import Any, Optional, Type, Dict
+from typing import Any, Optional
 
 # Constants
 DOC_TITLE = "USB PD Specification"
@@ -118,7 +118,9 @@ class FastStrategy(ExtractionStrategy):
         doc = fitz.open(str(pdf_path))
         try:
             doc_len = len(doc)
-            total_pages = doc_len if max_pages is None else min(max_pages, doc_len)
+            total_pages = (
+                doc_len if max_pages is None else min(max_pages, doc_len)
+            )
             for page_num in range(total_pages):
                 page = doc[page_num]
                 text = page.get_text()
@@ -156,7 +158,9 @@ class DetailedStrategy(ExtractionStrategy):
         doc = fitz.open(str(pdf_path))
         try:
             doc_len = len(doc)
-            total_pages = doc_len if max_pages is None else min(max_pages, doc_len)
+            total_pages = (
+                doc_len if max_pages is None else min(max_pages, doc_len)
+            )
             for page_num in range(total_pages):
                 page = doc[page_num]
                 blocks = page.get_text("dict")["blocks"]
@@ -166,7 +170,9 @@ class DetailedStrategy(ExtractionStrategy):
                         if text.strip():
                             yield {
                                 "doc_title": DOC_TITLE,
-                                "section_id": f"det_{page_num + 1}_{block_num}",
+                                "section_id": (
+                                    f"det_{page_num + 1}_{block_num}"
+                                ),
                                 "title": text[:40],
                                 "content": text.strip(),
                                 "page": page_num + 1,
@@ -191,11 +197,11 @@ class DetailedStrategy(ExtractionStrategy):
 
 class StrategyFactory:  # Factory for polymorphism
     """Factory to create extraction strategies."""
-    
+
     @staticmethod
     def create(strategy_type: str) -> ExtractionStrategy:
         """Create strategy - runtime polymorphism."""
-        strategies: Dict[str, Type[ExtractionStrategy]] = {
+        strategies: dict[str, type[ExtractionStrategy]] = {
             "comprehensive": ComprehensiveStrategy,
             "standard": StandardStrategy,
             "fast": FastStrategy,

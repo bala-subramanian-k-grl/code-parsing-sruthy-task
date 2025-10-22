@@ -3,7 +3,7 @@
 
 import re
 from abc import ABC, abstractmethod
-from typing import Protocol, Type, Dict
+from typing import Protocol
 
 
 class BaseAnalyzer(ABC):
@@ -12,11 +12,11 @@ class BaseAnalyzer(ABC):
     @abstractmethod
     def analyze(self, text: str) -> str:
         """Analyze text and return content type."""
-    
+
     def __call__(self, text: str) -> str:  # Magic method polymorphism
         """Make analyzer callable."""
         return self.analyze(text)
-    
+
     def __str__(self) -> str:  # Magic method polymorphism
         """String representation."""
         return f"{self.__class__.__name__}()"
@@ -24,7 +24,7 @@ class BaseAnalyzer(ABC):
 
 class AnalyzerProtocol(Protocol):  # Protocol for polymorphism
     """Protocol for analyzer implementations."""
-    
+
     def analyze(self, text: str) -> str:
         """Analyze text and return type."""
         ...
@@ -32,11 +32,11 @@ class AnalyzerProtocol(Protocol):  # Protocol for polymorphism
 
 class AnalyzerFactory:  # Factory for polymorphism
     """Factory to create analyzer instances."""
-    
+
     @staticmethod
     def create(analyzer_type: str) -> BaseAnalyzer:
         """Create analyzer - runtime polymorphism."""
-        types: Dict[str, Type[BaseAnalyzer]] = {
+        types: dict[str, type[BaseAnalyzer]] = {
             "pattern": PatternAnalyzer,
             "length": LengthAnalyzer,
             "hybrid": HybridAnalyzer

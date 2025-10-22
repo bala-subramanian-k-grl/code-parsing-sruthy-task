@@ -8,6 +8,7 @@ from src.config.constants import MIN_LINE_LENGTH
 
 from .base_analyzer import PatternAnalyzer
 
+
 class ContentAnalyzer:
     """Content analyzer using pattern matching."""
 
@@ -25,7 +26,7 @@ class ContentAnalyzer:
         cache_key = self._get_cache_key(text)
         if cache_key in self.__analysis_cache:
             return self.__analysis_cache[cache_key]
-        
+
         result = str(self.__analyzer.analyze(text))
         self.__analysis_cache[cache_key] = result
         self._update_classification_stats(result)

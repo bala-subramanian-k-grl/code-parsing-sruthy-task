@@ -177,7 +177,7 @@ class PDFExtractor(BaseExtractor):  # Inheritance
         )
 
     def _create_item_data(
-        self, text: str, content_type: str, block_num: int, 
+        self, text: str, content_type: str, block_num: int,
         page_num: int, block: dict[str, Any]
     ) -> ContentItemData:
         """Create content item data object."""

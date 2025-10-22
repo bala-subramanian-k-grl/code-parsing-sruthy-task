@@ -10,20 +10,22 @@ class BaseContent(BaseModel):
 
     page: int = Field(gt=0)  # Encapsulation
     content: str = Field()  # Encapsulation
-    
+
     def __init__(self, **data: Any) -> None:
         super().__init__(**data)
         self.__content_hash: Optional[str] = None  # Private
         self.__word_count: Optional[int] = None  # Private
-    
+
     @property
     def content_hash(self) -> str:
         """Get content hash."""
         if self.__content_hash is None:
             import hashlib
-            self.__content_hash = hashlib.md5(self.content.encode(), usedforsecurity=False).hexdigest()
+            self.__content_hash = hashlib.md5(
+                self.content.encode(), usedforsecurity=False
+            ).hexdigest()
         return self.__content_hash
-    
+
     @property
     def word_count(self) -> int:
         """Get word count."""
@@ -50,17 +52,17 @@ class TOCEntry(BaseModel):  # Encapsulation
     level: int = Field(gt=0)  # Encapsulation
     parent_id: Optional[str] = Field(default=None)  # Encapsulation
     tags: list[str] = Field(default_factory=list)  # Encapsulation
-    
+
     def __init__(self, **data: Any) -> None:
         super().__init__(**data)
         self.__creation_time: Optional[Any] = None  # Private
         self.__modification_count: int = 0  # Private
-    
+
     @property
     def creation_time(self) -> Optional[Any]:
         """Get creation time."""
         return self.__creation_time
-    
+
     @property
     def modification_count(self) -> int:
         """Get modification count."""
@@ -119,17 +121,17 @@ class ContentItem(BaseContent):  # Inheritance
     block_id: str = Field()  # Encapsulation
     bbox: list[float] = Field(default_factory=list)
     metadata: dict[str, Any] = Field(default_factory=dict)
-    
+
     def __init__(self, **data: Any) -> None:
         super().__init__(**data)
         self.__processing_state: str = "new"  # Private
         self.__error_count: int = 0  # Private
-    
+
     @property
     def processing_state(self) -> str:
         """Get processing state."""
         return self.__processing_state
-    
+
     @property
     def error_count(self) -> int:
         """Get error count."""

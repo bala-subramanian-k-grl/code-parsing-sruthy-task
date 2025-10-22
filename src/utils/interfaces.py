@@ -6,7 +6,7 @@ from typing import Any, Protocol
 
 class Processable(Protocol):
     """Protocol for processable objects."""
-    
+
     def process(self) -> Any:
         """Process the object."""
         ...
@@ -14,17 +14,17 @@ class Processable(Protocol):
 
 class Cacheable(ABC):
     """Abstract base class for cacheable objects."""
-    
+
     @abstractmethod
     def get_cache_key(self) -> str:
         """Get unique cache key."""
         pass
-    
+
     @abstractmethod
     def clear_cache(self) -> None:
         """Clear object cache."""
         pass
-    
+
     def __hash__(self) -> int:  # Magic method
         """Hash based on cache key."""
         return hash(self.get_cache_key())
@@ -32,17 +32,17 @@ class Cacheable(ABC):
 
 class Configurable(ABC):
     """Abstract base class for configurable objects."""
-    
+
     @abstractmethod
     def configure(self, **kwargs) -> None:
         """Configure object with parameters."""
         pass
-    
+
     @abstractmethod
     def get_config(self) -> dict[str, Any]:
         """Get current configuration."""
         pass
-    
+
     @abstractmethod
     def reset_config(self) -> None:
         """Reset to default configuration."""
@@ -51,17 +51,17 @@ class Configurable(ABC):
 
 class Validatable(ABC):
     """Abstract base class for validatable objects."""
-    
+
     @abstractmethod
     def validate(self) -> bool:
         """Validate object state."""
         pass
-    
+
     @abstractmethod
     def get_validation_errors(self) -> list[str]:
         """Get validation error messages."""
         pass
-    
+
     def is_valid(self) -> bool:
         """Check if object is valid."""
         return self.validate() and not self.get_validation_errors()
@@ -69,45 +69,45 @@ class Validatable(ABC):
 
 class Serializable(ABC):
     """Abstract base class for serializable objects."""
-    
+
     @abstractmethod
     def serialize(self) -> dict[str, Any]:
         """Serialize object to dictionary."""
         pass
-    
+
     @abstractmethod
     def deserialize(self, data: dict[str, Any]) -> None:
         """Deserialize from dictionary."""
         pass
-    
+
     def to_json(self) -> str:
         """Convert to JSON string."""
         import json
         return json.dumps(self.serialize())
 
 
-class Observable(ABC):
+class Observable:
     """Abstract base class for observable objects."""
-    
+
     def __init__(self):
         self.__observers: list[Any] = []  # Private observers
-    
+
     def add_observer(self, observer: Any) -> None:
         """Add observer."""
         if observer not in self.__observers:
             self.__observers.append(observer)
-    
+
     def remove_observer(self, observer: Any) -> None:
         """Remove observer."""
         if observer in self.__observers:
             self.__observers.remove(observer)
-    
+
     def _notify_observers(self, event: str, data: Any = None) -> None:
         """Notify all observers."""
         for observer in self.__observers:
             if hasattr(observer, 'update'):
                 observer.update(event, data)
-    
+
     @property
     def observer_count(self) -> int:
         """Get number of observers."""
