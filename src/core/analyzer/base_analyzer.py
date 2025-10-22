@@ -86,7 +86,7 @@ class LengthAnalyzer(BaseAnalyzer):  # Polymorphism
 class HybridAnalyzer(BaseAnalyzer):  # Polymorphism
     """Combines multiple analyzers."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._pattern = PatternAnalyzer()
         self._length = LengthAnalyzer()
 

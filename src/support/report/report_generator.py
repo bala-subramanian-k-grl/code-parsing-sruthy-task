@@ -3,7 +3,7 @@
 
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 
 class ProcessableMixin:
@@ -35,7 +35,7 @@ class BaseReportGenerator(ABC, ProcessableMixin, TransformableMixin):
         self.__output_dir = output_dir  # Private encapsulation
         self.__metadata: dict[str, Any] = {}  # Private metadata
         self.__generation_count: int = 0  # Private counter
-        self.__last_generated: Path | None = None  # Private tracking
+        self.__last_generated: Optional[Path] = None  # Private tracking
         self._setup_output_directory()
 
     def _setup_output_directory(self) -> None:
@@ -84,7 +84,7 @@ class BaseReportGenerator(ABC, ProcessableMixin, TransformableMixin):
         return self.__generation_count
 
     @property
-    def last_generated_file(self) -> Path | None:
+    def last_generated_file(self) -> Optional[Path]:
         """Get last generated file path."""
         return self.__last_generated
 

@@ -42,7 +42,7 @@ class PipelineOrchestrator(BasePipeline):  # Inheritance
         return self.__config
 
     @property
-    def logger(self):
+    def logger(self) -> Any:
         """Get logger (read-only access)."""
         return self.__logger
 

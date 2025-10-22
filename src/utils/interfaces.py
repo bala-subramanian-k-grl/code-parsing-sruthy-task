@@ -34,7 +34,7 @@ class Configurable(ABC):
     """Abstract base class for configurable objects."""
 
     @abstractmethod
-    def configure(self, **kwargs) -> None:
+    def configure(self, **kwargs: Any) -> None:
         """Configure object with parameters."""
         pass
 
@@ -89,7 +89,7 @@ class Serializable(ABC):
 class Observable:
     """Abstract base class for observable objects."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.__observers: list[Any] = []  # Private observers
 
     def add_observer(self, observer: Any) -> None:

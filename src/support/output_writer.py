@@ -77,8 +77,7 @@ class JSONLWriter(BaseWriter):  # Polymorphic implementation
         try:
             with open(self.output_path, "w", encoding="utf-8") as f:
                 if isinstance(data, list):
-                    typed_data = cast(list[Any], data)
-                    self._write_list(f, typed_data)
+                    self._write_list(f, data)
                 else:
                     self._write_single(f, data)
         except OSError as e:
@@ -145,8 +144,7 @@ class XMLWriter(BaseWriter):  # Polymorphic implementation
                 f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
                 f.write('<data>\n')
                 if isinstance(data, list):
-                    typed_data = cast(list[Any], data)
-                    for item in typed_data:
+                    for item in data:
                         f.write('  <item>\n')
                         if isinstance(item, dict):
                             typed_item = cast(dict[str, Any], item)
