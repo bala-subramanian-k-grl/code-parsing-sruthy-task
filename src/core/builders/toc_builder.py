@@ -75,8 +75,7 @@ class HierarchicalTOCBuilder(TOCBuilder):
         match = re.match(r"^(\d+(?:\.\d+)*)", title)
         if match:
             group = match.group(1)
-            assert isinstance(group, str)
-            return group
+            return group if group else ""
         return ""
 
     def _add_hierarchy(
