@@ -23,7 +23,7 @@ class MockPipelineTest(BasePipelineTest):  # Inheritance
 
         try:
             orchestrator = PipelineOrchestrator("application.yml")
-            return hasattr(orchestrator, "_config")
+            return hasattr(orchestrator, "config")
         except (ValueError, OSError, RuntimeError) as e:
             print(f"Test failed: {e}")
             return False
