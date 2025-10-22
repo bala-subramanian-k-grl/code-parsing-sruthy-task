@@ -46,10 +46,11 @@ class HierarchicalTOCBuilder(TOCBuilder):
 
     def _get_entry_title(self, entry: dict[str, Any]) -> str:
         """Protected method to get entry title safely."""
-        return entry.get("title", "")
+        title = entry.get("title", "")
+        return str(title) if title else ""
 
     def _create_enhanced_entry(
-        self, entry: dict[str, Any], level: int, section_num: Optional[str]
+        self, entry: dict[str, Any], level: int, section_num: str
     ) -> dict[str, Any]:
         """Protected method to create enhanced entry dictionary."""
         return {
