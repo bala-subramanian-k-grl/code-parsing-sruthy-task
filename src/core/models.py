@@ -21,7 +21,7 @@ class BaseContent(BaseModel):
         """Get content hash."""
         if self.__content_hash is None:
             import hashlib
-            self.__content_hash = hashlib.md5(self.content.encode()).hexdigest()
+            self.__content_hash = hashlib.md5(self.content.encode(), usedforsecurity=False).hexdigest()
         return self.__content_hash
     
     @property
