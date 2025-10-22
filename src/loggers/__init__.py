@@ -1,4 +1,4 @@
-"""Logging utilities exports"""
+"""Logging utilitie exports"""
 
 from .logger import get_logger
 

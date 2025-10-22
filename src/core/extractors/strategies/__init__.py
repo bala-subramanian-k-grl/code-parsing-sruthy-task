@@ -1,4 +1,4 @@
-"""Extraction strategies packages."""
+"""Extraction strategie packages."""
 
 from .extraction_strategy import (
     ComprehensiveStrategy,

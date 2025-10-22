@@ -17,6 +17,15 @@ except ImportError:
 
 
 class ExcelReportGenerator(BaseReportGenerator):  # Inheritance
+    
+    def get_report_type(self) -> str:
+        """Get report type name."""
+        return "excel"
+    
+    def get_file_extension(self) -> str:
+        """Get file extension for this report type."""
+        return ".xlsx"
+    
     def generate(self, data: dict[str, Any]) -> Path:  # Polymorphism
         if not has_openpyxl or openpyxl is None:
             msg = "openpyxl is required for Excel report generation"

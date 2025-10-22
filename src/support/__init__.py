@@ -1,4 +1,4 @@
-"""Support utilities exports"""
+"""Support utilitie exports"""
 
 from .output_writer import JSONLWriter
 from .report import ReportFactory

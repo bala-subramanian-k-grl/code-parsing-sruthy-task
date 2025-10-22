@@ -12,10 +12,7 @@ from src.core.orchestrator.base_pipeline import BasePipeline
 from src.support.output_writer import JSONLWriter
 from src.support.report.report_generator import ReportFactory
 from src.utils.decorators import log_execution, timing
-
-# File name constants
-USB_PD_TOC_FILE = "usb_pd_toc.jsonl"
-USB_PD_SPEC_FILE = "usb_pd_spec.jsonl"
+from src.config.constants import USB_PD_TOC_FILE, USB_PD_SPEC_FILE
 
 
 class PipelineOrchestrator(BasePipeline):  # Inheritance
@@ -24,20 +21,30 @@ class PipelineOrchestrator(BasePipeline):  # Inheritance
         import logging
 
         class_name = self.__class__.__name__
-        self._logger = logging.getLogger(class_name)
+        self.__logger = logging.getLogger(class_name)  # Private
         try:
-            self._config = Config(config_path)  # Encapsulation
-            self._logger.info("Configuration loaded from %s", config_path)
+            self.__config = Config(config_path)  # Private
+            self.__logger.info("Configuration loaded from %s", config_path)
         except (ValueError, OSError) as e:
             raise RuntimeError(f"Configuration error: {e}") from e
         try:
-            output_dir = self._config.output_directory
+            output_dir = self.__config.output_directory
             output_dir.mkdir(parents=True, exist_ok=True)
             msg = f"Output directory prepared: {output_dir}"
-            self._logger.info(msg)
+            self.__logger.info(msg)
         except OSError as e:
             msg = f"Cannot create output directory: {e}"
             raise RuntimeError(msg) from e
+
+    @property
+    def config(self) -> Config:
+        """Get configuration (read-only access)."""
+        return self.__config
+
+    @property  
+    def logger(self):
+        """Get logger (read-only access)."""
+        return self.__logger
 
     def _get_max_pages(self) -> Optional[int]:
         """Get max pages for processing."""
@@ -72,7 +79,7 @@ class PipelineOrchestrator(BasePipeline):  # Inheritance
 
     def _create_analysis_reports(self, counts: dict[str, Any]) -> None:
         """Create JSON and Excel analysis reports."""
-        output_dir = self._config.output_directory
+        output_dir = self.__config.output_directory
         json_gen = ReportFactory.create_generator("json", output_dir)
         json_gen.generate(counts)
         excel_gen = ReportFactory.create_generator("excel", output_dir)
@@ -82,7 +89,7 @@ class PipelineOrchestrator(BasePipeline):  # Inheritance
         """Create validation report."""
         from src.support.validation_generator import create_validation_report
 
-        output_dir = self._config.output_directory
+        output_dir = self.__config.output_directory
         create_validation_report(
             output_dir,
             output_dir / USB_PD_TOC_FILE,
@@ -93,7 +100,7 @@ class PipelineOrchestrator(BasePipeline):  # Inheritance
         """Create metadata file."""
         from src.support.metadata_generator import create_metadata_file
 
-        output_dir = self._config.output_directory
+        output_dir = self.__config.output_directory
         spec_file = output_dir / USB_PD_SPEC_FILE
         create_metadata_file(output_dir, spec_file)
 
@@ -101,28 +108,28 @@ class PipelineOrchestrator(BasePipeline):  # Inheritance
         self, max_pages: Optional[int]
     ) -> tuple[list[Any], list[Any]]:
         """Extract TOC and content data using Strategy Pattern."""
-        self._logger.info("Extracting Table of Contents...")
-        pdf_file = self._config.pdf_input_file
+        self.__logger.info("Extracting Table of Contents...")
+        pdf_file = self.__config.pdf_input_file
         toc = TOCExtractor().extract_toc(pdf_file)
         toc_count = len(toc)
         msg = f"TOC extraction completed: {toc_count} entries"
-        self._logger.info(msg)
+        self.__logger.info(msg)
 
         pages_info = max_pages or "all"
         msg = "Extracting content (max pages: %s)..."
-        self._logger.info(msg, pages_info)
+        self.__logger.info(msg, pages_info)
 
         # Use Strategy Pattern for comprehensive extraction
         strategy = ComprehensiveStrategy()
         content = list(strategy.extract_pages(pdf_file, max_pages))
         count = len(content)
-        self._logger.info("Content extraction completed: %s items", count)
+        self.__logger.info("Content extraction completed: %s items", count)
         return toc, content
 
     def _write_files(self, toc: list[Any], content: list[Any]) -> None:
         """Write JSONL output files."""
-        self._logger.info("Writing JSONL output files...")
-        output_dir = self._config.output_directory
+        self.__logger.info("Writing JSONL output files...")
+        output_dir = self.__config.output_directory
 
         # Write TOC and spec files
         toc_path = output_dir / USB_PD_TOC_FILE
@@ -132,24 +139,24 @@ class PipelineOrchestrator(BasePipeline):  # Inheritance
         spec_writer = JSONLWriter(spec_path)
         spec_writer.write(content)
 
-        self._logger.info("JSONL files written successfully")
+        self.__logger.info("JSONL files written successfully")
 
     def _generate_reports(
         self, toc: list[Any], content: list[Any]
     ) -> dict[str, Any]:
         """Generate analysis and validation reports."""
-        self._logger.info("Generating analysis reports...")
+        self.__logger.info("Generating analysis reports...")
         counts = self._calculate_counts(toc, content)
         self._create_analysis_reports(counts)
-        self._logger.info("Analysis reports generated successfully")
+        self.__logger.info("Analysis reports generated successfully")
 
-        self._logger.info("Generating validation report...")
+        self.__logger.info("Generating validation report...")
         self._create_validation_report()
-        self._logger.info("Validation report generated successfully")
+        self.__logger.info("Validation report generated successfully")
 
-        self._logger.info("Generating metadata file...")
+        self.__logger.info("Generating metadata file...")
         self._create_metadata_file()
-        self._logger.info("Metadata file generated successfully")
+        self.__logger.info("Metadata file generated successfully")
         return counts
 
     def _get_mode_name(self) -> str:
@@ -161,7 +168,7 @@ class PipelineOrchestrator(BasePipeline):  # Inheritance
     def run(self) -> dict[str, Any]:  # Polymorphism
         mode_name = self._get_mode_name()
         msg = "Starting pipeline execution - %s"
-        self._logger.info(msg, mode_name)
+        self.__logger.info(msg, mode_name)
 
         max_pages = self._get_max_pages()
         toc, content = self._extract_data(max_pages)
@@ -169,14 +176,14 @@ class PipelineOrchestrator(BasePipeline):  # Inheritance
         counts = self._generate_reports(toc, content)
 
         msg = "Pipeline execution completed successfully"
-        self._logger.info(msg)
+        self.__logger.info(msg)
         return {"toc_entries": len(toc), "spec_counts": counts}
 
     def run_toc_only(self) -> Any:  # Polymorphism
-        return TOCExtractor().extract_toc(self._config.pdf_input_file)
+        return TOCExtractor().extract_toc(self.__config.pdf_input_file)
 
     def run_content_only(self) -> int:  # Polymorphism
-        extractor = PDFExtractor(self._config.pdf_input_file)
+        extractor = PDFExtractor(self.__config.pdf_input_file)
         return len(extractor.extract_content())
 
     def run_full_pipeline(self) -> dict[str, Any]:

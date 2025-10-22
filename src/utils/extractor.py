@@ -1,4 +1,4 @@
-"""PDF extraction with OOP principles."""
+"""PDF extractions with OOP principles."""
 
 import logging
 from collections.abc import Iterator

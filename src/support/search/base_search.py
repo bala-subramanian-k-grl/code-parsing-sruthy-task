@@ -1,4 +1,4 @@
-"""Base class for search implementations with security measures."""
+"""Base search classes with polymorphism."""
 
 import logging
 from abc import ABC, abstractmethod
@@ -37,3 +37,16 @@ class BaseSearcher(ABC):  # Abstraction
     @abstractmethod  # Abstraction
     def search(self, term: str) -> list[dict[str, Any]]:
         pass
+
+    @abstractmethod
+    def get_search_type(self) -> str:
+        """Get search implementation type."""
+        pass
+
+    def __call__(self, term: str) -> list[dict[str, Any]]:
+        """Make searcher callable."""
+        return self.search(term)
+
+    def __str__(self) -> str:
+        """String representation."""
+        return f"{self.__class__.__name__}({self._file_path.name})"

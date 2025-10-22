@@ -10,6 +10,15 @@ from src.support.report.report_generator import BaseReportGenerator
 
 
 class JSONReportGenerator(BaseReportGenerator):  # Inheritance
+    
+    def get_report_type(self) -> str:
+        """Get report type name."""
+        return "json"
+    
+    def get_file_extension(self) -> str:
+        """Get file extension for this report type."""
+        return ".json"
+    
     def generate(self, data: dict[str, Any]) -> Path:  # Polymorphism
         report_file = self.output_dir / "parsing_report.json"
         try:

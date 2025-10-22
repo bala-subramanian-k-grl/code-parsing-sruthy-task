@@ -1,4 +1,3 @@
-# USB PD Specification Parser - CLI Application Module
 """Minimal CLI app with OOP principles."""
 
 import argparse
@@ -16,6 +15,11 @@ class BaseApp(ABC):  # Abstraction
         """Initialize base application."""
         self._logger = logging.getLogger(self.__class__.__name__)
         logging.basicConfig(level=logging.INFO)
+
+    @property
+    def logger(self) -> logging.Logger:
+        """Get logger instance."""
+        return self._logger
 
     @abstractmethod  # Abstraction
     def run(self) -> None:
@@ -46,11 +50,11 @@ class CLIApp(BaseApp):  # Inheritance
             result = orchestrator.run_toc_only()
             count = len(result)
             msg = "TOC extraction completed: %s entries"
-            self._logger.info(msg, count)
+            self.logger.info(msg, count)
         elif args.content_only:
             result = orchestrator.run_content_only()
             msg = "Content extraction completed: %s items processed"
-            self._logger.info(msg, result)
+            self.logger.info(msg, result)
         else:
             result = orchestrator.run_full_pipeline()
             toc_count = result["toc_entries"]
@@ -58,7 +62,7 @@ class CLIApp(BaseApp):  # Inheritance
             msg = (
                 "Processing completed: %s TOC entries, %s content items"
             )
-            self._logger.info(msg, toc_count, content_count)
+            self.logger.info(msg, toc_count, content_count)
 
     def run(self) -> None:  # Polymorphism
         """Run CLI application."""
@@ -67,7 +71,7 @@ class CLIApp(BaseApp):  # Inheritance
             self._execute_pipeline(args)
         except Exception as e:
             msg = "Application execution failed: %s"
-            self._logger.error(msg, e)
+            self.logger.error(msg, e)
             sys.exit(1)
 
 

@@ -77,7 +77,10 @@ def main() -> None:
         sys.exit(1)
 
     term = sys.argv[1]
-    file_path = sys.argv[2] if len(sys.argv) > MIN_ARGS_COUNT else DEFAULT_SEARCH_FILE
+    if len(sys.argv) > MIN_ARGS_COUNT:
+        file_path = sys.argv[2]
+    else:
+        file_path = DEFAULT_SEARCH_FILE
 
     try:
         # Factory pattern (Abstraction)

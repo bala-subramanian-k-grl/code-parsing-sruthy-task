@@ -1,4 +1,4 @@
-"""USB PD Specification Parser - Main Package"""
+"""USB PD Specifications Parser - Main Package"""
 
 from .config import Config
 from .core import PipelineOrchestrator

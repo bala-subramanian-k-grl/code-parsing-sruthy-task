@@ -1,4 +1,4 @@
-"""Base PDF extractors module."""
+"""Base PDF extractor module."""
 
 import logging
 from abc import ABC, abstractmethod

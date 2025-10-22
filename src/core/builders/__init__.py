@@ -1,4 +1,4 @@
-"""Builders packages."""
+"""Builder packages."""
 
 from .toc_builder import HierarchicalTOCBuilder, TOCBuilder
 

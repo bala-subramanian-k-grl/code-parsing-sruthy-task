@@ -1,4 +1,4 @@
-"""Extractor module exports"""
+"""Extractors module exports"""
 
 from .pdfextractor import PDFExtractor
 from .tocextractor import TOCExtractor

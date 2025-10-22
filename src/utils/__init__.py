@@ -1,4 +1,4 @@
-"""Utility functions exports"""
+"""Utility function exports"""
 
 from .decorators import log_execution, retry, timing, validate_path
 from .security_utils import PathValidator

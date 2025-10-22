@@ -13,8 +13,7 @@ input:
   pdf_path: "assets/USB_PD_R3_2 V1.1 2024-10.pdf"
   max_pages:
     mode_1: null  # Full document
-    mode_2: 1046  # Extended mode - full spec
-    mode_3: 1046  # Standard mode - full spec
+
   validation:
     check_file_exists: true
     max_file_size: "100MB"

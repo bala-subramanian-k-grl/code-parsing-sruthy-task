@@ -1,4 +1,3 @@
-# USB PD Specification Parser - Pipeline Orchestrator Module
 """Base class for pipeline orchestrators."""
 
 from abc import ABC, abstractmethod

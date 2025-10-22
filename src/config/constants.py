@@ -8,11 +8,12 @@ DEFAULT_DOC_TITLE = "USB Power Delivery Specification"
 DEFAULT_PDF_PATH = "assets/USB_PD_R3_2 V1.1 2024-10.pdf"
 DEFAULT_OUTPUT_DIR = "outputs"
 
-# Processing constants
-DEFAULT_MAX_PAGES_EXTENDED = 1046
-DEFAULT_MAX_PAGES_STANDARD = 1046
+# Processing constants - Dynamic detection with fallbacks
+DEFAULT_MAX_PAGES_FALLBACK = 1000  # Fallback if detection fails
+USB_PD_TOTAL_PAGES = 1046  # Specific to USB PD spec
 MIN_TEXT_LENGTH = 5
 MAX_TOC_PAGES = 20
+PROCESS_ALL_PAGES = -1  # Flag to process entire PDF
 
 # Search constants
 DEFAULT_SEARCH_FILE = "outputs/usb_pd_spec.jsonl"
@@ -31,3 +32,7 @@ MAX_PAGE_NUMBER = 2000
 MIN_TITLE_LENGTH = 3
 CONTENT_PREVIEW_LENGTH = 100
 MIN_CONTENT_THRESHOLD = 1000
+
+# File name constants
+USB_PD_TOC_FILE = "usb_pd_toc.jsonl"
+USB_PD_SPEC_FILE = "usb_pd_spec.jsonl"

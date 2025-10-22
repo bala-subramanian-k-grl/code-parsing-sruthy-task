@@ -1,4 +1,4 @@
-"""Module for displaying search results with logging and encapsulation."""
+"""Module for displaying search result with logging and encapsulation."""
 
 import logging
 from typing import Any

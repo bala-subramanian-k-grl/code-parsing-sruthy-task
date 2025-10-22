@@ -1,4 +1,4 @@
-"""Report generation module."""
+"""Report generations module."""
 
 from .excel_report import ExcelReportGenerator
 from .jsonreport_generator import JSONReportGenerator

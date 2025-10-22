@@ -1,4 +1,4 @@
-"""Factories package."""
+"""Factorie package."""
 
 from .file_factory import FileGeneratorFactory, MetadataGenerator
 

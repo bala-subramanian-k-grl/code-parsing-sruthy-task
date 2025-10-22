@@ -1,4 +1,4 @@
-"""TOC extractors exports"""
+"""TOC extractor exports"""
 
 from .toc_extractor import TOCExtractor
 

@@ -1,4 +1,4 @@
-"""Base logger implementation."""
+"""Base loggers implementation."""
 
 import logging
 from abc import ABC, abstractmethod

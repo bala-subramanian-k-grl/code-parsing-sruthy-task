@@ -1,4 +1,4 @@
-"""Protocol interfaces for better abstraction."""
+"""Protocol interface for better abstraction."""
 
 from pathlib import Path
 from typing import Any, Protocol

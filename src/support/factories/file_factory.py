@@ -19,22 +19,21 @@ class MetadataGenerator(FileGenerator):
     def generate(self, data: list[dict[str, Any]], output_path: Path) -> None:
         import json
 
-        metadata = []
+        metadata: list[dict[str, Any]] = []
         for item in data:
-            metadata.append(
-                {
-                    "doc_title": item.get("doc_title", ""),
-                    "section_id": item.get("section_id", ""),
-                    "page": item.get("page", 0),
-                    "type": item.get("type", ""),
-                    "word_count": len(item.get("content", "").split()),
-                    "char_count": len(item.get("content", "")),
-                }
-            )
+            metadata_entry: dict[str, Any] = {
+                "doc_title": item.get("doc_title", ""),
+                "section_id": item.get("section_id", ""),
+                "page": item.get("page", 0),
+                "type": item.get("type", ""),
+                "word_count": len(item.get("content", "").split()),
+                "char_count": len(item.get("content", "")),
+            }
+            metadata.append(metadata_entry)
 
         with open(output_path, "w", encoding="utf-8") as f:
-            for item in metadata:
-                f.write(json.dumps(item) + "\n")
+            for metadata_item in metadata:
+                f.write(json.dumps(metadata_item) + "\n")
 
 
 class FileGeneratorFactory:

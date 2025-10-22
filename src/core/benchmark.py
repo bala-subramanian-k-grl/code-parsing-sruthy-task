@@ -1,5 +1,5 @@
 # USB PD Specification Parser - Performance Benchmarking
-"""Minimal benchmark with OOP principles."""
+"""Minimal benchmarks with OOP principles."""
 
 import logging
 import time

@@ -29,19 +29,41 @@ class PDFExtractor(BaseExtractor):  # Inheritance
         super().__init__(pdf_path)
         self.__analyzer = ContentAnalyzer()  # Private composition
         self.__page_cache: dict[int, Any] = {}  # Private cache
+        self.__extraction_stats: dict[str, int] = {}  # Private stats
+        self.__processing_mode: str = "standard"  # Private mode
     def __str__(self) -> str:  # Public magic method
-        return f"PDFExtractor({self.get_pdf_name()})"
+        return f"PDFExtractor({self.pdf_name})"
 
     def __repr__(self) -> str:  # Public magic method
-        return f"PDFExtractor(pdf_path={self.get_pdf_path()!r})"
+        return f"PDFExtractor(pdf_path={self.pdf_path!r})"
 
-    def get_pdf_name(self) -> str:  # Public method
-        """Get PDF file name."""
+    @property
+    def pdf_path(self) -> Path:
+        """Get PDF file path (read-only)."""
+        return self._pdf_path
+
+    @property
+    def pdf_name(self) -> str:
+        """Get PDF file name (read-only)."""
         return self._pdf_path.name
 
-    def get_pdf_path(self) -> Path:  # Public method
-        """Get PDF file path."""
-        return self._pdf_path
+    @property
+    def extraction_stats(self) -> dict[str, int]:
+        """Get extraction statistics (read-only)."""
+        return self.__extraction_stats.copy()
+
+    @property
+    def processing_mode(self) -> str:
+        """Get processing mode."""
+        return self.__processing_mode
+
+    @processing_mode.setter
+    def processing_mode(self, mode: str) -> None:
+        """Set processing mode with validation."""
+        valid_modes = ["standard", "fast", "comprehensive"]
+        if mode not in valid_modes:
+            raise ValueError(f"Invalid mode: {mode}")
+        self.__processing_mode = mode
 
     def __call__(
         self, max_pages: Optional[int] = None
@@ -51,9 +73,35 @@ class PDFExtractor(BaseExtractor):  # Inheritance
     def __len__(self) -> int:  # Magic Method
         return len(self.extract())
 
+    def __eq__(self, other: object) -> bool:  # Magic Method
+        """Compare extractors by PDF path."""
+        if not isinstance(other, PDFExtractor):
+            return False
+        return self.pdf_path == other.pdf_path
+
+    def __hash__(self) -> int:  # Magic Method
+        """Hash based on PDF path."""
+        return hash(self.pdf_path)
+
     def extract(self) -> list[dict[str, Any]]:  # Polymorphism
         """Extract content from PDF."""
         return list(self.extract_structured_content())
+
+    def extract_fast(self) -> list[dict[str, Any]]:  # Polymorphism
+        """Fast extraction mode."""
+        old_mode = self.__processing_mode
+        self.__processing_mode = "fast"
+        result = self.extract()
+        self.__processing_mode = old_mode
+        return result
+
+    def extract_comprehensive(self) -> list[dict[str, Any]]:
+        """Comprehensive extraction mode."""
+        old_mode = self.__processing_mode
+        self.__processing_mode = "comprehensive"
+        result = self.extract()
+        self.__processing_mode = old_mode
+        return result
 
     @timing
     @log_execution
@@ -104,7 +152,7 @@ class PDFExtractor(BaseExtractor):  # Inheritance
         self, block: dict[str, Any], block_num: int, page_num: int
     ) -> Iterator[dict[str, Any]]:
         """Process individual block (Encapsulation)."""
-        if "lines" not in block:
+        if not self._should_process_block(block):
             return
 
         text = self._get_block_text(block)
@@ -112,10 +160,28 @@ class PDFExtractor(BaseExtractor):  # Inheritance
             return
 
         content_type = self.__analyzer.classify(text)  # Private access
-        item_data = ContentItemData(
+        self._update_stats(content_type)  # Private method
+        item_data = self._create_item_data(
             text, content_type, block_num, page_num, block
         )
         yield self._create_content_item(item_data)
+
+    def _should_process_block(self, block: dict[str, Any]) -> bool:
+        """Check if block should be processed."""
+        return "lines" in block
+
+    def _update_stats(self, content_type: str) -> None:
+        """Update extraction statistics."""
+        self.__extraction_stats[content_type] = (
+            self.__extraction_stats.get(content_type, 0) + 1
+        )
+
+    def _create_item_data(
+        self, text: str, content_type: str, block_num: int, 
+        page_num: int, block: dict[str, Any]
+    ) -> ContentItemData:
+        """Create content item data object."""
+        return ContentItemData(text, content_type, block_num, page_num, block)
 
     def _is_valid_text(self, text: str) -> bool:
         """Check if text is valid for processing (Encapsulation)."""
@@ -144,18 +210,30 @@ class PDFExtractor(BaseExtractor):  # Inheritance
 
     def _get_title(self, text: str) -> str:
         """Get title from text (Encapsulation)."""
-        stripped = text.strip()
-        if len(stripped) > MAX_TITLE_LENGTH:
-            return stripped[:MAX_TITLE_LENGTH] + "..."
-        return stripped
+        return self._truncate_text(text.strip(), MAX_TITLE_LENGTH)
+
+    def _truncate_text(self, text: str, max_length: int) -> str:
+        """Truncate text to maximum length."""
+        if len(text) > max_length:
+            return text[:max_length] + "..."
+        return text
+
+    def _reset_stats(self) -> None:
+        """Reset extraction statistics."""
+        self.__extraction_stats.clear()
+
+    def _get_cache_key(self, page_num: int) -> str:
+        """Generate cache key for page."""
+        return f"page_{page_num}_{self.__processing_mode}"
 
     def _get_block_text(self, block: dict[str, Any]) -> str:
         """Extract text from block."""
-        return "".join(
+        text_parts = [
             str(span["text"])
             for line in block["lines"]
             for span in line["spans"]
-        )
+        ]
+        return "".join(text_parts)
 
     def _extract_tables(
         self, plumber_doc: Any, page_num: int
@@ -183,9 +261,20 @@ class PDFExtractor(BaseExtractor):  # Inheritance
         self, table: Any, page_num: int, table_num: int
     ) -> dict[str, Any]:
         """Create table data dictionary."""
-        table_text = "\n".join(
+        table_text = self._format_table_text(table)
+        return self._build_table_dict(table_text, page_num, table_num)
+
+    def _format_table_text(self, table: Any) -> str:
+        """Format table as text."""
+        rows = [
             " | ".join(str(cell or "") for cell in row) for row in table
-        )
+        ]
+        return "\n".join(rows)
+
+    def _build_table_dict(
+        self, table_text: str, page_num: int, table_num: int
+    ) -> dict[str, Any]:
+        """Build table dictionary."""
         return {
             "type": "table",
             "content": table_text,

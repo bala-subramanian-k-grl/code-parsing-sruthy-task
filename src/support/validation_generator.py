@@ -1,4 +1,4 @@
-"""Validation report generator with OOP principles."""
+"""Validation report generators with OOP principles."""
 
 import json
 from abc import ABC, abstractmethod
@@ -9,10 +9,10 @@ from src.config.constants import MIN_CONTENT_THRESHOLD
 
 try:
     import openpyxl
-    from openpyxl.styles import Font
+    from openpyxl.styles import Font as font_class
 except ImportError:
     openpyxl = None  # type: ignore
-    Font = None  # type: ignore
+    font_class = None  # type: ignore
 
 HAS_OPENPYXL = openpyxl is not None
 
@@ -20,9 +20,20 @@ HAS_OPENPYXL = openpyxl is not None
 class BaseValidator(ABC):  # Abstraction
     """Abstract base class for validation report generators."""
 
-    def __init__(self, output_dir: Path):
+    def __init__(self, output_dir: Path) -> None:
         """Initialize validator with output directory."""
-        self._output_dir = output_dir  # Encapsulation
+        self.__output_dir = output_dir  # Private
+        self.__validation_results: dict[str, Any] = {}  # Private
+
+    @property
+    def output_dir(self) -> Path:
+        """Get output directory."""
+        return self.__output_dir
+
+    @property
+    def validation_results(self) -> dict[str, Any]:
+        """Get validation results."""
+        return self.__validation_results.copy()
 
     @abstractmethod  # Abstraction
     def generate_validation(
@@ -31,13 +42,17 @@ class BaseValidator(ABC):  # Abstraction
         """Generate validation report from TOC and spec data."""
         pass
 
+    def _store_results(self, results: dict[str, Any]) -> None:
+        """Store validation results."""
+        self.__validation_results.update(results)
+
 
 class XLSValidator(BaseValidator):  # Inheritance
     """Excel-based validation report generator."""
 
     def generate_validation(
         self, toc_data: list[Any], spec_data: list[Any]
-    ) -> Path:
+    ) -> Path:  # Polymorphism
         """Generate Excel validation report."""
         if not HAS_OPENPYXL or openpyxl is None:
             raise ImportError("openpyxl required for Excel reports")
@@ -48,7 +63,7 @@ class XLSValidator(BaseValidator):  # Inheritance
 
         # Create summary
         ws["A1"] = "USB PD Validation Report"  # type: ignore
-        ws["A1"].font = Font(bold=True, size=14)  # type: ignore
+        ws["A1"].font = font_class(bold=True, size=14)  # type: ignore
 
         status = "PASS" if len(spec_data) > MIN_CONTENT_THRESHOLD else "FAIL"
         metrics: list[tuple[str, Union[int, str]]] = [
@@ -61,9 +76,59 @@ class XLSValidator(BaseValidator):  # Inheritance
             ws[f"A{i}"] = metric  # type: ignore
             ws[f"B{i}"] = value  # type: ignore
 
-        xlsx_file = self._output_dir / "validation_report.xlsx"
+        # Store validation results
+        results: dict[str, Any] = {
+            "toc_entries": len(toc_data),
+            "content_items": len(spec_data),
+            "status": status
+        }
+        self._store_results(results)
+
+        xlsx_file = self.output_dir / "validation_report.xlsx"
         wb.save(xlsx_file)
         return xlsx_file
+
+
+class JSONValidator(BaseValidator):  # Inheritance
+    """JSON-based validation report generator."""
+
+    def generate_validation(
+        self, toc_data: list[Any], spec_data: list[Any]
+    ) -> Path:  # Polymorphism
+        """Generate JSON validation report."""
+        status = "PASS" if len(spec_data) > MIN_CONTENT_THRESHOLD else "FAIL"
+        validation_data: dict[str, Any] = {
+            "toc_entries": len(toc_data),
+            "content_items": len(spec_data),
+            "status": status,
+            "timestamp": "2024-01-01T00:00:00Z"
+        }
+        report: dict[str, Any] = {
+            "validation_report": validation_data
+        }
+        
+        self._store_results(validation_data)
+        
+        json_file = self.output_dir / "validation_report.json"
+        with open(json_file, 'w', encoding='utf-8') as f:
+            json.dump(report, f, indent=2)
+        return json_file
+
+
+class ValidationGeneratorFactory:
+    """Factory for validation generators."""
+    
+    __VALIDATORS: dict[str, type[BaseValidator]] = {
+        "excel": XLSValidator,
+        "json": JSONValidator  # Polymorphism - different implementations
+    }
+    
+    @classmethod
+    def create(cls, validator_type: str, output_dir: Path) -> BaseValidator:
+        """Create validator instance."""
+        if validator_type not in cls.__VALIDATORS:
+            raise ValueError(f"Unknown validator type: {validator_type}")
+        return cls.__VALIDATORS[validator_type](output_dir)
 
 
 def create_validation_report(
@@ -97,5 +162,5 @@ def create_validation_report(
         logger.debug("Failed to load spec data: %s", e)
         spec_data = []
 
-    validator = XLSValidator(output_dir)
+    validator = ValidationGeneratorFactory.create("excel", output_dir)
     return validator.generate_validation(toc_data, spec_data)

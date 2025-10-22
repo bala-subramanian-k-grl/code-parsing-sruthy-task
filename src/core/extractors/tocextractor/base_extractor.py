@@ -90,7 +90,9 @@ class BaseTOCExtractor(ABC):  # Abstraction
 
     def _is_valid_entry(self, page: int, title: str) -> bool:
         """Check if entry is valid (Encapsulation)."""
-        return 1 <= page <= MAX_PAGE_NUMBER and len(title.strip()) >= MIN_TITLE_LENGTH
+        page_valid = 1 <= page <= MAX_PAGE_NUMBER
+        title_valid = len(title.strip()) >= MIN_TITLE_LENGTH
+        return page_valid and title_valid
 
     def _calculate_level(self, section_id: str) -> int:
         """Calculate hierarchy level (Encapsulation)."""

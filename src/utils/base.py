@@ -1,4 +1,4 @@
-"""Base classes implementing OOP principles."""
+"""Base classe implementing OOP principles."""
 
 from abc import ABC, abstractmethod
 from pathlib import Path

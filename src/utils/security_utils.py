@@ -1,4 +1,4 @@
-"""Security utilities with OOP principles."""
+"""Security utilitie with OOP principles."""
 
 from pathlib import Path
 from typing import Union
