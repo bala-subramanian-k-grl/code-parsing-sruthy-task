@@ -74,8 +74,9 @@ class HierarchicalTOCBuilder(TOCBuilder):
         """Extract section number from title."""
         match = re.match(r"^(\d+(?:\.\d+)*)", title)
         if match:
-            result = match.group(1)
-            return str(result)
+            group = match.group(1)
+            assert isinstance(group, str)
+            return group
         return ""
 
     def _add_hierarchy(
