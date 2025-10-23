@@ -9,10 +9,10 @@ from src.config.constants import MIN_CONTENT_THRESHOLD
 
 try:
     import openpyxl
-    from openpyxl.styles import Font as font_class
+    from openpyxl.styles import Font
 except ImportError:
     openpyxl = None  # type: ignore
-    font_class = None  # type: ignore
+    Font = None  # type: ignore
 
 HAS_OPENPYXL = openpyxl is not None
 
@@ -63,7 +63,7 @@ class XLSValidator(BaseValidator):  # Inheritance
 
         # Create summary
         ws["A1"] = "USB PD Validation Report"  # type: ignore
-        ws["A1"].font = font_class(bold=True, size=14)  # type: ignore
+        ws["A1"].font = Font(bold=True, size=14)  # type: ignore
 
         status = "PASS" if len(spec_data) > MIN_CONTENT_THRESHOLD else "FAIL"
         metrics: list[tuple[str, Union[int, str]]] = [
