@@ -13,7 +13,6 @@ class BaseTestCase(ABC):  # Abstraction
     @abstractmethod  # Abstraction: must be implemented
     def setup_test_data(self) -> None:
         """Setup test data."""
-        pass
 
     def _add_test_data(
         self, key: str, value: Any

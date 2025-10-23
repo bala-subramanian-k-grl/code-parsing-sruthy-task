@@ -1,6 +1,5 @@
 """Stub file for 'fitz' module with type hints."""
 
-
 from typing import Any
 
 def open(filename: str) -> Any: ...

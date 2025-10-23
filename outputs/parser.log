@@ -42,3 +42,37 @@
 2025-10-23 11:10:34 [INFO] src.core.orchestrator.pipeline_coordinator - Completed run successfully
 2025-10-23 11:10:34 [INFO] src.core.orchestrator.pipeline_coordinator - run took 12.00 seconds
 2025-10-23 11:10:34 [INFO] CLIApp - Processing completed: 1360 TOC entries, 25760 content items
+2025-10-23 11:23:15 [INFO] PipelineOrchestrator - Configuration loaded from application.yml
+2025-10-23 11:23:15 [INFO] PipelineOrchestrator - Output directory prepared: D:\code parsing\outputs
+2025-10-23 11:23:15 [INFO] src.core.orchestrator.pipeline_coordinator - Executing run
+2025-10-23 11:23:15 [INFO] PipelineOrchestrator - Starting pipeline execution - Full Document Processing
+2025-10-23 11:23:15 [INFO] PipelineOrchestrator - Extracting Table of Contents...
+2025-10-23 11:23:16 [INFO] PipelineOrchestrator - TOC extraction completed: 1360 entries
+2025-10-23 11:23:16 [INFO] PipelineOrchestrator - Extracting content (max pages: all)...
+2025-10-23 11:23:27 [INFO] PipelineOrchestrator - Content extraction completed: 25760 items
+2025-10-23 11:23:27 [INFO] PipelineOrchestrator - Writing JSONL output files...
+2025-10-23 11:23:27 [INFO] PipelineOrchestrator - TOC file written: D:\code parsing\outputs\usb_pd_toc.jsonl
+2025-10-23 11:23:27 [INFO] PipelineOrchestrator - Spec file written: D:\code parsing\outputs\usb_pd_spec.jsonl
+2025-10-23 11:23:27 [INFO] PipelineOrchestrator - JSONL files written successfully
+2025-10-23 11:23:27 [INFO] PipelineOrchestrator - Generating analysis reports...
+2025-10-23 11:23:27 [INFO] PipelineOrchestrator - Analysis reports generated successfully
+2025-10-23 11:23:27 [INFO] PipelineOrchestrator - Generating validation report...
+2025-10-23 11:23:28 [INFO] PipelineOrchestrator - Validation report generated successfully
+2025-10-23 11:23:28 [INFO] PipelineOrchestrator - Generating metadata file...
+2025-10-23 11:23:28 [INFO] PipelineOrchestrator - Metadata file generated successfully
+2025-10-23 11:23:28 [INFO] PipelineOrchestrator - Pipeline execution completed successfully
+2025-10-23 11:23:28 [INFO] src.core.orchestrator.pipeline_coordinator - Completed run successfully
+2025-10-23 11:23:28 [INFO] src.core.orchestrator.pipeline_coordinator - run took 13.15 seconds
+2025-10-23 11:23:28 [INFO] CLIApp - Processing completed: 1360 TOC entries, 25760 content items
+2025-10-23 11:23:35 [INFO] JSONLSearcher - Initialized searcher for file: usb_pd_spec.jsonl
+2025-10-23 11:23:35 [INFO] src.support.search.jsonl_search - Executing search
+2025-10-23 11:23:35 [INFO] JSONLSearcher - Starting search for term: 'USB'
+2025-10-23 11:23:36 [INFO] JSONLSearcher - Search completed: Found 1082 matches for 'USB'
+2025-10-23 11:23:36 [INFO] src.support.search.jsonl_search - Completed search successfully
+2025-10-23 11:23:36 [INFO] src.support.search.jsonl_search - search took 0.29 seconds
+2025-10-23 11:23:36 [INFO] SearchDisplay - Displaying 10 of 1082 matches for 'USB'
+2025-10-23 11:23:36 [INFO] SearchDisplay - Truncated display: showing 10 of 1082 total matches
+2025-10-23 11:23:36 [INFO] __main__ - run took 0.30 seconds
+2025-10-23 11:23:36 [INFO] __main__ - run took 0.30 seconds
+2025-10-23 11:23:36 [INFO] __main__ - main took 0.31 seconds
+2025-10-23 11:23:36 [INFO] __main__ - main took 0.31 seconds

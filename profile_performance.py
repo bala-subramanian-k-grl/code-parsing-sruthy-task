@@ -63,9 +63,7 @@ class ConfigProfiler(BaseProfiler):  # Inheritance
             "profiler": self._name,
             "operations": 100,
             "total_calls": profile_data["total_calls"],
-            "profile_stats": (
-                profile_data["profile_output"][:300] + "..."
-            ),
+            "profile_stats": (profile_data["profile_output"][:300] + "..."),
         }
 
     def _config_operations(self) -> int:  # Encapsulation
@@ -92,9 +90,7 @@ class ModelProfiler(BaseProfiler):  # Inheritance
             "profiler": self._name,
             "operations": 200,
             "total_calls": profile_data["total_calls"],
-            "profile_stats": (
-                profile_data["profile_output"][:300] + "..."
-            ),
+            "profile_stats": (profile_data["profile_output"][:300] + "..."),
         }
 
     def _model_operations(self) -> int:  # Encapsulation
@@ -180,9 +176,9 @@ def main():
 
         logger.info("Performance Profiling Results:")
         for name, result in results.items():
-            ops = result['operations']
+            ops = result["operations"]
             logger.info(f"Profiler: {name} - {ops} operations")
-            calls = result['total_calls']
+            calls = result["total_calls"]
             logger.info(f"  Total Calls: {calls}")
 
         return 0

@@ -1,5 +1,6 @@
 """Minimal tests to boost coverage above 35%."""
 
+
 def test_metadata_generator():
     """Test metadata generator import and basic functionality."""
     from pathlib import Path
