@@ -23,8 +23,33 @@ class BaseExtractor:  # Abstraction
     """Base extractor (Abstraction, Encapsulation)."""
 
     def __init__(self, pdf_path: Path):
-        self._pdf_path = self._validate_path(pdf_path)  # Encapsulation
-        self._logger = logging.getLogger(__name__)  # Encapsulation
+        self._pdf_path = self._validate_path(pdf_path)  # Protected
+        self._logger = logging.getLogger(__name__)  # Protected
+        self.__extraction_count: int = 0  # Private counter
+        self.__error_count: int = 0  # Private error tracking
+
+    @property
+    def pdf_path(self) -> Path:
+        """Get PDF path (read-only)."""
+        return self._pdf_path
+
+    @property
+    def extraction_count(self) -> int:
+        """Get extraction count."""
+        return self.__extraction_count
+
+    @property
+    def error_count(self) -> int:
+        """Get error count."""
+        return self.__error_count
+
+    def _increment_extraction_count(self) -> None:  # Protected method
+        """Increment extraction counter."""
+        self.__extraction_count += 1
+
+    def _increment_error_count(self) -> None:  # Protected method
+        """Increment error counter."""
+        self.__error_count += 1
 
     def _validate_path(self, path: Path) -> Path:  # Encapsulation
         """Validate PDF path securely."""
@@ -58,12 +83,17 @@ class FrontPageExtractor(BaseExtractor):  # Inheritance
                 total_pages = min(max_pages, doc_len)
             for i in range(total_pages):
                 try:
+                    self._increment_extraction_count()
                     yield str(doc[i].get_text("text") or "")
                 except (fitz.FileDataError, fitz.FileNotFoundError) as e:
-                    self._logger.warning("PDF error on page %s: %s", i, e)
+                    self._increment_error_count()
+                    msg = f"PDF error on page {i}: {e}"
+                    self._logger.warning(msg)
                     yield ""
         except (fitz.FileDataError, fitz.FileNotFoundError, OSError) as e:
-            self._logger.error("Cannot open PDF file: %s", e)
+            self._increment_error_count()
+            msg = f"Cannot open PDF file: {e}"
+            self._logger.error(msg)
             return
         finally:
             if doc:
@@ -77,11 +107,16 @@ class TitleExtractor(BaseExtractor):  # Inheritance
         """Get PDF title from metadata."""
         try:
             with fitz.open(str(self._pdf_path)) as doc:
+                self._increment_extraction_count()
                 metadata = doc.metadata
                 title = metadata.get("title") if metadata else None
-                return title if isinstance(title, str) else DEFAULT_DOC_TITLE
+                if isinstance(title, str):
+                    return title
+                return DEFAULT_DOC_TITLE
         except (fitz.FileDataError, fitz.FileNotFoundError, OSError) as e:
-            self._logger.warning("Cannot read PDF metadata: %s", e)
+            self._increment_error_count()
+            msg = f"Cannot read PDF metadata: {e}"
+            self._logger.warning(msg)
             return DEFAULT_DOC_TITLE
 
 
@@ -98,5 +133,6 @@ def get_doc_title(pdf_path: Path) -> str:
     try:
         return TitleExtractor(pdf_path).get_title()
     except (PDFNotFoundError, OSError, ValueError) as e:
-        logging.getLogger(__name__).error("Cannot extract title: %s", e)
+        msg = f"Cannot extract title: {e}"
+        logging.getLogger(__name__).error(msg)
         return DEFAULT_DOC_TITLE

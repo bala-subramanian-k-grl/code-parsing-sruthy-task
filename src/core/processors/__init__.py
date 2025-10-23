@@ -8,5 +8,8 @@ from .base_processor import (
 )
 
 __all__ = [
-    "BaseProcessor", "TextProcessor", "DataProcessor", "ProcessorFactory"
+    "BaseProcessor",
+    "TextProcessor",
+    "DataProcessor",
+    "ProcessorFactory",
 ]

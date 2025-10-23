@@ -1,4 +1,4 @@
-"""Search utilitie exports"""
+"""Search utilities exports"""
 
 from .search_display import SearchDisplay
 

@@ -10,7 +10,6 @@ from src.support.report.report_generator import BaseReportGenerator
 
 
 class JSONReportGenerator(BaseReportGenerator):  # Inheritance
-
     def get_report_type(self) -> str:
         """Get report type name."""
         return "json"

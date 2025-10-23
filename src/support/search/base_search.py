@@ -8,9 +8,13 @@ from typing import Any
 
 class BaseSearcher(ABC):  # Abstraction
     def __init__(self, file_path: str):
-        self._file_path = self._validate_path(file_path)  # Encapsulation
+        self._file_path = self._validate_path(
+            file_path
+        )  # Protected for subclasses
         class_name = self.__class__.__name__
-        self._logger = logging.getLogger(class_name)
+        self._logger = logging.getLogger(
+            class_name
+        )  # Protected for subclasses
         file_name = self._file_path.name
         self._logger.info("Initialized searcher for file: %s", file_name)
 
@@ -41,7 +45,6 @@ class BaseSearcher(ABC):  # Abstraction
     @abstractmethod
     def get_search_type(self) -> str:
         """Get search implementation type."""
-        pass
 
     def __call__(self, term: str) -> list[dict[str, Any]]:
         """Make searcher callable."""

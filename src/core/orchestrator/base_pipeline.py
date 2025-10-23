@@ -1,4 +1,4 @@
-"""Base class for pipeline orchestrators."""
+"""Base class for pipeline orchestrator."""
 
 from abc import ABC, abstractmethod
 from typing import Any

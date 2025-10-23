@@ -27,7 +27,6 @@ class BaseMetadataGenerator(ABC):
     @abstractmethod
     def generate_metadata(self, spec_file: Path) -> Path:
         """Generate metadata file."""
-        pass
 
     def _update_stats(self, key: str, value: int) -> None:
         """Update internal statistics."""
@@ -47,16 +46,17 @@ class JSONLMetadataGenerator(BaseMetadataGenerator):
             return metadata_file
 
         try:
-            with open(spec_file, encoding='utf-8') as f:
-                with open(metadata_file, 'w', encoding='utf-8') as out:
+            with open(spec_file, encoding="utf-8") as f:
+                with open(metadata_file, "w", encoding="utf-8") as out:
                     for line in f:
                         if line.strip():
                             data = json.loads(line)
                             metadata = self._create_metadata(data)
-                            out.write(json.dumps(metadata) + '\n')
+                            out.write(json.dumps(metadata) + "\n")
                             entry_count += 1
         except (OSError, json.JSONDecodeError) as e:
             import logging
+
             logging.getLogger(__name__).debug(
                 "Metadata generation error: %s", e
             )
@@ -73,7 +73,7 @@ class JSONLMetadataGenerator(BaseMetadataGenerator):
             "page": data.get("page", 1),
             "type": data.get("type", "paragraph"),
             "word_count": len(content.split()),
-            "char_count": len(content)
+            "char_count": len(content),
         }
 
 
@@ -90,19 +90,22 @@ class CSVMetadataGenerator(BaseMetadataGenerator):
             return metadata_file
 
         try:
-            with open(metadata_file, 'w', encoding='utf-8') as out:
+            with open(metadata_file, "w", encoding="utf-8") as out:
                 # Write CSV header
-                out.write("doc_title,section_id,page,type,word_count,char_count\n")
+                out.write(
+                    "doc_title,section_id,page,type,word_count,char_count\n"
+                )
 
-                with open(spec_file, encoding='utf-8') as f:
+                with open(spec_file, encoding="utf-8") as f:
                     for line in f:
                         if line.strip():
                             data = json.loads(line)
                             metadata = self._create_csv_row(data)
-                            out.write(metadata + '\n')
+                            out.write(metadata + "\n")
                             entry_count += 1
         except (OSError, json.JSONDecodeError) as e:
             import logging
+
             logging.getLogger(__name__).debug("CSV generation error: %s", e)
 
         self._update_stats("entries_processed", entry_count)
@@ -129,7 +132,7 @@ class MetadataGeneratorFactory:
 
     __GENERATORS: dict[str, type[BaseMetadataGenerator]] = {
         "jsonl": JSONLMetadataGenerator,
-        "csv": CSVMetadataGenerator  # Polymorphism - different implementations
+        "csv": CSVMetadataGenerator,  # Polymorphism
     }
 
     @classmethod

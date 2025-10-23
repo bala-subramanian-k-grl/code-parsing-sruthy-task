@@ -15,6 +15,7 @@ class JSONLSearcher(BaseSearcher):  # Polymorphic implementation
     def get_search_type(self) -> str:  # Polymorphism
         """Get search implementation type."""
         return "jsonl"
+
     @timing
     @log_execution
     def search(self, term: str) -> list[dict[str, Any]]:  # Polymorphism

@@ -1,4 +1,4 @@
-"""Interface definitions for enhanced polymorphism."""
+"""Interface definition for enhanced polymorphism."""
 
 from abc import ABC, abstractmethod
 from typing import Any, Protocol
@@ -18,12 +18,10 @@ class Cacheable(ABC):
     @abstractmethod
     def get_cache_key(self) -> str:
         """Get unique cache key."""
-        pass
 
     @abstractmethod
     def clear_cache(self) -> None:
         """Clear object cache."""
-        pass
 
     def __hash__(self) -> int:  # Magic method
         """Hash based on cache key."""
@@ -36,17 +34,14 @@ class Configurable(ABC):
     @abstractmethod
     def configure(self, **kwargs: Any) -> None:
         """Configure object with parameters."""
-        pass
 
     @abstractmethod
     def get_config(self) -> dict[str, Any]:
         """Get current configuration."""
-        pass
 
     @abstractmethod
     def reset_config(self) -> None:
         """Reset to default configuration."""
-        pass
 
 
 class Validatable(ABC):
@@ -55,12 +50,10 @@ class Validatable(ABC):
     @abstractmethod
     def validate(self) -> bool:
         """Validate object state."""
-        pass
 
     @abstractmethod
     def get_validation_errors(self) -> list[str]:
         """Get validation error messages."""
-        pass
 
     def is_valid(self) -> bool:
         """Check if object is valid."""
@@ -73,16 +66,15 @@ class Serializable(ABC):
     @abstractmethod
     def serialize(self) -> dict[str, Any]:
         """Serialize object to dictionary."""
-        pass
 
     @abstractmethod
     def deserialize(self, data: dict[str, Any]) -> None:
         """Deserialize from dictionary."""
-        pass
 
     def to_json(self) -> str:
         """Convert to JSON string."""
         import json
+
         return json.dumps(self.serialize())
 
 
@@ -105,7 +97,7 @@ class Observable:
     def _notify_observers(self, event: str, data: Any = None) -> None:
         """Notify all observers."""
         for observer in self.__observers:
-            if hasattr(observer, 'update'):
+            if hasattr(observer, "update"):
                 observer.update(event, data)
 
     @property

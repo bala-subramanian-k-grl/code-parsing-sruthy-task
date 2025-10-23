@@ -40,8 +40,6 @@ class ContentAnalyzer:
         """Update classification statistics."""
         self.__stats[result] = self.__stats.get(result, 0) + 1
 
-
-
     def is_major_section(self, text: str) -> bool:
         """Check if text is a major section header."""
         return self._check_section_type(text, "major_section")

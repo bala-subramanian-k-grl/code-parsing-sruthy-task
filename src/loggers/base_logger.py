@@ -10,11 +10,11 @@ class BaseLoggerFactory(ABC):  # Abstraction
     """Abstract logger factory (Abstraction, Encapsulation)."""
 
     def __init__(self, name: str = "usb_pd_parser"):
-        self._name = name  # Encapsulation
-        self._formatter = self._create_formatter()  # Encapsulation
-        self._setup_stream_logger()  # Encapsulation
+        self._name = name  # Protected for subclasses
+        self._formatter = self._create_formatter()  # Protected for subclasses
+        self.__setup_stream_logger()  # Private - only used internally
 
-    def _setup_stream_logger(self) -> None:  # Encapsulation
+    def __setup_stream_logger(self) -> None:  # Private - only used internally
         """Setup stream logger to capture all logs to parser.log."""
         root_logger = logging.getLogger()
         handlers = root_logger.handlers
@@ -40,7 +40,6 @@ class BaseLoggerFactory(ABC):  # Abstraction
         self, output_dir: Optional[Path] = None, debug: bool = False
     ) -> logging.Logger:
         """Create logger instance."""
-        pass
 
     def _create_formatter(self) -> logging.Formatter:  # Encapsulation
         return logging.Formatter(

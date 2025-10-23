@@ -39,7 +39,7 @@ class AnalyzerFactory:  # Factory for polymorphism
         types: dict[str, type[BaseAnalyzer]] = {
             "pattern": PatternAnalyzer,
             "length": LengthAnalyzer,
-            "hybrid": HybridAnalyzer
+            "hybrid": HybridAnalyzer,
         }
         if analyzer_type not in types:
             raise ValueError(f"Unknown type: {analyzer_type}")
@@ -78,7 +78,7 @@ class LengthAnalyzer(BaseAnalyzer):  # Polymorphism
         length = len(text.strip())
         if length < 20:
             return "short_text"
-        elif length > 200:
+        if length > 200:
             return "long_content"
         return "medium_text"
 

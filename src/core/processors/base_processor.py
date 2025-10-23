@@ -18,12 +18,10 @@ class BaseProcessor(Cacheable, Configurable, Validatable, ABC):
     @abstractmethod
     def process(self, data: Any) -> Any:
         """Process input data."""
-        pass
 
     @abstractmethod
     def get_processor_type(self) -> str:
         """Get processor type name."""
-        pass
 
     # Cacheable interface methods
     def get_cache_key(self) -> str:
@@ -86,7 +84,7 @@ class TextProcessor(BaseProcessor):
         """Process text data."""
         if not isinstance(data, str):
             return str(data)
-        return data.strip().replace('\n', ' ')
+        return data.strip().replace("\n", " ")
 
 
 class DataProcessor(BaseProcessor):
@@ -104,9 +102,9 @@ class DataProcessor(BaseProcessor):
             return {
                 "original": data_dict,
                 "keys": keys_list,
-                "size": len(data_dict)
+                "size": len(data_dict),
             }
-        elif isinstance(data, list):
+        if isinstance(data, list):
             data_list: list[Any] = data
             return {"items": data_list, "count": len(data_list)}
         return {"value": data, "type": type(data).__name__}
@@ -117,7 +115,7 @@ class ProcessorFactory:
 
     __PROCESSORS: dict[str, type[BaseProcessor]] = {
         "text": TextProcessor,
-        "data": DataProcessor
+        "data": DataProcessor,
     }
 
     @classmethod

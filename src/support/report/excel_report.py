@@ -17,7 +17,6 @@ except ImportError:
 
 
 class ExcelReportGenerator(BaseReportGenerator):  # Inheritance
-
     def get_report_type(self) -> str:
         """Get report type name."""
         return "excel"

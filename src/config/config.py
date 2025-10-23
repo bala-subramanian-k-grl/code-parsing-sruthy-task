@@ -1,4 +1,3 @@
-# USB PD Specification Parser - Configuration Module
 """Configuration loader with OOP principles."""
 
 from pathlib import Path

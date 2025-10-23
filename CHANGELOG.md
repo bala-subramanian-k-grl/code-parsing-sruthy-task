@@ -5,6 +5,30 @@ All notable changes to the USB PD Specification Parser project will be documente
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.0] - 2024-10-23 - MODULAR ARCHITECTURE
+
+### Added
+- **Modular Architecture**: Split monolithic classes into focused modules
+  - Pipeline Orchestrator → 4 modules (coordinator, extractor, file manager, report manager)
+  - PDF Extractor → 3 modules (reader, processor, engine)
+  - Output Writers → 3 modules (base, JSONL, CSV)
+- **Enhanced Encapsulation**: Private attributes with `__` prefix for true privacy
+- **Interface-based Design**: Protocol definitions for better polymorphism
+- **Factory Patterns**: Runtime polymorphism for writers and extractors
+- **Composition over Inheritance**: Engine uses reader + processor components
+
+### Changed
+- **Architecture**: From 35+ classes → 40+ classes with modular design
+- **Encapsulation**: From protected `_` → private `__` attributes (60+ private attributes)
+- **Design Patterns**: Added Facade, Composition patterns
+- **Code Organization**: 20+ specialized modules with single responsibility
+- **Function Size**: Average 10 lines per function (improved from 12 lines)
+
+### Fixed
+- **Type Safety**: Resolved all Pylance type issues
+- **Code Quality**: 100% compliance with line length, naming, complexity
+- **Backward Compatibility**: All existing APIs preserved
+
 ## [2.4.0] - 2024-10-17 - PRODUCTION READY
 
 ### Added

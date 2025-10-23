@@ -36,7 +36,8 @@ def timing(func: F) -> F:
         end_time = time.time()
         logger = logging.getLogger(func.__module__)
         duration = end_time - start_time
-        logger.info("%s took %.2f seconds", func.__name__, duration)
+        msg = f"{func.__name__} took {duration:.2f} seconds"
+        logger.info(msg)
         return result
 
     return wrapper  # type: ignore
@@ -71,18 +72,14 @@ def retry(max_attempts: int = 3) -> Callable[[F], F]:
                     return func(*args, **kwargs)
                 except Exception as e:
                     if attempt == max_attempts - 1:
-                        logger.error(
-                            "%s failed after %s attempts",
-                            func.__name__,
-                            max_attempts,
+                        msg = (
+                            f"{func.__name__} failed after "
+                            f"{max_attempts} attempts"
                         )
+                        logger.error(msg)
                         raise
-                    logger.warning(
-                        "%s attempt %s failed: %s",
-                        func.__name__,
-                        attempt + 1,
-                        e,
-                    )
+                    msg = f"{func.__name__} attempt {attempt + 1} failed: {e}"
+                    logger.warning(msg)
             return None
 
         return wrapper  # type: ignore

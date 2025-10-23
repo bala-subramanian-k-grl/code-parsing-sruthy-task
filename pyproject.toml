@@ -5,8 +5,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "usb-pd-parser"
-version = "2.4.0"
-description = "Professional-grade USB PD specification parser with advanced OOP architecture and hierarchical processing"
+version = "2.5.0"
+description = "Professional-grade USB PD specification parser with modular OOP architecture and enhanced encapsulation"
 readme = "README.md"
 license = {file = "LICENSE"}
 authors = [
@@ -15,7 +15,7 @@ authors = [
 maintainers = [
     {name = "USB PD Parser Team", email = "team@usbpdparser.dev"}
 ]
-keywords = ["pdf", "parser", "usb", "power-delivery", "specification", "oop"]
+keywords = ["pdf", "parser", "usb", "power-delivery", "specification", "oop", "modular", "architecture"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",

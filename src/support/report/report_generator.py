@@ -45,17 +45,14 @@ class BaseReportGenerator(ABC, ProcessableMixin, TransformableMixin):
     @abstractmethod
     def generate(self, data: dict[str, Any]) -> Path:
         """Generate report."""
-        pass
 
     @abstractmethod
     def get_report_type(self) -> str:
         """Get report type name."""
-        pass
 
     @abstractmethod
     def get_file_extension(self) -> str:
         """Get file extension for this report type."""
-        pass
 
     def process(self) -> Any:
         """Process report generation."""
@@ -146,9 +143,11 @@ class ReportFactory:  # Factory pattern
         """Protected method to create generator instance."""
         if clean_type == "json":
             from .jsonreport_generator import JSONReportGenerator
+
             return JSONReportGenerator(output_dir)
-        elif clean_type == "excel":
+        if clean_type == "excel":
             from .excel_report import ExcelReportGenerator
+
             return ExcelReportGenerator(output_dir)
         raise ValueError(f"Invalid report type: {clean_type}")
 

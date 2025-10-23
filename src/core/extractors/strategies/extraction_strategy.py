@@ -99,7 +99,7 @@ class StandardStrategy(ExtractionStrategy):
         )
 
         extractor = PDFExtractor(pdf_path)
-        yield from extractor.extract_structured_content(max_pages)
+        yield from extractor.extract_content(max_pages)
 
 
 class FastStrategy(ExtractionStrategy):
@@ -205,7 +205,7 @@ class StrategyFactory:  # Factory for polymorphism
             "comprehensive": ComprehensiveStrategy,
             "standard": StandardStrategy,
             "fast": FastStrategy,
-            "detailed": DetailedStrategy
+            "detailed": DetailedStrategy,
         }
         if strategy_type not in strategies:
             raise ValueError(f"Unknown strategy: {strategy_type}")

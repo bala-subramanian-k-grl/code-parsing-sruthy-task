@@ -1,4 +1,3 @@
-# USB PD Specification Parser - TOC Extractor Module
 """Module for extracting Table of Contents from USB PD documents."""
 
 import re
@@ -60,7 +59,7 @@ class BaseTOCExtractor(ABC):  # Abstraction
         if len(groups) == MIN_TOC_GROUPS:
             title, page_str = groups
             return f"S{counter}", title, page_str
-        elif len(groups) == MAX_TOC_GROUPS:
+        if len(groups) == MAX_TOC_GROUPS:
             section_id, title, page_str = groups
             return section_id, title, page_str
         return "", "", ""

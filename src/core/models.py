@@ -21,6 +21,7 @@ class BaseContent(BaseModel):
         """Get content hash."""
         if self.__content_hash is None:
             import hashlib
+
             self.__content_hash = hashlib.md5(
                 self.content.encode(), usedforsecurity=False
             ).hexdigest()
@@ -100,9 +101,7 @@ class TOCEntry(BaseModel):  # Encapsulation
 
     @field_validator("parent_id", mode="before")
     @classmethod
-    def infer_parent(
-        cls, v: Any, info: ValidationInfo
-    ) -> Optional[str]:
+    def infer_parent(cls, v: Any, info: ValidationInfo) -> Optional[str]:
         """Infer parent (Abstraction)."""
         if v is not None:
             return str(v)

@@ -40,7 +40,6 @@ class BaseValidator(ABC):  # Abstraction
         self, toc_data: list[Any], spec_data: list[Any]
     ) -> Path:
         """Generate validation report from TOC and spec data."""
-        pass
 
     def _store_results(self, results: dict[str, Any]) -> None:
         """Store validation results."""
@@ -80,7 +79,7 @@ class XLSValidator(BaseValidator):  # Inheritance
         results: dict[str, Any] = {
             "toc_entries": len(toc_data),
             "content_items": len(spec_data),
-            "status": status
+            "status": status,
         }
         self._store_results(results)
 
@@ -101,16 +100,14 @@ class JSONValidator(BaseValidator):  # Inheritance
             "toc_entries": len(toc_data),
             "content_items": len(spec_data),
             "status": status,
-            "timestamp": "2024-01-01T00:00:00Z"
+            "timestamp": "2024-01-01T00:00:00Z",
         }
-        report: dict[str, Any] = {
-            "validation_report": validation_data
-        }
+        report: dict[str, Any] = {"validation_report": validation_data}
 
         self._store_results(validation_data)
 
         json_file = self.output_dir / "validation_report.json"
-        with open(json_file, 'w', encoding='utf-8') as f:
+        with open(json_file, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2)
         return json_file
 
@@ -120,7 +117,7 @@ class ValidationGeneratorFactory:
 
     __VALIDATORS: dict[str, type[BaseValidator]] = {
         "excel": XLSValidator,
-        "json": JSONValidator  # Polymorphism - different implementations
+        "json": JSONValidator,  # Polymorphism - different implementations
     }
 
     @classmethod

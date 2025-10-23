@@ -1,4 +1,3 @@
-# USB PD Specification Parser - Constants Module
 """Application constants."""
 
 
