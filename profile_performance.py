@@ -13,8 +13,9 @@ from typing import Any, Callable
 class BaseProfiler(ABC):  # Abstraction
     """Abstract profiler (Abstraction, Encapsulation)."""
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, stats_count: int = 5):
         self._name = name  # Encapsulation
+        self._stats_count = stats_count  # Encapsulation
         self._profiler = cProfile.Profile()  # Encapsulation
         class_name = self.__class__.__name__
         self._logger = logging.getLogger(class_name)
@@ -39,7 +40,7 @@ class BaseProfiler(ABC):  # Abstraction
 
             s = StringIO()
             ps = pstats.Stats(self._profiler, stream=s)
-            ps.sort_stats("cumulative").print_stats(5)
+            ps.sort_stats("cumulative").print_stats(self._stats_count)
 
             return {
                 "result": result,
@@ -54,6 +55,10 @@ class BaseProfiler(ABC):  # Abstraction
 class ConfigProfiler(BaseProfiler):  # Inheritance
     """Config profiler (Inheritance, Polymorphism)."""
 
+    def __init__(self, name: str, operations: int = 100, stats_count: int = 5):
+        super().__init__(name, stats_count)
+        self._operations = operations
+
     def profile_operation(self) -> dict[str, Any]:  # Polymorphism
         """Profile config operations."""
         self._logger.info(f"Profiling {self._name}")
@@ -61,7 +66,7 @@ class ConfigProfiler(BaseProfiler):  # Inheritance
 
         return {
             "profiler": self._name,
-            "operations": 100,
+            "operations": self._operations,
             "total_calls": profile_data["total_calls"],
             "profile_stats": (profile_data["profile_output"][:300] + "..."),
         }
@@ -71,7 +76,7 @@ class ConfigProfiler(BaseProfiler):  # Inheritance
         from src.config import Config
 
         count = 0
-        for _ in range(100):
+        for _ in range(self._operations):
             config: Config = Config("application.yml")
             _ = config.pdf_input_file
             count += 1
@@ -81,6 +86,10 @@ class ConfigProfiler(BaseProfiler):  # Inheritance
 class ModelProfiler(BaseProfiler):  # Inheritance
     """Model profiler (Inheritance, Polymorphism)."""
 
+    def __init__(self, name: str, operations: int = 200, stats_count: int = 5):
+        super().__init__(name, stats_count)
+        self._operations = operations
+
     def profile_operation(self) -> dict[str, Any]:  # Polymorphism
         """Profile model operations."""
         self._logger.info(f"Profiling {self._name}")
@@ -88,7 +97,7 @@ class ModelProfiler(BaseProfiler):  # Inheritance
 
         return {
             "profiler": self._name,
-            "operations": 200,
+            "operations": self._operations,
             "total_calls": profile_data["total_calls"],
             "profile_stats": (profile_data["profile_output"][:300] + "..."),
         }
@@ -98,7 +107,7 @@ class ModelProfiler(BaseProfiler):  # Inheritance
         from src.core.models import BaseContent, TOCEntry
 
         count = 0
-        for i in range(200):
+        for i in range(self._operations):
             BaseContent(page=i + 1, content=f"test {i}")
             if i % 20 == 0:
                 TOCEntry(
@@ -143,13 +152,15 @@ class ProfilerFactory:  # Factory pattern
     """Profiler factory (Abstraction, Encapsulation)."""
 
     @staticmethod
-    def create_profiler(profiler_type: str, name: str) -> BaseProfiler:
+    def create_profiler(
+        profiler_type: str, name: str, operations: int | None = None
+    ) -> BaseProfiler:
         """Create profiler instance."""
         if profiler_type == "config":
-            return ConfigProfiler(name)  # Polymorphism
+            return ConfigProfiler(name, operations or 100)  # Polymorphism
         elif profiler_type == "model":
-            return ModelProfiler(name)  # Polymorphism
-        msg = f"Invalid profiler type: {profiler_type}"
+            return ModelProfiler(name, operations or 200)  # Polymorphism
+        msg = f"Invalid profiler type: {profiler_type}. Supported types: config, model"
         raise ValueError(msg)
 
 

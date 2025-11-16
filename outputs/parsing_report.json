@@ -1,17 +1,13 @@
 {
-  "metadata": {
-    "title": "USB PD Report",
-    "generated": "2025-10-23T11:23:27.847397"
-  },
-  "summary": {
-    "pages": 1047,
-    "content_items": 25760,
+  "timestamp": "2025-11-16T04:45:54.089196",
+  "status": "completed",
+  "statistics": {
+    "total_pages": 1047,
     "toc_entries": 1360,
-    "major_sections": 56,
-    "key_terms": 0,
-    "paragraphs": 25760
+    "content_items": 25760
   },
   "validation": {
-    "status": "PASS"
+    "toc_extracted": true,
+    "content_extracted": true
   }
 }
