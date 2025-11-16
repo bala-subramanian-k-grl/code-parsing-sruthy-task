@@ -6,18 +6,18 @@ from typing import Any
 
 class BaseTest(ABC):
     """Abstract base test class with common test structure.
-    
+
     Provides a template for test classes with setup/teardown
     and required test methods.
     """
 
+    @abstractmethod
     def setup_method(self) -> None:
         """Setup method called before each test method."""
-        pass
 
+    @abstractmethod
     def teardown_method(self) -> None:
         """Teardown method called after each test method."""
-        pass
 
     @abstractmethod
     def test_basic_functionality(self) -> None:
