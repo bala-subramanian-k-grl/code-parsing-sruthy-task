@@ -1,4 +1,4 @@
-"""Search entry points."""
+"""Search CLI entry points."""
 
 import os
 import sys
