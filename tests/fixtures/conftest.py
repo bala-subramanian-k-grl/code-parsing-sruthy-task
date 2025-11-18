@@ -20,11 +20,7 @@ from typing import Any
 import pytest
 
 from ..helpers.file_utils import TempFileManager
-from .small_test import (
-    MockConfigFixture,
-    MockContentFixture,
-    MockTOCFixture,
-)
+from .small_test import MockConfigFixture, MockContentFixture, MockTOCFixture
 
 # =========================================================
 # Base Abstract Factory (Abstraction + Encapsulation)

@@ -7,9 +7,8 @@ from typing import Union
 from src.core.config.config_loader import ConfigLoader
 from src.core.config.constants import ParserMode
 from src.core.config.models import ContentItem, ParserResult, TOCEntry
-from src.core.interfaces.pipeline_interface import (
-    PipelineInterface, ValidationResult
-)
+from src.core.interfaces.pipeline_interface import (PipelineInterface,
+                                                    ValidationResult)
 from src.parser.pdf_parser import PDFParser
 from src.support.excel_report_generator import ExcelReportGenerator
 from src.support.json_report_generator import JSONReportGenerator

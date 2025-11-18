@@ -52,14 +52,10 @@ class PipelineMockTest(BaseE2ETest):
     def run(self) -> bool:
         self._logger.log("Running PipelineMockTest...")
 
-        from tests.helpers.mock_data import (
-            generate_mock_content,
-            generate_mock_toc,
-        )
-        from tests.helpers.validation_utils import (
-            validate_content_item,
-            validate_toc_entry,
-        )
+        from tests.helpers.mock_data import (generate_mock_content,
+                                             generate_mock_toc)
+        from tests.helpers.validation_utils import (validate_content_item,
+                                                    validate_toc_entry)
 
         toc = generate_mock_toc(10)
         content = generate_mock_content(50)

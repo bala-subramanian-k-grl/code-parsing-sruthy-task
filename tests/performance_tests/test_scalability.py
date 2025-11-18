@@ -101,10 +101,8 @@ class MemoryEfficiencyTest(BaseScalabilityTest):
     def run(self) -> bool:
         self._logger.log("Running MemoryEfficiencyTest...")
 
-        from tests.helpers.performance_utils import (
-            generate_large_dataset,
-            measure_execution_time,
-        )
+        from tests.helpers.performance_utils import (generate_large_dataset,
+                                                     measure_execution_time)
 
         _, elapsed = measure_execution_time(generate_large_dataset, 50000)
 
@@ -137,10 +135,8 @@ class ConcurrentOperationsTest(BaseScalabilityTest):
     def run(self) -> bool:
         self._logger.log("Running ConcurrentOperationsTest...")
 
-        from tests.helpers.mock_data import (
-            generate_mock_content,
-            generate_mock_toc,
-        )
+        from tests.helpers.mock_data import (generate_mock_content,
+                                             generate_mock_toc)
 
         toc = generate_mock_toc(1000)
         content = generate_mock_content(1000)

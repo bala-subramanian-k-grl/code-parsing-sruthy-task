@@ -100,10 +100,8 @@ class PipelineMockDataTest(BasePipelineTest):
     def run(self) -> bool:
         self._logger.log("Running PipelineMockDataTest...")
 
-        from tests.helpers.mock_data import (
-            generate_mock_content,
-            generate_mock_toc,
-        )
+        from tests.helpers.mock_data import (generate_mock_content,
+                                             generate_mock_toc)
 
         toc = generate_mock_toc(3)
         content = generate_mock_content(5)
