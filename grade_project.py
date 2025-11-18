@@ -1,3 +1,5 @@
+"""Project grading utility using Gemini AI for code analysis."""
+
 import json
 import os
 from pathlib import Path
