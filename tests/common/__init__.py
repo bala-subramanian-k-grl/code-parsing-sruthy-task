@@ -11,12 +11,12 @@ from .strategies import (
 )
 
 __all__ = [
-    "BaseTest",
-    "BaseSuite", 
-    "BaseFixture",
-    "CleanupMixin",
-    "TimerMixin",
-    "TestStrategy",
     "AttributeSetterStrategy",
+    "BaseFixture",
+    "BaseSuite",
+    "BaseTest",
+    "CleanupMixin",
+    "TestStrategy",
+    "TimerMixin",
     "ValidationStrategy",
 ]
