@@ -1,10 +1,3 @@
-2025-11-18 23:08:59 [INFO] USB PD Specification Parser started
-2025-11-18 23:08:59 [INFO] Processing assets\USB_PD_R3_2 V1.1 2024-10.pdf in ParserMode.FULL mode
-2025-11-18 23:08:59 [INFO] Starting PDF parsing
-2025-11-18 23:09:05 [INFO] Writing output files
-2025-11-18 23:09:05 [INFO] Generating reports
-2025-11-18 23:09:05 [INFO] Pipeline execution completed
-2025-11-18 23:09:05 [INFO] Extracted 1360 TOC entries
-2025-11-18 23:09:05 [INFO] Extracted 25760 content items
-2025-11-18 23:09:05 [INFO] USB PD Specification Parser completed
-2025-11-18 23:09:05 [INFO] Execution of 'main' took 6.47 sec
+2025-11-19 01:17:18 [INFO] Searching for 'low' in usb_pd_spec.jsonl
+2025-11-19 01:17:18 [INFO] Found 'low' 1501 times in usb_pd_spec.jsonl
+2025-11-19 01:17:18 [INFO] Execution of 'main' took 0.30 sec
