@@ -1,3 +1,3 @@
-2025-11-19 01:17:18 [INFO] Searching for 'low' in usb_pd_spec.jsonl
-2025-11-19 01:17:18 [INFO] Found 'low' 1501 times in usb_pd_spec.jsonl
-2025-11-19 01:17:18 [INFO] Execution of 'main' took 0.30 sec
+2025-11-19 03:31:14 [INFO] Searching for 'power' in usb_pd_spec.jsonl
+2025-11-19 03:31:14 [INFO] Found 'power' 7062 times in usb_pd_spec.jsonl
+2025-11-19 03:31:14 [INFO] Execution of 'main' took 0.17 sec

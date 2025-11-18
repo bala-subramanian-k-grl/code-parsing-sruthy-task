@@ -13,7 +13,7 @@ from src.utils.timer import timer
 def main() -> None:
     """Main entry point."""
     if len(sys.argv) < 2:
-        logger.error("Usage: python search_cli.py <keyword> [file_path]")
+        logger.error("Usage: python search.py <keyword> [file_path]")
         sys.exit(1)
 
     keyword = sys.argv[1]
