@@ -1,6 +1,7 @@
 # Core dependencies
 PyMuPDF>=1.23.0
 openpyxl>=3.1.0
+PyYAML>=6.0.0
 
 # Development and testing
 pytest>=7.4.0
