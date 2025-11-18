@@ -69,8 +69,8 @@ python -m src.cli.app --file documents/usb_pd_spec.pdf --mode content
 #### Content Search
 ```bash
 # Search in extracted content
-python search.py "Power Delivery" outputs/usb_pd_spec.jsonl
-python search.py "voltage" outputs/usb_pd_spec.jsonl
+python search_cli.py "Power Delivery" outputs/usb_pd_spec.jsonl
+python search_cli.py "voltage" outputs/usb_pd_spec.jsonl
 ```
 
 ## Python API
