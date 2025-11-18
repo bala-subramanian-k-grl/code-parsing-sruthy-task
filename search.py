@@ -1,4 +1,4 @@
-"""Search entry point."""
+"""Search entry points."""
 
 import os
 import sys
