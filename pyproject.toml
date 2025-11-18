@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "usb-pd-parser"
+version = "1.0.0"
+description = "Enterprise-grade Python toolkit for parsing USB Power Delivery specification documents"
+authors = [{name = "USB-PD Parser Team"}]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "PyMuPDF>=1.23.0",
+    "openpyxl>=3.1.0",
+    "PyYAML>=6.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.11.0",
+    "flake8>=6.0.0",
+    "black>=23.0.0",
+    "mypy>=1.5.0",
+]
+
+[project.scripts]
+usb-pd-parse = "main:main"
+usb-pd-search = "search:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.yml", "*.yaml", "*.json"]
