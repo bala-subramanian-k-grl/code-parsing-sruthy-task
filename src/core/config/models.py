@@ -1,6 +1,7 @@
 """Data models using dataclasses."""
 
 from dataclasses import dataclass, field
+from typing import Union
 
 
 @dataclass
@@ -11,7 +12,7 @@ class TOCEntry:
     title: str
     page: int
     level: int = 1
-    parent_id: str | None = None
+    parent_id: Union[str, None] = None
     full_path: str = ""
 
 
@@ -25,11 +26,11 @@ class ContentItem:
     content: str
     page: int
     level: int = 1
-    parent_id: str | None = None
+    parent_id: Union[str, None] = None
     full_path: str = ""
     content_type: str = "paragraph"
     block_id: str = ""
-    bbox: list[float] = field(default_factory=lambda: [])  # Bounding box [x1, y1, x2, y2]
+    bbox: list[float] = field(default_factory=lambda: [])  # [x1, y1, x2, y2]
 
 
 @dataclass

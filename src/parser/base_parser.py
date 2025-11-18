@@ -13,7 +13,9 @@ class BaseParser(ParserInterface, ABC):
     def __init__(self, file_path: Path) -> None:
         self._file_path = file_path
         if not self.validate():
-            raise FileNotFoundError(f"File not found or is not a file: {file_path}")
+            raise FileNotFoundError(
+                f"File not found or is not a file: {file_path}"
+            )
 
     @property
     def file_path(self) -> Path:
@@ -26,4 +28,4 @@ class BaseParser(ParserInterface, ABC):
 
     @abstractmethod
     def parse(self) -> ParserResult:
-        """Parse the file and return parser result - must be implemented by subclasses."""
+        """Parse file and return result - implemented by subclasses."""

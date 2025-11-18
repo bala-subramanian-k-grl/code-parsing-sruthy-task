@@ -46,8 +46,9 @@ def analyze_file(client: Any, f: Path) -> str:
     resp = client.models.generate_content(
         model=MODEL,
         contents=[
-            {"role": "user", "parts": [{"text": 
-                f"Analyze issues, OOP, quality:\n=== FILE {f.name} ===\n{text}"
+            {"role": "user", "parts": [{"text":
+                f"Analyze issues, OOP, quality:\n=== FILE "
+                f"{f.name} ===\n{text}"
             }]}
         ],
         config={"temperature": 0.1}
@@ -64,11 +65,11 @@ def final_grade(client: Any, combined: str) -> dict[str, Any]:
         config={"temperature": 0.1}
     )
     raw = extract_text(resp)
-    
+
     print("\n=== RAW RESPONSE ===")
     print(raw[:500])  # Print first 500 chars
     print("\n")
-    
+
     try:
         return json.loads(raw)
     except json.JSONDecodeError as e:
@@ -83,7 +84,10 @@ def grade_project(project_path: str) -> None:
         raise RuntimeError("GEMINI_API_KEY not set")
 
     if genai is None:
-        raise RuntimeError("google-genai package not installed. Install with: pip install google-genai")
+        raise RuntimeError(
+            "google-genai package not installed. "
+            "Install with: pip install google-genai"
+        )
 
     client = genai.Client(api_key=api_key)
 
@@ -101,10 +105,10 @@ def grade_project(project_path: str) -> None:
     print("\nRunning final grading pass...")
     try:
         result = final_grade(client, combined)
-        
+
         out = root / "gemini_grade_report.json"
         out.write_text(json.dumps(result, indent=2))
-        
+
         print("\nSaved:", out)
         print("\n=== OVERALL SCORE ===")
         if "overall" in result:
@@ -116,6 +120,7 @@ def grade_project(project_path: str) -> None:
         debug_file.write_text(combined)
         print(f"Saved combined summary to: {debug_file}")
         raise
+
 
 if __name__ == "__main__":
     import sys

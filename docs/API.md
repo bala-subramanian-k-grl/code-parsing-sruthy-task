@@ -2,69 +2,62 @@
 
 ## Overview
 
-The USB PD Specification Parser provides a professional-grade API for extracting and processing content from USB Power Delivery specification PDFs with advanced OOP architecture and comprehensive documentation.
-
-## Documentation Coverage
-
-### Complete Docstring Coverage
-- **All Python modules**: 100% docstring coverage
-- **All classes**: Comprehensive class-level documentation
-- **All methods**: Detailed method documentation with parameters and return types
-- **All functions**: Complete function documentation
-- **Magic methods**: Documented `__init__`, `__str__`, `__call__`, `__len__`, etc.
+The USB-PD Specification Parser provides a high-performance API for extracting and processing content from USB Power Delivery specification PDFs with clean OOP architecture.
 
 ## Core Architecture
 
 ### Abstract Base Classes
 
-The system uses 11+ abstract base classes for proper abstraction:
+The system uses abstract base classes for proper abstraction:
 
 ```python
-from src.utils.base import BaseExtractor, BaseWriter, BaseApp
-from src.core.orchestrator.base_pipeline import BasePipeline
+from src.parser.base_parser import BaseParser
+from src.orchestrator.validator import BaseValidator
+from src.core.interfaces.parser_interface import ParserInterface
 ```
 
 ### Main Classes
 
-#### PDFExtractor
+#### PDFParser
 
-Advanced PDF content extractor with OOP principles:
+PDF content parser with inheritance:
 
 ```python
-from src.core.extractors.pdfextractor.pdf_extractor import PDFExtractor
+from src.parser.pdf_parser import PDFParser
+from pathlib import Path
 
-# Inheritance and Polymorphism
-extractor = PDFExtractor(pdf_path)
-content = extractor.extract_content(max_pages=None)  # All pages
+# Initialize parser
+parser = PDFParser(Path("document.pdf"), "USB-PD Spec")
+result = parser.parse()
 
-# Magic methods
-print(len(extractor))  # __len__
-print(str(extractor))  # __str__
-result = extractor()   # __call__
+print(f"TOC entries: {len(result.toc_entries)}")
+print(f"Content items: {len(result.content_items)}")
 ```
 
 #### PipelineOrchestrator
 
-Orchestrates the entire extraction pipeline with Strategy pattern:
+Orchestrates the entire extraction pipeline:
 
 ```python
-from src.core.orchestrator.pipeline_orchestrator import PipelineOrchestrator
+from src.orchestrator.pipeline_orchestrator import PipelineOrchestrator
+from src.core.config.constants import ParserMode
+from pathlib import Path
 
-# Template Method pattern
-orchestrator = PipelineOrchestrator("application.yml")
-result = orchestrator.run()  # Processes all 1046 pages
+# Initialize orchestrator
+file_path = Path("document.pdf")
+orchestrator = PipelineOrchestrator(file_path, ParserMode.FULL)
+result = orchestrator.execute()
 ```
 
-#### Factory Patterns
+#### Factory Pattern
 
 ```python
-from src.support.factories.file_factory import FileGeneratorFactory
-from src.support.report.report_generator import ReportFactory
+from src.parser.parser_factory import ParserFactory
+from pathlib import Path
 
 # Factory Method pattern
-metadata_gen = FileGeneratorFactory.create_generator("metadata")
-json_gen = ReportFactory.create_generator("json", output_dir)
-excel_gen = ReportFactory.create_generator("excel", output_dir)
+parser = ParserFactory.create_parser(Path("document.pdf"))
+result = parser.parse()
 ```
 
 ## Current JSONL Format

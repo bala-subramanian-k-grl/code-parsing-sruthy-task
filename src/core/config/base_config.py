@@ -5,7 +5,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Self
+from typing import Union
+
+from typing_extensions import Self
 
 
 class ConfigMode(str, Enum):
@@ -50,7 +52,7 @@ class BaseConfig:
             verbose=verbose,
         )
 
-    def with_mode(self, mode: str | ConfigMode) -> Self:
+    def with_mode(self, mode: Union[str, ConfigMode]) -> Self:
         """Create new config with different mode."""
         mode_enum = mode if isinstance(mode, ConfigMode) else ConfigMode(mode)
         return type(self)(

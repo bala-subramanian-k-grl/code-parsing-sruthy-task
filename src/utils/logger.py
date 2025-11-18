@@ -4,7 +4,9 @@ import logging
 from pathlib import Path
 
 
-def _setup_logger(log_file: Path = Path("outputs") / "parser.log") -> logging.Logger:
+def _setup_logger(
+    log_file: Path = Path("outputs") / "parser.log"
+) -> logging.Logger:
     """Setup logger with file and console handlers."""
     try:
         log_file.parent.mkdir(parents=True, exist_ok=True)
@@ -42,7 +44,9 @@ def _setup_logger(log_file: Path = Path("outputs") / "parser.log") -> logging.Lo
 class Logger:
     """Logger wrapper with common logging methods."""
 
-    def __init__(self, log_file: Path = Path("outputs") / "parser.log") -> None:
+    def __init__(
+        self, log_file: Path = Path("outputs") / "parser.log"
+    ) -> None:
         self._logger = _setup_logger(log_file)
 
     def debug(self, message: str) -> None:

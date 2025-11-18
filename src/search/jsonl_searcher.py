@@ -23,8 +23,8 @@ class JSONLSearcher:
                         data: Any = json.loads(line)
                         if not isinstance(data, dict):
                             continue
-                        content = str(data.get("content", "")).lower()  # type: ignore
-                        title = str(data.get("title", "")).lower()  # type: ignore
+                        content = str(data.get("content", "")).lower()
+                        title = str(data.get("title", "")).lower()
                         count += content.count(keyword_lower)
                         count += title.count(keyword_lower)
                     except json.JSONDecodeError:

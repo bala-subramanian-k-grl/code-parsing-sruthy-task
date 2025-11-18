@@ -10,7 +10,7 @@ Improved version with:
 
 import argparse
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Union
 
 from src.core.config.config_loader import ConfigLoader
 from src.core.config.constants import ParserMode
@@ -38,7 +38,9 @@ class CLIApp:
 
     def parse_args(self):
         """Parse command-line arguments."""
-        parser = argparse.ArgumentParser(description="USB-PD Specification Parser CLI")
+        parser = argparse.ArgumentParser(
+            description="USB-PD Specification Parser CLI"
+        )
 
         parser.add_argument(
             "--file",
@@ -69,12 +71,15 @@ class CLIApp:
 
     def run(self) -> None:
         """Run the CLI application."""
-        file_path: Path | None = None
+        file_path: Union[Path, None] = None
         try:
             args = self.parse_args()
 
             file_path_raw = args.file or self._config_loader.get_pdf_path()
-            file_path = Path(file_path_raw) if isinstance(file_path_raw, str) else file_path_raw
+            file_path = (
+                Path(file_path_raw) if isinstance(file_path_raw, str)
+                else file_path_raw
+            )
 
             if file_path is None:
                 raise ValueError("No PDF file path provided")

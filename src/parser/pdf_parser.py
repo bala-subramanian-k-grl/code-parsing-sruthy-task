@@ -52,11 +52,13 @@ class PDFParser(BaseParser):
                                 content=text,
                                 page=page_num,
                                 block_id=f"p{page_num}_{block_num}",
-                                bbox=list(block.get("bbox", [])),  # type: ignore
+                                bbox=list(block.get("bbox", []))
                             )
                         )
         except Exception as e:
-            raise ValueError(f"Failed to extract content from PDF: {e}") from e
+            raise ValueError(
+                f"Failed to extract content from PDF: {e}"
+            ) from e
         return items
 
     def _extract_block_text(self, block: dict[str, Any]) -> str:

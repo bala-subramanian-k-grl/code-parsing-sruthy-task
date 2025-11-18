@@ -25,4 +25,6 @@ class ParserFactory:
             return parser_class(file_path)
 
         supported = ", ".join(ParserFactory._parser_registry.keys())
-        raise ValueError(f"Unsupported file type: {suffix}. Supported: {supported}")
+        raise ValueError(
+            f"Unsupported file type: {suffix}. Supported: {supported}"
+        )

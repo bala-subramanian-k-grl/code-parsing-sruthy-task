@@ -82,7 +82,9 @@ class PathTraversalPreventionTest(BaseRegressionTest):
         malicious_path = Path("../../etc/passwd")
         safe_path = Path("outputs/test.jsonl")
 
-        self._result = (".." in str(malicious_path)) and (".." not in str(safe_path))
+        self._result = (
+            ".." in str(malicious_path)
+        ) and (".." not in str(safe_path))
         return self._result
 
 

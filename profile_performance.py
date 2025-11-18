@@ -153,14 +153,19 @@ class ProfilerFactory:  # Factory pattern
 
     @staticmethod
     def create_profiler(
-        profiler_type: str, name: str, operations: int | None = None
+        profiler_type: str,
+        name: str,
+        operations: int | None = None
     ) -> BaseProfiler:
         """Create profiler instance."""
         if profiler_type == "config":
             return ConfigProfiler(name, operations or 100)  # Polymorphism
         elif profiler_type == "model":
             return ModelProfiler(name, operations or 200)  # Polymorphism
-        msg = f"Invalid profiler type: {profiler_type}. Supported types: config, model"
+        msg = (
+            f"Invalid profiler type: {profiler_type}. "
+            "Supported types: config, model"
+        )
         raise ValueError(msg)
 
 

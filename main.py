@@ -45,7 +45,9 @@ class ApplicationFactory:
         """Create runner instance."""
         if runner_type == "cli":
             return CLIRunner()
-        raise ValueError(f"Invalid runner type: {runner_type}. Supported types: cli")
+        raise ValueError(
+            f"Invalid runner type: {runner_type}. Supported types: cli"
+        )
 
 
 @timer

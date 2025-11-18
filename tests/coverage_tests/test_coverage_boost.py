@@ -78,7 +78,9 @@ class SearchModuleTest(BaseCoverageTest):
     def run(self) -> bool:
         """Verify JSONLSearcher has required search method."""
         searcher = JSONLSearcher()
-        assert hasattr(searcher, "search"), "JSONLSearcher missing search method"
+        assert hasattr(searcher, "search"), (
+            "JSONLSearcher missing search method"
+        )
         return True
 
 
@@ -87,7 +89,9 @@ class InterfaceProtocolTest(BaseCoverageTest):
 
     def run(self) -> bool:
         """Verify PipelineInterface is properly defined."""
-        assert hasattr(PipelineInterface, "__name__"), "PipelineInterface not defined"
+        assert hasattr(PipelineInterface, "__name__"), (
+            "PipelineInterface not defined"
+        )
         return True
 
 
@@ -106,7 +110,9 @@ class JSONReportTest(BaseCoverageTest):
     def run(self) -> bool:
         """Verify JSONReportGenerator has generate method."""
         generator = JSONReportGenerator()
-        assert hasattr(generator, "generate"), "JSONReportGenerator missing generate method"
+        assert hasattr(generator, "generate"), (
+            "JSONReportGenerator missing generate method"
+        )
         return True
 
 
@@ -116,7 +122,9 @@ class ValidationGeneratorTest(BaseCoverageTest):
     def run(self) -> bool:
         """Verify ExcelReportGenerator has generate method."""
         generator = ExcelReportGenerator()
-        assert hasattr(generator, "generate"), "ExcelReportGenerator missing generate method"
+        assert hasattr(generator, "generate"), (
+            "ExcelReportGenerator missing generate method"
+        )
         return True
 
 

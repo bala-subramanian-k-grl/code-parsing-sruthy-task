@@ -53,10 +53,10 @@ class ConfigLoader:
 
     def get_doc_title(self) -> str:
         """Get document title from config."""
-        return self._config.get("metadata", {}).get(
-            "doc_title", "Document"
-        )
+        title = self._config.get("metadata", {}).get("doc_title", "Document")
+        return str(title)
 
     def get_keywords(self) -> list[str]:
         """Get keywords from config."""
-        return self._config.get("metadata", {}).get("keywords", [])
+        keywords = self._config.get("metadata", {}).get("keywords", [])
+        return [str(k) for k in keywords] if keywords else []

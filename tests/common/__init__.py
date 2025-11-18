@@ -6,7 +6,7 @@ from .base_test import BaseTest
 from .mixins import CleanupMixin, TimerMixin
 from .strategies import (
     AttributeSetterStrategy,
-    MockStrategy,
+    mock_strategy,
     TestStrategy,
     ValidationStrategy,
 )

@@ -54,7 +54,8 @@ class TOCMockGenerator(BaseMockDataGenerator):
     """Generate mock TOC entries."""
 
     def generate(self) -> list[dict[str, Any]]:
-        self._logger.log(f"Generating {self._count} TOC items...")
+        count = self._count if self._count is not None else 10
+        self._logger.log(f"Generating {count} TOC items...")
         return [
             {
                 "section_id": f"s{i}",
@@ -62,7 +63,7 @@ class TOCMockGenerator(BaseMockDataGenerator):
                 "page": i + 1,
                 "level": 1,
             }
-            for i in range(self._count or 10)
+            for i in range(count)
         ]
 
 
@@ -70,7 +71,8 @@ class ContentMockGenerator(BaseMockDataGenerator):
     """Generate mock content items."""
 
     def generate(self) -> list[dict[str, Any]]:
-        self._logger.log(f"Generating {self._count} content items...")
+        count = self._count if self._count is not None else 100
+        self._logger.log(f"Generating {count} content items...")
         return [
             {
                 "doc_title": "Test Document",
@@ -85,7 +87,7 @@ class ContentMockGenerator(BaseMockDataGenerator):
                 "block_id": f"p{i}_{i % 10}",
                 "bbox": [0, 0, 100, 100],
             }
-            for i in range(self._count or 100)
+            for i in range(count)
         ]
 
 
@@ -110,7 +112,9 @@ class MockDataGeneratorFactory:
     """Factory for creating mock data generators."""
 
     @staticmethod
-    def create(generator_type: str, count: int | None = None) -> BaseMockDataGenerator:
+    def create(
+        generator_type: str, count: int | None = None
+    ) -> BaseMockDataGenerator:
         if generator_type == "toc":
             return TOCMockGenerator(count)
         if generator_type == "content":

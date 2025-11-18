@@ -1,6 +1,7 @@
 """TOC extractor with hierarchical section numbering."""
 
 from pathlib import Path
+from typing import Union
 
 import fitz  # type: ignore[import-untyped]
 
@@ -21,7 +22,7 @@ class TOCExtractor:
         try:
             with fitz.open(str(self._file_path)) as doc:  # type: ignore
                 toc = doc.get_toc()  # type: ignore
-                for idx, (level, title, page) in enumerate(toc):  # type: ignore
+                for idx, (level, title, page) in enumerate(toc):
                     title_str = str(title)  # type: ignore
                     sid = self._extract_section_id(title_str, idx)
                     lvl = int(level)  # type: ignore
@@ -66,7 +67,7 @@ class TOCExtractor:
 
     def _get_parent_id(
         self, level: int, stack: list[tuple[int, str]]
-    ) -> str | None:
+    ) -> Union[str, None]:
         """Get parent section ID."""
         for parent_level, parent_id in reversed(stack):
             if parent_level < level:

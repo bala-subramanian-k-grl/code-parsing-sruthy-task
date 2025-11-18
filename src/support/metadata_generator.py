@@ -3,6 +3,7 @@
 import json
 from dataclasses import asdict
 from pathlib import Path
+from typing import Union
 
 from src.core.config.config_loader import ConfigLoader
 from src.core.config.models import Metadata, ParserResult
@@ -14,7 +15,7 @@ MAX_CONTENT_ITEMS_FOR_KEYWORDS = 100
 class MetadataGenerator(IReportGenerator):
     """Generate metadata JSONL file."""
 
-    def __init__(self, config: ConfigLoader | None = None) -> None:
+    def __init__(self, config: Union[ConfigLoader, None] = None) -> None:
         self._config = config or ConfigLoader()
 
     def generate(self, result: ParserResult, path: Path) -> None:
@@ -31,7 +32,9 @@ class MetadataGenerator(IReportGenerator):
         major_sections = sum(
             1 for e in result.toc_entries if e.level == 1
         )
-        key_terms = self._extract_key_terms(result, MAX_CONTENT_ITEMS_FOR_KEYWORDS)
+        key_terms = self._extract_key_terms(
+            result, MAX_CONTENT_ITEMS_FOR_KEYWORDS
+        )
 
         metadata = Metadata(
             total_pages=max(pages) if pages else 0,
@@ -47,7 +50,7 @@ class MetadataGenerator(IReportGenerator):
 
         try:
             with path.open("w", encoding="utf-8") as f:
-                f.write(json.dumps(data) + "\n")
+                f.write(f"{json.dumps(data)}\n")
         except OSError as e:
             raise OSError(f"Failed to save metadata to {path}: {e}") from e
 

@@ -63,7 +63,9 @@ class CompositionImportTest(BaseImportTest):
             return True
         except ImportError as e:
             msg = self._logger.log(self._module_name, False)
-            raise ImportError(f"Failed to import {self._module_name}: {e}") from e
+            raise ImportError(
+                f"Failed to import {self._module_name}: {e}"
+            ) from e
 
 
 # =======================================================
@@ -74,10 +76,16 @@ class ConfigImportTest(BaseImportTest):
     """Test config module imports and basic functionality."""
 
     def run(self) -> bool:
-        """Verify config modules are importable and have expected attributes."""
-        assert src.core.config.base_config is not None, "base_config module is None"
-        assert src.core.config.constants is not None, "constants module is None"
-        assert hasattr(src.core.config.constants, "ParserMode"), "Missing ParserMode"
+        """Verify config modules are importable and have attributes."""
+        assert src.core.config.base_config is not None, (
+            "base_config module is None"
+        )
+        assert src.core.config.constants is not None, (
+            "constants module is None"
+        )
+        assert hasattr(src.core.config.constants, "ParserMode"), (
+            "Missing ParserMode"
+        )
         return True
 
 
@@ -86,10 +94,18 @@ class CoreModuleImportTest(BaseImportTest):
 
     def run(self) -> bool:
         """Verify core modules are importable and have expected classes."""
-        assert src.orchestrator.pipeline_orchestrator is not None, "pipeline_orchestrator is None"
-        assert src.parser.pdf_parser is not None, "pdf_parser is None"
-        assert src.parser.toc_extractor is not None, "toc_extractor is None"
-        assert hasattr(src.parser.pdf_parser, "PDFParser"), "Missing PDFParser class"
+        assert src.orchestrator.pipeline_orchestrator is not None, (
+            "pipeline_orchestrator is None"
+        )
+        assert src.parser.pdf_parser is not None, (
+            "pdf_parser is None"
+        )
+        assert src.parser.toc_extractor is not None, (
+            "toc_extractor is None"
+        )
+        assert hasattr(src.parser.pdf_parser, "PDFParser"), (
+            "Missing PDFParser class"
+        )
         return True
 
 
@@ -98,8 +114,12 @@ class LoggerImportTest(BaseImportTest):
 
     def run(self) -> bool:
         """Verify logger module has expected logger instance."""
-        assert src.utils.logger is not None, "logger module is None"
-        assert hasattr(src.utils.logger, "logger"), "Missing logger instance"
+        assert src.utils.logger is not None, (
+            "logger module is None"
+        )
+        # Check that logger has expected methods
+        assert hasattr(src.utils.logger, "info"), "Missing info method"
+        assert hasattr(src.utils.logger, "error"), "Missing error method"
         return True
 
 
@@ -111,7 +131,8 @@ class UtilsImportTest(BaseImportTest):
         assert src.parser.base_parser is not None, "base_parser is None"
         assert src.utils.timer is not None, "timer is None"
         assert src.utils.logger is not None, "logger is None"
-        assert hasattr(src.utils.timer, "timer"), "Missing timer decorator"
+        # Check that timer is callable (it's a decorator function)
+        assert callable(src.utils.timer), "timer is not callable"
         return True
 
 
@@ -120,9 +141,13 @@ class InterfaceImportTest(BaseImportTest):
 
     def run(self) -> bool:
         """Verify PipelineInterface has required abstract methods."""
-        assert hasattr(PipelineInterface, "__name__"), "PipelineInterface not defined"
+        assert hasattr(PipelineInterface, "__name__"), (
+            "PipelineInterface not defined"
+        )
         assert hasattr(PipelineInterface, "execute"), "Missing execute method"
-        assert hasattr(PipelineInterface, "validate"), "Missing validate method"
+        assert hasattr(PipelineInterface, "validate"), (
+            "Missing validate method"
+        )
         return True
 
 
@@ -131,10 +156,18 @@ class SupportModuleImportTest(BaseImportTest):
 
     def run(self) -> bool:
         """Verify support modules have required methods."""
-        assert hasattr(JSONReportGenerator, "__name__"), "JSONReportGenerator not defined"
-        assert hasattr(ExcelReportGenerator, "__name__"), "ExcelReportGenerator not defined"
-        assert hasattr(JSONLSearcher, "__name__"), "JSONLSearcher not defined"
-        assert hasattr(JSONLSearcher, "search"), "JSONLSearcher missing search method"
+        assert hasattr(JSONReportGenerator, "__name__"), (
+            "JSONReportGenerator not defined"
+        )
+        assert hasattr(ExcelReportGenerator, "__name__"), (
+            "ExcelReportGenerator not defined"
+        )
+        assert hasattr(JSONLSearcher, "__name__"), (
+            "JSONLSearcher not defined"
+        )
+        assert hasattr(JSONLSearcher, "search"), (
+            "JSONLSearcher missing search method"
+        )
         return True
 
 
@@ -143,8 +176,12 @@ class ModelImportTest(BaseImportTest):
 
     def run(self) -> bool:
         """Verify models module has expected dataclasses."""
-        assert src.core.config.models is not None, "models module is None"
-        assert hasattr(src.core.config.models, "ParserResult"), "Missing ParserResult"
+        assert src.core.config.models is not None, (
+            "models module is None"
+        )
+        assert hasattr(src.core.config.models, "ParserResult"), (
+            "Missing ParserResult"
+        )
         assert hasattr(src.core.config.models, "Metadata"), "Missing Metadata"
         return True
 

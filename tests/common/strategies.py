@@ -34,7 +34,9 @@ class AttributeSetterStrategy(TestStrategy):
         try:
             setattr(obj, attr, value)
         except (AttributeError, TypeError) as e:
-            raise AttributeError(f"Cannot set attribute '{attr}' on {type(obj).__name__}: {e}") from e
+            raise AttributeError(
+                f"Cannot set attribute '{attr}' on {type(obj).__name__}: {e}"
+            ) from e
 
 
 class ValidationStrategy(TestStrategy):
@@ -47,9 +49,14 @@ class ValidationStrategy(TestStrategy):
         }
 
     Example:
-        schema = {"required": ["name", "age"], "types": {"name": str, "age": int}}
+        schema = {
+            "required": ["name", "age"],
+            "types": {"name": str, "age": int}
+        }
         strategy = ValidationStrategy()
-        is_valid = strategy.execute({"name": "John", "age": 30}, schema)
+        is_valid = strategy.execute(
+            {"name": "John", "age": 30}, schema
+        )
     """
 
     def execute(self, data: Any, schema: dict[str, Any]) -> bool:
@@ -80,4 +87,4 @@ class ValidationStrategy(TestStrategy):
 
 
 # Backward compatibility alias
-MockStrategy = AttributeSetterStrategy
+mock_strategy = AttributeSetterStrategy

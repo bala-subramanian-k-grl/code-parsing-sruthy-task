@@ -97,11 +97,13 @@ class NonexistentFileTest(BaseEdgeTest):
 
         pdf_path = Path("nonexistent.pdf")
         try:
-            parser = PDFParser(pdf_path)
-            self._result = hasattr(parser, "parse")
+            PDFParser(pdf_path)
+            self._result = False  # Should have failed
+        except FileNotFoundError:
+            self._result = True  # Expected behavior
         except Exception as e:
             self.add_error(str(e))
-            self._result = True  # Should not crash
+            self._result = True  # Any exception is acceptable
         return self._result
 
 
@@ -148,6 +150,10 @@ class BoundaryConditionTest(BaseEdgeTest):
         zero_items = generate_mock_toc(0)
         one_item = generate_mock_toc(1)
 
+        # Debug output
+        print(f"Zero items length: {len(zero_items)}")
+        print(f"One item length: {len(one_item)}")
+
         self._result = (len(zero_items) == 0 and len(one_item) == 1)
         return self._result
 
@@ -166,7 +172,17 @@ class EdgeTestRunner:
         self._tests.append(test)
 
     def run_all(self) -> bool:
-        return all(test.run() for test in self._tests)
+        results = []
+        for test in self._tests:
+            try:
+                result = test.run()
+                results.append(result)
+                if not result:
+                    print(f"FAILED: {test.__class__.__name__}")
+            except Exception as e:
+                print(f"ERROR in {test.__class__.__name__}: {e}")
+                results.append(False)
+        return all(results)
 
 
 # ======================================================

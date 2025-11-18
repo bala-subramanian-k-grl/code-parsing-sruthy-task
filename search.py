@@ -17,7 +17,9 @@ def main() -> None:
         sys.exit(1)
 
     keyword = sys.argv[1]
-    default_path = os.environ.get("SEARCH_FILE_PATH", "outputs/usb_pd_spec.jsonl")
+    default_path = os.environ.get(
+        "SEARCH_FILE_PATH", "outputs/usb_pd_spec.jsonl"
+    )
     file_path = Path(sys.argv[2] if len(sys.argv) > 2 else default_path)
 
     if not file_path.exists():

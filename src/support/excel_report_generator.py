@@ -1,7 +1,7 @@
 """Excel validation report generator."""
 
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, Union
 
 from openpyxl import Workbook  # type: ignore[import-untyped]
 
@@ -12,7 +12,7 @@ from src.core.interfaces.report_interface import IReportGenerator
 class ExcelReportGenerator(IReportGenerator):
     """Generate Excel validation report."""
 
-    _METRICS: list[tuple[str, str | Callable[[ParserResult], int]]] = [
+    _METRICS: list[tuple[str, Union[str, Callable[[ParserResult], int]]]] = [
         ("Metric", "Value"),
         ("TOC Entries", lambda r: len(r.toc_entries)),
         ("Content Items", lambda r: len(r.content_items)),

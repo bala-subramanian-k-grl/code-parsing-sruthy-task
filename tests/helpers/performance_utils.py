@@ -81,7 +81,9 @@ class ExecutionTimer(BasePerformanceUtility):
 
     def run(self) -> tuple[Any, float]:
         """Measure execution time of the function."""
-        self._logger.log(f"Measuring time for: {self._func.__name__}")
+        self._logger.log(
+            f"Measuring time for: {self._func.__name__}"
+        )
         start = time.perf_counter()
         result = self._func(*self._args)
         elapsed = time.perf_counter() - start
@@ -92,7 +94,9 @@ class ExecutionTimer(BasePerformanceUtility):
 class BenchmarkRunner(BasePerformanceUtility):
     """Benchmark a callable operation across multiple iterations."""
 
-    def __init__(self, func: Callable[[], None], iterations: int = 100) -> None:
+    def __init__(
+        self, func: Callable[[], None], iterations: int = 100
+    ) -> None:
         super().__init__()
         self._func = func              # Encapsulation
         self._iterations = iterations  # Encapsulation
@@ -100,7 +104,8 @@ class BenchmarkRunner(BasePerformanceUtility):
     def run(self) -> dict[str, float]:
         """Benchmark operation multiple times."""
         self._logger.log(
-            f"Benchmarking {self._func.__name__} for {self._iterations} iterations..."
+            f"Benchmarking {self._func.__name__} for "
+            f"{self._iterations} iterations..."
         )
         times: list[float] = []
 

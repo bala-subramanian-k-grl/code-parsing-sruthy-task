@@ -1,19 +1,11 @@
 # Usage Guide
 
-## Version 2.3.0 Features
-
-### Complete Documentation
-- **100% Docstring Coverage**: All modules, classes, and functions documented
-- **Enhanced API Documentation**: Comprehensive API.md with examples
-- **Improved Code Quality**: All linting issues resolved
-- **Better Test Coverage**: 38.73% coverage achieved
-
 ## Quick Start
 
 ### Installation
 
 ```bash
-git clone https://github.com/sruthypanigrahi/code-parsing.git
+git clone <repository-url>
 cd code-parsing
 pip install -r requirements.txt
 ```
@@ -21,17 +13,14 @@ pip install -r requirements.txt
 ### Basic Usage
 
 ```bash
-# Run with interactive interface
-python main.py
-
-# Process entire document (1046 pages)
-python main.py --config application.yml
+# Run CLI application
+python -m src.cli.app --file path/to/document.pdf --mode full
 
 # Extract only TOC
-python main.py --toc-only
+python -m src.cli.app --file path/to/document.pdf --mode toc
 
 # Extract only content
-python main.py --content-only
+python -m src.cli.app --file path/to/document.pdf --mode content
 ```
 
 ## Processing Modes
