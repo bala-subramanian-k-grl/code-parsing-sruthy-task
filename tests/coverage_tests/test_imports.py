@@ -26,6 +26,7 @@ from src.support.json_report_generator import JSONReportGenerator
 # Base Abstract Test (Abstraction + Encapsulation)
 # =======================================================
 
+
 class BaseImportTest(ABC):
     """Abstract base class for import validation tests."""
 

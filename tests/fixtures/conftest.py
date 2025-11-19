@@ -26,6 +26,7 @@ from .small_test import MockConfigFixture, MockContentFixture, MockTOCFixture
 # Base Abstract Factory (Abstraction + Encapsulation)
 # =========================================================
 
+
 class BaseFixtureFactory(ABC):
     """
     Abstract base class for fixture factories.

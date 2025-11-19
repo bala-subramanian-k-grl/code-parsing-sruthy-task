@@ -69,10 +69,8 @@ class TOCExtractorInitializationTest(BaseExtractorTest):
         from src.parser.toc_extractor import TOCExtractor
 
         # Test class import and method existence without file validation
-        self._result = (
-            hasattr(TOCExtractor, "extract")
-            and hasattr(TOCExtractor, "__init__")
-        )
+        self._result = (hasattr(TOCExtractor, "extract") and
+                        hasattr(TOCExtractor, "__init__"))
 
         return self._result
 

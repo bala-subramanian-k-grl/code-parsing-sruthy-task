@@ -18,6 +18,7 @@ from ..common.base_fixture import BaseFixture
 # Composition Helper (BOOSTS OOP SCORE)
 # ================================================================
 
+
 class FixtureLogger:
     """Simple logger to demonstrate composition inside fixtures."""
 
@@ -30,6 +31,7 @@ class FixtureLogger:
 # ================================================================
 # Mock Fixtures (Inheritance + Polymorphism + Composition)
 # ================================================================
+
 
 class MockTOCFixture(BaseFixture):
     """Mock TOC data fixture."""
