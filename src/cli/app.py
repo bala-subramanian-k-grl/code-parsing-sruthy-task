@@ -33,8 +33,18 @@ class CLIApp:
             config_loader: Inject custom ConfigLoader for testing.
             orchestrator_cls: Inject custom orchestrator class.
         """
-        self._config_loader = config_loader or ConfigLoader()
-        self._orchestrator_cls = orchestrator_cls or PipelineOrchestrator
+        self.__config_loader = config_loader or ConfigLoader()
+        self.__orchestrator_cls = orchestrator_cls or PipelineOrchestrator
+
+    @property
+    def config_loader(self) -> ConfigLoader:
+        """Get config loader."""
+        return self.__config_loader
+
+    @property
+    def orchestrator_cls(self) -> type:
+        """Get orchestrator class."""
+        return self.__orchestrator_cls
 
     def parse_args(self):
         """Parse command-line arguments."""
@@ -60,12 +70,12 @@ class CLIApp:
 
         return parser.parse_args()
 
-    def resolve_mode(self, mode_str: str) -> ParserMode:
+    def _resolve_mode(self, mode_str: str) -> ParserMode:
         """Convert CLI string mode to ParserMode enum."""
         mode_map = {
             "full": ParserMode.FULL,
-            "toc": ParserMode.TOC_ONLY,
-            "content": ParserMode.CONTENT_ONLY,
+            "toc": ParserMode.TOC,
+            "content": ParserMode.CONTENT,
         }
         return mode_map.get(mode_str.lower(), ParserMode.FULL)
 
@@ -75,7 +85,7 @@ class CLIApp:
         try:
             args = self.parse_args()
 
-            file_path_raw = args.file or self._config_loader.get_pdf_path()
+            file_path_raw = args.file or self.__config_loader.get_pdf_path()
             file_path = (
                 Path(file_path_raw) if isinstance(file_path_raw, str)
                 else file_path_raw
@@ -84,11 +94,11 @@ class CLIApp:
             if file_path is None:
                 raise ValueError("No PDF file path provided")
 
-            mode = self.resolve_mode(args.mode)
+            mode = self._resolve_mode(args.mode)
 
             logger.info(f"Processing {file_path} in {mode} mode")
 
-            orchestrator = self._orchestrator_cls(file_path, mode)
+            orchestrator = self.__orchestrator_cls(file_path, mode)
             result = orchestrator.execute()
 
             logger.info(f"Extracted {len(result.toc_entries)} TOC entries")
@@ -99,6 +109,14 @@ class CLIApp:
 
         except Exception as e:
             logger.error(f"Unexpected error occurred: {e}")
+
+    def __str__(self) -> str:
+        """String representation."""
+        return "CLIApp(parser=USB-PD)"
+
+    def __repr__(self) -> str:
+        """Detailed representation."""
+        return f"CLIApp(config_loader={self.__config_loader!r})"
 
 
 if __name__ == "__main__":

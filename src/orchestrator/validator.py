@@ -17,6 +17,14 @@ class BaseValidator(ABC):
 class ResultValidator(BaseValidator):
     """Validates parser results have at least TOC or content data."""
 
+    def __str__(self) -> str:
+        """String representation."""
+        return "ResultValidator(requires_toc_or_content)"
+
+    def __repr__(self) -> str:
+        """Detailed representation."""
+        return "ResultValidator()"
+
     def validate(self, data: ParserResult) -> ValidationResult:
         """Validate parser result has at least TOC entries or content items."""
         errors: list[str] = []
@@ -35,6 +43,14 @@ class ResultValidator(BaseValidator):
 
 class StrictValidator(ResultValidator):
     """Strict validator requiring both TOC entries and content items."""
+
+    def __str__(self) -> str:
+        """String representation."""
+        return "StrictValidator(requires_both_toc_and_content)"
+
+    def __repr__(self) -> str:
+        """Detailed representation."""
+        return "StrictValidator()"
 
     def validate(self, data: ParserResult) -> ValidationResult:
         """Validate that both TOC entries and content items exist."""

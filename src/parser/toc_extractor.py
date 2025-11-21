@@ -12,7 +12,12 @@ class TOCExtractor:
     """Extract TOC with hierarchical section IDs."""
 
     def __init__(self, file_path: Path) -> None:
-        self._file_path = file_path
+        self.__file_path = file_path
+
+    @property
+    def file_path(self) -> Path:
+        """Get file path."""
+        return self.__file_path
 
     def extract(self) -> list[TOCEntry]:
         """Extract TOC with parent-child relationships."""
@@ -20,7 +25,7 @@ class TOCExtractor:
         parent_stack: list[tuple[int, str]] = []
 
         try:
-            with fitz.open(str(self._file_path)) as doc:  # type: ignore
+            with fitz.open(str(self.__file_path)) as doc:  # type: ignore
                 toc = doc.get_toc()  # type: ignore
                 for idx, (level, title, page) in enumerate(toc):
                     title_str = str(title)  # type: ignore
@@ -77,3 +82,11 @@ class TOCExtractor:
     def _build_full_path(self, title: str) -> str:
         """Build full hierarchical path."""
         return title
+
+    def __str__(self) -> str:
+        """String representation."""
+        return f"TOCExtractor(file={self.__file_path.name})"
+
+    def __repr__(self) -> str:
+        """Detailed representation."""
+        return f"TOCExtractor(file_path={self.__file_path!r})"

@@ -4,7 +4,7 @@ import time
 from pathlib import Path
 from typing import Any, Callable, TypeVar
 
-T = TypeVar("T")
+type_var_t = TypeVar("type_var_t")
 
 
 class CleanupMixin:
@@ -28,8 +28,8 @@ class TimerMixin:
     """Mixin for timing operations in tests."""
 
     def time_operation(
-        self, func: Callable[..., T], *args: Any, **kwargs: Any
-    ) -> tuple[T, float]:
+        self, func: Callable[..., type_var_t], *args: Any, **kwargs: Any
+    ) -> tuple[type_var_t, float]:
         """Time a function execution and return result with elapsed time.
 
         Args:

@@ -31,8 +31,8 @@ class TempFileManager:
             if f.exists():
                 try:
                     f.unlink()
-                except OSError:
-                    pass
+                except OSError as e:
+                    print(f"Warning: Could not delete {f}: {e}")
         self.__files.clear()
 
     def __enter__(self) -> "TempFileManager":

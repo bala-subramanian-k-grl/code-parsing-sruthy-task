@@ -3,19 +3,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from enum import Enum
 from pathlib import Path
 from typing import Union
 
 from typing_extensions import Self
 
-
-class ConfigMode(str, Enum):
-    """Valid configuration modes."""
-
-    FULL = "full"
-    TOC = "toc"
-    CONTENT = "content"
+from .constants import ParserMode
 
 
 @dataclass(frozen=True)
@@ -28,7 +21,7 @@ class BaseConfig:
 
     input_path: Path
     output_dir: Path
-    mode: ConfigMode = ConfigMode.FULL
+    mode: ParserMode = ParserMode.FULL
     verbose: bool = False
 
     @classmethod
@@ -48,13 +41,13 @@ class BaseConfig:
         return cls(
             input_path=Path(input_path),
             output_dir=Path(output_dir),
-            mode=ConfigMode(mode),
+            mode=ParserMode(mode),
             verbose=verbose,
         )
 
-    def with_mode(self, mode: Union[str, ConfigMode]) -> Self:
+    def with_mode(self, mode: Union[str, ParserMode]) -> Self:
         """Create new config with different mode."""
-        mode_enum = mode if isinstance(mode, ConfigMode) else ConfigMode(mode)
+        mode_enum = mode if isinstance(mode, ParserMode) else ParserMode(mode)
         return type(self)(
             input_path=self.input_path,
             output_dir=self.output_dir,

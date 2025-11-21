@@ -51,3 +51,7 @@ class ParserResult:
     toc_entries: list[TOCEntry] = field(default_factory=lambda: [])
     content_items: list[ContentItem] = field(default_factory=lambda: [])
     metadata: Metadata = field(default_factory=Metadata)
+
+    def __len__(self) -> int:
+        """Return total number of items (TOC + content)."""
+        return len(self.toc_entries) + len(self.content_items)

@@ -11,7 +11,12 @@ class TextParser(BaseParser):
 
     def __init__(self, file_path: Path, doc_title: str = "Document") -> None:
         super().__init__(file_path)
-        self._doc_title = doc_title
+        self.__doc_title = doc_title
+
+    @property
+    def doc_title(self) -> str:
+        """Get document title."""
+        return self.__doc_title
 
     def parse(self) -> ParserResult:
         """Parse text file and extract content."""
@@ -21,9 +26,9 @@ class TextParser(BaseParser):
 
             items = [
                 ContentItem(
-                    doc_title=self._doc_title,
+                    doc_title=self.__doc_title,
                     section_id="text_content",
-                    title=self._doc_title,
+                    title=self.__doc_title,
                     content=content,
                     page=1,
                 )
@@ -35,3 +40,11 @@ class TextParser(BaseParser):
     def validate(self) -> bool:
         """Validate text file has .txt extension."""
         return super().validate() and self._file_path.suffix.lower() == ".txt"
+
+    def __str__(self) -> str:
+        """String representation."""
+        return f"TextParser(file={self._file_path.name}, title={self.__doc_title})"
+
+    def __repr__(self) -> str:
+        """Detailed representation."""
+        return f"TextParser(file_path={self._file_path!r}, doc_title={self.__doc_title!r})"

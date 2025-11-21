@@ -24,17 +24,35 @@ class PipelineOrchestrator(PipelineInterface):
         file_path: Path,
         mode: ParserMode,
         config: Union[ConfigLoader, None] = None,
-        toc_filename: str = "usb_pd_toc.jsonl",
-        content_filename: str = "usb_pd_spec.jsonl",
     ) -> None:
 
-        self._file_path = file_path
-        self._mode = mode
-        self._config = config or ConfigLoader()
-        self._output_dir = self._config.get_output_dir()
-        self._doc_title = self._config.get_doc_title()
-        self._toc_filename = toc_filename
-        self._content_filename = content_filename
+        self.__file_path = file_path
+        self.__mode = mode
+        self.__config = config or ConfigLoader()
+        self.__output_dir = self.__config.get_output_dir()
+        self.__doc_title = self.__config.get_doc_title()
+        self.__toc_filename = "usb_pd_toc.jsonl"
+        self.__content_filename = "usb_pd_spec.jsonl"
+
+    @property
+    def file_path(self) -> Path:
+        """Get file path."""
+        return self.__file_path
+
+    @property
+    def mode(self) -> ParserMode:
+        """Get parser mode."""
+        return self.__mode
+
+    @property
+    def output_dir(self) -> Path:
+        """Get output directory."""
+        return self.__output_dir
+
+    @property
+    def doc_title(self) -> str:
+        """Get document title."""
+        return self.__doc_title
 
     def execute(self) -> ParserResult:
         """Execute pipeline."""
@@ -46,11 +64,11 @@ class PipelineOrchestrator(PipelineInterface):
 
         try:
             logger.info("Starting PDF parsing")
-            parser = PDFParser(self._file_path, self._doc_title)
+            parser = PDFParser(self.__file_path, self.__doc_title)
             result: ParserResult = parser.parse()
 
             logger.info("Writing output files")
-            self._output_dir.mkdir(exist_ok=True)
+            self.__output_dir.mkdir(exist_ok=True)
             self._write_toc(result.toc_entries)
             self._write_content(result.content_items)
 
@@ -66,19 +84,19 @@ class PipelineOrchestrator(PipelineInterface):
     def validate(self) -> ValidationResult:
         """Validate pipeline configuration."""
         errors: list[str] = []
-        if not self._file_path.exists():
-            errors.append(f"File not found: {self._file_path}")
-        if self._file_path.suffix != ".pdf":
-            errors.append(f"Invalid file type: {self._file_path.suffix}")
+        if not self.__file_path.exists():
+            errors.append(f"File not found: {self.__file_path}")
+        if self.__file_path.suffix != ".pdf":
+            errors.append(f"Invalid file type: {self.__file_path.suffix}")
         return ValidationResult(is_valid=not errors, errors=errors)
 
     def _write_toc(self, entries: list[TOCEntry]) -> None:
         """Write table of contents entries to JSONL file."""
-        path = self._output_dir / self._toc_filename
+        path = self.__output_dir / self.__toc_filename
         with path.open("w", encoding="utf-8") as f:
             for entry in entries:
                 json_data = json.dumps({
-                    "doc_title": self._doc_title,
+                    "doc_title": self.__doc_title,
                     "section_id": entry.section_id,
                     "title": entry.title,
                     "full_path": entry.title,
@@ -91,7 +109,7 @@ class PipelineOrchestrator(PipelineInterface):
 
     def _write_content(self, items: list[ContentItem]) -> None:
         """Write content items to JSONL file."""
-        path = self._output_dir / self._content_filename
+        path = self.__output_dir / self.__content_filename
         with path.open("w", encoding="utf-8") as f:
             for item in items:
                 json_data = json.dumps({
@@ -112,11 +130,19 @@ class PipelineOrchestrator(PipelineInterface):
     def _generate_reports(self, result: ParserResult) -> None:
         """Generate metadata, JSON, and Excel reports from parser result."""
         MetadataGenerator().generate(
-            result, self._output_dir / "usb_pd_metadata.jsonl"
+            result, self.__output_dir / "usb_pd_metadata.jsonl"
         )
         JSONReportGenerator().generate(
-            result, self._output_dir / "parsing_report.json"
+            result, self.__output_dir / "parsing_report.json"
         )
         ExcelReportGenerator().generate(
-            result, self._output_dir / "validation_report.xlsx"
+            result, self.__output_dir / "validation_report.xlsx"
         )
+
+    def __str__(self) -> str:
+        """String representation."""
+        return f"PipelineOrchestrator(file={self.__file_path.name}, mode={self.__mode.value})"
+
+    def __repr__(self) -> str:
+        """Detailed representation."""
+        return f"PipelineOrchestrator(file_path={self.__file_path!r}, mode={self.__mode!r})"

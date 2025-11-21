@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from typing import Any
 
 
 class ParserInterface(ABC):
@@ -12,4 +15,4 @@ class ParserInterface(ABC):
     @abstractmethod
     def parse(self) -> Any:
         """Parse the input file and return a raw representation."""
-        raise NotImplementedError
+        ...

@@ -7,8 +7,8 @@ from pathlib import Path
 class ParserMode(str, Enum):
     """Parser processing modes."""
 
-    TOC_ONLY = "toc_only"
-    CONTENT_ONLY = "content_only"
+    TOC = "toc"
+    CONTENT = "content"
     FULL = "full"
 
 

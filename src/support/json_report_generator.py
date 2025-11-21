@@ -34,3 +34,11 @@ class JSONReportGenerator(IReportGenerator):
                 json.dump(report, f, indent=2)
         except OSError as e:
             raise OSError(f"Failed to save JSON report to {path}: {e}") from e
+
+    def __str__(self) -> str:
+        """String representation."""
+        return "JSONReportGenerator(format=json)"
+
+    def __repr__(self) -> str:
+        """Detailed representation."""
+        return "JSONReportGenerator()"

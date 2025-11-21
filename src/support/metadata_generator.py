@@ -16,7 +16,12 @@ class MetadataGenerator(IReportGenerator):
     """Generate metadata JSONL file."""
 
     def __init__(self, config: Union[ConfigLoader, None] = None) -> None:
-        self._config = config or ConfigLoader()
+        self.__config = config or ConfigLoader()
+
+    @property
+    def config(self) -> ConfigLoader:
+        """Get configuration loader."""
+        return self.__config
 
     def generate(self, result: ParserResult, path: Path) -> None:
         """Generate metadata file."""
@@ -57,10 +62,18 @@ class MetadataGenerator(IReportGenerator):
     def _extract_key_terms(self, result: ParserResult, limit: int) -> set[str]:
         """Extract key terms from content up to specified limit."""
         terms: set[str] = set()
-        keywords = self._config.get_keywords()
+        keywords = self.__config.get_keywords()
         for item in result.content_items[:limit]:
             content_lower = item.content.lower()
             for keyword in keywords:
                 if keyword in content_lower:
                     terms.add(keyword)
         return terms
+
+    def __str__(self) -> str:
+        """String representation."""
+        return "MetadataGenerator(format=jsonl)"
+
+    def __repr__(self) -> str:
+        """Detailed representation."""
+        return "MetadataGenerator()"

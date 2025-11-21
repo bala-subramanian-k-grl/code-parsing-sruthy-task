@@ -29,3 +29,11 @@ class BaseParser(ParserInterface, ABC):
     @abstractmethod
     def parse(self) -> ParserResult:
         """Parse file and return result - implemented by subclasses."""
+
+    def __str__(self) -> str:
+        """String representation."""
+        return f"{self.__class__.__name__}(file={self._file_path.name})"
+
+    def __repr__(self) -> str:
+        """Detailed representation."""
+        return f"{self.__class__.__name__}(file_path={self._file_path!r})"

@@ -10,7 +10,7 @@ from src.parser.text_parser import TextParser
 class ParserFactory:
     """Factory for creating appropriate parser instances."""
 
-    _parser_registry: dict[str, type[BaseParser]] = {
+    __parser_registry: dict[str, type[BaseParser]] = {
         ".pdf": PDFParser,
         ".txt": TextParser,
     }
@@ -19,12 +19,12 @@ class ParserFactory:
     def create_parser(file_path: Path) -> BaseParser:
         """Create parser based on file extension."""
         suffix = file_path.suffix.lower()
-        parser_class = ParserFactory._parser_registry.get(suffix)
+        parser_class = ParserFactory._ParserFactory__parser_registry.get(suffix)
 
         if parser_class:
             return parser_class(file_path)
 
-        supported = ", ".join(ParserFactory._parser_registry.keys())
+        supported = ", ".join(ParserFactory._ParserFactory__parser_registry.keys())
         raise ValueError(
             f"Unsupported file type: {suffix}. Supported: {supported}"
         )

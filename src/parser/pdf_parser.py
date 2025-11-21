@@ -15,7 +15,12 @@ class PDFParser(BaseParser):
 
     def __init__(self, file_path: Path, doc_title: str = "Document") -> None:
         super().__init__(file_path)
-        self._doc_title = doc_title
+        self.__doc_title = doc_title
+
+    @property
+    def doc_title(self) -> str:
+        """Get document title."""
+        return self.__doc_title
 
     def parse(self) -> ParserResult:
         """Parse PDF and extract TOC + content."""
@@ -46,7 +51,7 @@ class PDFParser(BaseParser):
                             continue
                         items.append(
                             ContentItem(
-                                doc_title=self._doc_title,
+                                doc_title=self.__doc_title,
                                 section_id=f"p{page_num}_{block_num}",
                                 title=text[:100],
                                 content=text,
@@ -71,3 +76,11 @@ class PDFParser(BaseParser):
                 text = str(span.get("text", ""))  # type: ignore
                 texts.append(text)
         return "".join(texts)
+
+    def __str__(self) -> str:
+        """String representation."""
+        return f"PDFParser(file={self._file_path.name}, title={self.__doc_title})"
+
+    def __repr__(self) -> str:
+        """Detailed representation."""
+        return f"PDFParser(file_path={self._file_path!r}, doc_title={self.__doc_title!r})"

@@ -12,3 +12,4 @@ class IReportGenerator(ABC):
     @abstractmethod
     def generate(self, result: ParserResult, path: Path) -> None:
         """Generate report from parser result."""
+        ...
