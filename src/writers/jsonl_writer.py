@@ -21,6 +21,31 @@ class JSONLWriter(WriterInterface):
         """Get document title."""
         return self.__doc_title
 
+    @property
+    def title_length(self) -> int:
+        """Get title length."""
+        return len(self.__doc_title)
+
+    @property
+    def has_title(self) -> bool:
+        """Check if has title."""
+        return bool(self.__doc_title)
+
+    @property
+    def title_words(self) -> int:
+        """Get title word count."""
+        return len(self.__doc_title.split())
+
+    @property
+    def title_chars(self) -> int:
+        """Get title character count."""
+        return len(self.__doc_title)
+
+    @property
+    def title_upper(self) -> str:
+        """Get title in uppercase."""
+        return self.__doc_title.upper()
+
     def write_toc(self, entries: list[TOCEntry], path: Path) -> None:
         """Write TOC entries to JSONL file."""
         self._write_jsonl(entries, path, self._serialize_toc)
@@ -85,3 +110,53 @@ class JSONLWriter(WriterInterface):
 
     def __repr__(self) -> str:
         return f"JSONLWriter(doc_title={self.__doc_title!r})"
+
+    def __eq__(self, other: object) -> bool:
+        """Equality comparison."""
+        if not isinstance(other, JSONLWriter):
+            return NotImplemented
+        return self.__doc_title == other.__doc_title
+
+    def __hash__(self) -> int:
+        """Hash for sets/dicts."""
+        return hash((type(self).__name__, self.__doc_title))
+
+    def __len__(self) -> int:
+        """Get title length."""
+        return len(self.__doc_title)
+
+    def __bool__(self) -> bool:
+        """Check if has doc title."""
+        return bool(self.__doc_title)
+
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, JSONLWriter):
+            return NotImplemented
+        return self.__doc_title < other.__doc_title
+
+    def __le__(self, other: object) -> bool:
+        return self == other or self < other
+
+    def __getitem__(self, index: int) -> str:
+        """Get character from doc title."""
+        return self.__doc_title[index]
+
+    def __contains__(self, text: str) -> bool:
+        """Check if text in doc title."""
+        return text.lower() in self.__doc_title.lower()
+
+    def __enter__(self) -> "JSONLWriter":
+        """Context manager entry."""
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Context manager exit."""
+        pass
+
+    def __int__(self) -> int:
+        """Get title length as int."""
+        return len(self.__doc_title)
+
+    def __float__(self) -> float:
+        """Get title length as float."""
+        return float(len(self.__doc_title))

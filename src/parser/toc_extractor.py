@@ -19,6 +19,36 @@ class TOCExtractor:
         """Get file path."""
         return self.__file_path
 
+    @property
+    def file_exists(self) -> bool:
+        """Check if file exists."""
+        return self.__file_path.exists()
+
+    @property
+    def file_name(self) -> str:
+        """Get file name."""
+        return self.__file_path.name
+
+    @property
+    def file_size(self) -> int:
+        """Get file size."""
+        return self.__file_path.stat().st_size if self.__file_path.exists() else 0
+
+    @property
+    def file_suffix(self) -> str:
+        """Get file suffix."""
+        return self.__file_path.suffix
+
+    @property
+    def file_parent(self) -> Path:
+        """Get file parent directory."""
+        return self.__file_path.parent
+
+    @property
+    def file_stem(self) -> str:
+        """Get file stem."""
+        return self.__file_path.stem
+
     def extract(self) -> list[TOCEntry]:
         """Extract TOC with parent-child relationships."""
         entries: list[TOCEntry] = []
@@ -90,3 +120,29 @@ class TOCExtractor:
     def __repr__(self) -> str:
         """Detailed representation."""
         return f"TOCExtractor(file_path={self.__file_path!r})"
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, TOCExtractor):
+            return NotImplemented
+        return self.__file_path == other.__file_path
+
+    def __hash__(self) -> int:
+        return hash((type(self).__name__, self.__file_path))
+
+    def __len__(self) -> int:
+        return len(str(self.__file_path))
+
+    def __bool__(self) -> bool:
+        return self.__file_path.exists()
+
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, TOCExtractor):
+            return NotImplemented
+        return str(self.__file_path) < str(other.__file_path)
+
+    def __le__(self, other: object) -> bool:
+        return self == other or self < other
+
+    def __contains__(self, text: str) -> bool:
+        """Check if text in file path."""
+        return text in str(self.__file_path)

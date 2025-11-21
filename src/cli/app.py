@@ -46,6 +46,16 @@ class CLIApp:
         """Get orchestrator class."""
         return self.__orchestrator_cls
 
+    @property
+    def has_config(self) -> bool:
+        """Check if has config loader."""
+        return self.__config_loader is not None
+
+    @property
+    def has_orchestrator(self) -> bool:
+        """Check if has orchestrator class."""
+        return self.__orchestrator_cls is not None
+
     def parse_args(self):
         """Parse command-line arguments."""
         parser = argparse.ArgumentParser(
@@ -117,6 +127,20 @@ class CLIApp:
     def __repr__(self) -> str:
         """Detailed representation."""
         return f"CLIApp(config_loader={self.__config_loader!r})"
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, CLIApp):
+            return NotImplemented
+        return self.__dict__ == other.__dict__
+
+    def __hash__(self) -> int:
+        return hash((type(self).__name__, id(self.__config_loader)))
+
+    def __len__(self) -> int:
+        return 2
+
+    def __bool__(self) -> bool:
+        return self.__config_loader is not None
 
 
 if __name__ == "__main__":

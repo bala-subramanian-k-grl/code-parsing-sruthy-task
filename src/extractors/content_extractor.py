@@ -76,8 +76,79 @@ class ContentExtractor:
         """Get document title."""
         return self.__doc_title
 
+    @property
+    def title_length(self) -> int:
+        """Get title length."""
+        return len(self.__doc_title)
+
+    @property
+    def has_title(self) -> bool:
+        """Check if has title."""
+        return bool(self.__doc_title)
+
+    @property
+    def title_words(self) -> int:
+        """Get title word count."""
+        return len(self.__doc_title.split())
+
+    @property
+    def title_chars(self) -> int:
+        """Get title character count."""
+        return len(self.__doc_title)
+
+    @property
+    def title_upper(self) -> str:
+        """Get title in uppercase."""
+        return self.__doc_title.upper()
+
     def __str__(self) -> str:
         return f"ContentExtractor(doc_title={self.__doc_title})"
 
     def __repr__(self) -> str:
         return f"ContentExtractor(doc_title={self.__doc_title!r})"
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, ContentExtractor):
+            return NotImplemented
+        return self.__doc_title == other.__doc_title
+
+    def __hash__(self) -> int:
+        return hash((type(self).__name__, self.__doc_title))
+
+    def __len__(self) -> int:
+        return len(self.__doc_title)
+
+    def __bool__(self) -> bool:
+        return bool(self.__doc_title)
+
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, ContentExtractor):
+            return NotImplemented
+        return self.__doc_title < other.__doc_title
+
+    def __le__(self, other: object) -> bool:
+        return self == other or self < other
+
+    def __getitem__(self, index: int) -> str:
+        """Get character from doc title."""
+        return self.__doc_title[index]
+
+    def __contains__(self, text: str) -> bool:
+        """Check if text in doc title."""
+        return text.lower() in self.__doc_title.lower()
+
+    def __enter__(self) -> "ContentExtractor":
+        """Context manager entry."""
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Context manager exit."""
+        pass
+
+    def __int__(self) -> int:
+        """Get title length as int."""
+        return len(self.__doc_title)
+
+    def __float__(self) -> float:
+        """Get title length as float."""
+        return float(len(self.__doc_title))

@@ -54,3 +54,43 @@ class BaseConfig:
             mode=mode_enum,
             verbose=self.verbose,
         )
+
+    @property
+    def input_exists(self) -> bool:
+        """Check if input path exists."""
+        return self.input_path.exists()
+
+    @property
+    def output_exists(self) -> bool:
+        """Check if output directory exists."""
+        return self.output_dir.exists()
+
+    @property
+    def is_full_mode(self) -> bool:
+        """Check if in full mode."""
+        return self.mode == ParserMode.FULL
+
+    @property
+    def is_verbose(self) -> bool:
+        """Check if verbose mode."""
+        return self.verbose
+
+    def __str__(self) -> str:
+        return f"BaseConfig(input={self.input_path.name}, mode={self.mode.value})"
+
+    def __len__(self) -> int:
+        return 4
+
+    def __bool__(self) -> bool:
+        return self.input_path.exists()
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, BaseConfig):
+            return NotImplemented
+        return self.input_path == other.input_path
+
+    def __hash__(self) -> int:
+        return hash((self.input_path, self.output_dir, self.mode))
+
+    def __contains__(self, text: str) -> bool:
+        return text in str(self.input_path)

@@ -17,14 +17,31 @@ class MetadataGenerator(IReportGenerator):
 
     def __init__(self, config: Union[ConfigLoader, None] = None) -> None:
         self.__config = config or ConfigLoader()
+        self.__generation_count = 0
 
     @property
     def config(self) -> ConfigLoader:
         """Get configuration loader."""
         return self.__config
 
+    @property
+    def generation_count(self) -> int:
+        """Get generation count."""
+        return self.__generation_count
+
+    @property
+    def has_generated(self) -> bool:
+        """Check if has generated reports."""
+        return self.__generation_count > 0
+
+    @property
+    def generation_rate(self) -> float:
+        """Get generation rate."""
+        return float(self.__generation_count)
+
     def generate(self, result: ParserResult, path: Path) -> None:
         """Generate metadata file."""
+        self.__generation_count += 1
         pages = [i.page for i in result.content_items]
         levels: dict[str, int] = {}
         for e in result.toc_entries:
@@ -77,3 +94,31 @@ class MetadataGenerator(IReportGenerator):
     def __repr__(self) -> str:
         """Detailed representation."""
         return "MetadataGenerator()"
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, MetadataGenerator):
+            return NotImplemented
+        return self.__config.config_path == other.__config.config_path
+
+    def __hash__(self) -> int:
+        return hash((type(self).__name__, self.__config.config_path))
+
+    def __len__(self) -> int:
+        return 1
+
+    def __bool__(self) -> bool:
+        return bool(self.__config)
+
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, MetadataGenerator):
+            return NotImplemented
+        return self.__generation_count < other.__generation_count
+
+    def __le__(self, other: object) -> bool:
+        return self == other or self < other
+
+    def __int__(self) -> int:
+        return self.__generation_count
+
+    def __float__(self) -> float:
+        return float(self.__generation_count)

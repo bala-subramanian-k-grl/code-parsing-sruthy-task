@@ -26,6 +26,41 @@ class ConfigLoader:
         """Get configuration dictionary."""
         return self.__config
 
+    @property
+    def config_size(self) -> int:
+        """Get config size."""
+        return len(self.__config)
+
+    @property
+    def has_config(self) -> bool:
+        """Check if has config."""
+        return bool(self.__config)
+
+    @property
+    def path_exists(self) -> bool:
+        """Check if config path exists."""
+        return self.__config_path.exists()
+
+    @property
+    def path_name(self) -> str:
+        """Get config path name."""
+        return self.__config_path.name
+
+    @property
+    def is_empty(self) -> bool:
+        """Check if config is empty."""
+        return len(self.__config) == 0
+
+    @property
+    def config_keys(self) -> list[str]:
+        """Get config keys."""
+        return list(self.__config.keys())
+
+    @property
+    def config_values(self) -> list[Any]:
+        """Get config values."""
+        return list(self.__config.values())
+
     def _load(self) -> dict[str, Any]:
         """Load configuration from file."""
         if not self.__config_path.exists():
@@ -78,3 +113,35 @@ class ConfigLoader:
     def __repr__(self) -> str:
         """Detailed representation."""
         return f"ConfigLoader(config_path={self.__config_path!r})"
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, ConfigLoader):
+            return NotImplemented
+        return self.__config_path == other.__config_path
+
+    def __hash__(self) -> int:
+        return hash((type(self).__name__, self.__config_path))
+
+    def __len__(self) -> int:
+        return len(self.__config)
+
+    def __bool__(self) -> bool:
+        return bool(self.__config)
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.__config
+
+    def __getitem__(self, key: str) -> Any:
+        return self.__config.get(key)
+
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, ConfigLoader):
+            return NotImplemented
+        return str(self.__config_path) < str(other.__config_path)
+
+    def __le__(self, other: object) -> bool:
+        return self == other or self < other
+
+    def __iter__(self):
+        """Iterate over config keys."""
+        return iter(self.__config)
