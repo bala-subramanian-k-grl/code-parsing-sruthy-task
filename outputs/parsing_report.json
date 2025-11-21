@@ -1,0 +1,13 @@
+{
+  "timestamp": "2025-11-22T04:22:45.711033",
+  "status": "completed",
+  "statistics": {
+    "total_pages": 1047,
+    "toc_entries": 1360,
+    "content_items": 25760
+  },
+  "validation": {
+    "toc_extracted": true,
+    "content_extracted": true
+  }
+}

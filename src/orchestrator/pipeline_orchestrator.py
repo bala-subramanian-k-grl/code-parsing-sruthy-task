@@ -1,12 +1,11 @@
 """Pipeline orchestrator for coordinating extraction."""
 
-import json
 from pathlib import Path
 from typing import Union
 
 from src.core.config.config_loader import ConfigLoader
 from src.core.config.constants import ParserMode
-from src.core.config.models import ContentItem, ParserResult, TOCEntry
+from src.core.config.models import ParserResult
 from src.core.interfaces.pipeline_interface import (PipelineInterface,
                                                     ValidationResult)
 from src.parser.pdf_parser import PDFParser
@@ -14,6 +13,7 @@ from src.support.excel_report_generator import ExcelReportGenerator
 from src.support.json_report_generator import JSONReportGenerator
 from src.support.metadata_generator import MetadataGenerator
 from src.utils.logger import logger
+from src.writers.jsonl_writer import JSONLWriter
 
 
 class PipelineOrchestrator(PipelineInterface):
@@ -68,9 +68,15 @@ class PipelineOrchestrator(PipelineInterface):
             result: ParserResult = parser.parse()
 
             logger.info("Writing output files")
-            self.__output_dir.mkdir(exist_ok=True)
-            self._write_toc(result.toc_entries)
-            self._write_content(result.content_items)
+            writer = JSONLWriter(self.__doc_title)
+            writer.write_toc(
+                result.toc_entries,
+                self.__output_dir / self.__toc_filename
+            )
+            writer.write_content(
+                result.content_items,
+                self.__output_dir / self.__content_filename
+            )
 
             logger.info("Generating reports")
             self._generate_reports(result)
@@ -89,43 +95,6 @@ class PipelineOrchestrator(PipelineInterface):
         if self.__file_path.suffix != ".pdf":
             errors.append(f"Invalid file type: {self.__file_path.suffix}")
         return ValidationResult(is_valid=not errors, errors=errors)
-
-    def _write_toc(self, entries: list[TOCEntry]) -> None:
-        """Write table of contents entries to JSONL file."""
-        path = self.__output_dir / self.__toc_filename
-        with path.open("w", encoding="utf-8") as f:
-            for entry in entries:
-                json_data = json.dumps({
-                    "doc_title": self.__doc_title,
-                    "section_id": entry.section_id,
-                    "title": entry.title,
-                    "full_path": entry.title,
-                    "page": entry.page,
-                    "level": entry.level,
-                    "parent_id": entry.parent_id,
-                    "tags": [],
-                })
-                f.write(f"{json_data}\n")
-
-    def _write_content(self, items: list[ContentItem]) -> None:
-        """Write content items to JSONL file."""
-        path = self.__output_dir / self.__content_filename
-        with path.open("w", encoding="utf-8") as f:
-            for item in items:
-                json_data = json.dumps({
-                    "doc_title": item.doc_title,
-                    "section_id": item.section_id,
-                    "title": item.title,
-                    "content": item.content,
-                    "page": item.page,
-                    "level": item.level,
-                    "parent_id": item.parent_id,
-                    "full_path": item.full_path,
-                    "type": item.content_type,
-                    "block_id": item.block_id,
-                    "bbox": item.bbox,
-                })
-                f.write(f"{json_data}\n")
 
     def _generate_reports(self, result: ParserResult) -> None:
         """Generate metadata, JSON, and Excel reports from parser result."""

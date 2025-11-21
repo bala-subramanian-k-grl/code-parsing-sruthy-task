@@ -28,8 +28,8 @@ def main() -> None:
 
     logger.info(f"Searching for '{keyword}' in {file_path.name}")
     try:
-        searcher = JSONLSearcher()
-        count = searcher.search(keyword, file_path)
+        searcher = JSONLSearcher(file_path)
+        count = searcher.search(keyword)
         logger.info(f"Found '{keyword}' {count} times in {file_path.name}")
     except (OSError, ValueError) as e:
         logger.error(f"Search failed: {e}")
