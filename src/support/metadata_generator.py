@@ -3,45 +3,29 @@
 import json
 from dataclasses import asdict
 from pathlib import Path
-from typing import Union
+from typing import Any, Optional
 
 from src.core.config.config_loader import ConfigLoader
 from src.core.config.models import Metadata, ParserResult
-from src.core.interfaces.report_interface import IReportGenerator
+from src.support.base_report_generator import BaseReportGenerator
 
 MAX_CONTENT_ITEMS_FOR_KEYWORDS = 100
 
 
-class MetadataGenerator(IReportGenerator):
+class MetadataGenerator(BaseReportGenerator):
     """Generate metadata JSONL file."""
 
-    def __init__(self, config: Union[ConfigLoader, None] = None) -> None:
+    def __init__(self, config: Optional[ConfigLoader] = None) -> None:
+        super().__init__()
         self.__config = config or ConfigLoader()
-        self.__generation_count = 0
 
-    @property
-    def config(self) -> ConfigLoader:
-        """Get configuration loader."""
-        return self.__config
+    def _validate_result(self, result: ParserResult) -> None:
+        """Validate result has TOC entries."""
+        if not result.toc_entries:
+            raise ValueError("Result has no TOC entries")
 
-    @property
-    def generation_count(self) -> int:
-        """Get generation count."""
-        return self.__generation_count
-
-    @property
-    def has_generated(self) -> bool:
-        """Check if has generated reports."""
-        return self.__generation_count > 0
-
-    @property
-    def generation_rate(self) -> float:
-        """Get generation rate."""
-        return float(self.__generation_count)
-
-    def generate(self, result: ParserResult, path: Path) -> None:
-        """Generate metadata file."""
-        self.__generation_count += 1
+    def _format_data(self, result: ParserResult) -> dict[str, Any]:
+        """Format data as metadata dict."""
         pages = [i.page for i in result.content_items]
         levels: dict[str, int] = {}
         for e in result.toc_entries:
@@ -69,12 +53,21 @@ class MetadataGenerator(IReportGenerator):
         data = asdict(metadata)
         data["major_sections"] = major_sections
         data["key_terms_count"] = len(key_terms)
+        return data
 
+    def _write_to_file(self, data: dict[str, Any], path: Path) -> None:
+        """Write metadata to JSONL file."""
         try:
             with path.open("w", encoding="utf-8") as f:
                 f.write(f"{json.dumps(data)}\n")
         except OSError as e:
-            raise OSError(f"Failed to save metadata to {path}: {e}") from e
+            raise OSError(
+                f"Failed to save metadata to {path}: {e}"
+            ) from e
+
+    def get_file_extension(self) -> str:
+        """Get file extension."""
+        return "jsonl"
 
     def _extract_key_terms(self, result: ParserResult, limit: int) -> set[str]:
         """Extract key terms from content up to specified limit."""
@@ -87,38 +80,4 @@ class MetadataGenerator(IReportGenerator):
                     terms.add(keyword)
         return terms
 
-    def __str__(self) -> str:
-        """String representation."""
-        return "MetadataGenerator(format=jsonl)"
 
-    def __repr__(self) -> str:
-        """Detailed representation."""
-        return "MetadataGenerator()"
-
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, MetadataGenerator):
-            return NotImplemented
-        return self.__config.config_path == other.__config.config_path
-
-    def __hash__(self) -> int:
-        return hash((type(self).__name__, self.__config.config_path))
-
-    def __len__(self) -> int:
-        return 1
-
-    def __bool__(self) -> bool:
-        return bool(self.__config)
-
-    def __lt__(self, other: object) -> bool:
-        if not isinstance(other, MetadataGenerator):
-            return NotImplemented
-        return self.__generation_count < other.__generation_count
-
-    def __le__(self, other: object) -> bool:
-        return self == other or self < other
-
-    def __int__(self) -> int:
-        return self.__generation_count
-
-    def __float__(self) -> float:
-        return float(self.__generation_count)
