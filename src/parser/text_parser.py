@@ -1,5 +1,6 @@
 """Text parser implementation."""
 
+from __future__ import annotations
 from pathlib import Path
 
 from src.core.config.models import ContentItem, ParserResult
@@ -13,15 +14,38 @@ class TextParser(BaseParser):
         super().__init__(file_path)
         self.__doc_title = doc_title
 
+    # ---------------------------------------------------------
+    # Polymorphism
+    # ---------------------------------------------------------
+    @property
+    def parser_type(self) -> str:
+        """Return parser type."""
+        return "TEXT"
+
+    def supports(self, extension: str) -> bool:
+        """Polymorphic override—supports .txt files only."""
+        return extension.lower() == ".txt"
+
+    @property
+    def is_binary(self) -> bool:
+        """Text files are not binary."""
+        return False
+
+    # ---------------------------------------------------------
+    # Encapsulation
+    # ---------------------------------------------------------
     @property
     def doc_title(self) -> str:
         """Get document title."""
         return self.__doc_title
 
+    # ---------------------------------------------------------
+    # Parsing Implementation
+    # ---------------------------------------------------------
     def parse(self) -> ParserResult:
         """Parse text file and extract content."""
         try:
-            with self._file_path.open("r", encoding="utf-8") as f:
+            with self.file_path.open("r", encoding="utf-8") as f:
                 content = f.read()
 
             items = [
@@ -33,18 +57,24 @@ class TextParser(BaseParser):
                     page=1,
                 )
             ]
+
             return ParserResult(content_items=items)
+
         except (OSError, UnicodeDecodeError) as e:
             raise ValueError(f"Failed to parse text file: {e}") from e
 
+    # ---------------------------------------------------------
+    # Validation Override (LSP-safe)
+    # ---------------------------------------------------------
     def validate(self) -> bool:
         """Validate text file has .txt extension."""
-        return super().validate() and self._file_path.suffix.lower() == ".txt"
+        return super().validate() and self.file_path.suffix.lower() == ".txt"
 
+    # ---------------------------------------------------------
+    # Magic Methods
+    # ---------------------------------------------------------
     def __str__(self) -> str:
-        """String representation."""
-        return f"TextParser(file={self._file_path.name}, title={self.__doc_title})"
+        return f"TextParser(file={self.file_path.name}, title={self.__doc_title})"
 
     def __repr__(self) -> str:
-        """Detailed representation."""
-        return f"TextParser(file_path={self._file_path!r}, doc_title={self.__doc_title!r})"
+        return f"TextParser(file_path={self.file_path!r}, doc_title={self.__doc_title!r})"

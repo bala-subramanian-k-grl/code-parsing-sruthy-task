@@ -1,6 +1,7 @@
-"""Base report generator with polymorphic methods."""
+"""Base report generator with full OOP structure."""
 
-from abc import abstractmethod
+from __future__ import annotations
+from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any
 
@@ -8,70 +9,102 @@ from src.core.config.models import ParserResult
 from src.core.interfaces.report_interface import IReportGenerator
 
 
-class BaseReportGenerator(IReportGenerator):
-    """Abstract base class for all report generators."""
+class BaseReportGenerator(IReportGenerator, ABC):
+    """
+    Abstract base class for all report generators.
+
+    Implements:
+        - Template Method Pattern
+        - Strict abstraction hooks
+        - Polymorphism (file extension, formatter, writer)
+        - Encapsulation for internal state tracking
+    """
 
     def __init__(self) -> None:
-        """Initialize base report generator."""
-        self._generation_count = 0
+        self.__generation_count = 0                 # private
+        self.__last_output_path: Path | None = None  # private
+        self.__last_success: bool = False           # private
+
+    # ---------------------------------------------------------
+    # Encapsulated Properties
+    # ---------------------------------------------------------
 
     @property
     def generation_count(self) -> int:
-        """Get generation count."""
-        return self._generation_count
+        """Number of times this generator was used."""
+        return self.__generation_count
+
+    @property
+    def last_output_path(self) -> Path | None:
+        """Path of last generated report."""
+        return self.__last_output_path
+
+    @property
+    def last_success(self) -> bool:
+        """Whether last generation succeeded."""
+        return self.__last_success
+
+    # ---------------------------------------------------------
+    # Template Method (Do NOT override in subclasses)
+    # ---------------------------------------------------------
 
     def generate(self, result: ParserResult, path: Path) -> None:
-        """Generate report with validation and formatting."""
-        self._generation_count += 1
+        """
+        Template method that defines the workflow:
+            1. Validate input result
+            2. Format data
+            3. Write to target file
+        """
+        self.__generation_count += 1
+
         self._validate_result(result)
-        formatted_data = self._format_data(result)
-        self._write_to_file(formatted_data, path)
+        formatted = self._format_data(result)
+        self._write_to_file(formatted, path)
+
+        self.__last_output_path = path
+        self.__last_success = True
+
+    # ---------------------------------------------------------
+    # Abstract Methods (Polymorphism Points)
+    # ---------------------------------------------------------
 
     @abstractmethod
     def _validate_result(self, result: ParserResult) -> None:
-        """Validate result before generation (polymorphic)."""
-        ...
+        """Validate ParserResult before processing."""
 
     @abstractmethod
     def _format_data(self, result: ParserResult) -> Any:
-        """Format data for output (polymorphic)."""
-        ...
+        """Format result data for output."""
 
     @abstractmethod
     def _write_to_file(self, data: Any, path: Path) -> None:
-        """Write formatted data to file (polymorphic)."""
-        ...
+        """Write formatted data to requested file."""
 
     @abstractmethod
     def get_file_extension(self) -> str:
-        """Get file extension for this generator (polymorphic)."""
-        ...
+        """Return the file extension for this generator."""
+
+    # ---------------------------------------------------------
+    # Magic Methods (Clean, Highly Reusable)
+    # ---------------------------------------------------------
 
     def __str__(self) -> str:
-        """String representation."""
-        ext = self.get_file_extension()
-        return f"{self.__class__.__name__}(format={ext})"
+        return f"{self.__class__.__name__}(format={self.get_file_extension()})"
 
     def __repr__(self) -> str:
-        """Detailed representation."""
         return f"{self.__class__.__name__}()"
 
     def __eq__(self, other: object) -> bool:
-        """Equality comparison."""
         return isinstance(other, self.__class__)
 
     def __hash__(self) -> int:
-        """Hash for set/dict usage."""
         return hash(type(self).__name__)
 
     def __bool__(self) -> bool:
-        """Boolean conversion."""
         return True
 
     def __int__(self) -> int:
-        """Integer conversion."""
-        return self._generation_count
+        return self.__generation_count
 
     def __float__(self) -> float:
-        """Float conversion."""
-        return float(self._generation_count)
+        return float(self.__generation_count)
