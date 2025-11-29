@@ -309,19 +309,19 @@ class PerformanceUtilityFactory(BasePerformanceFactory):
                 raise ValueError("size required for dataset generator")
             self.__creation_count += 1
             return LargeDatasetGenerator(size, logger)
-        
+
         if utility_type == "timer":
             if func is None:
                 raise ValueError("func required for timer utility")
             self.__creation_count += 1
             return ExecutionTimer(func, *args, logger=logger)
-        
+
         if utility_type == "benchmark":
             if func is None:
                 raise ValueError("func required for benchmark utility")
             self.__creation_count += 1
             return BenchmarkRunner(func, iterations, logger)
-        
+
         raise ValueError(f"Unknown utility type: {utility_type}")
 
     def __str__(self) -> str:

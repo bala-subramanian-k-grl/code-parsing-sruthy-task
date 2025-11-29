@@ -55,8 +55,6 @@ class BaseCoverageTest(ABC):
     def __str__(self) -> str:
         return self.name()
 
-    __repr__ = __str__
-
     def __repr__(self) -> str:
         return "BaseCoverageTest()"
 

@@ -72,8 +72,13 @@ class ParserFactory(FactoryInterface[BaseParser]):
                 temp = registered_cls(file_path)
                 if temp.supports(ext):
                     return registered_cls(file_path)
-            except Exception:
+            except Exception as e:
                 # Skip classes that fail on initialization
+                # Log for debugging but continue trying other parsers
+                import logging
+                logging.debug(
+                    f"Parser {registered_cls.__name__} failed: {e}"
+                )
                 continue
 
         # Case 3 — no parser found

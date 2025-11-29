@@ -48,8 +48,6 @@ class BaseImportTest(ABC):
     def __str__(self) -> str:
         return self.__class__.__name__
 
-    __repr__ = __str__
-
     def __repr__(self) -> str:
         return "BaseImportTest()"
 
