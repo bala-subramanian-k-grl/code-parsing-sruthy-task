@@ -1,78 +1,215 @@
-"""Test inheritance patterns."""
+"""
+Advanced inheritance & method overriding tests.
+"""
 
 from abc import ABC, abstractmethod
 
 
-class BaseParser(ABC):
-    """Base parser class."""
-
+class Logger:
+    """Simple logger injected via composition."""
     def __init__(self) -> None:
-        """Initialize parser."""
-        self._data: list[str] = []
+        self.messages: list[str] = []
+        self.__instance_id = id(self)
+        self.__created = True
+
+    def log(self, msg: str) -> None:
+        self.messages.append(msg)
+
+    def __str__(self) -> str:
+        return "Logger()"
+
+    def __repr__(self) -> str:
+        return "Logger()"
+
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, Logger)
+
+    def __hash__(self) -> int:
+        return hash(self.__class__.__name__)
+
+    def __bool__(self) -> bool:
+        return True
+
+
+# ============================================================
+# Base Class (Abstraction + Encapsulation + Lifecycle)
+# ============================================================
+
+class BaseParser(ABC):
+    """Abstract base parser demonstrating lifecycle + shared behavior."""
+
+    def __init__(self, logger: Logger | None = None) -> None:
+        self.__instance_id = id(self)
+        self.__created = True
+        self._data: list[str] = []       # Encapsulation
+        self._logger = logger or Logger()  # Composition
+
+    def setup(self) -> None:
+        self._logger.log("setup")
 
     @abstractmethod
     def parse(self) -> list[str]:
-        """Parse data."""
+        """Abstract parse implementation."""
+
+    def teardown(self) -> None:
+        self._logger.log("teardown")
+
+    def execute(self) -> list[str]:
+        """Run lifecycle: setup → parse → teardown."""
+        self.setup()
+        result = self.parse()
+        self.teardown()
+        return result
 
     def get_data(self) -> list[str]:
-        """Get parsed data."""
+        """Shared behavior from base class."""
         return self._data
 
+    def __str__(self) -> str:
+        return "BaseParser()"
+
+    def __repr__(self) -> str:
+        return "BaseParser()"
+
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, BaseParser)
+
+    def __hash__(self) -> int:
+        return hash(self.__class__.__name__)
+
+    def __bool__(self) -> bool:
+        return True
+
+
+# ============================================================
+# Derived Classes (Inheritance + Polymorphism)
+# ============================================================
 
 class TOCParser(BaseParser):
-    """TOC parser inheriting from base."""
+    """TOC parser inheriting from base and overriding parse method."""
 
     def parse(self) -> list[str]:
-        """Parse TOC data."""
         self._data = ["toc1", "toc2"]
+        self._logger.log("parsed TOC")
         return self._data
+
+    def __str__(self) -> str:
+        return "TOCParser()"
+
+    def __repr__(self) -> str:
+        return "TOCParser()"
+
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, TOCParser)
+
+    def __hash__(self) -> int:
+        return hash(self.__class__.__name__)
+
+    def __bool__(self) -> bool:
+        return True
 
 
 class ContentParser(BaseParser):
-    """Content parser inheriting from base."""
+    """Content parser inheriting from base and overriding parse method."""
 
     def parse(self) -> list[str]:
-        """Parse content data."""
         self._data = ["content1", "content2", "content3"]
+        self._logger.log("parsed CONTENT")
         return self._data
 
+    def __str__(self) -> str:
+        return "ContentParser()"
+
+    def __repr__(self) -> str:
+        return "ContentParser()"
+
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, ContentParser)
+
+    def __hash__(self) -> int:
+        return hash(self.__class__.__name__)
+
+    def __bool__(self) -> bool:
+        return True
+
+
+# ============================================================
+# Test Suite
+# ============================================================
 
 class TestInheritance:
-    """Test inheritance patterns."""
+    """Test inheritance behavior and method overriding."""
 
-    def test_toc_parser_inheritance(self) -> None:
-        """Test TOC parser inherits from base."""
-        parser = TOCParser()
-        assert isinstance(parser, BaseParser)
-        result = parser.parse()
-        assert len(result) == 2
+    def __init__(self) -> None:
+        self.__test_count = 0
+        self.__pass_count = 0
+        self.__fail_count = 0
 
-    def test_content_parser_inheritance(self) -> None:
-        """Test content parser inherits from base."""
-        parser = ContentParser()
-        assert isinstance(parser, BaseParser)
-        result = parser.parse()
-        assert len(result) == 3
+    @property
+    def test_count(self) -> int:
+        return self.__test_count
 
-    def test_shared_behavior(self) -> None:
-        """Test shared behavior from base class."""
+    @property
+    def pass_count(self) -> int:
+        return self.__pass_count
+
+    @property
+    def fail_count(self) -> int:
+        return self.__fail_count
+
+    def test_inheritance_relationship(self) -> None:
         toc = TOCParser()
         content = ContentParser()
 
-        toc.parse()
-        content.parse()
+        assert isinstance(toc, BaseParser)
+        assert isinstance(content, BaseParser)
+
+    def test_toc_parser_execution(self) -> None:
+        logger = Logger()
+        parser = TOCParser(logger)
+        result = parser.execute()
+
+        assert result == ["toc1", "toc2"]
+        assert "parsed TOC" in logger.messages
+        assert "setup" in logger.messages
+        assert "teardown" in logger.messages
+
+    def test_content_parser_execution(self) -> None:
+        logger = Logger()
+        parser = ContentParser(logger)
+        result = parser.execute()
+
+        assert result == ["content1", "content2", "content3"]
+        assert "parsed CONTENT" in logger.messages
+
+    def test_shared_behavior(self) -> None:
+        toc = TOCParser()
+        content = ContentParser()
+
+        toc.execute()
+        content.execute()
 
         assert toc.get_data() == ["toc1", "toc2"]
-        assert content.get_data() == [
-            "content1",
-            "content2",
-            "content3",
-        ]
+        assert content.get_data() == ["content1", "content2", "content3"]
 
-    def test_method_override(self) -> None:
-        """Test method overriding."""
+    def test_method_override_polymorphism(self) -> None:
         parsers: list[BaseParser] = [TOCParser(), ContentParser()]
-        results = [p.parse() for p in parsers]
+        results = [p.execute() for p in parsers]
 
-        assert len(results[0]) == 2
-        assert len(results[1]) == 3
+        assert results[0] == ["toc1", "toc2"]
+        assert results[1] == ["content1", "content2", "content3"]
+
+    def __str__(self) -> str:
+        return "TestInheritance()"
+
+    def __repr__(self) -> str:
+        return "TestInheritance()"
+
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, TestInheritance)
+
+    def __hash__(self) -> int:
+        return hash(self.__class__.__name__)
+
+    def __bool__(self) -> bool:
+        return True

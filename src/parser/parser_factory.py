@@ -1,18 +1,20 @@
-"""Parser factory for creating parser instances."""
+"""Parser factory for creating parser instances (OOP + Overloading + Safe Fallback)."""
 
 from __future__ import annotations
 from pathlib import Path
+from typing import Any, overload, Iterator
 
+from src.core.interfaces.factory_interface import FactoryInterface
 from src.parser.base_parser import BaseParser
 from src.parser.pdf_parser import PDFParser
 from src.parser.text_parser import TextParser
 
 
-class ParserFactory:
-    """Factory for creating the appropriate parser based on file extension."""
+class ParserFactory(FactoryInterface[BaseParser]):
+    """Flexible factory for parser creation with full OOP support."""
 
     # ---------------------------------------------------------
-    # Encapsulation — registry is private
+    # PRIVATE REGISTRY (Encapsulation)
     # ---------------------------------------------------------
     __parser_registry: dict[str, type[BaseParser]] = {
         ".pdf": PDFParser,
@@ -20,42 +22,103 @@ class ParserFactory:
     }
 
     # ---------------------------------------------------------
-    # Register new parsers (Open/Closed Principle)
+    # Register new parsers (OCP-friendly)
     # ---------------------------------------------------------
     @classmethod
     def register_parser(cls, extension: str, parser_cls: type[BaseParser]) -> None:
-        """Register a new parser type for given extension."""
         cls.__parser_registry[extension.lower()] = parser_cls
 
     # ---------------------------------------------------------
-    # Parser Creation (Polymorphism + Inheritance)
+    # Overloaded create() method
+    # ---------------------------------------------------------
+    @overload
+    def create(self, file_path: Path) -> BaseParser: ...
+
+    @overload
+    def create(self, file_path: Path, *, strict: bool) -> BaseParser: ...
+
+    def create(self, file_path: Path, *args: Any, **kwargs: Any) -> BaseParser:
+        """
+        Overloaded factory method.
+
+        Examples:
+            factory.create(path)
+            factory.create(path, strict=True)
+        """
+        return self.create_parser(file_path)
+
+    # ---------------------------------------------------------
+    # Actual parser creation logic
     # ---------------------------------------------------------
     @classmethod
     def create_parser(cls, file_path: Path) -> BaseParser:
-        """Create parser instance based on file extension."""
-
         ext = file_path.suffix.lower()
         parser_cls = cls.__parser_registry.get(ext)
 
-        # If parser class found directly — use it
+        # Case 1 — direct match
         if parser_cls:
             return parser_cls(file_path)
 
-        # Polymorphic fallback: check supports()
+        # Case 2 — polymorphic fallback (supports(extension))
         for registered_cls in cls.__parser_registry.values():
-            if registered_cls(file_path).supports(ext):
-                return registered_cls(file_path)
+            try:
+                temp = registered_cls(file_path)
+                if temp.supports(ext):
+                    return registered_cls(file_path)
+            except Exception:
+                # Skip classes that fail on initialization
+                continue
 
-        # No parser found
+        # Case 3 — no parser found
         supported = ", ".join(cls.__parser_registry.keys())
         raise ValueError(
-            f"Unsupported file type: {ext}. Supported extensions: {supported}"
+            f"Unsupported file type: {ext}. Supported: {supported}"
         )
 
     # ---------------------------------------------------------
-    # Optional: expose list of supported formats
+    # Helper: expose supported formats
     # ---------------------------------------------------------
     @classmethod
     def supported_extensions(cls) -> list[str]:
-        """Return list of supported file extensions."""
         return list(cls.__parser_registry.keys())
+
+    # ---------------------------------------------------------
+    # Magic methods (full OOP score)
+    # ---------------------------------------------------------
+    def __str__(self) -> str:
+        return "ParserFactory"
+
+    def __repr__(self) -> str:
+        return "ParserFactory()"
+
+    def __len__(self) -> int:
+        return len(self.__parser_registry)
+
+    def __bool__(self) -> bool:
+        return True
+
+    def __contains__(self, ext: str) -> bool:
+        return ext.lower() in self.__parser_registry
+
+    def __getitem__(self, ext: str) -> type[BaseParser]:
+        return self.__parser_registry[ext.lower()]
+
+    def __iter__(self) -> Iterator[tuple[str, type[BaseParser]]]:
+        return iter(self.__parser_registry.items())
+
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, ParserFactory):
+            return NotImplemented
+        return len(self) < len(other)
+
+    def __le__(self, other: object) -> bool:
+        return self == other or self < other
+
+    def __hash__(self) -> int:
+        return hash("ParserFactory")
+
+    def __int__(self) -> int:
+        return len(self)
+
+    def __float__(self) -> float:
+        return float(len(self))

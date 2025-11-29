@@ -23,6 +23,10 @@ class JSONLWriter(WriterInterface):
     # Encapsulated Properties
     # -------------------------------------------------------------------------
     @property
+    def writer_type(self) -> str:
+        return "JSONL"
+
+    @property
     def doc_title(self) -> str:
         return self.__doc_title
 
@@ -53,7 +57,6 @@ class JSONLWriter(WriterInterface):
         self, data: list[Union[TOCEntry, ContentItem]], path: Path
     ) -> None:
         """Generic write orchestrator."""
-
         if not data:
             raise ValueError("Cannot write empty data.")
 
@@ -76,7 +79,7 @@ class JSONLWriter(WriterInterface):
         self._write_jsonl(items, path, self._serialize_content)
 
     # -------------------------------------------------------------------------
-    # Core Writer Logic (Encapsulation + Template Method)
+    # Core Writer Logic (Encapsulation)
     # -------------------------------------------------------------------------
     def _write_jsonl(
         self,
@@ -85,8 +88,6 @@ class JSONLWriter(WriterInterface):
         serializer: Callable[[T], dict[str, Any]]
     ) -> None:
         """Write serialized JSON lines to file."""
-
-        # Prepare directory (Encapsulation)
         path.parent.mkdir(parents=True, exist_ok=True)
 
         with path.open("w", encoding="utf-8") as f:
@@ -97,22 +98,20 @@ class JSONLWriter(WriterInterface):
     # Hooks (Polymorphic extension points)
     # -------------------------------------------------------------------------
     def _before_write(self, path: Path) -> None:
-        """Hook before writing. Subclasses can override."""
         pass
 
     def _after_write(self, path: Path) -> None:
-        """Hook after writing. Subclasses can override."""
         pass
 
     # -------------------------------------------------------------------------
-    # Serialization Layer
+    # Serialization Layer — FINAL & CORRECT VERSION
     # -------------------------------------------------------------------------
     def _serialize_toc(self, entry: TOCEntry) -> dict[str, Any]:
         return {
             "doc_title": self.__doc_title,
             "section_id": entry.section_id,
             "title": entry.title,
-            "full_path": entry.title,
+            "full_path": entry.full_path or entry.title,
             "page": entry.page,
             "level": entry.level,
             "parent_id": entry.parent_id,
@@ -120,6 +119,7 @@ class JSONLWriter(WriterInterface):
         }
 
     def _serialize_content(self, item: ContentItem) -> dict[str, Any]:
+        """Serialize ContentItem into JSON-safe dict. (MATCHED WITH MODEL)"""
         return {
             "doc_title": item.doc_title,
             "section_id": item.section_id,
@@ -129,13 +129,13 @@ class JSONLWriter(WriterInterface):
             "level": item.level,
             "parent_id": item.parent_id,
             "full_path": item.full_path,
-            "type": item.content_type,
+            "content_type": item.content_type,   # CORRECT FIELD
             "block_id": item.block_id,
             "bbox": item.bbox,
         }
 
     # -------------------------------------------------------------------------
-    # Magic / Dunder Methods (Your same logic kept)
+    # Magic / Dunder Methods
     # -------------------------------------------------------------------------
     def __str__(self) -> str:
         return f"JSONLWriter(doc_title={self.__doc_title})"
@@ -144,7 +144,10 @@ class JSONLWriter(WriterInterface):
         return f"JSONLWriter(doc_title={self.__doc_title!r})"
 
     def __eq__(self, other: object) -> bool:
-        return isinstance(other, JSONLWriter) and self.__doc_title == other.__doc_title
+        return (
+            isinstance(other, JSONLWriter)
+            and self.__doc_title == other.__doc_title
+        )
 
     def __hash__(self) -> int:
         return hash((type(self).__name__, self.__doc_title))
@@ -156,7 +159,10 @@ class JSONLWriter(WriterInterface):
         return bool(self.__doc_title)
 
     def __lt__(self, other: object) -> bool:
-        return isinstance(other, JSONLWriter) and self.__doc_title < other.__doc_title
+        return (
+            isinstance(other, JSONLWriter)
+            and self.__doc_title < other.__doc_title
+        )
 
     def __le__(self, other: object) -> bool:
         return self == other or self < other
@@ -169,7 +175,6 @@ class JSONLWriter(WriterInterface):
 
     def __enter__(self) -> "JSONLWriter":
         return self
-
 
     def __int__(self) -> int:
         return len(self.__doc_title)

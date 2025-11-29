@@ -11,10 +11,31 @@ class Timer:
     """Context manager for timing operations with extendable behaviors."""
 
     def __init__(self, name: str, logger: Optional[Logger] = None) -> None:
-        self.name = name
-        self.logger = logger or Logger()
-        self.start_time: float = 0.0
-        self.elapsed: float = 0.0
+        self.__name = name
+        self.__logger = logger or Logger()
+        self.__start_time: float = 0.0
+        self.__elapsed: float = 0.0
+        self.__run_count = 0
+
+    @property
+    def name(self) -> str:
+        return self.__name
+
+    @property
+    def logger(self) -> Logger:
+        return self.__logger
+
+    @property
+    def start_time(self) -> float:
+        return self.__start_time
+
+    @property
+    def elapsed(self) -> float:
+        return self.__elapsed
+
+    @property
+    def run_count(self) -> int:
+        return self.__run_count
 
     # -------------------------------------------------------------------------
     # Context manager hooks
@@ -35,30 +56,59 @@ class Timer:
     # -------------------------------------------------------------------------
     def start(self) -> None:
         """Start the timer."""
-        self.start_time = time.time()
+        self.__start_time = time.time()
+        self.__run_count += 1
 
     def stop(self) -> None:
         """Stop the timer and calculate elapsed time."""
-        self.elapsed = time.time() - self.start_time
+        self.__elapsed = time.time() - self.__start_time
 
     # -------------------------------------------------------------------------
     # Polymorphic extension hooks
     # -------------------------------------------------------------------------
     def _on_success(self) -> None:
         """Hook: Called when block finishes successfully."""
-        self.logger.info(f"'{self.name}' took {self.elapsed:.2f} sec")
+        self.__logger.info(f"'{self.__name}' took {self.__elapsed:.2f} sec")
 
     def _on_failure(self, error: Exception) -> None:
         """Hook: Called when block raises an exception."""
-        self.logger.error(
-            f"'{self.name}' failed after {self.elapsed:.2f} sec: {error}"
+        self.__logger.error(
+            f"'{self.__name}' failed after {self.__elapsed:.2f} sec: {error}"
         )
 
     # -------------------------------------------------------------------------
     # Utility: convert to string
     # -------------------------------------------------------------------------
     def __str__(self) -> str:
-        return f"Timer(name='{self.name}', elapsed={self.elapsed:.2f}s)"
+        return f"Timer(name='{self.__name}', elapsed={self.__elapsed:.2f}s)"
+
+    def __repr__(self) -> str:
+        return f"Timer(name={self.__name!r})"
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Timer):
+            return NotImplemented
+        return self.__name == other.__name
+
+    def __hash__(self) -> int:
+        return hash((type(self).__name__, self.__name))
+
+    def __len__(self) -> int:
+        return self.__run_count
+
+    def __bool__(self) -> bool:
+        return self.__elapsed > 0
+
+    def __int__(self) -> int:
+        return int(self.__elapsed)
+
+    def __float__(self) -> float:
+        return self.__elapsed
+
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, Timer):
+            return NotImplemented
+        return self.__elapsed < other.elapsed
 
     # -------------------------------------------------------------------------
     # Decorator wrapper (Polymorphic)

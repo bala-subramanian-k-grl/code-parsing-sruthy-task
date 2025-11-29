@@ -1,7 +1,7 @@
 {
-  "timestamp": "2025-11-23T06:20:12.265093",
+  "timestamp": "2025-11-29T19:36:51.984626",
   "report_type": "JSON",
-  "status": "completed",
+  "status": "success",
   "statistics": {
     "total_pages": 1047,
     "toc_entries": 1360,

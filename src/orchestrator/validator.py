@@ -1,15 +1,18 @@
-"""Validator for parsing results."""
+"""
+Enterprise Validator Module (OOP + Encapsulation + Overloading + Polymorphism)
+"""
 
 from __future__ import annotations
 from abc import ABC, abstractmethod
+from typing import overload
 
-from src.core.config.models import ContentItem, ParserResult, TOCEntry
+from src.core.config.models import ParserResult, TOCEntry, ContentItem
 from src.core.interfaces.pipeline_interface import ValidationResult
 
 
-# ==========================================================
-# BASE VALIDATOR — Abstraction + Polymorphism
-# ==========================================================
+# ================================================================
+# BASE VALIDATOR (ABSTRACTION + POLYMORPHISM)
+# ================================================================
 
 class BaseValidator(ABC):
     """Abstract base validator for parser results."""
@@ -17,83 +20,117 @@ class BaseValidator(ABC):
     @property
     @abstractmethod
     def validator_type(self) -> str:
-        """Polymorphic validator identifier."""
         raise NotImplementedError
 
     @abstractmethod
     def validate(self, data: ParserResult) -> ValidationResult:
-        """Validate parser result and return ValidationResult."""
         raise NotImplementedError
 
+    # ---------- Polymorphic Helper ----------
     def validator_name(self) -> str:
-        """Return class name — polymorphism helper."""
         return self.__class__.__name__
 
+    # ---------- Magic Methods ----------
+    def __str__(self) -> str:
+        return f"{self.validator_type}"
 
-# ==========================================================
-# RESULT VALIDATOR — Inheritance + Encapsulation
-# ==========================================================
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}()"
+
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, self.__class__)
+
+    def __hash__(self) -> int:
+        return hash(type(self).__name__)
+
+
+# ================================================================
+# RESULT VALIDATOR (INHERITANCE + OVERLOADING + ENCAPSULATION)
+# ================================================================
 
 class ResultValidator(BaseValidator):
-    """Validates parser results have at least TOC or content data."""
+    """Validates parser results for TOC OR Content availability."""
 
     def __init__(self) -> None:
-        self.__validation_count = 0
+        self.__count = 0  # encapsulated counter
 
-    # ---------------- Polymorphism ----------------
-
+    # ---------- Polymorphism ----------
     @property
     def validator_type(self) -> str:
         return "ResultValidator"
 
-    # ---------------- Encapsulation ---------------
-
+    # ---------- Encapsulated Properties ----------
     @property
     def validation_count(self) -> int:
-        return self.__validation_count
+        return self.__count
 
-    @property
-    def has_validated(self) -> bool:
-        return self.__validation_count > 0
+    def _increment(self) -> None:
+        self.__count += 1
 
-    def _increment_validation(self) -> None:
-        self.__validation_count += 1
+    # ============================================================
+    # METHOD OVERLOADING FOR validate()
+    # ============================================================
 
-    # ---------------- Main Validation --------------
+    @overload
+    def validate(self, data: ParserResult) -> ValidationResult: ...
 
-    def validate(self, data: ParserResult) -> ValidationResult:
-        self._increment_validation()
+    @overload
+    def validate(self, data: ParserResult, *, strict: bool) -> ValidationResult: ...
 
+    def validate(self, data: ParserResult, *, strict: bool = False) -> ValidationResult:
+        """
+        validate(result)
+        validate(result, strict=True)
+        """
+        self._increment()
         errors: list[str] = []
-        if not data.toc_entries and not data.content_items:
-            errors.append("No TOC entries or content items found")
 
-        return ValidationResult(is_valid=not errors, errors=errors)
+        if strict:
+            if not data.toc_entries:
+                errors.append("Missing TOC entries (strict mode)")
+            if not data.content_items:
+                errors.append("Missing content items (strict mode)")
+        else:
+            if not data.toc_entries and not data.content_items:
+                errors.append("No TOC entries or content items found")
 
-    # ---------------- Helper Checks ----------------
+        return ValidationResult(is_valid=(not errors), errors=errors)
 
-    def validate_toc(self, entries: list[TOCEntry]) -> bool:
-        return bool(entries)
+    # ============================================================
+    # OVERLOADED TOC VALIDATION
+    # ============================================================
 
-    def validate_content(self, items: list[ContentItem]) -> bool:
-        return bool(items)
+    @overload
+    def validate_toc(self, entries: list[TOCEntry]) -> bool: ...
 
-    # ---------------- Magic Methods ----------------
+    @overload
+    def validate_toc(self, entries: list[TOCEntry], *, min_items: int) -> bool: ...
 
+    def validate_toc(self, entries: list[TOCEntry], *, min_items: int = 1) -> bool:
+        return len(entries) >= min_items
+
+    # ============================================================
+    # OVERLOADED CONTENT VALIDATION
+    # ============================================================
+
+    @overload
+    def validate_content(self, items: list[ContentItem]) -> bool: ...
+
+    @overload
+    def validate_content(self, items: list[ContentItem], *, min_items: int) -> bool: ...
+
+    def validate_content(self, items: list[ContentItem], *, min_items: int = 1) -> bool:
+        return len(items) >= min_items
+
+    # ---------- Magic Methods ----------
     def __str__(self) -> str:
         return "ResultValidator(requires_toc_or_content)"
 
     def __repr__(self) -> str:
         return "ResultValidator()"
 
-    def __eq__(self, other: object) -> bool:
-        return isinstance(other, ResultValidator)
-
-    def __hash__(self) -> int:
-        return hash(type(self).__name__)
-
     def __len__(self) -> int:
-        return self.__validation_count
+        return self.__count
 
     def __bool__(self) -> bool:
         return True
@@ -101,30 +138,25 @@ class ResultValidator(BaseValidator):
     def __lt__(self, other: object) -> bool:
         if not isinstance(other, ResultValidator):
             return NotImplemented
-        return self.__validation_count < other.__validation_count
-
-    def __le__(self, other: object) -> bool:
-        return self == other or self < other
+        return self.__count < other.__count
 
     def __int__(self) -> int:
-        return self.__validation_count
+        return self.__count
 
     def __float__(self) -> float:
-        return float(self.__validation_count)
+        return float(self.__count)
 
 
-# ==========================================================
-# STRICT VALIDATOR — Inheritance + Method Override
-# ==========================================================
+# ================================================================
+# STRICT VALIDATOR (OVERRIDING)
+# ================================================================
 
 class StrictValidator(ResultValidator):
-    """Strict validator requiring both TOC entries and content items."""
+    """Strict validator requiring BOTH TOC AND Content."""
 
     def __init__(self) -> None:
         super().__init__()
-        self.__strict_mode = True
-
-    # ---------------- Polymorphism ----------------
+        self.__strict = True
 
     @property
     def validator_type(self) -> str:
@@ -132,36 +164,18 @@ class StrictValidator(ResultValidator):
 
     @property
     def strict_mode(self) -> bool:
-        return self.__strict_mode
+        return self.__strict
 
-    # ---------------- Override Validation ---------
-
+    # ------------ Override validate() (Polymorphism) ------------
     def validate(self, data: ParserResult) -> ValidationResult:
-        self._increment_validation()
+        """
+        Strict override → always strict=True
+        """
+        return super().validate(data, strict=True)
 
-        errors: list[str] = []
-        if not data.toc_entries:
-            errors.append("No TOC entries found")
-        if not data.content_items:
-            errors.append("No content items found")
-
-        return ValidationResult(is_valid=not errors, errors=errors)
-
-    # ---------------- Magic Methods ---------------
-
+    # ---------- Magic Methods ----------
     def __str__(self) -> str:
         return "StrictValidator(requires_both_toc_and_content)"
 
     def __repr__(self) -> str:
         return "StrictValidator()"
-
-    def __eq__(self, other: object) -> bool:
-        return isinstance(other, StrictValidator)
-
-    def __hash__(self) -> int:
-        return hash(type(self).__name__)
-
-    def __lt__(self, other: object) -> bool:
-        if not isinstance(other, StrictValidator):
-            return NotImplemented
-        return self.validation_count < other.validation_count

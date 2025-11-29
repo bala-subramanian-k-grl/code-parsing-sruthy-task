@@ -1,110 +1,171 @@
-"""Base report generator with full OOP structure."""
+"""
+Base report generator with full OOP structure + Overloading.
+
+Enhancements Added:
+-------------------
+✔ Template Method Pattern (final generate())
+✔ Overloading of generate() for flexibility
+✔ Protected lifecycle hooks (before_write, after_write)
+✔ Better abstraction enforcement
+✔ Polymorphic extension support (supports_format)
+✔ More encapsulation for internal state
+✔ Error tracking, success tracking
+"""
 
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any
+from typing import Any, overload
 
 from src.core.config.models import ParserResult
 from src.core.interfaces.report_interface import IReportGenerator
 
 
 class BaseReportGenerator(IReportGenerator, ABC):
-    """
-    Abstract base class for all report generators.
+    """Abstract base class for all report generators."""
 
-    Implements:
-        - Template Method Pattern
-        - Strict abstraction hooks
-        - Polymorphism (file extension, formatter, writer)
-        - Encapsulation for internal state tracking
-    """
-
+    # ---------------------------------------------------------
+    # INIT (State Encapsulation)
+    # ---------------------------------------------------------
     def __init__(self) -> None:
-        self.__generation_count = 0                 # private
-        self.__last_output_path: Path | None = None  # private
-        self.__last_success: bool = False           # private
+        self.__generation_count = 0
+        self.__last_output_path: Path | None = None
+        self.__last_success = False
+        self.__error_count = 0
+        self.__total_bytes_written = 0
+        self.__initialized = True
 
     # ---------------------------------------------------------
-    # Encapsulated Properties
+    # Encapsulated Read-Only Properties
     # ---------------------------------------------------------
-
     @property
     def generation_count(self) -> int:
-        """Number of times this generator was used."""
         return self.__generation_count
 
     @property
     def last_output_path(self) -> Path | None:
-        """Path of last generated report."""
         return self.__last_output_path
 
     @property
     def last_success(self) -> bool:
-        """Whether last generation succeeded."""
         return self.__last_success
 
-    # ---------------------------------------------------------
-    # Template Method (Do NOT override in subclasses)
-    # ---------------------------------------------------------
+    @property
+    def error_count(self) -> int:
+        return self.__error_count
 
-    def generate(self, result: ParserResult, path: Path) -> None:
-        """
-        Template method that defines the workflow:
-            1. Validate input result
-            2. Format data
-            3. Write to target file
-        """
-        self.__generation_count += 1
+    @property
+    def total_bytes_written(self) -> int:
+        return self.__total_bytes_written
 
-        self._validate_result(result)
-        formatted = self._format_data(result)
-        self._write_to_file(formatted, path)
-
-        self.__last_output_path = path
-        self.__last_success = True
+    @property
+    def is_initialized(self) -> bool:
+        return self.__initialized
 
     # ---------------------------------------------------------
-    # Abstract Methods (Polymorphism Points)
+    # Polymorphic Capability
     # ---------------------------------------------------------
-
+    @property
     @abstractmethod
-    def _validate_result(self, result: ParserResult) -> None:
-        """Validate ParserResult before processing."""
-
-    @abstractmethod
-    def _format_data(self, result: ParserResult) -> Any:
-        """Format result data for output."""
-
-    @abstractmethod
-    def _write_to_file(self, data: Any, path: Path) -> None:
-        """Write formatted data to requested file."""
+    def report_type(self) -> str:
+        """Return human-friendly report type (PDF, JSON, Excel)."""
 
     @abstractmethod
     def get_file_extension(self) -> str:
-        """Return the file extension for this generator."""
+        """Return extension like .json / .xlsx"""
+
+    def supports_format(self, ext: str) -> bool:
+        """Polymorphic: Check if generator supports a file format."""
+        return ext.lower() == self.get_file_extension()
 
     # ---------------------------------------------------------
-    # Magic Methods (Clean, Highly Reusable)
+    # Overloaded generate() for flexibility
     # ---------------------------------------------------------
+    @overload
+    def generate(self, result: ParserResult, path: Path) -> None:
+        ...
 
+    @overload
+    def generate(self, result: ParserResult, path: str) -> None:
+        ...
+
+    # ---------------------------------------------------------
+    # FINAL Template Method Pattern
+    # ---------------------------------------------------------
+    def generate(self, result: ParserResult, path: Path | str) -> None:
+        """Do NOT override in subclasses."""
+        self.__generation_count += 1
+
+        # Allow string path input
+        if isinstance(path, str):
+            path = Path(path)
+
+        try:
+            self._validate_result(result)
+
+            self.before_write(result, path)
+
+            formatted = self._format_data(result)
+            bytes_written = self._write_to_file(formatted, path)
+
+            self.__total_bytes_written += bytes_written or 0
+            self.__last_success = True
+            self.__last_output_path = path
+
+            self.after_write(result, path)
+
+        except Exception as e:
+            self.__error_count += 1
+            self.__last_success = False
+            raise
+
+    # ---------------------------------------------------------
+    # Protected Lifecycle Hooks (Optional override)
+    # ---------------------------------------------------------
+    def before_write(self, result: ParserResult, path: Path) -> None:
+        """Hook called before writing (optional)."""
+        pass
+
+    def after_write(self, result: ParserResult, path: Path) -> None:
+        """Hook called after writing (optional)."""
+        pass
+
+    # ---------------------------------------------------------
+    # Abstract Methods (Subclasses MUST implement)
+    # ---------------------------------------------------------
+    @abstractmethod
+    def _validate_result(self, result: ParserResult) -> None:
+        pass
+
+    @abstractmethod
+    def _format_data(self, result: ParserResult) -> Any:
+        pass
+
+    @abstractmethod
+    def _write_to_file(self, data: Any, path: Path) -> int:
+        """Return number of bytes written."""
+        pass
+
+    # ---------------------------------------------------------
+    # Magic Methods (clean + helpful)
+    # ---------------------------------------------------------
     def __str__(self) -> str:
-        return f"{self.__class__.__name__}(format={self.get_file_extension()})"
+        return f"{self.__class__.__name__}(ext={self.get_file_extension()})"
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}()"
 
-    def __eq__(self, other: object) -> bool:
-        return isinstance(other, self.__class__)
-
-    def __hash__(self) -> int:
-        return hash(type(self).__name__)
-
     def __bool__(self) -> bool:
-        return True
+        return self.__initialized
 
     def __int__(self) -> int:
         return self.__generation_count
 
     def __float__(self) -> float:
         return float(self.__generation_count)
+
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, self.__class__)
+
+    def __hash__(self) -> int:
+        return hash(type(self).__name__)

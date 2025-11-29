@@ -1,10 +1,12 @@
-"""Search module for content searching.
-
-Provides:
-- JSONLSearcher: Search JSONL files for keywords
+"""
+Search module for enterprise-level content searching.
 """
 
 from src.search.jsonl_searcher import JSONLSearcher
 
-__version__ = "1.0.0"
-__all__ = ["JSONLSearcher"]
+__version__ = "1.0.1"
+__author__ = "USB-PD Parser Framework"
+
+__all__ = [
+    "JSONLSearcher",
+]

@@ -177,17 +177,52 @@ export USB_PD_OUTPUT_DIR="/path/to/outputs"
 usb-pd-parser/
 ├── src/
 │   ├── cli/                 # Command-line interface
+│   │   ├── app.py          # Main CLI application
+│   │   ├── decorators.py   # Shared decorators
+│   │   └── strategies.py   # Mode strategies
 │   ├── core/                # Core business logic
 │   │   ├── config/         # Configuration management
+│   │   │   ├── base_config.py
+│   │   │   ├── config_loader.py
+│   │   │   ├── constants.py
+│   │   │   └── models.py
 │   │   └── interfaces/     # Abstract interfaces (SOLID)
+│   │       ├── extraction_strategy.py
+│   │       ├── factory_interface.py
+│   │       ├── parser_interface.py
+│   │       ├── pipeline_interface.py
+│   │       └── report_interface.py
+│   ├── extractors/         # Content extraction
+│   │   ├── content_extractor.py
+│   │   ├── extractor_interface.py
+│   │   └── text_extractor.py
 │   ├── orchestrator/       # Pipeline coordination
+│   │   ├── pipeline_orchestrator.py
+│   │   └── validator.py
 │   ├── parser/             # PDF parsing engines
+│   │   ├── base_parser.py
+│   │   ├── parser_factory.py
+│   │   ├── pdf_parser.py
+│   │   ├── text_parser.py
+│   │   └── toc_extractor.py
 │   ├── search/             # Content search functionality
+│   │   └── jsonl_searcher.py
 │   ├── support/            # Report generation
-│   └── utils/              # Shared utilities
+│   │   ├── base_report_generator.py
+│   │   ├── excel_report_generator.py
+│   │   ├── json_report_generator.py
+│   │   └── metadata_generator.py
+│   ├── utils/              # Shared utilities
+│   │   ├── logger.py
+│   │   └── timer.py
+│   └── writers/            # Output writers
+│       ├── jsonl_writer.py
+│       └── writer_interface.py
 ├── tests/                  # Comprehensive test suite
 ├── docs/                   # Documentation
-└── outputs/                # Generated reports
+├── assets/                 # Sample PDF documents
+├── outputs/                # Generated reports
+└── main.py                 # Application entry point
 ```
 
 ### Design Patterns

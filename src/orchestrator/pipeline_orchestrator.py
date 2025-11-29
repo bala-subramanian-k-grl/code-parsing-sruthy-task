@@ -1,61 +1,59 @@
-"""Pipeline orchestrator for coordinating extraction."""
+"""
+Enterprise Pipeline Orchestrator (OOP-Optimized + Overloading Added)
+"""
 
 from __future__ import annotations
 from pathlib import Path
-from typing import Union
+from typing import Optional, overload
 
 from src.core.config.config_loader import ConfigLoader
 from src.core.config.constants import ParserMode
 from src.core.config.models import ParserResult
-from src.core.interfaces.pipeline_interface import (
-    PipelineInterface,
-    ValidationResult,
-)
-from src.parser.pdf_parser import PDFParser
-from src.support.excel_report_generator import ExcelReportGenerator
-from src.support.json_report_generator import JSONReportGenerator
+from src.core.interfaces.pipeline_interface import PipelineInterface, ValidationResult
 from src.support.metadata_generator import MetadataGenerator
-from src.utils.logger import logger
+from src.support.json_report_generator import JSONReportGenerator
+from src.support.excel_report_generator import ExcelReportGenerator
 from src.writers.jsonl_writer import JSONLWriter
+from src.utils.logger import logger
 
 
 class PipelineOrchestrator(PipelineInterface):
-    """Orchestrates the entire parsing pipeline."""
+    """Main enterprise pipeline orchestrator."""
 
-    # ---------------------------------------------------------
-    # INITIALIZATION (ENCAPSULATION)
-    # ---------------------------------------------------------
+    # ==========================================================
+    # INIT (ENCAPSULATION)
+    # ==========================================================
     def __init__(
         self,
         file_path: Path,
         mode: ParserMode,
-        config: Union[ConfigLoader, None] = None,
+        config: Optional[ConfigLoader] = None,
     ) -> None:
-        
+
         self.__file_path = file_path
         self.__mode = mode
         self.__config = config or ConfigLoader()
 
-        self.__output_dir = self.__config.get_output_dir()
-        self.__doc_title = self.__config.get_doc_title()
+        # Encapsulated config values
+        self.__output_dir = Path(self.__config.get("output", {}).get("base_dir", "outputs"))
+        self.__doc_title = str(self.__config.get("metadata", {}).get("doc_title", "Document"))
 
-        self.__toc_filename = "usb_pd_toc.jsonl"
-        self.__content_filename = "usb_pd_spec.jsonl"
+        # Counters
+        self.__exec_count = 0
+        self.__success = 0
+        self.__errors = 0
 
-    # ---------------------------------------------------------
-    # REQUIRED INTERFACE PROPERTIES (POLYMORPHISM)
-    # ---------------------------------------------------------
+        # Filenames
+        self._toc_name = "usb_pd_toc.jsonl"
+        self._content_name = "usb_pd_spec.jsonl"
+
+    # ==========================================================
+    # PROPERTIES
+    # ==========================================================
     @property
     def pipeline_type(self) -> str:
         return "USBPD-Pipeline"
 
-    @property
-    def is_async(self) -> bool:
-        return False
-
-    # ---------------------------------------------------------
-    # ENCAPSULATED ATTRIBUTES
-    # ---------------------------------------------------------
     @property
     def file_path(self) -> Path:
         return self.__file_path
@@ -73,128 +71,178 @@ class PipelineOrchestrator(PipelineInterface):
         return self.__doc_title
 
     @property
-    def toc_filename(self) -> str:
-        return self.__toc_filename
+    def execution_count(self) -> int:
+        return self.__exec_count
 
     @property
-    def content_filename(self) -> str:
-        return self.__content_filename
+    def success_count(self) -> int:
+        return self.__success
 
     @property
-    def file_exists(self) -> bool:
-        return self.__file_path.exists()
+    def error_count(self) -> int:
+        return self.__errors
 
-    @property
-    def output_exists(self) -> bool:
-        return self.__output_dir.exists()
-
-    @property
-    def file_name(self) -> str:
-        return self.__file_path.name
-
-    # ---------------------------------------------------------
-    # PREPARE (REQUIRED BY INTERFACE)
-    # ---------------------------------------------------------
-    def prepare(self) -> None:
-        """Prepare output directory."""
-        if not self.__output_dir.exists():
-            self.__output_dir.mkdir(parents=True, exist_ok=True)
-            logger.info(f"Created output directory → {self.__output_dir}")
-
-    # ---------------------------------------------------------
-    # VALIDATION (OVERRIDE)
-    # ---------------------------------------------------------
+    # ==========================================================
+    # VALIDATION
+    # ==========================================================
     def validate(self) -> ValidationResult:
-        """Validate pipeline configuration."""
         errors: list[str] = []
 
         if not self.__file_path.exists():
             errors.append(f"File not found: {self.__file_path}")
 
         if self.__file_path.suffix.lower() != ".pdf":
-            errors.append(f"Invalid file type: {self.__file_path.suffix}")
+            errors.append("Input must be a PDF file.")
 
         return ValidationResult(is_valid=(not errors), errors=errors)
 
-    def _validate_pipeline(self) -> None:
-        """Internal validator wrapper."""
-        validation = self.validate()
-        if not validation.is_valid:
-            raise ValueError(
-                f"Pipeline validation failed: {', '.join(validation.errors)}"
-            )
+    def _ensure_valid(self) -> None:
+        val = self.validate()
+        if not val.is_valid:
+            raise ValueError(f"Validation failed: {', '.join(val.errors)}")
 
-    # ---------------------------------------------------------
-    # EXECUTE (REQUIRED BY INTERFACE)
-    # ---------------------------------------------------------
+    # ==========================================================
+    # TEMPLATE METHOD PATTERN → execute()
+    # ==========================================================
     def execute(self) -> ParserResult:
-        """Execute entire pipeline."""
-        self.prepare()
-        self._validate_pipeline()
+        self.__exec_count += 1
+        self._on_start()
 
         try:
-            result = self._parse_document()
-            self._write_outputs(result)
-            self._generate_reports(result)
-            logger.info("Pipeline execution completed successfully")
+            self.prepare()
+            self._ensure_valid()
 
+            result = self._parse()
+            self._write_outputs(result)      # overloaded version inside
+            self._generate_reports(result)
+
+            self.__success += 1
+            self._on_complete()
             return result
 
         except Exception as e:
-            logger.error(f"Pipeline execution failed: {e}")
+            logger.error(f"Pipeline failed: {e}")
+            self.__errors += 1
             raise
 
         finally:
             self.cleanup()
 
-    # ---------------------------------------------------------
-    # CLEANUP (REQUIRED BY INTERFACE)
-    # ---------------------------------------------------------
-    def cleanup(self) -> None:
-        """Clean up resources."""
-        logger.info("Pipeline cleanup complete")
+    # ==========================================================
+    # METHOD OVERLOADING — run()
+    # ==========================================================
 
-    # ---------------------------------------------------------
-    # INTERNAL PROCESSING METHODS (ENCAPSULATED)
-    # ---------------------------------------------------------
-    def _parse_document(self) -> ParserResult:
-        """Parse PDF document."""
-        logger.info("Starting PDF parsing")
-        parser = PDFParser(self.__file_path, self.__doc_title)
+    @overload
+    def run(self) -> ParserResult: ...
+    
+    @overload
+    def run(self, mode: ParserMode) -> ParserResult: ...
+
+    def run(self, mode: Optional[ParserMode] = None) -> ParserResult:
+        """
+        Overloaded method:
+        - run()                 → use existing mode
+        - run(ParserMode.FULL)  → override mode and run
+        """
+        if mode:
+            self._PipelineOrchestrator__mode = mode
+        return self.execute()
+
+    # ==========================================================
+    # INTERNAL LIFECYCLE HOOKS
+    # ==========================================================
+    def _on_start(self) -> None:
+        logger.info("Pipeline started.")
+
+    def _on_complete(self) -> None:
+        logger.info("Pipeline completed successfully.")
+
+    # ==========================================================
+    # PREPARE
+    # ==========================================================
+    def prepare(self) -> None:
+        if not self.__output_dir.exists():
+            self.__output_dir.mkdir(parents=True, exist_ok=True)
+            logger.info(f"Created output directory: {self.__output_dir}")
+
+    # ==========================================================
+    # PARSE
+    # ==========================================================
+    def _parse(self) -> ParserResult:
+        from src.parser.parser_factory import ParserFactory
+        parser = ParserFactory.create_parser(self.__file_path)
+        logger.info("Parsing PDF...")
         return parser.parse()
 
-    def _write_outputs(self, result: ParserResult) -> None:
-        """Write output files."""
-        logger.info("Writing JSONL files")
+    # ==========================================================
+    # METHOD OVERLOADING — write_outputs()
+    # ==========================================================
 
+    @overload
+    def _write_outputs(self, result: ParserResult) -> None: ...
+    
+    @overload
+    def _write_outputs(self, result: ParserResult, *, only: str) -> None: ...
+
+    def _write_outputs(self, result: ParserResult, *, only: str = "all") -> None:
+        """
+        Overloaded output writer.
+        - only="all" (default)
+        - only="toc"
+        - only="content"
+        """
         writer = JSONLWriter(self.__doc_title)
+        out = self.__output_dir
 
-        writer.write_toc(
-            result.toc_entries,
-            self.__output_dir / self.__toc_filename,
-        )
-        writer.write_content(
-            result.content_items,
-            self.__output_dir / self.__content_filename,
-        )
+        if only == "all":
+            writer.write_toc(result.toc_entries, out / self._toc_name)
+            writer.write_content(result.content_items, out / self._content_name)
+        elif only == "toc":
+            writer.write_toc(result.toc_entries, out / self._toc_name)
+        elif only == "content":
+            writer.write_content(result.content_items, out / self._content_name)
+        else:
+            raise ValueError("Invalid `only` value for _write_outputs")
 
+    # ==========================================================
+    # REPORT GENERATION
+    # ==========================================================
     def _generate_reports(self, result: ParserResult) -> None:
-        """Generate metadata, JSON, and Excel reports."""
-        MetadataGenerator().generate(
-            result, self.__output_dir / "usb_pd_metadata.jsonl"
-        )
-        JSONReportGenerator().generate(
-            result, self.__output_dir / "parsing_report.json",
-        )
-        ExcelReportGenerator().generate(
-            result, self.__output_dir / "validation_report.xlsx",
-        )
+        out = self.__output_dir
+        MetadataGenerator().generate(result, out / "usb_pd_metadata.jsonl")
+        JSONReportGenerator().generate(result, out / "parsing_report.json")
+        ExcelReportGenerator().generate(result, out / "validation_report.xlsx")
 
-    # ---------------------------------------------------------
-    # MAGIC METHODS (UNCHANGED)
-    # ---------------------------------------------------------
+    # ==========================================================
+    # CLEANUP
+    # ==========================================================
+    def cleanup(self) -> None:
+        logger.info("Cleanup complete.")
+
+    # ==========================================================
+    # REQUIRED INTERFACE METHODS
+    # ==========================================================
+    def pause(self) -> None: ...
+    def resume(self) -> None: ...
+    def cancel(self) -> None: ...
+    
+    def get_status(self) -> str:
+        return "running" if self.__exec_count else "idle"
+
+    def get_progress(self) -> float:
+        return 1.0 if self.__success else 0.0
+
+    # ==========================================================
+    # MAGIC METHODS
+    # ==========================================================
     def __str__(self) -> str:
-        return f"PipelineOrchestrator(file={self.__file_path.name}, mode={self.__mode.value})"
+        return f"PipelineOrchestrator(file={self.file_path.name}, mode={self.mode.value})"
 
     def __repr__(self) -> str:
-        return f"PipelineOrchestrator(file_path={self.__file_path!r}, mode={self.__mode!r})"
+        return f"PipelineOrchestrator(path={self.file_path!r}, mode={self.mode!r})"
+
+    def __len__(self) -> int:
+        return self.__exec_count
+
+    def __bool__(self) -> bool:
+        return self.file_path.exists()

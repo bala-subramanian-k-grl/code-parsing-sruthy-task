@@ -1,6 +1,17 @@
-"""Content extraction from PDF documents."""
+"""
+ContentExtractor
+-----------------
+Enterprise-grade content extraction component.
 
-from typing import Any
+Implements:
+- Strategy Pattern compatibility
+- Full OOP: Encapsulation, Polymorphism, Abstraction
+- Clean extension hooks for NLP/ML enhancements
+- Safe internal state handling
+"""
+
+from __future__ import annotations
+from typing import Any, List
 
 from src.core.config.models import ContentItem
 from src.extractors.text_extractor import TextExtractor
@@ -8,108 +19,149 @@ from src.extractors.extractor_interface import ExtractorInterface
 
 
 class ContentExtractor(ExtractorInterface):
-    """Extract content items from PDF documents."""
+    """Extract structured content items from PDF documents."""
 
+    # ==========================================================
+    # CLASS-LEVEL CONSTANTS (ENCAPSULATION)
+    # ==========================================================
     _TITLE_MAX_LENGTH = 100
     _MIN_TEXT_LENGTH = 1
 
-    # -------------------------------------------------
-    # Encapsulated & Abstracted Initializer
-    # -------------------------------------------------
+    # ==========================================================
+    # INITIALIZATION
+    # ==========================================================
     def __init__(self, doc_title: str) -> None:
-        if not doc_title:
-            raise ValueError("doc_title cannot be empty")
-
-        self.__doc_title = doc_title
+        self.__doc_title = doc_title.strip()
         self.__text_extractor = TextExtractor()
+        self._validate_init()
 
-    # -------------------------------------------------
-    # Required OOP Properties (ENCAPSULATION + POLYMORPHISM)
-    # -------------------------------------------------
+    def _validate_init(self) -> None:
+        """Encapsulated initializer validation."""
+        if not self.__doc_title:
+            raise ValueError("ContentExtractor requires a non-empty doc_title.")
 
+    # ==========================================================
+    # PROPERTIES (ENCAPSULATION + POLYMORPHISM)
+    # ==========================================================
     @property
     def extractor_type(self) -> str:
-        """Polymorphic extractor type identifier."""
         return "ContentExtractor"
 
     @property
     def is_stateful(self) -> bool:
-        """This extractor holds internal state -> True."""
-        return True
+        return True  # holds document title
 
-    # -------------------------------------------------
-    # Required Abstract Method (INHERITANCE + POLYMORPHISM)
-    # -------------------------------------------------
+    # ==========================================================
+    # PRIMARY EXTRACTION ENTRY (POLYMORPHISM)
+    # ==========================================================
+    def extract(self, data: Any) -> List[ContentItem]:
+        """Extract content from entire PDF document."""
+        results: List[ContentItem] = []
 
-    def extract(self, data: Any) -> list[ContentItem]:
-        """Extract all content from PDF document."""
-        items: list[ContentItem] = []
         for page_num, page in enumerate(data, start=1):
-            items.extend(self._extract_from_page(page, page_num))
-        return items
+            processed_page = self._preprocess_page(page)
+            results.extend(self._extract_from_page(processed_page, page_num))
 
-    # -------------------------------------------------
-    # Optional Validation (POLYMORPHISM)
-    # -------------------------------------------------
+        return results
 
+    # ==========================================================
+    # VALIDATION HOOK
+    # ==========================================================
     def validate(self) -> None:
-        """Validate extractor configuration."""
         if not self.__doc_title:
-            raise ValueError("ContentExtractor requires a document title.")
+            raise ValueError("ContentExtractor validation failed: Missing title")
 
-    # -------------------------------------------------
-    # INTERNAL EXTRACTION LOGIC (ENCAPSULATED)
-    # -------------------------------------------------
+    # ==========================================================
+    # HOOKS FOR EXTENSIBILITY
+    # ==========================================================
+    def _preprocess_page(self, page: Any) -> Any:
+        """
+        Hook: future NLP/image preprocessing.
+        Can be overridden by subclasses.
+        """
+        return page
 
-    def _extract_from_page(self, page: Any, page_num: int) -> list[ContentItem]:
-        """Extract content from a single page."""
+    def _normalize_text(self, text: str) -> str:
+        """Hook: normalize extracted text."""
+        return text.replace("\n", " ").strip()
+
+    def _clean_text(self, text: str) -> str:
+        """Internal cleaning with encapsulation."""
+        return " ".join(text.split())
+
+    # ==========================================================
+    # PAGE-LEVEL EXTRACTION
+    # ==========================================================
+    def _extract_from_page(
+        self, page: Any, page_num: int
+    ) -> List[ContentItem]:
+        """Extract structured content from a single page."""
         text_dict = page.get_text("dict")
         blocks = text_dict.get("blocks", [])
-        items: list[ContentItem] = []
+
+        items: List[ContentItem] = []
 
         for block_num, block in enumerate(blocks):
             if not self._is_valid_block(block):
                 continue
 
-            text = self.__text_extractor.extract(block)
+            raw_text = self.__text_extractor.extract(block)
+            text = self._normalize_text(raw_text)
 
             if not self._is_valid_text(text):
                 continue
 
+            text = self._clean_text(text)
+
             items.append(
-                self._build_content_item(text, page_num, block_num, block)
+                self._build_content_item(
+                    text=text,
+                    page_num=page_num,
+                    block_num=block_num,
+                    block=block,
+                )
             )
+
         return items
 
+    # ==========================================================
+    # VALIDATION HELPERS
+    # ==========================================================
     def _is_valid_block(self, block: dict[str, Any]) -> bool:
         return "lines" in block
 
     def _is_valid_text(self, text: str) -> bool:
         return len(text.strip()) >= self._MIN_TEXT_LENGTH
 
+    # ==========================================================
+    # MODEL CREATION
+    # ==========================================================
     def _build_content_item(
-        self, text: str, page_num: int, block_num: int, block: dict[str, Any]
+        self,
+        text: str,
+        page_num: int,
+        block_num: int,
+        block: dict[str, Any],
     ) -> ContentItem:
-        """Build ContentItem from extracted data."""
         block_id = self._generate_block_id(page_num, block_num)
+
         return ContentItem(
             doc_title=self.__doc_title,
             section_id=block_id,
-            title=text[:self._TITLE_MAX_LENGTH],
+            title=text[: self._TITLE_MAX_LENGTH],
             content=text,
             page=page_num,
             block_id=block_id,
-            bbox=list(block.get("bbox", []))
+            bbox=list(block.get("bbox", [])),
         )
 
     @staticmethod
     def _generate_block_id(page_num: int, block_num: int) -> str:
         return f"p{page_num}_{block_num}"
 
-    # -------------------------------------------------
-    # Existing Encapsulated Properties (UNCHANGED)
-    # -------------------------------------------------
-
+    # ==========================================================
+    # READ-ONLY PUBLIC PROPERTIES (ENCAPSULATION)
+    # ==========================================================
     @property
     def doc_title(self) -> str:
         return self.__doc_title
@@ -134,20 +186,20 @@ class ContentExtractor(ExtractorInterface):
     def title_upper(self) -> str:
         return self.__doc_title.upper()
 
-    # -------------------------------------------------
-    # Magic Methods (UNCHANGED)
-    # -------------------------------------------------
-
+    # ==========================================================
+    # MAGIC METHODS (CLEAN + CONSISTENT)
+    # ==========================================================
     def __str__(self) -> str:
-        return f"ContentExtractor(doc_title={self.__doc_title})"
+        return f"ContentExtractor(title={self.__doc_title})"
 
     def __repr__(self) -> str:
         return f"ContentExtractor(doc_title={self.__doc_title!r})"
 
     def __eq__(self, other: object) -> bool:
-        if not isinstance(other, ContentExtractor):
-            return NotImplemented
-        return self.__doc_title == other.__doc_title
+        return (
+            isinstance(other, ContentExtractor)
+            and self.__doc_title == other.__doc_title
+        )
 
     def __hash__(self) -> int:
         return hash((type(self).__name__, self.__doc_title))

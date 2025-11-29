@@ -1,17 +1,21 @@
 """
-Enterprise extraction strategy interface (Strategy Pattern).
-
+Enterprise Extraction Strategy Interface (Strategy Pattern).
 """
 
 from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from typing import Any, Protocol
 
 from src.core.config.constants import ParserMode
 
 
+# ==========================================================
+# DOCUMENT PROTOCOL (Duck-Typed Interface)
+# ==========================================================
+
 class Document(Protocol):
-    """Protocol defining the required structure of a document."""
+    """Protocol defining the expected behavior of a document."""
 
     def __len__(self) -> int:
         """Return number of pages in the document."""
@@ -22,54 +26,121 @@ class Document(Protocol):
         ...
 
 
-class ExtractionStrategy(ABC):
-    """Abstract Strategy for content extraction."""
+# ==========================================================
+# EXTRACTION STRATEGY (ABSTRACT STRATEGY PATTERN)
+# ==========================================================
 
+class ExtractionStrategy(ABC):
+    """Abstract Strategy for PDF content extraction."""
+
+    VERSION = "1.0.0"
+
+    # ------------------------------------------------------
+    # ABSTRACT POLYMORPHIC METHODS
+    # ------------------------------------------------------
 
     @abstractmethod
     def extract(self, document: Document) -> list[dict[str, Any]]:
         """
         Extract content from the document.
 
-        Every strategy has a different algorithm.
-        This is where polymorphism happens.
+        Each strategy implements its own algorithm (Polymorphism).
         """
         raise NotImplementedError
 
     @abstractmethod
     def supports(self, mode: ParserMode) -> bool:
-        """
-        Check if the strategy supports the given parser mode.
-
-        Example:
-            return mode == ParserMode.TOC
-        """
+        """Whether strategy supports the given parser mode."""
         raise NotImplementedError
 
     @abstractmethod
     def strategy_name(self) -> str:
-        """
-        Human-readable strategy name.
-
-        Example:
-            return "TOCExtractionStrategy"
-        """
+        """Human-readable strategy name."""
         raise NotImplementedError
 
+    @abstractmethod
+    def prepare(self) -> None:
+        """Prepare strategy before extraction."""
+        raise NotImplementedError
+
+    @abstractmethod
+    def cleanup(self) -> None:
+        """Cleanup after extraction."""
+        raise NotImplementedError
+
+    @abstractmethod
+    def can_handle(self, document: Document) -> bool:
+        """Check if strategy can process the document."""
+        raise NotImplementedError
+
+    @abstractmethod
+    def get_metadata(self) -> dict[str, Any]:
+        """Return metadata describing strategy behavior."""
+        raise NotImplementedError
+
+    @abstractmethod
+    def estimate_time(self, document: Document) -> float:
+        """Estimate extraction time (seconds)."""
+        raise NotImplementedError
+
+    # ------------------------------------------------------
+    # OPTIONAL POLYMORPHIC METHODS
+    # ------------------------------------------------------
 
     def validate_strategy(self) -> None:
-        """
-        Optional validation method.
-
-        Subclasses may override to validate internal state or config.
-        """
+        """Optional validation (subclasses may override)."""
         pass
 
     def priority(self) -> int:
         """
-        Optional priority system.
-        Higher value = higher priority strategy.
-
-        Useful if multiple strategies support same ParserMode.
+        Strategy priority for conflict resolution.
+        Higher = preferred.
         """
         return 10
+
+    # ------------------------------------------------------
+    # INTERNAL VALIDATION (ENCAPSULATION)
+    # ------------------------------------------------------
+
+    def _ensure_document(self, document: Document) -> None:
+        """Protected helper to validate document before extraction."""
+        if not hasattr(document, "__len__") or not hasattr(document, "__getitem__"):
+            raise TypeError(
+                f"{self.strategy_name()} received invalid document type"
+            )
+        if len(document) == 0:
+            raise ValueError("Document is empty; cannot extract content")
+
+    # ------------------------------------------------------
+    # DUNDER METHODS (POLYMORPHIC + READABILITY)
+    # ------------------------------------------------------
+
+    def __str__(self) -> str:
+        return f"{self.strategy_name()}Strategy"
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(priority={self.priority()})"
+
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, self.__class__)
+
+    def __hash__(self) -> int:
+        return hash(type(self).__name__)
+
+    def __bool__(self) -> bool:
+        return True
+
+    def __lt__(self, other: object) -> bool:
+        """Sort strategies by priority."""
+        if not isinstance(other, ExtractionStrategy):
+            return NotImplemented
+        return self.priority() < other.priority()
+
+    def __le__(self, other: object) -> bool:
+        return self == other or self < other
+
+    def __int__(self) -> int:
+        return self.priority()
+
+    def __float__(self) -> float:
+        return float(self.priority())

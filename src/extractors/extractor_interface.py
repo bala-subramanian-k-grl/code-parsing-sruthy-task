@@ -28,3 +28,18 @@ class ExtractorInterface(ABC):
     def extractor_name(self) -> str:
         """Return extractor class name."""
         return self.__class__.__name__
+
+    def __str__(self) -> str:
+        return f"{self.extractor_type}Extractor"
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}()"
+
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, self.__class__)
+
+    def __hash__(self) -> int:
+        return hash(type(self).__name__)
+
+    def __bool__(self) -> bool:
+        return True

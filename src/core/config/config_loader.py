@@ -1,155 +1,144 @@
 """
-Enterprise OOP Configuration Loader Module.
+Enterprise OOP Configuration Loader Module (Optimized & Compact)
 
-OOP Enhancements:
-- BaseConfigLoader (Abstraction)
-- YAMLConfigLoader / JSONConfigLoader / EnvConfigLoader (Inheritance)
-- Polymorphic load(), source_name(), validate()
-- Factory pattern for selecting loader type
-- Encapsulation with protected methods
+Implements:
+- Abstraction (BaseConfigLoader)
+- Inheritance (YAMLConfigLoader, JSONConfigLoader, EnvConfigLoader)
+- Factory Pattern (ConfigLoaderFactory)
+- Polymorphism (load(), source_name(), magic methods)
+- Encapsulation (private/protected methods, property access)
+- Overloading (create(), get())
 """
 
 from __future__ import annotations
+import json
+import os
+import yaml
 
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Callable, Dict, Optional, TypeVar, overload
 
-import yaml
-import json
-import os
+from src.core.interfaces.factory_interface import FactoryInterface
 
 
-# ==========================================================
-# 1. ABSTRACT BASE LOADER (Abstraction)
-# ==========================================================
+# ======================================================
+# Helper Decorator — Protected Access
+# ======================================================
+
+T = TypeVar('T')
+
+def protected_access(func: Callable[..., T]) -> Callable[..., T]:
+    def wrapper(self: Any, *args: Any, **kwargs: Any) -> T:
+        return func(self, *args, **kwargs)
+    return wrapper
+
+
+# ======================================================
+# ABSTRACT BASE LOADER (Abstraction + Encapsulation)
+# ======================================================
 
 class BaseConfigLoader(ABC):
-    """
-    Abstract interface for configuration loaders.
-
-    Enforces:
-    - load()
-    - get()
-    - source_name()
-    """
+    """Abstract loader interface."""
 
     def __init__(self, config_path: Optional[Path] = None):
-        self._config_path = config_path
+        self.__config_path = config_path
         self._config: Dict[str, Any] = {}
 
-    # ------- ABSTRACT POLYMORPHIC METHODS -------
+    # ---------- Abstract Methods ----------
     @abstractmethod
     def load(self) -> Dict[str, Any]:
-        """Load configuration from underlying storage."""
         raise NotImplementedError
 
     @abstractmethod
     def source_name(self) -> str:
-        """Human readable name of source (YAML/JSON/ENV)."""
         raise NotImplementedError
 
-    # ------- SHARED UTILITY METHODS (Encapsulation) -------
-    def get(self, key: str, default: Any = None) -> Any:
-        """Retrieve config value safely."""
-        return self._config.get(key, default)
+    # ---------- Shared Protected Methods ----------
+    @protected_access
+    def _validate_path(self) -> None:
+        if self.__config_path and not self.__config_path.exists():
+            raise FileNotFoundError(f"Config not found: {self.__config_path}")
 
-    def validate_path(self) -> None:
-        """Validate file path existence."""
-        if self._config_path and not self._config_path.exists():
-            raise FileNotFoundError(f"Config file not found: {self._config_path}")
+    @protected_access
+    def _read_file(self) -> str:
+        if not self.__config_path:
+            raise ValueError("Config path is not set")
+        with self.__config_path.open("r", encoding="utf-8") as f:
+            return f.read()
+
+    # ---------- Public Accessors ----------
+    @property
+    def config_path(self) -> Optional[Path]:
+        return self.__config_path
 
     @property
     def config(self) -> Dict[str, Any]:
         return self._config
 
-    @property
-    def config_keys(self) -> list[str]:
-        return list(self._config.keys())
+    # ---------- Overloaded Getters ----------
+    @overload
+    def get(self, key: str) -> Any: ...
+    @overload
+    def get(self, key: str, default: Any) -> Any: ...
 
-    @property
-    def config_values(self) -> list[Any]:
-        return list(self._config.values())
+    def get(self, key: str, default: Any = None) -> Any:
+        return self._config.get(key, default)
 
-    def __contains__(self, key: str) -> bool:
-        return key in self._config
-
-    def __getitem__(self, key: str) -> Any:
-        return self._config.get(key)
-
+    # ---------- Magic Methods (Polymorphism) ----------
     def __len__(self) -> int:
         return len(self._config)
 
     def __str__(self) -> str:
-        return f"{self.source_name()}Loader(path={self._config_path})"
+        return f"{self.source_name()}Loader(path={self.__config_path})"
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}(config_path={self._config_path!r})"
+        return f"{self.__class__.__name__}(path={self.__config_path!r})"
+
+    def __bool__(self) -> bool:
+        return bool(self._config)
+
+    def __contains__(self, item: str) -> bool:
+        return item in self._config
 
 
-# ==========================================================
-# 2. YAML CONFIG LOADER (Inheritance + Polymorphism)
-# ==========================================================
+# ======================================================
+# YAML LOADER
+# ======================================================
 
 class YAMLConfigLoader(BaseConfigLoader):
-    """Load configuration from YAML file."""
-
     def load(self) -> Dict[str, Any]:
-        self.validate_path()
-
-        if not self._config_path:
-            raise ValueError("Config path is not set")
-
-        try:
-            with self._config_path.open("r", encoding="utf-8") as f:
-                self._config = yaml.safe_load(f) or {}
-        except yaml.YAMLError as e:
-            raise ValueError(f"Malformed YAML in {self._config_path}: {e}")
-
+        self._validate_path()
+        data: Any = yaml.safe_load(self._read_file())
+        self._config = data if isinstance(data, dict) else {}
         return self._config
 
     def source_name(self) -> str:
         return "YAML"
 
 
-# ==========================================================
-# 3. JSON CONFIG LOADER
-# ==========================================================
+# ======================================================
+# JSON LOADER
+# ======================================================
 
 class JSONConfigLoader(BaseConfigLoader):
-    """Load configuration from JSON file."""
-
     def load(self) -> Dict[str, Any]:
-        self.validate_path()
-
-        if not self._config_path:
-            raise ValueError("Config path is not set")
-
+        self._validate_path()
         try:
-            with self._config_path.open("r", encoding="utf-8") as f:
-                self._config = json.load(f) or {}
+            self._config = json.loads(self._read_file()) or {}
         except json.JSONDecodeError as e:
-            raise ValueError(f"Malformed JSON in {self._config_path}: {e}")
-
+            raise ValueError(f"Malformed JSON: {e}")
         return self._config
 
     def source_name(self) -> str:
         return "JSON"
 
 
-# ==========================================================
-# 4. ENVIRONMENT CONFIG LOADER
-# ==========================================================
+# ======================================================
+# ENVIRONMENT LOADER
+# ======================================================
 
 class EnvConfigLoader(BaseConfigLoader):
-    """
-    Load configuration from environment variables.
-
-    Example:
-        export PDF_PATH="assets/doc.pdf"
-        export OUTPUT_DIR="outputs"
-    """
-
     def load(self) -> Dict[str, Any]:
         self._config = {
             "input": {"pdf_path": os.getenv("PDF_PATH")},
@@ -157,8 +146,7 @@ class EnvConfigLoader(BaseConfigLoader):
             "metadata": {
                 "doc_title": os.getenv("DOC_TITLE", "Document"),
                 "keywords": os.getenv("KEYWORDS", "").split(",")
-                if os.getenv("KEYWORDS")
-                else [],
+                if os.getenv("KEYWORDS") else []
             },
         }
         return self._config
@@ -167,71 +155,42 @@ class EnvConfigLoader(BaseConfigLoader):
         return "ENVIRONMENT"
 
 
-# ==========================================================
-# 5. FACTORY PATTERN — Select Loader Type
-# ==========================================================
+# ======================================================
+# FACTORY PATTERN (Polymorphism + Overloading)
+# ======================================================
 
-class ConfigLoaderFactory:
-    """Factory class to create appropriate loader based on file extension."""
+class ConfigLoaderFactory(FactoryInterface[BaseConfigLoader]):
+    """Create appropriate config loader based on file extension."""
 
-    @staticmethod
-    def create_loader(path: Path) -> BaseConfigLoader:
+    def create(self, path: Path, *args: Any, **kwargs: Any) -> BaseConfigLoader:
         ext = path.suffix.lower()
 
-        if ext in [".yml", ".yaml"]:
+        if ext in (".yml", ".yaml"):
             return YAMLConfigLoader(path)
-        elif ext == ".json":
+        if ext == ".json":
             return JSONConfigLoader(path)
-        else:
-            raise ValueError(f"Unsupported config format: {ext}")
 
-
-# ==========================================================
-# 6. HIGH-LEVEL ENTERPRISE WRAPPER (Maintains backward compatibility)
-# ==========================================================
-
-class ConfigLoader:
-    """
-    Backward-compatible wrapper.
-
-    Uses:
-    - YAMLConfigLoader
-    - ConfigLoaderFactory
-    - Polymorphic loader underneath
-    """
-
-    def __init__(self, config_path: Path = Path("application.yml")):
-        self._config_path = config_path
-        self._loader = ConfigLoaderFactory.create_loader(self._config_path)
-        self._config = self._loader.load()
-
-    # -------- Existing methods you already had (compatible) --------
-    def get_pdf_path(self) -> Path:
-        path = self._config.get("input", {}).get("pdf_path")
-        if not path:
-            raise ValueError(f"pdf_path not found in {self._config_path}")
-        return Path(path)
-
-    def get_output_dir(self) -> Path:
-        dir_path = self._config.get("output", {}).get("base_dir")
-        if not dir_path:
-            raise ValueError(f"base_dir not found in {self._config_path}")
-        return Path(dir_path)
-
-    def get_doc_title(self) -> str:
-        title = self._config.get("metadata", {}).get("doc_title", "Document")
-        return str(title)
-
-    def get_keywords(self) -> list[str]:
-        keywords = self._config.get("metadata", {}).get("keywords", [])
-        return [str(k) for k in keywords] if keywords else []
-
-    # -------- Add transparency for access -------
-    def __getitem__(self, key: str) -> Any:
-        return self._config.get(key)
+        raise ValueError(f"Unsupported config format: {ext}")
 
     def __str__(self) -> str:
-        return f"ConfigLoader(source={self._loader.source_name()}, path={self._config_path})"
+        return "ConfigLoaderFactory"
 
-    def __repr__(self) -> str:
-        return f"ConfigLoader(loader={self._loader!r})"
+
+# ======================================================
+# HIGH-LEVEL WRAPPER (Simple Public API)
+# ======================================================
+
+class ConfigLoader(BaseConfigLoader):
+    """User-facing loader (default = YAML)."""
+
+    def __init__(self, config_path: Path = Path("application.yml")):
+        super().__init__(config_path)
+        self.__factory = ConfigLoaderFactory()
+        self.__loader = self.__factory.create(config_path)
+        self._config = self.__loader.load()
+
+    def load(self) -> Dict[str, Any]:
+        return self.__loader.load()
+
+    def source_name(self) -> str:
+        return self.__loader.source_name()
