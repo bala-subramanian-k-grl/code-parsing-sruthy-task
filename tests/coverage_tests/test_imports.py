@@ -16,7 +16,7 @@ import src.parser.base_parser
 import src.parser.pdf_parser
 import src.parser.toc_extractor
 import src.utils.logger
-import src.utils.timer
+from src.utils import timer as timer_module
 from src.core.interfaces.pipeline_interface import PipelineInterface
 from src.search.jsonl_searcher import JSONLSearcher
 from src.support.excel_report_generator import ExcelReportGenerator
@@ -295,8 +295,8 @@ class UtilsImportTest(BaseImportTest):
         assert src.parser.base_parser is not None, (
             "base_parser missing"
         )
-        assert src.utils.timer is not None, "timer missing"
-        assert callable(src.utils.timer.timer), (
+        assert timer_module is not None, "timer module missing"
+        assert callable(timer_module), (
             "timer decorator not callable"
         )
         return True
