@@ -6,8 +6,7 @@ Enterprise-grade OOP import validation tests.
 from __future__ import annotations
 
 import importlib
-from abc import ABC
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
 import src.core.config.base_config
 import src.core.config.constants
