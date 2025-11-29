@@ -6,8 +6,9 @@ Encapsulation, Abstraction, Polymorphism, and Overloading.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Callable, TypeVar, Union
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from .constants import ParserMode
 
@@ -85,7 +86,13 @@ class BaseConfig(BaseConfigInterface):
     - Polymorphism: mode_behavior(), summary(), validation
     """
 
-    def __init__(self, input_path: Path, output_dir: Path, mode: ParserMode = ParserMode.FULL, verbose: bool = False) -> None:
+    def __init__(
+        self,
+        input_path: Path,
+        output_dir: Path,
+        mode: ParserMode = ParserMode.FULL,
+        verbose: bool = False
+    ) -> None:
         self.__input_path = input_path
         self.__output_dir = output_dir
         self.__mode = mode
@@ -134,9 +141,11 @@ class BaseConfig(BaseConfigInterface):
     @protected_access
     def _validate_paths(self) -> None:
         if not self.__input_path.exists():
-            raise FileNotFoundError(f"Input does not exist: {self.__input_path}")
+            msg = f"Input does not exist: {self.__input_path}"
+            raise FileNotFoundError(msg)
         if not self.__output_dir.exists():
-            raise FileNotFoundError(f"Output directory does not exist: {self.__output_dir}")
+            msg = f"Output directory does not exist: {self.__output_dir}"
+            raise FileNotFoundError(msg)
 
     def validate(self) -> None:
         self._validate_paths()
@@ -145,20 +154,35 @@ class BaseConfig(BaseConfigInterface):
     # MODE-SPECIFIC CONFIG CREATOR (Polymorphism + Overloading)
     # ==========================================================
 
-    def with_mode(self, mode: Union[str, ParserMode]) -> Union['FullConfig', 'TOCConfig', 'ContentConfig']:
+    def with_mode(
+        self, mode: str | ParserMode
+    ) -> "FullConfig | TOCConfig | ContentConfig":
         """Create a new config object for a different mode (polymorphic)."""
-        from src.core.config.base_config import FullConfig, TOCConfig, ContentConfig
+        from src.core.config.base_config import (
+            ContentConfig,
+            FullConfig,
+            TOCConfig,
+        )
 
         mode_enum = mode if isinstance(mode, ParserMode) else ParserMode(mode)
 
         if mode_enum == ParserMode.FULL:
-            return FullConfig(self.__input_path, self.__output_dir, verbose=self.__verbose)
+            return FullConfig(
+                self.__input_path, self.__output_dir,
+                verbose=self.__verbose
+            )
 
         if mode_enum == ParserMode.TOC:
-            return TOCConfig(self.__input_path, self.__output_dir, verbose=self.__verbose)
+            return TOCConfig(
+                self.__input_path, self.__output_dir,
+                verbose=self.__verbose
+            )
 
         if mode_enum == ParserMode.CONTENT:
-            return ContentConfig(self.__input_path, self.__output_dir, verbose=self.__verbose)
+            return ContentConfig(
+                self.__input_path, self.__output_dir,
+                verbose=self.__verbose
+            )
 
         raise ValueError(f"Unsupported mode: {mode}")
 
@@ -184,7 +208,10 @@ class BaseConfig(BaseConfigInterface):
     # ==========================================================
 
     def __str__(self) -> str:
-        return f"BaseConfig(input={self.__input_path.name}, mode={self.__mode.value})"
+        return (
+            f"BaseConfig(input={self.__input_path.name}, "
+            f"mode={self.__mode.value})"
+        )
 
     def __len__(self) -> int:
         return 4  # number of config fields

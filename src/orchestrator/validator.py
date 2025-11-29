@@ -3,12 +3,12 @@ Enterprise Validator Module (OOP + Encapsulation + Overloading + Polymorphism)
 """
 
 from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from typing import overload
 
-from src.core.config.models import ParserResult, TOCEntry, ContentItem
+from src.core.config.models import ContentItem, ParserResult, TOCEntry
 from src.core.interfaces.pipeline_interface import ValidationResult
-
 
 # ================================================================
 # BASE VALIDATOR (ABSTRACTION + POLYMORPHISM)
@@ -75,9 +75,13 @@ class ResultValidator(BaseValidator):
     def validate(self, data: ParserResult) -> ValidationResult: ...
 
     @overload
-    def validate(self, data: ParserResult, *, strict: bool) -> ValidationResult: ...
+    def validate(
+        self, data: ParserResult, *, strict: bool
+    ) -> ValidationResult: ...
 
-    def validate(self, data: ParserResult, *, strict: bool = False) -> ValidationResult:
+    def validate(
+        self, data: ParserResult, *, strict: bool = False
+    ) -> ValidationResult:
         """
         validate(result)
         validate(result, strict=True)
@@ -90,9 +94,8 @@ class ResultValidator(BaseValidator):
                 errors.append("Missing TOC entries (strict mode)")
             if not data.content_items:
                 errors.append("Missing content items (strict mode)")
-        else:
-            if not data.toc_entries and not data.content_items:
-                errors.append("No TOC entries or content items found")
+        elif not data.toc_entries and not data.content_items:
+            errors.append("No TOC entries or content items found")
 
         return ValidationResult(is_valid=(not errors), errors=errors)
 
@@ -104,9 +107,13 @@ class ResultValidator(BaseValidator):
     def validate_toc(self, entries: list[TOCEntry]) -> bool: ...
 
     @overload
-    def validate_toc(self, entries: list[TOCEntry], *, min_items: int) -> bool: ...
+    def validate_toc(
+        self, entries: list[TOCEntry], *, min_items: int
+    ) -> bool: ...
 
-    def validate_toc(self, entries: list[TOCEntry], *, min_items: int = 1) -> bool:
+    def validate_toc(
+        self, entries: list[TOCEntry], *, min_items: int = 1
+    ) -> bool:
         return len(entries) >= min_items
 
     # ============================================================
@@ -117,9 +124,13 @@ class ResultValidator(BaseValidator):
     def validate_content(self, items: list[ContentItem]) -> bool: ...
 
     @overload
-    def validate_content(self, items: list[ContentItem], *, min_items: int) -> bool: ...
+    def validate_content(
+        self, items: list[ContentItem], *, min_items: int
+    ) -> bool: ...
 
-    def validate_content(self, items: list[ContentItem], *, min_items: int = 1) -> bool:
+    def validate_content(
+        self, items: list[ContentItem], *, min_items: int = 1
+    ) -> bool:
         return len(items) >= min_items
 
     # ---------- Magic Methods ----------

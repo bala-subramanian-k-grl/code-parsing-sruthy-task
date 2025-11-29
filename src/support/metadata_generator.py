@@ -1,17 +1,19 @@
 """
-Metadata Generator with full OOP, Polymorphism, Overloading & Template Method Pattern
+Metadata Generator with full OOP, Polymorphism, Overloading.
+
+Template Method Pattern.
 """
 
 from __future__ import annotations
+
 import json
 from dataclasses import asdict
 from pathlib import Path
-from typing import Any, Dict, Optional, overload
+from typing import Any, overload
 
 from src.core.config.config_loader import ConfigLoader
 from src.core.config.models import Metadata, ParserResult
 from src.support.base_report_generator import BaseReportGenerator
-
 
 MAX_CONTENT_ITEMS_FOR_KEYWORDS = 100
 
@@ -19,7 +21,7 @@ MAX_CONTENT_ITEMS_FOR_KEYWORDS = 100
 class MetadataGenerator(BaseReportGenerator):
     """Generate metadata JSONL using full OOP and extensibility."""
 
-    def __init__(self, config: Optional[ConfigLoader] = None) -> None:
+    def __init__(self, config: ConfigLoader | None = None) -> None:
         super().__init__()
         self.__config = config or ConfigLoader()
 
@@ -44,22 +46,23 @@ class MetadataGenerator(BaseReportGenerator):
     def _validate_result(self, result: ParserResult) -> None:
         """Ensure TOC exists before generating metadata."""
         if not result.toc_entries:
-            raise ValueError("Metadata cannot be generated: No TOC entries found.")
+            msg = "Metadata cannot be generated: No TOC entries found."
+            raise ValueError(msg)
 
     def _extract_pages(self, result: ParserResult) -> list[int]:
         return [item.page for item in result.content_items]
 
-    def _count_toc_levels(self, result: ParserResult) -> Dict[str, int]:
+    def _count_toc_levels(self, result: ParserResult) -> dict[str, int]:
         """Encapsulated calculation of TOC levels."""
-        levels: Dict[str, int] = {}
+        levels: dict[str, int] = {}
         for entry in result.toc_entries:
             key = f"level_{entry.level}"
             levels[key] = levels.get(key, 0) + 1
         return levels
 
-    def _count_content_types(self, result: ParserResult) -> Dict[str, int]:
+    def _count_content_types(self, result: ParserResult) -> dict[str, int]:
         """Encapsulated calculation of content type distribution."""
-        types: Dict[str, int] = {}
+        types: dict[str, int] = {}
         for item in result.content_items:
             t = item.content_type
             types[t] = types.get(t, 0) + 1
@@ -71,8 +74,11 @@ class MetadataGenerator(BaseReportGenerator):
 
     def _extract_key_terms(self, result: ParserResult, limit: int) -> set[str]:
         """Extract configured keywords from content."""
-        keywords_data = self.__config.get("metadata", {}).get("keywords", [])
-        keywords: list[str] = [str(k) for k in keywords_data] if keywords_data else []
+        meta_cfg = self.__config.get("metadata", {})
+        keywords_data = meta_cfg.get("keywords", [])
+        keywords: list[str] = (
+            [str(k) for k in keywords_data] if keywords_data else []
+        )
         found_terms: set[str] = set()
 
         for item in result.content_items[:limit]:
@@ -86,7 +92,7 @@ class MetadataGenerator(BaseReportGenerator):
     # ---------------------------------------------------------
     # FORMAT DATA (Template Method Hook)
     # ---------------------------------------------------------
-    def _format_data(self, result: ParserResult) -> Dict[str, Any]:
+    def _format_data(self, result: ParserResult) -> dict[str, Any]:
         pages = self._extract_pages(result)
 
         metadata = Metadata(
@@ -98,7 +104,9 @@ class MetadataGenerator(BaseReportGenerator):
         )
 
         base = asdict(metadata)
-        key_terms = self._extract_key_terms(result, MAX_CONTENT_ITEMS_FOR_KEYWORDS)
+        key_terms = self._extract_key_terms(
+            result, MAX_CONTENT_ITEMS_FOR_KEYWORDS
+        )
 
         # Additional metadata
         base["major_sections"] = self._count_major_sections(result)
@@ -114,9 +122,13 @@ class MetadataGenerator(BaseReportGenerator):
     def prepare_output_path(self, base_path: Path) -> Path: ...
 
     @overload
-    def prepare_output_path(self, base_path: Path, *, force_ext: bool) -> Path: ...
+    def prepare_output_path(
+        self, base_path: Path, *, force_ext: bool
+    ) -> Path: ...
 
-    def prepare_output_path(self, base_path: Path, *, force_ext: bool = False) -> Path:
+    def prepare_output_path(
+        self, base_path: Path, *, force_ext: bool = False
+    ) -> Path:
         """Polymorphic output path handler."""
         if force_ext:
             return base_path.with_suffix(self.output_extension)
@@ -127,12 +139,12 @@ class MetadataGenerator(BaseReportGenerator):
         return base_path
 
     @overload
-    def serialize(self, data: Dict[str, Any]) -> str: ...
+    def serialize(self, data: dict[str, Any]) -> str: ...
 
     @overload
-    def serialize(self, data: Dict[str, Any], *, compact: bool) -> str: ...
+    def serialize(self, data: dict[str, Any], *, compact: bool) -> str: ...
 
-    def serialize(self, data: Dict[str, Any], *, compact: bool = False) -> str:
+    def serialize(self, data: dict[str, Any], *, compact: bool = False) -> str:
         """Overloaded serializer: pretty or compact JSON."""
         if compact:
             return json.dumps(data, separators=(",", ":"))
@@ -142,7 +154,7 @@ class MetadataGenerator(BaseReportGenerator):
     # WRITE TO FILE (Template Method Hook)
     # MUST RETURN BYTES WRITTEN
     # ---------------------------------------------------------
-    def _write_to_file(self, data: Dict[str, Any], path: Path) -> int:
+    def _write_to_file(self, data: dict[str, Any], path: Path) -> int:
         serialized = self.serialize(data)
 
         try:

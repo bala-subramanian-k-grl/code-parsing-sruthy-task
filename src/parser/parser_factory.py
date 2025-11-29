@@ -1,8 +1,13 @@
-"""Parser factory for creating parser instances (OOP + Overloading + Safe Fallback)."""
+"""Parser factory for creating parser instances.
+
+OOP + Overloading + Safe Fallback.
+"""
 
 from __future__ import annotations
+
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Any, overload, Iterator
+from typing import Any, overload
 
 from src.core.interfaces.factory_interface import FactoryInterface
 from src.parser.base_parser import BaseParser
@@ -25,7 +30,9 @@ class ParserFactory(FactoryInterface[BaseParser]):
     # Register new parsers (OCP-friendly)
     # ---------------------------------------------------------
     @classmethod
-    def register_parser(cls, extension: str, parser_cls: type[BaseParser]) -> None:
+    def register_parser(
+        cls, extension: str, parser_cls: type[BaseParser]
+    ) -> None:
         cls.__parser_registry[extension.lower()] = parser_cls
 
     # ---------------------------------------------------------

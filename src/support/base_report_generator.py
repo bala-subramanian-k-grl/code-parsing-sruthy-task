@@ -13,6 +13,7 @@ Enhancements Added:
 """
 
 from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any, overload
@@ -114,7 +115,7 @@ class BaseReportGenerator(IReportGenerator, ABC):
 
             self.after_write(result, path)
 
-        except Exception as e:
+        except Exception:
             self.__error_count += 1
             self.__last_success = False
             raise
@@ -124,11 +125,9 @@ class BaseReportGenerator(IReportGenerator, ABC):
     # ---------------------------------------------------------
     def before_write(self, result: ParserResult, path: Path) -> None:
         """Hook called before writing (optional)."""
-        pass
 
     def after_write(self, result: ParserResult, path: Path) -> None:
         """Hook called after writing (optional)."""
-        pass
 
     # ---------------------------------------------------------
     # Abstract Methods (Subclasses MUST implement)
@@ -144,7 +143,6 @@ class BaseReportGenerator(IReportGenerator, ABC):
     @abstractmethod
     def _write_to_file(self, data: Any, path: Path) -> int:
         """Return number of bytes written."""
-        pass
 
     # ---------------------------------------------------------
     # Magic Methods (clean + helpful)

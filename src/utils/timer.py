@@ -1,8 +1,9 @@
 """Execution timer with improved OOP design."""
 
 import time
+from collections.abc import Callable
 from functools import wraps
-from typing import Any, Callable, Optional
+from typing import Any
 
 from src.utils.logger import Logger
 
@@ -10,7 +11,7 @@ from src.utils.logger import Logger
 class Timer:
     """Context manager for timing operations with extendable behaviors."""
 
-    def __init__(self, name: str, logger: Optional[Logger] = None) -> None:
+    def __init__(self, name: str, logger: Logger | None = None) -> None:
         self.__name = name
         self.__logger = logger or Logger()
         self.__start_time: float = 0.0

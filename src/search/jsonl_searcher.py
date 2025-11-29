@@ -3,9 +3,11 @@ Enterprise JSONL Searcher (OOP + Overloading + Polymorphism)
 """
 
 from __future__ import annotations
+
 import json
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Iterable, List, Dict, overload
+from typing import Any, overload
 
 
 class JSONLSearcher:
@@ -15,7 +17,7 @@ class JSONLSearcher:
         self.__file_path = file_path
         self.__search_count = 0
         self.__total_matches = 0
-        self.__cached_lines: List[Dict[str, Any]] | None = None
+        self.__cached_lines: list[dict[str, Any]] | None = None
 
     # =========================================================
     # Encapsulation
@@ -59,12 +61,12 @@ class JSONLSearcher:
     # Internal Helpers
     # =========================================================
 
-    def _load_lines(self) -> List[Dict[str, Any]]:
+    def _load_lines(self) -> list[dict[str, Any]]:
         """Load JSONL lines once (caching)."""
         if self.__cached_lines is not None:
             return self.__cached_lines
 
-        lines: List[Dict[str, Any]] = []
+        lines: list[dict[str, Any]] = []
         try:
             with self.__file_path.open("r", encoding="utf-8") as f:
                 for line in f:
@@ -75,7 +77,9 @@ class JSONLSearcher:
                     except json.JSONDecodeError:
                         continue
         except OSError as e:
-            raise OSError(f"Failed to read file '{self.__file_path}': {e}")
+            raise OSError(
+                f"Failed to read file '{self.__file_path}': {e}"
+            ) from e
 
         self.__cached_lines = lines
         return lines
@@ -175,7 +179,7 @@ class JSONLSearcher:
     def __bool__(self) -> bool:
         return self.file_exists
 
-    def __getitem__(self, index: int) -> Dict[str, Any]:
+    def __getitem__(self, index: int) -> dict[str, Any]:
         """Index into a JSONL record."""
         return self._load_lines()[index]
 

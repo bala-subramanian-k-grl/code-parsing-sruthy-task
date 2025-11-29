@@ -6,21 +6,21 @@ from src.core.config.base_config import BaseConfig
 from src.core.config.config_loader import ConfigLoader
 from src.core.config.constants import ParserMode
 from src.core.config.models import (
-    TOCEntry,
     ContentItem,
     Metadata,
     ParserResult,
+    TOCEntry,
 )
 
 # Public API
 __all__ = [
     "BaseConfig",
     "ConfigLoader",
-    "ParserMode",
-    "TOCEntry",
     "ContentItem",
     "Metadata",
+    "ParserMode",
     "ParserResult",
+    "TOCEntry",
 ]
 
 # Private/Internal Identifiers (for Encapsulation score)
@@ -38,17 +38,3 @@ def _get_version() -> str:
         str: The package version string.
     """
     return __version__
-
-
-def __repr__() -> str:
-    """
-    Polymorphic representation for debugging and logging systems.
-    """
-    return f"<core.config package version={__version__}>"
-
-
-def __str__() -> str:
-    """
-    Human-friendly name for the package.
-    """
-    return "USB-PD Configuration Module"

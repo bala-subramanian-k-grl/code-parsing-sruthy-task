@@ -1,8 +1,10 @@
 """PDF parser implementation with full OOP, Overloading, Polymorphism."""
 
 from __future__ import annotations
+
 from pathlib import Path
 from typing import Any, overload
+
 import fitz  # type: ignore[import-untyped]
 
 from src.core.config.models import ParserResult
@@ -116,13 +118,16 @@ class PDFParser(BaseParser):
                         text += page_text
                 return text
         except Exception as e:
-            raise ValueError(f"Unable to extract raw text: {e}")
+            raise ValueError(f"Unable to extract raw text: {e}") from e
 
     # ---------------------------------------------------------
     # Magic Methods
     # ---------------------------------------------------------
     def __str__(self) -> str:
-        return f"PDFParser(file={self.file_path.name}, title={self.__doc_title})"
+        return (
+            f"PDFParser(file={self.file_path.name}, "
+            f"title={self.__doc_title})"
+        )
 
     def __repr__(self) -> str:
         return (

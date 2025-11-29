@@ -5,16 +5,15 @@ CLI application entry point with improved OOP, encapsulation, and polymorphism.
 import argparse
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Optional, Type,overload
+from typing import overload
 
+from src.cli.decorators import protected_access
+from src.cli.strategies import ModeStrategyFactory
 from src.core.config.config_loader import ConfigLoader
 from src.core.config.constants import ParserMode
 from src.core.config.models import ParserResult
 from src.orchestrator.pipeline_orchestrator import PipelineOrchestrator
 from src.utils.logger import logger
-from src.cli.strategies import ModeStrategyFactory
-from src.cli.decorators import protected_access
-
 
 # =========================
 # Abstractions
@@ -50,7 +49,8 @@ class BasePipelineExecutor(ABC):
         return f"{self.__class__.__name__}(abstract executor)"
 
     def __repr__(self) -> str:
-        return f"<BasePipelineExecutor abstract class {self.__class__.__name__}>"
+        cls_name = self.__class__.__name__
+        return f"<BasePipelineExecutor abstract class {cls_name}>"
 
 
 # =========================
@@ -76,7 +76,8 @@ class ArgumentParserService:
 
     @staticmethod
     def _build_parser() -> argparse.ArgumentParser:
-        parser = argparse.ArgumentParser(description="USB-PD Specification Parser CLI")
+        desc = "USB-PD Specification Parser CLI"
+        parser = argparse.ArgumentParser(description=desc)
         parser.add_argument(
             "--file", "-f", type=str,
             help="Path to PDF file. Overrides config value."
@@ -113,7 +114,7 @@ class FilePathResolver:
         self._config_loader = config_loader
         self._validator = PathValidator()
 
-    def resolve(self, file_arg: Optional[str]) -> Path:
+    def resolve(self, file_arg: str | None) -> Path:
         file_path_raw = file_arg or self._config_loader.get("pdf_path")
         if not file_path_raw:
             raise ValueError("No PDF file path provided")
@@ -129,7 +130,7 @@ class FilePathResolver:
 class DefaultPipelineExecutor(BasePipelineExecutor):
     """Executes the pipeline using the orchestrator."""
 
-    def __init__(self, orchestrator_cls: Type[PipelineOrchestrator]) -> None:
+    def __init__(self, orchestrator_cls: type[PipelineOrchestrator]) -> None:
         self._orchestrator_cls = orchestrator_cls
 
     def execute(self, file_path: Path, mode: ParserMode) -> ParserResult:
@@ -152,8 +153,14 @@ class ResultLogger:
 
     def log(self, result: ParserResult) -> None:
         logger.info("Extraction completed successfully")
-        logger.info(self._formatter.format_count("TOC entries", len(result.toc_entries)))
-        logger.info(self._formatter.format_count("content items", len(result.content_items)))
+        toc_msg = self._formatter.format_count(
+            "TOC entries", len(result.toc_entries)
+        )
+        content_msg = self._formatter.format_count(
+            "content items", len(result.content_items)
+        )
+        logger.info(toc_msg)
+        logger.info(content_msg)
 
 
 # =========================
@@ -165,20 +172,27 @@ class CLIApp(BaseCLI):
 
     def __init__(
         self,
-        config_loader: Optional[ConfigLoader] = None,
-        orchestrator_cls: Optional[Type[PipelineOrchestrator]] = None,
-        arg_parser_service: Optional[ArgumentParserService] = None,
-        mode_factory: Optional[ModeStrategyFactory] = None,
-        pipeline_executor: Optional[BasePipelineExecutor] = None,
-        result_logger: Optional[ResultLogger] = None,
+        config_loader: ConfigLoader | None = None,
+        orchestrator_cls: type[PipelineOrchestrator] | None = None,
+        arg_parser_service: ArgumentParserService | None = None,
+        mode_factory: ModeStrategyFactory | None = None,
+        pipeline_executor: BasePipelineExecutor | None = None,
+        result_logger: ResultLogger | None = None,
     ) -> None:
 
         self._config_loader = config_loader or ConfigLoader()
-        self._orchestrator_cls = orchestrator_cls or PipelineOrchestrator
-        self._arg_parser_service = arg_parser_service or ArgumentParserService()
+        self._orchestrator_cls = (
+            orchestrator_cls or PipelineOrchestrator
+        )
+        self._arg_parser_service = (
+            arg_parser_service or ArgumentParserService()
+        )
         self._mode_factory = mode_factory or ModeStrategyFactory()
         self._file_resolver = FilePathResolver(self._config_loader)
-        self._pipeline_executor = pipeline_executor or DefaultPipelineExecutor(self._orchestrator_cls)
+        self._pipeline_executor = (
+            pipeline_executor or
+            DefaultPipelineExecutor(self._orchestrator_cls)
+        )
         self._result_logger = result_logger or ResultLogger()
 
         # Encapsulated Counters
@@ -254,7 +268,7 @@ class CLIApp(BaseCLI):
     @overload
     def run(self, args: argparse.Namespace) -> None: ...
 
-    def run(self, args: Optional[argparse.Namespace] = None) -> None:
+    def run(self, args: argparse.Namespace | None = None) -> None:
         """Run the CLI application, optionally using pre-parsed arguments."""
         self._increment_run_count()
 
@@ -266,7 +280,11 @@ class CLIApp(BaseCLI):
             mode = mode_strategy.get_mode()
             file_path = self._file_resolver.resolve(args.file)
 
-            logger.info(f"Processing {file_path} in {mode_strategy.name} ({mode}) mode")
+            msg = (
+                f"Processing {file_path} in "
+                f"{mode_strategy.name} ({mode}) mode"
+            )
+            logger.info(msg)
 
             result = self._pipeline_executor.execute(file_path, mode)
             self._result_logger.log(result)

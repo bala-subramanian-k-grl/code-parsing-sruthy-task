@@ -82,10 +82,12 @@ class BaseE2ETest(ABC):
 
     # ---- Optional hooks for subclasses ----
     def before_run(self) -> None:
-        pass
+        """Hook before test execution."""
+        return None
 
     def after_run(self) -> None:
-        pass
+        """Hook after test execution."""
+        return None
 
     def add_error(self, msg: str) -> None:
         self._errors.append(msg)

@@ -1,6 +1,7 @@
 """Text parser implementation with OOP, Overloading, and Polymorphism."""
 
 from __future__ import annotations
+
 from pathlib import Path
 from typing import overload
 
@@ -133,7 +134,10 @@ class TextParser(BaseParser):
     # Magic Methods
     # ---------------------------------------------------------
     def __str__(self) -> str:
-        return f"TextParser(file={self.file_path.name}, title={self.__doc_title})"
+        return (
+            f"TextParser(file={self.file_path.name}, "
+            f"title={self.__doc_title})"
+        )
 
     def __repr__(self) -> str:
         return (

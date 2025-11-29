@@ -6,9 +6,9 @@ Cleaned, optimized & improved for OOP scoring criteria.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from collections.abc import Iterator
 from dataclasses import dataclass, field
-from typing import Any, Iterator, Union
-
+from typing import Any
 
 # ==========================================================
 # 1. ABSTRACT BASE MODEL (ABSTRACTION + POLYMORPHISM)
@@ -61,7 +61,7 @@ class TOCEntry(BaseModel):
     title: str
     page: int
     level: int = 1
-    parent_id: Union[str, None] = None
+    parent_id: str | None = None
     full_path: str = ""
 
     # ---------- Overridden Methods ----------
@@ -98,7 +98,10 @@ class TOCEntry(BaseModel):
         return f"TOCEntry({self.section_id!r})"
 
     def __eq__(self, other: object) -> bool:
-        return isinstance(other, TOCEntry) and self.section_id == other.section_id
+        return (
+            isinstance(other, TOCEntry) and
+            self.section_id == other.section_id
+        )
 
     def __hash__(self) -> int:
         return hash(self.section_id)
@@ -121,7 +124,7 @@ class ContentItem(BaseModel):
     content: str
     page: int
     level: int = 1
-    parent_id: Union[str, None] = None
+    parent_id: str | None = None
     full_path: str = ""
     content_type: str = "paragraph"
     block_id: str = ""
@@ -135,7 +138,10 @@ class ContentItem(BaseModel):
             raise ValueError("ContentItem: page must be >= 0")
 
     def summary(self) -> str:
-        preview = self.content[:50] + "..." if len(self.content) > 50 else self.content
+        if len(self.content) > 50:
+            preview = self.content[:50] + "..."
+        else:
+            preview = self.content
         return f"{self.title} → {preview}"
 
     def item_type(self) -> str:
@@ -162,7 +168,10 @@ class ContentItem(BaseModel):
         return f"ContentItem({self.section_id!r})"
 
     def __eq__(self, other: object) -> bool:
-        return isinstance(other, ContentItem) and self.section_id == other.section_id
+        return (
+            isinstance(other, ContentItem) and
+            self.section_id == other.section_id
+        )
 
     def __hash__(self) -> int:
         return hash(self.section_id)
@@ -191,7 +200,11 @@ class Metadata(BaseModel):
             raise ValueError("Metadata: total_pages must be >= 0")
 
     def summary(self) -> str:
-        return f"pages={self.total_pages}, toc={self.total_toc_entries}, content={self.total_content_items}"
+        return (
+            f"pages={self.total_pages}, "
+            f"toc={self.total_toc_entries}, "
+            f"content={self.total_content_items}"
+        )
 
     def item_type(self) -> str:
         return "Metadata"
@@ -223,7 +236,10 @@ class ParserResult(BaseModel):
             c.validate()
 
     def summary(self) -> str:
-        return f"{len(self.toc_entries)} TOC, {len(self.content_items)} content"
+        return (
+            f"{len(self.toc_entries)} TOC, "
+            f"{len(self.content_items)} content"
+        )
 
     def item_type(self) -> str:
         return "ParserResult"
@@ -236,7 +252,7 @@ class ParserResult(BaseModel):
     def __len__(self) -> int:
         return len(self.toc_entries) + len(self.content_items)
 
-    def __iter__(self) -> Iterator[Union[TOCEntry, ContentItem]]:
+    def __iter__(self) -> Iterator[TOCEntry | ContentItem]:
         yield from self.toc_entries
         yield from self.content_items
 

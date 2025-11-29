@@ -1,8 +1,9 @@
 """JSONL writer implementation (OOP enhanced)."""
 
 import json
+from collections.abc import Callable, Iterable
 from pathlib import Path
-from typing import Any, Callable, Iterable, TypeVar, Union, cast
+from typing import Any, TypeVar, cast
 
 from src.core.config.models import ContentItem, TOCEntry
 from src.writers.writer_interface import WriterInterface
@@ -54,7 +55,7 @@ class JSONLWriter(WriterInterface):
     # High-level Writer (Abstraction)
     # -------------------------------------------------------------------------
     def write(
-        self, data: list[Union[TOCEntry, ContentItem]], path: Path
+        self, data: list[TOCEntry | ContentItem], path: Path
     ) -> None:
         """Generic write orchestrator."""
         if not data:

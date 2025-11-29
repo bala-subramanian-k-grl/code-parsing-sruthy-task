@@ -4,12 +4,14 @@ Extractors Package (Enterprise Architecture)
 
 from __future__ import annotations
 
-from typing import Type, Dict, List
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from src.extractors.extractor_interface import ExtractorInterface
 
 from src.extractors.content_extractor import ContentExtractor
-from src.extractors.text_extractor import TextExtractor
 from src.extractors.extractor_interface import ExtractorInterface
-
+from src.extractors.text_extractor import TextExtractor
 
 # ==========================================================
 # PACKAGE METADATA
@@ -29,7 +31,7 @@ __all__ = [
 # ==========================================================
 
 # Protected registry for all extractors
-_extractor_registry: Dict[str, Type[ExtractorInterface]] = {
+_extractor_registry: dict[str, type[ExtractorInterface]] = {
     "content": ContentExtractor,
     "text": TextExtractor,
 }
@@ -39,7 +41,7 @@ _extractor_registry: Dict[str, Type[ExtractorInterface]] = {
 # PUBLIC API (Polymorphism + Encapsulation)
 # ==========================================================
 
-def get_available_extractors() -> List[str]:
+def get_available_extractors() -> list[str]:
     """
     Return list of available extractor names.
 
@@ -49,7 +51,9 @@ def get_available_extractors() -> List[str]:
     return list(_extractor_registry.keys())
 
 
-def register_extractor(name: str, extractor_cls: Type[ExtractorInterface]) -> None:
+def register_extractor(
+    name: str, extractor_cls: type[ExtractorInterface]
+) -> None:
     """
     Register a new extractor implementation.
 
@@ -65,7 +69,7 @@ def register_extractor(name: str, extractor_cls: Type[ExtractorInterface]) -> No
     _extractor_registry[name] = extractor_cls
 
 
-def get_extractor(name: str) -> Type[ExtractorInterface]:
+def get_extractor(name: str) -> type[ExtractorInterface]:
     """
     Retrieve extractor class by name.
 

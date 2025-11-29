@@ -11,7 +11,6 @@ from src.core.interfaces.pipeline_interface import (
 )
 from src.core.interfaces.report_interface import IReportGenerator
 
-
 # ---------------------------------------------------------
 # VERSION (Encapsulated)
 # ---------------------------------------------------------
@@ -24,12 +23,12 @@ __version__ = "1.0.0"
 # ---------------------------------------------------------
 
 __all__ = [
-    "ParserInterface",
     "ExtractionStrategy",
+    "FactoryInterface",
+    "IReportGenerator",
+    "ParserInterface",
     "PipelineInterface",
     "ValidationResult",
-    "IReportGenerator",
-    "FactoryInterface",
 ]
 
 
@@ -47,17 +46,3 @@ def _get_version() -> str:
     Used internally by loaders/CLI for logging or debugging.
     """
     return __version__
-
-
-# ---------------------------------------------------------
-# Module-Level Polymorphism
-# ---------------------------------------------------------
-
-def __str__() -> str:
-    """Human-friendly name of the interfaces module."""
-    return "Interfaces Module (Contracts & Abstractions)"
-
-
-def __repr__() -> str:
-    """Debug-friendly representation."""
-    return f"<interfaces package version={__version__}>"

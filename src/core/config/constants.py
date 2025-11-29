@@ -9,9 +9,9 @@ Includes:
 """
 
 from __future__ import annotations
+
 from enum import Enum
 from pathlib import Path
-
 
 # ==========================================================
 # 1. ABSTRACT BASE ENUM (Abstraction + Polymorphism)
@@ -129,9 +129,14 @@ class ConstantManager:
     @classmethod
     def validate_paths(cls) -> None:
         if not cls.__default_pdf_path.exists():
-            raise FileNotFoundError(f"Missing default PDF: {cls.__default_pdf_path}")
+            msg = f"Missing default PDF: {cls.__default_pdf_path}"
+            raise FileNotFoundError(msg)
         if not cls.__default_output_dir.exists():
-            raise FileNotFoundError(f"Missing output directory: {cls.__default_output_dir}")
+            msg = (
+                f"Missing output directory: "
+                f"{cls.__default_output_dir}"
+            )
+            raise FileNotFoundError(msg)
 
     # ---------- Polymorphic Magic Methods ----------
     def __str__(self) -> str:

@@ -9,7 +9,6 @@ from typing import Any, Protocol
 
 from src.core.config.constants import ParserMode
 
-
 # ==========================================================
 # DOCUMENT PROTOCOL (Duck-Typed Interface)
 # ==========================================================
@@ -87,9 +86,9 @@ class ExtractionStrategy(ABC):
     # OPTIONAL POLYMORPHIC METHODS
     # ------------------------------------------------------
 
+    @abstractmethod
     def validate_strategy(self) -> None:
         """Optional validation (subclasses may override)."""
-        pass
 
     def priority(self) -> int:
         """
@@ -104,7 +103,9 @@ class ExtractionStrategy(ABC):
 
     def _ensure_document(self, document: Document) -> None:
         """Protected helper to validate document before extraction."""
-        if not hasattr(document, "__len__") or not hasattr(document, "__getitem__"):
+        has_len = hasattr(document, "__len__")
+        has_getitem = hasattr(document, "__getitem__")
+        if not has_len or not has_getitem:
             raise TypeError(
                 f"{self.strategy_name()} received invalid document type"
             )

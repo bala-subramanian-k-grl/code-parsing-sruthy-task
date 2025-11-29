@@ -3,16 +3,17 @@ Enterprise-grade Singleton Logger
 """
 
 from __future__ import annotations
+
 import logging
 import threading
 from pathlib import Path
-from typing import Optional, overload
+from typing import overload
 
 
 class Logger:
     """Thread-safe Singleton Logger with full OOP design."""
 
-    _instance: Optional["Logger"] = None
+    _instance: "Logger" | None = None
     _lock = threading.Lock()
     _DEFAULT_NAME = "PDFParser"
 
@@ -85,7 +86,7 @@ class Logger:
     # ---------------------------------------------------------
     @overload
     def log(self, message: str) -> None: ...
-    
+
     @overload
     def log(self, message: str, *, level: int) -> None: ...
 
@@ -100,8 +101,8 @@ class Logger:
         self,
         *,
         level: int = logging.INFO,
-        log_format: Optional[str] = None,
-        date_format: Optional[str] = None,
+        log_format: str | None = None,
+        date_format: str | None = None,
     ) -> None:
         """Dynamically update logger formatting + level."""
         if log_format:

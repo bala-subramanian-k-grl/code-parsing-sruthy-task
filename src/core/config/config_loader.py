@@ -11,16 +11,17 @@ Implements:
 """
 
 from __future__ import annotations
+
 import json
 import os
+from abc import ABC, abstractmethod
+from collections.abc import Callable
+from pathlib import Path
+from typing import Any, TypeVar, overload
+
 import yaml
 
-from abc import ABC, abstractmethod
-from pathlib import Path
-from typing import Any, Callable, Dict, Optional, TypeVar, overload
-
 from src.core.interfaces.factory_interface import FactoryInterface
-
 
 # ======================================================
 # Helper Decorator — Protected Access
@@ -41,13 +42,13 @@ def protected_access(func: Callable[..., T]) -> Callable[..., T]:
 class BaseConfigLoader(ABC):
     """Abstract loader interface."""
 
-    def __init__(self, config_path: Optional[Path] = None):
+    def __init__(self, config_path: Path | None = None):
         self.__config_path = config_path
-        self._config: Dict[str, Any] = {}
+        self._config: dict[str, Any] = {}
 
     # ---------- Abstract Methods ----------
     @abstractmethod
-    def load(self) -> Dict[str, Any]:
+    def load(self) -> dict[str, Any]:
         raise NotImplementedError
 
     @abstractmethod
@@ -69,11 +70,11 @@ class BaseConfigLoader(ABC):
 
     # ---------- Public Accessors ----------
     @property
-    def config_path(self) -> Optional[Path]:
+    def config_path(self) -> Path | None:
         return self.__config_path
 
     @property
-    def config(self) -> Dict[str, Any]:
+    def config(self) -> dict[str, Any]:
         return self._config
 
     # ---------- Overloaded Getters ----------
@@ -107,7 +108,7 @@ class BaseConfigLoader(ABC):
 # ======================================================
 
 class YAMLConfigLoader(BaseConfigLoader):
-    def load(self) -> Dict[str, Any]:
+    def load(self) -> dict[str, Any]:
         self._validate_path()
         data: Any = yaml.safe_load(self._read_file())
         self._config = data if isinstance(data, dict) else {}
@@ -122,12 +123,12 @@ class YAMLConfigLoader(BaseConfigLoader):
 # ======================================================
 
 class JSONConfigLoader(BaseConfigLoader):
-    def load(self) -> Dict[str, Any]:
+    def load(self) -> dict[str, Any]:
         self._validate_path()
         try:
             self._config = json.loads(self._read_file()) or {}
         except json.JSONDecodeError as e:
-            raise ValueError(f"Malformed JSON: {e}")
+            raise ValueError(f"Malformed JSON: {e}") from e
         return self._config
 
     def source_name(self) -> str:
@@ -139,7 +140,7 @@ class JSONConfigLoader(BaseConfigLoader):
 # ======================================================
 
 class EnvConfigLoader(BaseConfigLoader):
-    def load(self) -> Dict[str, Any]:
+    def load(self) -> dict[str, Any]:
         self._config = {
             "input": {"pdf_path": os.getenv("PDF_PATH")},
             "output": {"base_dir": os.getenv("OUTPUT_DIR")},
@@ -162,7 +163,9 @@ class EnvConfigLoader(BaseConfigLoader):
 class ConfigLoaderFactory(FactoryInterface[BaseConfigLoader]):
     """Create appropriate config loader based on file extension."""
 
-    def create(self, path: Path, *args: Any, **kwargs: Any) -> BaseConfigLoader:
+    def create(
+        self, path: Path, *args: Any, **kwargs: Any
+    ) -> BaseConfigLoader:
         ext = path.suffix.lower()
 
         if ext in (".yml", ".yaml"):
@@ -189,7 +192,7 @@ class ConfigLoader(BaseConfigLoader):
         self.__loader = self.__factory.create(config_path)
         self._config = self.__loader.load()
 
-    def load(self) -> Dict[str, Any]:
+    def load(self) -> dict[str, Any]:
         return self.__loader.load()
 
     def source_name(self) -> str:

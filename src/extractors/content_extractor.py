@@ -11,11 +11,12 @@ Implements:
 """
 
 from __future__ import annotations
-from typing import Any, List
+
+from typing import Any
 
 from src.core.config.models import ContentItem
-from src.extractors.text_extractor import TextExtractor
 from src.extractors.extractor_interface import ExtractorInterface
+from src.extractors.text_extractor import TextExtractor
 
 
 class ContentExtractor(ExtractorInterface):
@@ -38,7 +39,8 @@ class ContentExtractor(ExtractorInterface):
     def _validate_init(self) -> None:
         """Encapsulated initializer validation."""
         if not self.__doc_title:
-            raise ValueError("ContentExtractor requires a non-empty doc_title.")
+            msg = "ContentExtractor requires a non-empty doc_title."
+            raise ValueError(msg)
 
     # ==========================================================
     # PROPERTIES (ENCAPSULATION + POLYMORPHISM)
@@ -54,9 +56,9 @@ class ContentExtractor(ExtractorInterface):
     # ==========================================================
     # PRIMARY EXTRACTION ENTRY (POLYMORPHISM)
     # ==========================================================
-    def extract(self, data: Any) -> List[ContentItem]:
+    def extract(self, data: Any) -> list[ContentItem]:
         """Extract content from entire PDF document."""
-        results: List[ContentItem] = []
+        results: list[ContentItem] = []
 
         for page_num, page in enumerate(data, start=1):
             processed_page = self._preprocess_page(page)
@@ -69,7 +71,8 @@ class ContentExtractor(ExtractorInterface):
     # ==========================================================
     def validate(self) -> None:
         if not self.__doc_title:
-            raise ValueError("ContentExtractor validation failed: Missing title")
+            msg = "ContentExtractor validation failed: Missing title"
+            raise ValueError(msg)
 
     # ==========================================================
     # HOOKS FOR EXTENSIBILITY
@@ -94,12 +97,12 @@ class ContentExtractor(ExtractorInterface):
     # ==========================================================
     def _extract_from_page(
         self, page: Any, page_num: int
-    ) -> List[ContentItem]:
+    ) -> list[ContentItem]:
         """Extract structured content from a single page."""
         text_dict = page.get_text("dict")
         blocks = text_dict.get("blocks", [])
 
-        items: List[ContentItem] = []
+        items: list[ContentItem] = []
 
         for block_num, block in enumerate(blocks):
             if not self._is_valid_block(block):

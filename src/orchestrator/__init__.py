@@ -10,14 +10,13 @@ from __future__ import annotations
 from .pipeline_orchestrator import PipelineOrchestrator
 from .validator import BaseValidator, ResultValidator, StrictValidator
 
-
 # -------------------------
 # PACKAGE METADATA
 # -------------------------
 __version__ = "1.1.0"
 __all__ = [
-    "PipelineOrchestrator",
     "BaseValidator",
+    "PipelineOrchestrator",
     "ResultValidator",
     "StrictValidator",
 ]

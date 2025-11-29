@@ -11,4 +11,4 @@ from src.core.config.constants import ParserMode
 from src.core.config.models import ContentItem, ParserResult, TOCEntry
 
 __version__ = "1.0.0"
-__all__ = ["ParserMode", "TOCEntry", "ContentItem", "ParserResult"]
+__all__ = ["ContentItem", "ParserMode", "ParserResult", "TOCEntry"]

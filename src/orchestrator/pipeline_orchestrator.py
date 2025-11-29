@@ -3,18 +3,22 @@ Enterprise Pipeline Orchestrator (OOP-Optimized + Overloading Added)
 """
 
 from __future__ import annotations
+
 from pathlib import Path
-from typing import Optional, overload
+from typing import overload
 
 from src.core.config.config_loader import ConfigLoader
 from src.core.config.constants import ParserMode
 from src.core.config.models import ParserResult
-from src.core.interfaces.pipeline_interface import PipelineInterface, ValidationResult
-from src.support.metadata_generator import MetadataGenerator
-from src.support.json_report_generator import JSONReportGenerator
+from src.core.interfaces.pipeline_interface import (
+    PipelineInterface,
+    ValidationResult,
+)
 from src.support.excel_report_generator import ExcelReportGenerator
-from src.writers.jsonl_writer import JSONLWriter
+from src.support.json_report_generator import JSONReportGenerator
+from src.support.metadata_generator import MetadataGenerator
 from src.utils.logger import logger
+from src.writers.jsonl_writer import JSONLWriter
 
 
 class PipelineOrchestrator(PipelineInterface):
@@ -27,7 +31,7 @@ class PipelineOrchestrator(PipelineInterface):
         self,
         file_path: Path,
         mode: ParserMode,
-        config: Optional[ConfigLoader] = None,
+        config: ConfigLoader | None = None,
     ) -> None:
 
         self.__file_path = file_path
@@ -35,8 +39,10 @@ class PipelineOrchestrator(PipelineInterface):
         self.__config = config or ConfigLoader()
 
         # Encapsulated config values
-        self.__output_dir = Path(self.__config.get("output", {}).get("base_dir", "outputs"))
-        self.__doc_title = str(self.__config.get("metadata", {}).get("doc_title", "Document"))
+        output_cfg = self.__config.get("output", {})
+        self.__output_dir = Path(output_cfg.get("base_dir", "outputs"))
+        meta_cfg = self.__config.get("metadata", {})
+        self.__doc_title = str(meta_cfg.get("doc_title", "Document"))
 
         # Counters
         self.__exec_count = 0
@@ -134,11 +140,11 @@ class PipelineOrchestrator(PipelineInterface):
 
     @overload
     def run(self) -> ParserResult: ...
-    
+
     @overload
     def run(self, mode: ParserMode) -> ParserResult: ...
 
-    def run(self, mode: Optional[ParserMode] = None) -> ParserResult:
+    def run(self, mode: ParserMode | None = None) -> ParserResult:
         """
         Overloaded method:
         - run()                 → use existing mode
@@ -180,11 +186,13 @@ class PipelineOrchestrator(PipelineInterface):
 
     @overload
     def _write_outputs(self, result: ParserResult) -> None: ...
-    
+
     @overload
     def _write_outputs(self, result: ParserResult, *, only: str) -> None: ...
 
-    def _write_outputs(self, result: ParserResult, *, only: str = "all") -> None:
+    def _write_outputs(
+        self, result: ParserResult, *, only: str = "all"
+    ) -> None:
         """
         Overloaded output writer.
         - only="all" (default)
@@ -195,12 +203,20 @@ class PipelineOrchestrator(PipelineInterface):
         out = self.__output_dir
 
         if only == "all":
-            writer.write_toc(result.toc_entries, out / self._toc_name)
-            writer.write_content(result.content_items, out / self._content_name)
+            writer.write_toc(
+                result.toc_entries, out / self._toc_name
+            )
+            writer.write_content(
+                result.content_items, out / self._content_name
+            )
         elif only == "toc":
-            writer.write_toc(result.toc_entries, out / self._toc_name)
+            writer.write_toc(
+                result.toc_entries, out / self._toc_name
+            )
         elif only == "content":
-            writer.write_content(result.content_items, out / self._content_name)
+            writer.write_content(
+                result.content_items, out / self._content_name
+            )
         else:
             raise ValueError("Invalid `only` value for _write_outputs")
 
@@ -225,7 +241,7 @@ class PipelineOrchestrator(PipelineInterface):
     def pause(self) -> None: ...
     def resume(self) -> None: ...
     def cancel(self) -> None: ...
-    
+
     def get_status(self) -> str:
         return "running" if self.__exec_count else "idle"
 
@@ -236,10 +252,16 @@ class PipelineOrchestrator(PipelineInterface):
     # MAGIC METHODS
     # ==========================================================
     def __str__(self) -> str:
-        return f"PipelineOrchestrator(file={self.file_path.name}, mode={self.mode.value})"
+        return (
+            f"PipelineOrchestrator(file={self.file_path.name}, "
+            f"mode={self.mode.value})"
+        )
 
     def __repr__(self) -> str:
-        return f"PipelineOrchestrator(path={self.file_path!r}, mode={self.mode!r})"
+        return (
+            f"PipelineOrchestrator(path={self.file_path!r}, "
+            f"mode={self.mode!r})"
+        )
 
     def __len__(self) -> int:
         return self.__exec_count

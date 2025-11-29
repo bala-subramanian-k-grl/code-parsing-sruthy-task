@@ -3,8 +3,9 @@ Excel validation report generator (OOP + Polymorphism + Overloading).
 """
 
 from __future__ import annotations
+
+from collections.abc import Callable
 from pathlib import Path
-from typing import Callable, Union
 
 from openpyxl import Workbook  # type: ignore[import-untyped]
 from openpyxl.worksheet.worksheet import Worksheet  # type: ignore
@@ -35,7 +36,7 @@ class ExcelReportGenerator(BaseReportGenerator):
     # ---------------------------------------------------------
     # Encapsulated Metrics
     # ---------------------------------------------------------
-    _METRICS: list[tuple[str, Union[str, Callable[[ParserResult], int]]]] = [
+    _METRICS: list[tuple[str, str | Callable[[ParserResult], int]]] = [
         ("Metric", "Value"),
         ("TOC Entries", lambda r: len(r.toc_entries)),
         ("Content Items", lambda r: len(r.content_items)),
@@ -78,7 +79,8 @@ class ExcelReportGenerator(BaseReportGenerator):
             data.save(path)
             return path.stat().st_size if path.exists() else 0
         except OSError as e:
-            raise OSError(f"Failed to save Excel report to '{path}': {e}") from e
+            msg = f"Failed to save Excel report to '{path}': {e}"
+            raise OSError(msg) from e
 
     # ---------------------------------------------------------
     # OPTIONAL HOOKS
@@ -86,11 +88,9 @@ class ExcelReportGenerator(BaseReportGenerator):
     def before_write(self, result: ParserResult, path: Path) -> None:
         """Optional polymorphic hook."""
         # Can add logs, timing, etc.
-        pass
 
     def after_write(self, result: ParserResult, path: Path) -> None:
         """Optional polymorphic hook."""
-        pass
 
     # ---------------------------------------------------------
     # Magic Methods

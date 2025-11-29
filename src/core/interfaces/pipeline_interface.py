@@ -20,7 +20,6 @@ from dataclasses import dataclass
 
 from src.core.config.models import ParserResult
 
-
 # ==========================================================
 # VALIDATION RESULT (Dataclass + Polymorphism)
 # ==========================================================

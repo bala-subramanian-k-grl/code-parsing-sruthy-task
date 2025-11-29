@@ -8,7 +8,7 @@ Provides:
 """
 
 from src.utils.logger import logger
-from src.utils.timer import timer, Timer
+from src.utils.timer import Timer, timer
 
 __version__ = "2.0.0"
-__all__ = ["logger", "timer", "Timer"]
+__all__ = ["Timer", "logger", "timer"]

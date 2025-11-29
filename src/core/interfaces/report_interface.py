@@ -57,11 +57,13 @@ class IReportGenerator(ABC):
 
     def _ensure_path(self, path: Path) -> None:
         if not path.parent.exists():
-            raise FileNotFoundError(f"Output directory not found: {path.parent}")
+            msg = f"Output directory not found: {path.parent}"
+            raise FileNotFoundError(msg)
 
     def _ensure_ready(self) -> None:
         if not self._is_ready:
-            raise RuntimeError("Report generator is not prepared. Call prepare().")
+            msg = "Report generator is not prepared. Call prepare()."
+            raise RuntimeError(msg)
 
     # ==========================================================
     # OPTIONAL LIFECYCLE HOOKS

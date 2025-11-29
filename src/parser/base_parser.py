@@ -1,9 +1,10 @@
 """Base parser abstract class (OOP + Overloading)."""
 
 from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any, Dict, Optional, overload
+from typing import Any, overload
 
 from src.core.config.models import ParserResult
 from src.core.interfaces.parser_interface import ParserInterface
@@ -69,7 +70,7 @@ class BaseParser(ParserInterface, ABC):
 
     @overload
     def validate(self) -> bool: ...
-    
+
     @overload
     def validate(self, *, raise_on_error: bool) -> bool: ...
 
@@ -102,33 +103,30 @@ class BaseParser(ParserInterface, ABC):
     def open(self) -> None:
         """Open parser resources."""
         # Kept minimal; subclasses may override if needed.
-        pass
 
     def close(self) -> None:
         """Close parser resources."""
         # Kept minimal; subclasses may override if needed.
-        pass
 
     def reset(self) -> None:
         """Reset parser state."""
         # Kept minimal; subclasses may override if needed.
-        pass
 
     # ---------------- get_info (Overloaded) -------------------
 
     @overload
-    def get_info(self) -> Dict[str, Any]: ...
+    def get_info(self) -> dict[str, Any]: ...
 
     @overload
-    def get_info(self, *, extended: bool) -> Dict[str, Any]: ...
+    def get_info(self, *, extended: bool) -> dict[str, Any]: ...
 
-    def get_info(self, *, extended: bool = False) -> Dict[str, Any]:
+    def get_info(self, *, extended: bool = False) -> dict[str, Any]:
         """
         Overloaded:
         - get_info()                   -> basic info
         - get_info(extended=True)      -> basic + extra info
         """
-        info: Dict[str, Any] = {
+        info: dict[str, Any] = {
             "type": self.parser_type,
             "file": self.file_name,
             "suffix": self.file_suffix,
@@ -185,7 +183,12 @@ class BaseParser(ParserInterface, ABC):
         self.open()
         return self
 
-    def __exit__(self, exc_type: Optional[type[BaseException]], exc_val: Optional[BaseException], exc_tb: Optional[Any]) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: Any | None
+    ) -> None:
         self.close()
 
     def __int__(self) -> int:

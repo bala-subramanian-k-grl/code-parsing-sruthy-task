@@ -16,17 +16,17 @@ Main modules:
 from src.cli import CLIApp
 from src.core import ContentItem, ParserMode, ParserResult, TOCEntry
 from src.orchestrator import PipelineOrchestrator
-from src.parser import PDFParser, ParserFactory
+from src.parser import ParserFactory, PDFParser
 
 __version__ = "1.0.0"
 __author__ = "USB-PD Parser Team"
 __all__ = [
     "CLIApp",
-    "PipelineOrchestrator",
-    "ParserFactory",
-    "PDFParser",
-    "ParserMode",
-    "TOCEntry",
     "ContentItem",
+    "PDFParser",
+    "ParserFactory",
+    "ParserMode",
     "ParserResult",
+    "PipelineOrchestrator",
+    "TOCEntry",
 ]

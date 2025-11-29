@@ -3,10 +3,11 @@ JSON report generator with full OOP, overloading, polymorphism.
 """
 
 from __future__ import annotations
+
 import json
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, overload
+from typing import Any, overload
 
 from src.core.config.models import ParserResult
 from src.support.base_report_generator import BaseReportGenerator
@@ -37,7 +38,7 @@ class JSONReportGenerator(BaseReportGenerator):
     def _timestamp() -> str:
         return datetime.now().isoformat()
 
-    def _base_metadata(self) -> Dict[str, Any]:
+    def _base_metadata(self) -> dict[str, Any]:
         """Common metadata for all JSON reports."""
         return {
             "timestamp": self._timestamp(),
@@ -58,7 +59,7 @@ class JSONReportGenerator(BaseReportGenerator):
     def _extract_pages(self, result: ParserResult) -> list[int]:
         return [item.page for item in result.content_items]
 
-    def _statistics(self, result: ParserResult) -> Dict[str, Any]:
+    def _statistics(self, result: ParserResult) -> dict[str, Any]:
         pages = self._extract_pages(result)
         return {
             "total_pages": max(pages) if pages else 0,
@@ -66,13 +67,13 @@ class JSONReportGenerator(BaseReportGenerator):
             "content_items": len(result.content_items),
         }
 
-    def _summary(self, result: ParserResult) -> Dict[str, bool]:
+    def _summary(self, result: ParserResult) -> dict[str, bool]:
         return {
             "toc_extracted": bool(result.toc_entries),
             "content_extracted": bool(result.content_items),
         }
 
-    def _format_data(self, result: ParserResult) -> Dict[str, Any]:
+    def _format_data(self, result: ParserResult) -> dict[str, Any]:
         data = self._base_metadata()
         data.update(
             {
@@ -86,12 +87,12 @@ class JSONReportGenerator(BaseReportGenerator):
     # JSON Serialization (with Overloading)
     # ---------------------------------------------------------
     @overload
-    def serialize(self, data: Dict[str, Any]) -> str: ...
+    def serialize(self, data: dict[str, Any]) -> str: ...
 
     @overload
-    def serialize(self, data: Dict[str, Any], *, compact: bool) -> str: ...
+    def serialize(self, data: dict[str, Any], *, compact: bool) -> str: ...
 
-    def serialize(self, data: Dict[str, Any], *, compact: bool = False) -> str:
+    def serialize(self, data: dict[str, Any], *, compact: bool = False) -> str:
         """
         Overloaded serializer:
         - serialize(data)
@@ -105,7 +106,7 @@ class JSONReportGenerator(BaseReportGenerator):
     # Write File (Template Method Hook)
     # Must return bytes written
     # ---------------------------------------------------------
-    def _write_to_file(self, data: Dict[str, Any], path: Path) -> int:
+    def _write_to_file(self, data: dict[str, Any], path: Path) -> int:
         try:
             serialized = self.serialize(data)
             with path.open("w", encoding="utf-8") as f:
@@ -123,9 +124,13 @@ class JSONReportGenerator(BaseReportGenerator):
     def prepare_output_path(self, base_path: Path) -> Path: ...
 
     @overload
-    def prepare_output_path(self, base_path: Path, *, force_ext: bool) -> Path: ...
+    def prepare_output_path(
+        self, base_path: Path, *, force_ext: bool
+    ) -> Path: ...
 
-    def prepare_output_path(self, base_path: Path, *, force_ext: bool = False) -> Path:
+    def prepare_output_path(
+        self, base_path: Path, *, force_ext: bool = False
+    ) -> Path:
         """
         If force_ext=True → always replace extension.
         """

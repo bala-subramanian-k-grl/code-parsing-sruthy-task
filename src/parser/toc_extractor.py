@@ -1,10 +1,12 @@
 """Enterprise TOC Extractor with Overloading, Encapsulation & Polymorphism."""
 
 from __future__ import annotations
+
 from pathlib import Path
-from typing import Any, Union
+from typing import Any
 
 import fitz  # type: ignore[import-untyped]  # pyright: ignore[reportMissingTypeStubs]
+
 from src.core.config.models import TOCEntry
 from src.extractors.extractor_interface import ExtractorInterface
 
@@ -59,7 +61,8 @@ class TOCExtractor(ExtractorInterface):
         self.__extraction_count += 1
 
         if not self.validate():
-            raise ValueError(f"Invalid file for TOC extraction: {self.file_path}")
+            msg = f"Invalid file for TOC extraction: {self.file_path}"
+            raise ValueError(msg)
 
         raw_toc = self._read_toc()
         entries = self._build_entries(raw_toc)
@@ -124,7 +127,7 @@ class TOCExtractor(ExtractorInterface):
 
     def _get_parent_id(
         self, level: int, stack: list[tuple[int, str]]
-    ) -> Union[str, None]:
+    ) -> str | None:
         for parent_level, parent_id in reversed(stack):
             if parent_level < level:
                 return parent_id
@@ -146,6 +149,9 @@ class TOCExtractor(ExtractorInterface):
         if not isinstance(other, TOCExtractor):
             return NotImplemented
         return self.file_path == other.file_path
+
+    def __hash__(self) -> int:
+        return hash((type(self).__name__, self.file_path))
 
     def __len__(self) -> int:
         return self.extraction_count

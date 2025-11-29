@@ -1,8 +1,9 @@
 """Abstract writer interface with improved OOP structure."""
 
 from abc import ABC, abstractmethod
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 
 class WriterInterface(ABC):

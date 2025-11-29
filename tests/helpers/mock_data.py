@@ -289,7 +289,9 @@ class MockDataGeneratorFactory(BaseFactory):
         if generator_type not in generators:
             raise ValueError(f"Unknown generator type: {generator_type}")
 
-        generator_class: type[BaseMockDataGenerator] = generators[generator_type]
+        generator_class: type[BaseMockDataGenerator] = (
+            generators[generator_type]
+        )
         return generator_class(count)
 
     def __str__(self) -> str:

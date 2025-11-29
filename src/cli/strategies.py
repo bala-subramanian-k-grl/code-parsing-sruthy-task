@@ -4,12 +4,11 @@ Parser Mode Strategies for CLI.
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, Type
+from typing import Any
 
+from src.cli.decorators import protected_access
 from src.core.config.constants import ParserMode
 from src.core.interfaces.factory_interface import FactoryInterface
-from src.cli.decorators import protected_access
-
 
 # =====================================================
 # Base Strategy (Abstract)
@@ -132,9 +131,9 @@ class ContentModeStrategy(BaseModeStrategy):
 class ModeStrategyFactory(FactoryInterface[BaseModeStrategy]):
     """Factory to create strategies based on a mode string."""
 
-    _default_strategy: Type[BaseModeStrategy] = FullModeStrategy
+    _default_strategy: type[BaseModeStrategy] = FullModeStrategy
 
-    _mode_map: dict[str, Type[BaseModeStrategy]] = {
+    _mode_map: dict[str, type[BaseModeStrategy]] = {
         "full": FullModeStrategy,
         "toc": TocModeStrategy,
         "content": ContentModeStrategy,
@@ -153,7 +152,9 @@ class ModeStrategyFactory(FactoryInterface[BaseModeStrategy]):
 
     # ---------- Factory Logic ----------
 
-    def create(self, mode_str: str, *args: Any, **kwargs: Any) -> BaseModeStrategy:
+    def create(
+        self, mode_str: str, *args: Any, **kwargs: Any
+    ) -> BaseModeStrategy:
         """Return a strategy instance based on mode string."""
         self._increment_creation()
         mode_key = (mode_str or "").lower()

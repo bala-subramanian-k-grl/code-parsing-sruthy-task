@@ -49,11 +49,11 @@ class BaseTest(ABC):
     # ------------------------------------------------------------
     def on_test_pass(self) -> None:
         """Hook executed when a test passes."""
-        pass
+        return None
 
     def on_test_fail(self, error: Exception) -> None:
         """Hook executed when a test fails."""
-        pass
+        return None
 
     # ------------------------------------------------------------
     # Test Runner
