@@ -24,7 +24,7 @@ class BaseEnum(str, Enum):
         raise NotImplementedError("Subclasses must override label()")
 
     def is_valid(self, value: str) -> bool:
-        return value.lower() == self.value.lower()
+        return bool(value.lower() == str(self.value).lower())
 
     @classmethod
     def list_values(cls) -> list[str]:
@@ -39,7 +39,7 @@ class BaseEnum(str, Enum):
 
     # Polymorphic magic methods
     def __str__(self) -> str:
-        return self.value
+        return str(self.value)
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.value!r})"
@@ -57,13 +57,13 @@ class ParserMode(BaseEnum):
     FULL = "full"
 
     def label(self) -> str:
-        match self:
-            case ParserMode.TOC:
-                return "Table of Contents Extraction"
-            case ParserMode.CONTENT:
-                return "Content Extraction"
-            case ParserMode.FULL:
-                return "Full Document Parsing"
+        if self is ParserMode.TOC:
+            return "Table of Contents Extraction"
+        elif self is ParserMode.CONTENT:
+            return "Content Extraction"
+        elif self is ParserMode.FULL:
+            return "Full Document Parsing"
+        return "Unknown Mode"
 
     # Behavior helpers
     def is_full(self) -> bool:

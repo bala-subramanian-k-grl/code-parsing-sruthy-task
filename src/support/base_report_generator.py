@@ -83,17 +83,17 @@ class BaseReportGenerator(IReportGenerator, ABC):
     # Overloaded generate() for flexibility
     # ---------------------------------------------------------
     @overload
-    def generate(self, result: ParserResult, path: Path) -> None:
+    def generate(self, result: ParserResult, path: Path) -> None:  # type: ignore[override]
         ...
 
     @overload
-    def generate(self, result: ParserResult, path: str) -> None:
+    def generate(self, result: ParserResult, path: str) -> None:  # type: ignore[override]
         ...
 
     # ---------------------------------------------------------
     # FINAL Template Method Pattern
     # ---------------------------------------------------------
-    def generate(self, result: ParserResult, path: Path | str) -> None:
+    def generate(self, result: ParserResult, path: Path | str) -> None:  # type: ignore[override]
         """Do NOT override in subclasses."""
         self.__generation_count += 1
 

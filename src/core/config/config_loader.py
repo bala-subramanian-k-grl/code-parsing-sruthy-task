@@ -165,7 +165,7 @@ class EnvConfigLoader(BaseConfigLoader):
 class ConfigLoaderFactory(FactoryInterface[BaseConfigLoader]):
     """Create appropriate config loader based on file extension."""
 
-    def create(
+    def create(  # type: ignore[override]
         self, path: Path, *args: Any, **kwargs: Any
     ) -> BaseConfigLoader:
         ext = path.suffix.lower()

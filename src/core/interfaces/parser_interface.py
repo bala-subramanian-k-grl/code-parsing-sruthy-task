@@ -135,16 +135,16 @@ class ParserInterface(ABC):
 
     @overload
     @abstractmethod
-    def supports_format(self, format_type: str) -> bool:
+    def supports_format(self, format_type: str) -> bool:  # type: ignore[misc]
         ...
 
     @overload
     @abstractmethod
-    def supports_format(self, *formats: str) -> bool:
+    def supports_format(self, *formats: str) -> bool:  # type: ignore[misc]
         ...
 
     @abstractmethod
-    def supports_format(self, *formats: str) -> bool:
+    def supports_format(self, *formats: str) -> bool:  # type: ignore[misc]
         """Check if parser supports one or more input formats."""
         raise NotImplementedError
 

@@ -54,7 +54,7 @@ class JSONLWriter(WriterInterface):
     # -------------------------------------------------------------------------
     # High-level Writer (Abstraction)
     # -------------------------------------------------------------------------
-    def write(
+    def write(  # type: ignore[override]
         self, data: list[TOCEntry | ContentItem], path: Path
     ) -> None:
         """Generic write orchestrator."""

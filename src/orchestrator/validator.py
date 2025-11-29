@@ -79,7 +79,7 @@ class ResultValidator(BaseValidator):
         self, data: ParserResult, *, strict: bool
     ) -> ValidationResult: ...
 
-    def validate(
+    def validate(  # type: ignore[override]
         self, data: ParserResult, *, strict: bool = False
     ) -> ValidationResult:
         """
@@ -178,7 +178,7 @@ class StrictValidator(ResultValidator):
         return self.__strict
 
     # ------------ Override validate() (Polymorphism) ------------
-    def validate(self, data: ParserResult) -> ValidationResult:
+    def validate(self, data: ParserResult) -> ValidationResult:  # type: ignore[override]
         """
         Strict override → always strict=True
         """

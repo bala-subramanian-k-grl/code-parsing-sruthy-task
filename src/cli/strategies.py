@@ -152,7 +152,7 @@ class ModeStrategyFactory(FactoryInterface[BaseModeStrategy]):
 
     # ---------- Factory Logic ----------
 
-    def create(
+    def create(  # type: ignore[override]
         self, mode_str: str, *args: Any, **kwargs: Any
     ) -> BaseModeStrategy:
         """Return a strategy instance based on mode string."""

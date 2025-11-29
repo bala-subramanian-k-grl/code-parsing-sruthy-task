@@ -64,13 +64,12 @@ class ApplicationFactory:
     @staticmethod
     def create_runner(runner_type: str = "cli") -> BaseRunner:
         """Create a runner based on type."""
-        match runner_type.lower():
-            case "cli":
-                return CLIRunner()
-            case _:
-                raise ValueError(
-                    f"Invalid runner type: {runner_type}. Supported: cli"
-                )
+        runner_lower = runner_type.lower()
+        if runner_lower == "cli":
+            return CLIRunner()
+        raise ValueError(
+            f"Invalid runner type: {runner_type}. Supported: cli"
+        )
 
 
 # ===============================================================
