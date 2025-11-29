@@ -1,5 +1,7 @@
 """JSONL writer implementation (OOP enhanced)."""
 
+from __future__ import annotations
+
 import json
 from collections.abc import Callable, Iterable
 from pathlib import Path

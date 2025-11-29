@@ -1,5 +1,7 @@
 """Advanced interface/Protocol-based OOP tests with dependency injection."""
 
+from __future__ import annotations
+
 from typing import Protocol, runtime_checkable
 
 # ============================================================
