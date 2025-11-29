@@ -5,7 +5,7 @@ import time
 from pathlib import Path
 from typing import Any, Callable, TypeVar
 
-type_var_t = TypeVar("type_var_t")  # PEP8 compliant snake_case
+t_var = TypeVar("t_var")  # PEP8 compliant snake_case
 
 
 class CleanupMixin:
@@ -59,10 +59,10 @@ class TimerMixin:
 
     def time_operation(
         self,
-        func: Callable[..., type_var_t],
+        func: Callable[..., t_var],
         *args: Any,
         **kwargs: Any
-    ) -> tuple[type_var_t, float]:
+    ) -> tuple[t_var, float]:
         """
         Measure the execution time of a function.
 

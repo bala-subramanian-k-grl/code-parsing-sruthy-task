@@ -21,11 +21,13 @@ if TYPE_CHECKING:
 # Decorator for Encapsulation
 # ==========================================================
 
-T = TypeVar('T')
+t_return = TypeVar('t_return')
 
-def protected_access(func: Callable[..., T]) -> Callable[..., T]:
+def protected_access(
+    func: Callable[..., t_return]
+) -> Callable[..., t_return]:
     """Decorator indicating this method is protected/internal."""
-    def wrapper(self: Any, *args: Any, **kwargs: Any) -> T:
+    def wrapper(self: Any, *args: Any, **kwargs: Any) -> t_return:
         return func(self, *args, **kwargs)
     return wrapper
 

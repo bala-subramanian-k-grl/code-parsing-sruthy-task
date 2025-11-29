@@ -8,10 +8,10 @@ from abc import ABC, abstractmethod
 from typing import Any, Generic, TypeVar, overload
 
 # Type variable for factory output type
-T = TypeVar("T")
+t_product = TypeVar("t_product")
 
 
-class FactoryInterface(ABC, Generic[T]):
+class FactoryInterface(ABC, Generic[t_product]):
     """Abstract base class for all factory implementations."""
 
     VERSION = "1.0.0"
@@ -22,18 +22,18 @@ class FactoryInterface(ABC, Generic[T]):
 
     @overload
     @abstractmethod
-    def create(self) -> T:
+    def create(self) -> t_product:
         """Create without parameters."""
         ...
 
     @overload
     @abstractmethod
-    def create(self, *args: Any, **kwargs: Any) -> T:
+    def create(self, *args: Any, **kwargs: Any) -> t_product:
         """Create with flexible parameters."""
         ...
 
     @abstractmethod
-    def create(self, *args: Any, **kwargs: Any) -> T:
+    def create(self, *args: Any, **kwargs: Any) -> t_product:
         """Main abstract creation method."""
         raise NotImplementedError
 

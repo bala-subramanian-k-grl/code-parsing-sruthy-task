@@ -27,10 +27,12 @@ from src.core.interfaces.factory_interface import FactoryInterface
 # Helper Decorator — Protected Access
 # ======================================================
 
-T = TypeVar('T')
+t_config = TypeVar('t_config')
 
-def protected_access(func: Callable[..., T]) -> Callable[..., T]:
-    def wrapper(self: Any, *args: Any, **kwargs: Any) -> T:
+def protected_access(
+    func: Callable[..., t_config]
+) -> Callable[..., t_config]:
+    def wrapper(self: Any, *args: Any, **kwargs: Any) -> t_config:
         return func(self, *args, **kwargs)
     return wrapper
 
