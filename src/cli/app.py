@@ -2,6 +2,8 @@
 CLI application entry point with improved OOP, encapsulation, and polymorphism.
 """
 
+from __future__ import annotations
+
 import argparse
 from abc import ABC, abstractmethod
 from pathlib import Path
