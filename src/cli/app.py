@@ -117,7 +117,7 @@ class FilePathResolver:
         self._validator = PathValidator()
 
     def resolve(self, file_arg: str | None) -> Path:
-        file_path_raw = file_arg or self._config_loader.get("pdf_path")
+        file_path_raw = file_arg or self._config_loader.get("input.pdf_path")
         if not file_path_raw:
             raise ValueError("No PDF file path provided")
 

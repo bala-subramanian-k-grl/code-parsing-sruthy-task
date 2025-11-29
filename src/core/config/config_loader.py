@@ -86,6 +86,18 @@ class BaseConfigLoader(ABC):
     def get(self, key: str, default: Any) -> Any: ...
 
     def get(self, key: str, default: Any = None) -> Any:
+        # Handle nested keys like "input.pdf_path"
+        if "." in key:
+            keys = key.split(".")
+            value = self._config
+            for k in keys:
+                if isinstance(value, dict):
+                    value = value.get(k)
+                    if value is None:
+                        return default
+                else:
+                    return default
+            return value
         return self._config.get(key, default)
 
     # ---------- Magic Methods (Polymorphism) ----------
