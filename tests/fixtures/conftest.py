@@ -22,7 +22,6 @@ import pytest
 from ..helpers.file_utils import TempFileManager
 from .small_test import MockConfigFixture, MockContentFixture, MockTOCFixture
 
-
 # =========================================================
 # Base Abstract Factory (Abstraction + Encapsulation)
 # =========================================================

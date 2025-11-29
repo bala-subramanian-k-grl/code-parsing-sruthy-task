@@ -5,7 +5,6 @@ Advanced strategy pattern tests with lifecycle.
 from abc import ABC, abstractmethod
 from typing import Any
 
-
 # ============================================================
 # Logger for Composition
 # ============================================================

@@ -4,7 +4,6 @@ Advanced OOP principles tests with lifecycle.
 
 from abc import ABC, abstractmethod
 
-
 # ============================================================
 # Logger (Composition)
 # ============================================================

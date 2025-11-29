@@ -2,7 +2,6 @@
 
 from typing import Protocol, runtime_checkable
 
-
 # ============================================================
 # Protocol Interfaces (Abstraction)
 # ============================================================

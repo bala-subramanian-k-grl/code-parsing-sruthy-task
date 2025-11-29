@@ -14,7 +14,6 @@ from __future__ import annotations
 import time
 from abc import ABC, abstractmethod
 
-
 # ============================================================
 # Logger via Composition
 # ============================================================
@@ -234,10 +233,8 @@ class PipelineMockDataTest(BasePipelineTest):
     def run_test(self) -> bool:
         self.logger.log("Running PipelineMockDataTest...")
 
-        from tests.helpers.mock_data import (
-            generate_mock_content,
-            generate_mock_toc,
-        )
+        from tests.helpers.mock_data import (generate_mock_content,
+                                             generate_mock_toc)
 
         toc = generate_mock_toc(3)
         content = generate_mock_content(5)

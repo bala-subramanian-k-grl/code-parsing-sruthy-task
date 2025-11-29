@@ -1,9 +1,9 @@
 """Enterprise-grade test strategies (Strategy Pattern)."""
 
 from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from typing import Any
-
 
 # ==========================================================
 # Base Strategy (Abstraction + Polymorphism)

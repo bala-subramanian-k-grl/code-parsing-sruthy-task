@@ -8,7 +8,6 @@ from __future__ import annotations
 import time
 from abc import ABC, abstractmethod
 
-
 # =========================================================
 # Logger (Composition)
 # =========================================================
@@ -171,8 +170,8 @@ class ValidationSpeedTest(BasePerformanceTest):
         self._logger.log("Running ValidationSpeedTest...")
 
         from tests.helpers.mock_data import generate_mock_content
-        from tests.helpers.validation_utils import validate_content_item
         from tests.helpers.performance_utils import measure_execution_time
+        from tests.helpers.validation_utils import validate_content_item
 
         data = generate_mock_content(100)
 

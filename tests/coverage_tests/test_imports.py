@@ -4,9 +4,10 @@ Enterprise-grade OOP import validation tests.
 
 
 from __future__ import annotations
-import importlib
-from abc import ABC, abstractmethod
 
+import importlib
+from abc import ABC
+from abc import abstractmethod
 
 import src.core.config.base_config
 import src.core.config.constants
@@ -21,7 +22,6 @@ from src.core.interfaces.pipeline_interface import PipelineInterface
 from src.search.jsonl_searcher import JSONLSearcher
 from src.support.excel_report_generator import ExcelReportGenerator
 from src.support.json_report_generator import JSONReportGenerator
-
 
 # ============================================================
 # Base Abstract Test (Abstraction)

@@ -5,10 +5,8 @@ Interfaces package for abstract contracts used across the USB-PD parser.
 from src.core.interfaces.extraction_strategy import ExtractionStrategy
 from src.core.interfaces.factory_interface import FactoryInterface
 from src.core.interfaces.parser_interface import ParserInterface
-from src.core.interfaces.pipeline_interface import (
-    PipelineInterface,
-    ValidationResult,
-)
+from src.core.interfaces.pipeline_interface import (PipelineInterface,
+                                                    ValidationResult)
 from src.core.interfaces.report_interface import IReportGenerator
 
 # ---------------------------------------------------------

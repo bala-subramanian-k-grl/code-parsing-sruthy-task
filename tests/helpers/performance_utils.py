@@ -14,9 +14,10 @@ Enhancements:
 from __future__ import annotations
 
 import time
-from abc import ABC, abstractmethod
-from typing import Any, Callable, List
-
+from abc import ABC
+from abc import abstractmethod
+from typing import Any
+from typing import Callable
 
 # ============================================================
 # Logger (Composition)
@@ -78,7 +79,7 @@ class BasePerformanceUtility(ABC):
     def __init__(self, logger: PerformanceLogger | None = None) -> None:
         self._logger = logger or PerformanceLogger()     # Composition
         self._result: Any = None                        # Encapsulation
-        self._errors: List[str] = []                    # Encapsulation
+        self._errors: list[str] = []                    # Encapsulation
         self._start_time: float = 0.0                   # Encapsulation
         self._end_time: float = 0.0                     # Encapsulation
         self.__instance_id = id(self)
@@ -127,7 +128,7 @@ class BasePerformanceUtility(ABC):
         return self._result
 
     @property
-    def errors(self) -> List[str]:
+    def errors(self) -> list[str]:
         return list(self._errors)
 
     def __str__(self) -> str:

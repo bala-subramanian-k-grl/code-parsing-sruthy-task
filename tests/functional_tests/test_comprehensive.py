@@ -11,9 +11,9 @@ Enhancements:
 """
 
 from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from typing import List, Optional
-
 
 # ================================================================
 # Composition Helper (Shared Logger)
@@ -142,14 +142,10 @@ class PipelineMockTest(BaseE2ETest):
     """Validate pipeline using mock TOC + content."""
 
     def execute(self) -> bool:
-        from tests.helpers.mock_data import (
-            generate_mock_content,
-            generate_mock_toc,
-        )
-        from tests.helpers.validation_utils import (
-            validate_content_item,
-            validate_toc_entry,
-        )
+        from tests.helpers.mock_data import (generate_mock_content,
+                                             generate_mock_toc)
+        from tests.helpers.validation_utils import (validate_content_item,
+                                                    validate_toc_entry)
 
         toc = generate_mock_toc(10)
         content = generate_mock_content(50)

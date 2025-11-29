@@ -5,12 +5,8 @@ Configuration module initializer for the USB-PD Parser.
 from src.core.config.base_config import BaseConfig
 from src.core.config.config_loader import ConfigLoader
 from src.core.config.constants import ParserMode
-from src.core.config.models import (
-    ContentItem,
-    Metadata,
-    ParserResult,
-    TOCEntry,
-)
+from src.core.config.models import (ContentItem, Metadata, ParserResult,
+                                    TOCEntry)
 
 # Public API
 __all__ = [

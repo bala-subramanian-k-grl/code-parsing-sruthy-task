@@ -11,7 +11,9 @@ Demonstrates OOP principles:
 """
 
 from __future__ import annotations
-from abc import ABC, abstractmethod
+
+from abc import ABC
+from abc import abstractmethod
 from pathlib import Path
 
 import src.utils.logger
@@ -24,7 +26,6 @@ from src.search.jsonl_searcher import JSONLSearcher
 from src.support.excel_report_generator import ExcelReportGenerator
 from src.support.json_report_generator import JSONReportGenerator
 from tests.helpers.mock_data import generate_mock_metadata
-
 
 # ============================================================
 # Base Abstraction for Coverage Tests

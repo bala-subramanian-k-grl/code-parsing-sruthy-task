@@ -160,11 +160,8 @@ class BaseConfig(BaseConfigInterface):
         self, mode: str | ParserMode
     ) -> "FullConfig | TOCConfig | ContentConfig":
         """Create a new config object for a different mode (polymorphic)."""
-        from src.core.config.base_config import (
-            ContentConfig,
-            FullConfig,
-            TOCConfig,
-        )
+        from src.core.config.base_config import (ContentConfig, FullConfig,
+                                                 TOCConfig)
 
         mode_enum = mode if isinstance(mode, ParserMode) else ParserMode(mode)
 

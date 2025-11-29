@@ -1,6 +1,7 @@
 """Enhanced test mixins for cleanup and timing operations."""
 
 from __future__ import annotations
+
 import time
 from pathlib import Path
 from typing import Any, Callable, TypeVar

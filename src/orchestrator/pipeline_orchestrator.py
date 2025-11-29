@@ -10,10 +10,8 @@ from typing import overload
 from src.core.config.config_loader import ConfigLoader
 from src.core.config.constants import ParserMode
 from src.core.config.models import ParserResult
-from src.core.interfaces.pipeline_interface import (
-    PipelineInterface,
-    ValidationResult,
-)
+from src.core.interfaces.pipeline_interface import (PipelineInterface,
+                                                    ValidationResult)
 from src.support.excel_report_generator import ExcelReportGenerator
 from src.support.json_report_generator import JSONReportGenerator
 from src.support.metadata_generator import MetadataGenerator

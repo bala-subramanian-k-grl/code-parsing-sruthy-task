@@ -1,6 +1,7 @@
 """USB PD Specification Parser - Main Entry Point with Enhanced OOP."""
 
 from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from typing import Optional
 
