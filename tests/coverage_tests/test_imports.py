@@ -16,11 +16,11 @@ import src.parser.base_parser
 import src.parser.pdf_parser
 import src.parser.toc_extractor
 import src.utils.logger
-from src.utils import timer as timer_module
 from src.core.interfaces.pipeline_interface import PipelineInterface
 from src.search.jsonl_searcher import JSONLSearcher
 from src.support.excel_report_generator import ExcelReportGenerator
 from src.support.json_report_generator import JSONReportGenerator
+from src.utils import timer as timer_module
 
 # ============================================================
 # Base Abstract Test (Abstraction)
