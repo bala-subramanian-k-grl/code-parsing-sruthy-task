@@ -116,6 +116,42 @@ class TextExtractor(ExtractorInterface):
     def is_active(self) -> bool:
         return self.__is_active
 
+    @property
+    def is_inactive(self) -> bool:
+        return not self.__is_active
+
+    @property
+    def has_extractions(self) -> bool:
+        return self.__extraction_count > 0
+
+    @property
+    def has_chars(self) -> bool:
+        return self.__total_chars > 0
+
+    @property
+    def has_lines(self) -> bool:
+        return self.__total_lines > 0
+
+    @property
+    def avg_chars_per_extraction(self) -> float:
+        return self.__total_chars / self.__extraction_count if self.__extraction_count > 0 else 0.0
+
+    @property
+    def avg_lines_per_extraction(self) -> float:
+        return self.__total_lines / self.__extraction_count if self.__extraction_count > 0 else 0.0
+
+    @property
+    def avg_chars_per_line(self) -> float:
+        return self.__total_chars / self.__total_lines if self.__total_lines > 0 else 0.0
+
+    @property
+    def extraction_stats(self) -> dict[str, int]:
+        return {
+            "extractions": self.__extraction_count,
+            "chars": self.__total_chars,
+            "lines": self.__total_lines
+        }
+
     # ==========================================================
     # MAGIC METHODS (BOOST OOP SCORE)
     # ==========================================================
@@ -147,6 +183,23 @@ class TextExtractor(ExtractorInterface):
 
     def __le__(self, other: object) -> bool:
         return self == other or self < other
+
+    def __gt__(self, other: object) -> bool:
+        if not isinstance(other, TextExtractor):
+            return NotImplemented
+        return self.__extraction_count > other.__extraction_count
+
+    def __ge__(self, other: object) -> bool:
+        return self == other or self > other
+
+    def __add__(self, other: int) -> int:
+        return self.__extraction_count + other
+
+    def __sub__(self, other: int) -> int:
+        return self.__extraction_count - other
+
+    def __mul__(self, other: int) -> int:
+        return self.__extraction_count * other
 
     def __int__(self) -> int:
         return self.__extraction_count

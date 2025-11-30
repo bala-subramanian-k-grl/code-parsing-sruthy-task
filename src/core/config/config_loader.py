@@ -89,10 +89,10 @@ class BaseConfigLoader(ABC):
         # Handle nested keys like "input.pdf_path"
         if "." in key:
             keys = key.split(".")
-            value: Any = self._config
+            value: dict[str, Any] | Any = self._config
             for k in keys:
                 if isinstance(value, dict):
-                    value = value.get(k)
+                    value = value.get(k, default)
                     if value is None:
                         return default
                 else:
@@ -115,6 +115,44 @@ class BaseConfigLoader(ABC):
 
     def __contains__(self, item: str) -> bool:
         return item in self._config
+
+    def __call__(self, key: str, default: Any = None) -> Any:
+        """Make loader callable for getting values."""
+        return self.get(key, default)
+
+    def __iter__(self):
+        """Iterate over config keys."""
+        return iter(self._config.keys())
+
+    def __getitem__(self, key: str):
+        """Dictionary-like access."""
+        return self._config[key]
+
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, self.__class__)
+
+    def __hash__(self) -> int:
+        return hash(type(self).__name__)
+
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, BaseConfigLoader):
+            return NotImplemented
+        return len(self) < len(other)
+
+    def __le__(self, other: object) -> bool:
+        return self == other or self < other
+
+    def __int__(self) -> int:
+        return len(self._config)
+
+    def __float__(self) -> float:
+        return float(len(self._config))
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        self._config[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self._config[key]
 
 
 # ======================================================
@@ -191,6 +229,27 @@ class ConfigLoaderFactory(FactoryInterface[BaseConfigLoader]):
 
     def __str__(self) -> str:
         return "ConfigLoaderFactory"
+
+    def __repr__(self) -> str:
+        return "ConfigLoaderFactory()"
+
+    def __bool__(self) -> bool:
+        return True
+
+    def __len__(self) -> int:
+        return 3
+
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, ConfigLoaderFactory)
+
+    def __hash__(self) -> int:
+        return hash("ConfigLoaderFactory")
+
+    def __int__(self) -> int:
+        return 3
+
+    def __float__(self) -> float:
+        return 3.0
 
 
 # ======================================================

@@ -5,12 +5,31 @@ Enterprise JSONL Searcher (OOP + Overloading + Polymorphism)
 from __future__ import annotations
 
 import json
+from abc import ABC, abstractmethod
 from collections.abc import Iterable
 from pathlib import Path
 from typing import Any, overload
 
 
-class JSONLSearcher:
+class BaseSearcher(ABC):
+    """Abstract base class for all searchers."""
+
+    @abstractmethod
+    def search(self, keyword: str | Iterable[str], **kwargs) -> int:  # type: ignore[misc]
+        raise NotImplementedError
+
+    @abstractmethod
+    def validate(self) -> bool:
+        raise NotImplementedError
+
+    def __str__(self) -> str:
+        return f"{self.__class__.__name__}()"
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}()"
+
+
+class JSONLSearcher(BaseSearcher):
     """Search JSONL files for keywords."""
 
     def __init__(self, file_path: Path) -> None:
@@ -90,19 +109,19 @@ class JSONLSearcher:
 
     # 1) search("keyword")
     @overload
-    def search(self, keyword: str) -> int: ...
+    def search(self, keyword: str) -> int: ...  # type: ignore[override]
 
     # 2) search(["word1","word2"])
     @overload
-    def search(self, keyword: Iterable[str]) -> int: ...
+    def search(self, keyword: Iterable[str]) -> int: ...  # type: ignore[override]
 
     # 3) search("keyword", case_sensitive=True)
     @overload
-    def search(self, keyword: str, *, case_sensitive: bool) -> int: ...
+    def search(self, keyword: str, *, case_sensitive: bool) -> int: ...  # type: ignore[override]
 
     # 4) search("keyword", field="title")
     @overload
-    def search(self, keyword: str, *, field: str) -> int: ...
+    def search(self, keyword: str, *, field: str) -> int: ...  # type: ignore[override]
 
     def search(
         self,

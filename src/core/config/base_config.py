@@ -232,6 +232,75 @@ class BaseConfig(BaseConfigInterface):
     def __contains__(self, text: str) -> bool:
         return text in self.summary()
 
+    @property
+    def input_name(self) -> str:
+        return self.__input_path.name
+
+    @property
+    def input_stem(self) -> str:
+        return self.__input_path.stem
+
+    @property
+    def input_suffix(self) -> str:
+        return self.__input_path.suffix
+
+    @property
+    def input_exists(self) -> bool:
+        return self.__input_path.exists()
+
+    @property
+    def output_exists(self) -> bool:
+        return self.__output_dir.exists()
+
+    @property
+    def output_name(self) -> str:
+        return self.__output_dir.name
+
+    @property
+    def is_verbose(self) -> bool:
+        return self.__verbose
+
+    @property
+    def mode_value(self) -> str:
+        return self.__mode.value
+
+    @property
+    def mode_name(self) -> str:
+        return self.__mode.name
+
+    def __getitem__(self, key: str) -> Any:
+        attrs = {
+            "input": self.__input_path,
+            "output": self.__output_dir,
+            "mode": self.__mode,
+            "verbose": self.__verbose
+        }
+        return attrs.get(key)
+
+    def __iter__(self):
+        return iter(["input", "output", "mode", "verbose"])
+
+    def __le__(self, other: object) -> bool:
+        return self == other or self < other
+
+    def __gt__(self, other: object) -> bool:
+        if not isinstance(other, BaseConfig):
+            return NotImplemented
+        return len(self.summary()) > len(other.summary())
+
+    def __ge__(self, other: object) -> bool:
+        return self == other or self > other
+
+    def __add__(self, other: object) -> int:
+        if isinstance(other, int):
+            return len(self.summary()) + other
+        return NotImplemented
+
+    def __sub__(self, other: object) -> int:
+        if isinstance(other, int):
+            return len(self.summary()) - other
+        return NotImplemented
+
 
 # ==========================================================
 # MODE-SPECIFIC CONFIG CLASSES

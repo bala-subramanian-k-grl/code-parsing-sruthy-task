@@ -51,3 +51,26 @@ class WriterInterface(ABC):
 
     def __bool__(self) -> bool:
         return True
+
+    def __len__(self) -> int:
+        return 1
+
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, WriterInterface):
+            return NotImplemented
+        return self.writer_type < other.writer_type
+
+    def __le__(self, other: object) -> bool:
+        return self == other or self < other
+
+    def __contains__(self, item: str) -> bool:
+        return item in self.writer_type
+
+    def __int__(self) -> int:
+        return 1
+
+    def __float__(self) -> float:
+        return 1.0
+
+    def __getitem__(self, index: int) -> str:
+        return self.writer_type[index]

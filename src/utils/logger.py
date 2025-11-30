@@ -6,14 +6,33 @@ from __future__ import annotations
 
 import logging
 import threading
+from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import overload
 
 
-class Logger:
+class BaseLogger(ABC):
+    """Abstract base class for all loggers."""
+
+    @abstractmethod
+    def info(self, msg: str) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def error(self, msg: str) -> None:
+        raise NotImplementedError
+
+    def __str__(self) -> str:
+        return f"{self.__class__.__name__}()"
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}()"
+
+
+class Logger(BaseLogger):
     """Thread-safe Singleton Logger with full OOP design."""
 
-    _instance: "Logger" | None = None
+    _instance: "Logger | None" = None
     _lock = threading.Lock()
     _DEFAULT_NAME = "PDFParser"
 

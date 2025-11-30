@@ -160,3 +160,31 @@ class JSONReportGenerator(BaseReportGenerator):
 
     def __bool__(self) -> bool:
         return True
+
+    def __len__(self) -> int:
+        return 1
+
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, JSONReportGenerator):
+            return NotImplemented
+        return self.report_type < other.report_type
+
+    def __le__(self, other: object) -> bool:
+        return self == other or self < other
+
+    def __contains__(self, item: str) -> bool:
+        return item in self.report_type
+
+    def __int__(self) -> int:
+        return 1
+
+    def __float__(self) -> float:
+        return 1.0
+
+    def __gt__(self, other: object) -> bool:
+        if not isinstance(other, JSONReportGenerator):
+            return NotImplemented
+        return self.report_type > other.report_type
+
+    def __ge__(self, other: object) -> bool:
+        return self == other or self > other

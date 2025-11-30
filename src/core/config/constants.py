@@ -44,6 +44,47 @@ class BaseEnum(str, Enum):
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.value!r})"
 
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, self.__class__) and self.value == other.value
+
+    def __hash__(self) -> int:
+        return hash((self.__class__.__name__, self.value))
+
+    def __bool__(self) -> bool:
+        return True
+
+    def __len__(self) -> int:
+        return len(str(self.value))
+
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+        return str(self.value) < str(other.value)
+
+    def __le__(self, other: object) -> bool:
+        return self == other or self < other
+
+    def __contains__(self, text: str) -> bool:
+        return text in str(self.value)
+
+    def __int__(self) -> int:
+        return len(str(self.value))
+
+    def __float__(self) -> float:
+        return float(len(str(self.value)))
+
+    def __iter__(self):
+        return iter(str(self.value))
+
+    def __getitem__(self, index: int) -> str:
+        return str(self.value)[index]
+
+    def __add__(self, other: str) -> str:
+        return str(self.value) + other
+
+    def __mul__(self, other: int) -> str:
+        return str(self.value) * other
+
 
 # ==========================================================
 # 2. PARSER MODE ENUM (Inheritance + Polymorphism)
@@ -74,6 +115,26 @@ class ParserMode(BaseEnum):
 
     def is_content(self) -> bool:
         return self is ParserMode.CONTENT
+
+    def __getitem__(self, index: int) -> str:
+        return str(self.value)[index]
+
+    def __iter__(self):
+        return iter(str(self.value))
+
+    def __gt__(self, other: object) -> bool:
+        if not isinstance(other, ParserMode):
+            return NotImplemented
+        return str(self.value) > str(other.value)
+
+    def __ge__(self, other: object) -> bool:
+        return self == other or self > other
+
+    def __add__(self, other: str) -> str:
+        return str(self.value) + other
+
+    def __mul__(self, other: int) -> str:
+        return str(self.value) * other
 
 
 # ==========================================================
@@ -159,6 +220,54 @@ class ConstantManager:
 
     def __lt__(self, other: object) -> bool:
         return False  # ConstantManager instances are not comparable
+
+    def __le__(self, other: object) -> bool:
+        return self == other
+
+    def __int__(self) -> int:
+        return len(self)
+
+    def __float__(self) -> float:
+        return float(len(self))
+
+    def __gt__(self, other: object) -> bool:
+        if not isinstance(other, ConstantManager):
+            return NotImplemented
+        return False
+
+    def __ge__(self, other: object) -> bool:
+        return self == other
+
+    @classmethod
+    def __getitem__(cls, key: str) -> Path | int | list[str] | str:
+        """Dictionary-like access to constants."""
+        mapping: dict[str, Path | int | list[str] | str] = {
+            "pdf_path": cls.default_pdf(),
+            "output_dir": cls.output_dir(),
+            "max_file_size": cls.max_file_size(),
+            "supported_formats": cls.supported_formats(),
+            "encoding": cls.encoding(),
+            "timeout": cls.timeout(),
+            "max_pages": cls.max_pages(),
+            "buffer_size": cls.buffer_size(),
+        }
+        return mapping[key]
+
+    @classmethod
+    def __contains__(cls, key: str) -> bool:
+        return key in [
+            "pdf_path", "output_dir", "max_file_size",
+            "supported_formats", "encoding", "timeout",
+            "max_pages", "buffer_size"
+        ]
+
+    @classmethod
+    def __iter__(cls):
+        return iter([
+            "pdf_path", "output_dir", "max_file_size",
+            "supported_formats", "encoding", "timeout",
+            "max_pages", "buffer_size"
+        ])
 
 
 # ==========================================================

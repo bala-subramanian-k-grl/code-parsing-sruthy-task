@@ -1,16 +1,5 @@
 """
 Enterprise Pipeline Interface (Enhanced OOP Version)
-
-Enhancements:
--------------
-✔ Full OOP abstraction using ABC
-✔ Encapsulation via protected/private attributes
-✔ Polymorphism through abstract and virtual methods
-✔ Method overloading (Python-style)
-✔ Property decorators for controlled access
-✔ Rich dunder suite (__len__, __float__, __int__, __contains__, __str__)
-✔ Protected helper methods for validation and state management
-✔ Lifecycle-based design (prepare → validate → execute → cleanup)
 """
 
 from __future__ import annotations

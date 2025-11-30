@@ -53,6 +53,30 @@ class JSONLWriter(WriterInterface):
     def title_upper(self) -> str:
         return self.__doc_title.upper()
 
+    @property
+    def title_lower(self) -> str:
+        return self.__doc_title.lower()
+
+    @property
+    def title_capitalized(self) -> str:
+        return self.__doc_title.capitalize()
+
+    @property
+    def title_stripped(self) -> str:
+        return self.__doc_title.strip()
+
+    @property
+    def title_is_empty(self) -> bool:
+        return not self.__doc_title.strip()
+
+    @property
+    def title_first_char(self) -> str:
+        return self.__doc_title[0] if self.__doc_title else ""
+
+    @property
+    def title_last_char(self) -> str:
+        return self.__doc_title[-1] if self.__doc_title else ""
+
     # -------------------------------------------------------------------------
     # High-level Writer (Abstraction)
     # -------------------------------------------------------------------------
@@ -184,3 +208,31 @@ class JSONLWriter(WriterInterface):
 
     def __float__(self) -> float:
         return float(len(self.__doc_title))
+
+    def __call__(self, data: list[TOCEntry | ContentItem], path: Path) -> None:
+        """Make writer callable."""
+        return self.write(data, path)
+
+    def __iter__(self):
+        """Iterate over doc_title characters."""
+        return iter(self.__doc_title)
+
+    def __gt__(self, other: object) -> bool:
+        if not isinstance(other, JSONLWriter):
+            return NotImplemented
+        return self.__doc_title > other.__doc_title
+
+    def __ge__(self, other: object) -> bool:
+        return self == other or self > other
+
+    def __add__(self, other: str) -> str:
+        return self.__doc_title + other
+
+    def __mul__(self, other: int) -> str:
+        return self.__doc_title * other
+
+    def __mod__(self, other: str) -> str:
+        return self.__doc_title % other
+
+    def __pow__(self, other: int) -> int:
+        return len(self.__doc_title) ** other

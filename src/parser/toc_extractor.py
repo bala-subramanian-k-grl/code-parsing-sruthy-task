@@ -44,13 +44,45 @@ class TOCExtractor(ExtractorInterface):
     def extraction_count(self) -> int:
         return self.__extraction_count
 
+    @property
+    def has_extractions(self) -> bool:
+        return self.__extraction_count > 0
+
+    @property
+    def file_name(self) -> str:
+        return self.file_path.name
+
+    @property
+    def file_stem(self) -> str:
+        return self.file_path.stem
+
+    @property
+    def file_parent(self) -> str:
+        return str(self.file_path.parent)
+
+    @property
+    def file_size_kb(self) -> float:
+        return self.file_path.stat().st_size / 1024 if self.file_exists else 0.0
+
+    @property
+    def file_size_mb(self) -> float:
+        return self.file_path.stat().st_size / (1024 * 1024) if self.file_exists else 0.0
+
+    @property
+    def is_pdf(self) -> bool:
+        return self.file_suffix == ".pdf"
+
+    @property
+    def file_absolute_path(self) -> str:
+        return str(self.file_path.absolute())
+
     # ----------------------------------------------------------------------
-    # Validation & Polymorphism
+    # Protected Validation Methods
     # ----------------------------------------------------------------------
-    def supports(self, extension: str) -> bool:
+    def _supports(self, extension: str) -> bool:
         return extension.lower() == ".pdf"
 
-    def validate(self) -> bool:
+    def _validate(self) -> bool:
         return self.file_exists and self.file_suffix == ".pdf"
 
     # ----------------------------------------------------------------------
@@ -60,7 +92,7 @@ class TOCExtractor(ExtractorInterface):
         """Extract TOC entries from PDF file."""
         self.__extraction_count += 1
 
-        if not self.validate():
+        if not self._validate():
             msg = f"Invalid file for TOC extraction: {self.file_path}"
             raise ValueError(msg)
 
@@ -77,8 +109,7 @@ class TOCExtractor(ExtractorInterface):
         try:
             with fitz.open(str(self.file_path)) as doc:  # type: ignore[attr-defined]
                 toc_data = doc.get_toc()  # type: ignore[attr-defined]
-                result: list[Any] = list(toc_data) if toc_data else []
-                return result
+                return list(toc_data) if toc_data else []
         except Exception as e:
             raise ValueError(f"Failed to read TOC: {e}") from e
 
@@ -175,3 +206,22 @@ class TOCExtractor(ExtractorInterface):
         if not isinstance(other, TOCExtractor):
             return NotImplemented
         return self.file_path < other.file_path
+
+    def __le__(self, other: object) -> bool:
+        return self == other or self < other
+
+    def __gt__(self, other: object) -> bool:
+        if not isinstance(other, TOCExtractor):
+            return NotImplemented
+        return self.file_path > other.file_path
+
+    def __ge__(self, other: object) -> bool:
+        return self == other or self > other
+
+    def __enter__(self) -> "TOCExtractor":
+        """Context manager support."""
+        return self
+
+    def __call__(self) -> list[TOCEntry]:
+        """Make extractor callable."""
+        return self.extract()

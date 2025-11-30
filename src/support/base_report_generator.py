@@ -63,6 +63,38 @@ class BaseReportGenerator(IReportGenerator, ABC):
     def is_initialized(self) -> bool:
         return self.__initialized
 
+    @property
+    def has_generations(self) -> bool:
+        return self.__generation_count > 0
+
+    @property
+    def has_errors(self) -> bool:
+        return self.__error_count > 0
+
+    @property
+    def has_successes(self) -> bool:
+        return self.__last_success
+
+    @property
+    def success_rate(self) -> float:
+        return (self.__generation_count - self.__error_count) / self.__generation_count if self.__generation_count > 0 else 0.0
+
+    @property
+    def error_rate(self) -> float:
+        return self.__error_count / self.__generation_count if self.__generation_count > 0 else 0.0
+
+    @property
+    def avg_bytes_per_generation(self) -> float:
+        return self.__total_bytes_written / self.__generation_count if self.__generation_count > 0 else 0.0
+
+    @property
+    def total_kb_written(self) -> float:
+        return self.__total_bytes_written / 1024
+
+    @property
+    def total_mb_written(self) -> float:
+        return self.__total_bytes_written / (1024 * 1024)
+
     # ---------------------------------------------------------
     # Polymorphic Capability
     # ---------------------------------------------------------
@@ -167,3 +199,41 @@ class BaseReportGenerator(IReportGenerator, ABC):
 
     def __hash__(self) -> int:
         return hash(type(self).__name__)
+
+    def __call__(self, result: ParserResult, path: Path | str) -> None:
+        """Make generator callable."""
+        return self.generate(result, path)
+
+    def __len__(self) -> int:
+        return self.__generation_count
+
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, BaseReportGenerator):
+            return NotImplemented
+        return self.__generation_count < other.__generation_count
+
+    def __le__(self, other: object) -> bool:
+        return self == other or self < other
+
+    def __contains__(self, item: str) -> bool:
+        return item in self.report_type
+
+    def __getitem__(self, index: int) -> str:
+        return self.report_type[index]
+
+    def __iter__(self):
+        return iter([self.report_type, self.get_file_extension()])
+
+    def __gt__(self, other: object) -> bool:
+        if not isinstance(other, BaseReportGenerator):
+            return NotImplemented
+        return self.__generation_count > other.__generation_count
+
+    def __ge__(self, other: object) -> bool:
+        return self == other or self > other
+
+    def __add__(self, other: int) -> int:
+        return self.__generation_count + other
+
+    def __sub__(self, other: int) -> int:
+        return self.__generation_count - other

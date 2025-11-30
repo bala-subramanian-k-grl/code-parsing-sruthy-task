@@ -1,5 +1,5 @@
 """
-CLI application entry point with improved OOP, encapsulation, and polymorphism.
+CLI application entry point with rich OOP design.
 """
 
 from __future__ import annotations
@@ -7,7 +7,6 @@ from __future__ import annotations
 import argparse
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import overload
 
 from src.cli.decorators import protected_access
 from src.cli.strategies import ModeStrategyFactory
@@ -17,60 +16,107 @@ from src.core.config.models import ParserResult
 from src.orchestrator.pipeline_orchestrator import PipelineOrchestrator
 from src.utils.logger import logger
 
-# =========================
-# Abstractions
-# =========================
+
+# ======================================================================
+# ABSTRACT BASE TYPES
+# ======================================================================
+
 
 class BaseCLI(ABC):
-    """Abstract base class for CLI interfaces."""
+    """Abstract base class for all CLI front-ends."""
 
     @abstractmethod
     def parse_args(self) -> argparse.Namespace:
+        """Parse CLI arguments into a namespace."""
         raise NotImplementedError
 
     @abstractmethod
-    def run(self) -> None:
+    def run(self, *args: object, **kwargs: object) -> None:
+        """Run the CLI application."""
         raise NotImplementedError
 
-    # Polymorphism added
     def __str__(self) -> str:
         return f"{self.__class__.__name__}(abstract CLI)"
 
     def __repr__(self) -> str:
-        return f"<BaseCLI abstract class {self.__class__.__name__}>"
+        return f"<{self.__class__.__name__} abstract>"
 
 
 class BasePipelineExecutor(ABC):
-    """Abstract executor responsible for running the pipeline."""
+    """Abstract executor responsible for running the parsing pipeline."""
 
     @abstractmethod
     def execute(self, file_path: Path, mode: ParserMode) -> ParserResult:
+        """Execute pipeline and return ParserResult."""
         raise NotImplementedError
 
     def __str__(self) -> str:
         return f"{self.__class__.__name__}(abstract executor)"
 
     def __repr__(self) -> str:
-        cls_name = self.__class__.__name__
-        return f"<BasePipelineExecutor abstract class {cls_name}>"
+        return f"<{self.__class__.__name__} abstract>"
 
 
-# =========================
-# Services
-# =========================
+class BaseValidator(ABC):
+    """Abstract base for value/path/mode validators."""
 
-class ArgumentValidator:
-    """Helper class for validating CLI inputs."""
+    @abstractmethod
+    def validate(self, value: str) -> bool:
+        """Return True if the provided value is considered valid."""
+        raise NotImplementedError
+
+    def __str__(self) -> str:
+        return f"{self.__class__.__name__}()"
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}()"
+
+
+class BaseFormatter(ABC):
+    """Abstract base for output formatters used for logging or display."""
+
+    @abstractmethod
+    def format(self, *args: object, **kwargs: object) -> str:
+        """Return formatted string for given args."""
+        raise NotImplementedError
+
+    def __str__(self) -> str:
+        return f"{self.__class__.__name__}()"
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}()"
+
+
+# ======================================================================
+# VALIDATORS & ARGUMENT SERVICES
+# ======================================================================
+
+
+class ArgumentValidator(BaseValidator):
+    """Helper class for validating CLI input strings (paths, modes)."""
+
+    def validate(self, value: str) -> bool:
+        """Validate generic non-empty string."""
+        return bool(value)
 
     def validate_file(self, path: str) -> bool:
+        """Validate that a file path exists."""
         return Path(path).exists() if path else False
 
     def validate_mode(self, mode: str) -> bool:
-        return mode in ["full", "toc", "content"]
+        """Validate that mode is one of allowed parser modes."""
+        return mode in {"full", "toc", "content"}
 
 
 class ArgumentParserService:
-    """Handles CLI argument parsing."""
+    """
+    Service that encapsulates argument parsing logic.
+
+    Responsibilities:
+    - Build argparse.ArgumentParser
+    - Parse command line
+    - Perform basic input validations
+    """
 
     def __init__(self) -> None:
         self._parser = self._build_parser()
@@ -80,27 +126,49 @@ class ArgumentParserService:
     def _build_parser() -> argparse.ArgumentParser:
         desc = "USB-PD Specification Parser CLI"
         parser = argparse.ArgumentParser(description=desc)
+
         parser.add_argument(
-            "--file", "-f", type=str,
-            help="Path to PDF file. Overrides config value."
+            "--file",
+            "-f",
+            type=str,
+            help="Path to PDF file. Overrides config value.",
         )
         parser.add_argument(
-            "--mode", "-m", type=str,
+            "--mode",
+            "-m",
+            type=str,
             choices=["full", "toc", "content"],
             default="full",
-            help="Parser mode to use."
+            help="Parser mode to use.",
         )
+
         return parser
 
     def parse(self) -> argparse.Namespace:
+        """Parse CLI arguments and apply basic validation."""
         args = self._parser.parse_args()
+
         if args.file and not self._validator.validate_file(args.file):
-            pass
+            # Soft validation: log warning, let downstream raise if needed
+            logger.warning(f"File does not exist: {args.file}")
+
+        if not self._validator.validate_mode(args.mode):
+            raise ValueError(f"Invalid mode value: {args.mode}")
+
         return args
 
+    def __str__(self) -> str:
+        return "ArgumentParserService"
 
-class PathValidator:
-    """Validates filesystem paths."""
+    def __repr__(self) -> str:
+        return "ArgumentParserService()"
+
+
+class PathValidator(BaseValidator):
+    """Validates filesystem paths using pathlib.Path."""
+
+    def validate(self, value: str) -> bool:
+        return Path(value).exists()
 
     def exists(self, path: Path) -> bool:
         return path.exists()
@@ -110,13 +178,18 @@ class PathValidator:
 
 
 class FilePathResolver:
-    """Resolves file paths using CLI args or configuration."""
+    """
+    Resolves input file path using precedence:
+        1. CLI argument
+        2. Configuration (input.pdf_path)
+    """
 
     def __init__(self, config_loader: ConfigLoader) -> None:
         self._config_loader = config_loader
         self._validator = PathValidator()
 
     def resolve(self, file_arg: str | None) -> Path:
+        """Resolve final file path to use for parsing."""
         file_path_raw = file_arg or self._config_loader.get("input.pdf_path")
         if not file_path_raw:
             raise ValueError("No PDF file path provided")
@@ -126,11 +199,31 @@ class FilePathResolver:
         if not self._validator.exists(file_path):
             raise FileNotFoundError(file_path)
 
+        if not self._validator.is_file(file_path):
+            raise ValueError(f"Path is not a file: {file_path}")
+
         return file_path
+
+    def __str__(self) -> str:
+        return "FilePathResolver"
+
+    def __repr__(self) -> str:
+        return "FilePathResolver()"
+
+
+# ======================================================================
+# PIPELINE EXECUTION & RESULT LOGGING
+# ======================================================================
 
 
 class DefaultPipelineExecutor(BasePipelineExecutor):
-    """Executes the pipeline using the orchestrator."""
+    """
+    Default implementation of pipeline executor.
+
+    Delegates:
+    - Construction of PipelineOrchestrator
+    - Calling execute()
+    """
 
     def __init__(self, orchestrator_cls: type[PipelineOrchestrator]) -> None:
         self._orchestrator_cls = orchestrator_cls
@@ -139,38 +232,78 @@ class DefaultPipelineExecutor(BasePipelineExecutor):
         orchestrator = self._orchestrator_cls(file_path, mode)
         return orchestrator.execute()
 
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(orchestrator_cls={self._orchestrator_cls.__name__})"
 
-class ResultFormatter:
-    """Formats output results for logging."""
+
+class ResultFormatter(BaseFormatter):
+    """Formats counts and messages for result logging."""
+
+    def format(self, *args: object, **kwargs: object) -> str:
+        """
+        Generic format implementation.
+
+        Expected usage:
+            format(label, count)
+        """
+        if len(args) >= 2:
+            label, count = args[0], args[1]
+            return f"Extracted {count} {label}"
+        return ""
 
     def format_count(self, label: str, count: int) -> str:
         return f"Extracted {count} {label}"
 
 
 class ResultLogger:
-    """Logs final parsed counts."""
+    """Logs high-level statistics of ParserResult."""
 
     def __init__(self) -> None:
         self._formatter = ResultFormatter()
 
     def log(self, result: ParserResult) -> None:
         logger.info("Extraction completed successfully")
+
         toc_msg = self._formatter.format_count(
             "TOC entries", len(result.toc_entries)
         )
         content_msg = self._formatter.format_count(
             "content items", len(result.content_items)
         )
+
         logger.info(toc_msg)
         logger.info(content_msg)
 
+    def __str__(self) -> str:
+        return "ResultLogger"
 
-# =========================
-# CLI Application
-# =========================
+    def __repr__(self) -> str:
+        return "ResultLogger()"
+
+
+# ======================================================================
+# MAIN CLI APPLICATION
+# ======================================================================
+
 
 class CLIApp(BaseCLI):
-    """Main CLI application with full OOP enhancements."""
+    """
+    Main CLI application.
+
+    Responsibilities:
+    - Read configuration
+    - Parse CLI arguments
+    - Resolve file path
+    - Choose ParserMode via strategy
+    - Execute pipeline via executor
+    - Log results via ResultLogger
+
+    OOP Features:
+    - Abstraction via BaseCLI
+    - Overloaded run()
+    - Encapsulated counters (run/success/error)
+    - Composition of multiple services for SRP
+    """
 
     def __init__(
         self,
@@ -181,30 +314,25 @@ class CLIApp(BaseCLI):
         pipeline_executor: BasePipelineExecutor | None = None,
         result_logger: ResultLogger | None = None,
     ) -> None:
-
+        # Core collaborators (composition)
         self._config_loader = config_loader or ConfigLoader()
-        self._orchestrator_cls = (
-            orchestrator_cls or PipelineOrchestrator
-        )
-        self._arg_parser_service = (
-            arg_parser_service or ArgumentParserService()
-        )
+        self._orchestrator_cls = orchestrator_cls or PipelineOrchestrator
+        self._arg_parser_service = arg_parser_service or ArgumentParserService()
         self._mode_factory = mode_factory or ModeStrategyFactory()
         self._file_resolver = FilePathResolver(self._config_loader)
         self._pipeline_executor = (
-            pipeline_executor or
-            DefaultPipelineExecutor(self._orchestrator_cls)
+            pipeline_executor or DefaultPipelineExecutor(self._orchestrator_cls)
         )
         self._result_logger = result_logger or ResultLogger()
 
-        # Encapsulated Counters
+        # Encapsulated execution counters
         self.__run_count = 0
         self.__success_count = 0
         self.__error_count = 0
 
-    # ---------------------------
-    # Protected Internal Methods
-    # ---------------------------
+    # --------------------------------------------------
+    # Protected counter mutators (decorator-based control)
+    # --------------------------------------------------
 
     @protected_access
     def _increment_run_count(self) -> None:
@@ -218,77 +346,65 @@ class CLIApp(BaseCLI):
     def _increment_error_count(self) -> None:
         self.__error_count += 1
 
-    # ---------------------------
-    # Properties (Encapsulation)
-    # ---------------------------
+    # --------------------------------------------------
+    # Read-only statistics (encapsulation)
+    # --------------------------------------------------
 
     @property
     def run_count(self) -> int:
         return self.__run_count
 
-    @run_count.setter
-    def run_count(self, value: int):
-        if value < 0:
-            raise ValueError("run_count cannot be negative")
-        self.__run_count = value
-
     @property
     def success_count(self) -> int:
         return self.__success_count
-
-    @success_count.setter
-    def success_count(self, value: int):
-        if value < 0:
-            raise ValueError("success_count cannot be negative")
-        self.__success_count = value
 
     @property
     def error_count(self) -> int:
         return self.__error_count
 
-    @error_count.setter
-    def error_count(self, value: int):
-        if value < 0:
-            raise ValueError("error_count cannot be negative")
-        self.__error_count = value
-
-    # ---------------------------
-    # Abstract Method Implementation
-    # ---------------------------
+    # --------------------------------------------------
+    # BaseCLI implementation
+    # --------------------------------------------------
 
     def parse_args(self) -> argparse.Namespace:
-        """Override: Parse command line arguments."""
+        """Parse CLI arguments using service."""
         return self._arg_parser_service.parse()
 
-    # ---------------------------
-    # Run (With Overloading)
-    # ---------------------------
+    # --------------------------------------------------
+    # run() method matching base signature
+    # --------------------------------------------------
 
-    @overload
-    def run(self) -> None: ...
+    def run(self, *args: object, **kwargs: object) -> None:
+        """
+        Run CLI application.
 
-    @overload
-    def run(self, args: argparse.Namespace) -> None: ...
-
-    def run(self, args: argparse.Namespace | None = None) -> None:
-        """Run the CLI application, optionally using pre-parsed arguments."""
+        Usage:
+            - run()                        → internally parse args
+            - run(parsed_args)             → use already parsed args
+        """
         self._increment_run_count()
 
         try:
-            if args is None:
-                args = self.parse_args()
+            # 1. Resolve arguments
+            parsed_args = args[0] if args and isinstance(args[0], argparse.Namespace) else None
+            if parsed_args is None:
+                parsed_args = self.parse_args()
 
-            mode_strategy = self._mode_factory.create(args.mode)
+            # 2. Resolve mode via strategy
+            mode_strategy = self._mode_factory.create(parsed_args.mode)
             mode = mode_strategy.get_mode()
-            file_path = self._file_resolver.resolve(args.file)
 
-            msg = (
-                f"Processing {file_path} in "
-                f"{mode_strategy.name} ({mode}) mode"
+            # 3. Resolve file path
+            file_path = self._file_resolver.resolve(parsed_args.file)
+
+            logger.info(
+                f"Processing {file_path} in {mode_strategy.name} ({mode.value}) mode"
             )
-            logger.info(msg)
 
+            # 4. Execute pipeline
             result = self._pipeline_executor.execute(file_path, mode)
+
+            # 5. Log summary
             self._result_logger.log(result)
 
             self._increment_success_count()
@@ -297,16 +413,20 @@ class CLIApp(BaseCLI):
             logger.error(f"Error: {exc}")
             self._increment_error_count()
 
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001 - last-resort catch for CLI
             logger.error(f"Unexpected error occurred: {exc}")
             self._increment_error_count()
 
-    # ---------------------------
-    # Polymorphic Magic Methods
-    # ---------------------------
+    # --------------------------------------------------
+    # Magic methods (meaningful only)
+    # --------------------------------------------------
 
     def __str__(self) -> str:
-        return "CLIApp(parser=USB-PD)"
+        return (
+            f"CLIApp(run={self.__run_count}, "
+            f"success={self.__success_count}, "
+            f"errors={self.__error_count})"
+        )
 
     def __repr__(self) -> str:
         return (
@@ -314,25 +434,15 @@ class CLIApp(BaseCLI):
             f"orchestrator_cls={self._orchestrator_cls!r})"
         )
 
-    def __eq__(self, other: object) -> bool:
-        return isinstance(other, CLIApp)
-
-    def __hash__(self) -> int:
-        return hash(type(self).__name__)
-
     def __len__(self) -> int:
+        """Return how many times the app has been executed."""
         return self.__run_count
 
     def __bool__(self) -> bool:
+        """CLIApp is always considered truthy (instantiated app)."""
         return True
 
-    def __int__(self) -> int:
-        return self.__run_count
 
-    def __float__(self) -> float:
-        return float(self.__success_count)
-
-
-# Run directly
+# Script-style execution (still useful for direct `python -m src.cli.app`)
 if __name__ == "__main__":
     CLIApp().run()

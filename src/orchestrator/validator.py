@@ -43,6 +43,29 @@ class BaseValidator(ABC):
     def __hash__(self) -> int:
         return hash(type(self).__name__)
 
+    def __bool__(self) -> bool:
+        return True
+
+    def __len__(self) -> int:
+        return 1
+
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, BaseValidator):
+            return NotImplemented
+        return self.validator_type < other.validator_type
+
+    def __le__(self, other: object) -> bool:
+        return self == other or self < other
+
+    def __contains__(self, item: str) -> bool:
+        return item in self.validator_type
+
+    def __int__(self) -> int:
+        return 1
+
+    def __float__(self) -> float:
+        return 1.0
+
 
 # ================================================================
 # RESULT VALIDATOR (INHERITANCE + OVERLOADING + ENCAPSULATION)
@@ -157,6 +180,14 @@ class ResultValidator(BaseValidator):
     def __float__(self) -> float:
         return float(self.__count)
 
+    def __call__(self, data: ParserResult) -> ValidationResult:
+        """Make validator callable."""
+        return self.validate(data)
+
+    def __iter__(self):
+        """Iterate over validation methods."""
+        return iter(["validate", "validate_toc", "validate_content"])
+
 
 # ================================================================
 # STRICT VALIDATOR (OVERRIDING)
@@ -190,3 +221,15 @@ class StrictValidator(ResultValidator):
 
     def __repr__(self) -> str:
         return "StrictValidator()"
+
+    def __bool__(self) -> bool:
+        return self.__strict
+
+    def __contains__(self, item: str) -> bool:
+        return item in "strict"
+
+    def __le__(self, other: object) -> bool:
+        return self == other or self < other
+
+    def __getitem__(self, index: int) -> str:
+        return "strict"[index]

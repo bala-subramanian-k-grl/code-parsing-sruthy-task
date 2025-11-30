@@ -110,9 +110,31 @@ class ExcelReportGenerator(BaseReportGenerator):
     def __bool__(self) -> bool:
         return True
 
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, ExcelReportGenerator):
+            return NotImplemented
+        return len(self) < len(other)
+
+    def __le__(self, other: object) -> bool:
+        return self == other or self < other
+
+    def __int__(self) -> int:
+        return len(self._METRICS)
+
+    def __float__(self) -> float:
+        return float(len(self._METRICS))
+
     def __len__(self) -> int:
         """Number of metrics."""
         return len(self._METRICS)
+
+    def __gt__(self, other: object) -> bool:
+        if not isinstance(other, ExcelReportGenerator):
+            return NotImplemented
+        return len(self) > len(other)
+
+    def __ge__(self, other: object) -> bool:
+        return self == other or self > other
 
     def __contains__(self, item: str) -> bool:
         """Check if a metric exists."""

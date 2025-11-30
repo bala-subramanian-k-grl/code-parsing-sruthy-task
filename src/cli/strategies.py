@@ -86,6 +86,29 @@ class BaseModeStrategy(ABC):
     def __contains__(self, text: str) -> bool:
         return text.lower() in self.name.lower()
 
+    @property
+    def has_usage(self) -> bool:
+        return self._BaseModeStrategy__usage_count > 0
+
+    @property
+    def name_upper(self) -> str:
+        return self.name.upper()
+
+    @property
+    def name_capitalized(self) -> str:
+        return self.name.capitalize()
+
+    def __getitem__(self, index: int) -> str:
+        return self.name[index]
+
+    def __gt__(self, other: object) -> bool:
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+        return self._BaseModeStrategy__usage_count > other._BaseModeStrategy__usage_count
+
+    def __ge__(self, other: object) -> bool:
+        return self == other or self > other
+
 
 # =====================================================
 # Concrete Strategies
@@ -101,6 +124,9 @@ class FullModeStrategy(BaseModeStrategy):
         self._increment_usage()
         return ParserMode.FULL
 
+    def __call__(self) -> ParserMode:
+        return self.get_mode()
+
 
 class TocModeStrategy(BaseModeStrategy):
 
@@ -112,6 +138,9 @@ class TocModeStrategy(BaseModeStrategy):
         self._increment_usage()
         return ParserMode.TOC
 
+    def __call__(self) -> ParserMode:
+        return self.get_mode()
+
 
 class ContentModeStrategy(BaseModeStrategy):
 
@@ -122,6 +151,9 @@ class ContentModeStrategy(BaseModeStrategy):
     def get_mode(self) -> ParserMode:
         self._increment_usage()
         return ParserMode.CONTENT
+
+    def __call__(self) -> ParserMode:
+        return self.get_mode()
 
 
 # =====================================================
@@ -177,3 +209,52 @@ class ModeStrategyFactory(FactoryInterface[BaseModeStrategy]):
 
     def __len__(self) -> int:
         return self.__creation_count
+
+    def __bool__(self) -> bool:
+        return True
+
+    def __call__(self, mode_str: str) -> BaseModeStrategy:
+        return self.create(mode_str)
+
+    def __getitem__(self, mode_str: str) -> type[BaseModeStrategy]:
+        return self._mode_map.get(mode_str.lower(), self._default_strategy)
+
+    def __contains__(self, mode_str: str) -> bool:
+        return mode_str.lower() in self._mode_map
+
+    def __iter__(self):
+        return iter(self._mode_map.keys())
+
+    def __gt__(self, other: object) -> bool:
+        if not isinstance(other, ModeStrategyFactory):
+            return NotImplemented
+        return self._ModeStrategyFactory__creation_count > other._ModeStrategyFactory__creation_count
+
+    def __ge__(self, other: object) -> bool:
+        return self == other or self > other
+
+    def __int__(self) -> int:
+        return self.__creation_count
+
+    def __float__(self) -> float:
+        return float(self.__creation_count)
+
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, ModeStrategyFactory):
+            return NotImplemented
+        return self.__creation_count < other.__creation_count
+
+    def __le__(self, other: object) -> bool:
+        return self == other or self < other
+
+    @property
+    def has_creations(self) -> bool:
+        return self.__creation_count > 0
+
+    @property
+    def supported_modes(self) -> list[str]:
+        return list(self._mode_map.keys())
+
+    @property
+    def mode_count(self) -> int:
+        return len(self._mode_map)

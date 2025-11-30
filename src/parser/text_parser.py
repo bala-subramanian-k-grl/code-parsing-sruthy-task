@@ -47,6 +47,30 @@ class TextParser(BaseParser):
             raise ValueError("Document title cannot be empty.")
         self.__doc_title = title
 
+    @property
+    def title_length(self) -> int:
+        return len(self.__doc_title)
+
+    @property
+    def title_words(self) -> int:
+        return len(self.__doc_title.split())
+
+    @property
+    def title_upper(self) -> str:
+        return self.__doc_title.upper()
+
+    @property
+    def title_lower(self) -> str:
+        return self.__doc_title.lower()
+
+    @property
+    def has_title(self) -> bool:
+        return bool(self.__doc_title.strip())
+
+    @property
+    def title_is_empty(self) -> bool:
+        return not self.__doc_title.strip()
+
     # ---------------------------------------------------------
     # OVERLOADED parse()
     # ---------------------------------------------------------
@@ -161,3 +185,46 @@ class TextParser(BaseParser):
 
     def __contains__(self, text: str) -> bool:
         return text.lower() in self.__doc_title.lower()
+
+    def __enter__(self) -> "TextParser":
+        """Context manager: open parser."""
+        self.open()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Context manager: close parser."""
+        self.close()
+
+    def __call__(self) -> ParserResult:
+        """Make parser callable."""
+        return self.parse()
+
+    def __iter__(self):
+        """Iterate over lines in text file."""
+        content = self._read_file()
+        return iter(content.split("\n"))
+
+    def __int__(self) -> int:
+        return self.file_size
+
+    def __float__(self) -> float:
+        return float(self.file_size)
+
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, TextParser):
+            return NotImplemented
+        return self.file_size < other.file_size
+
+    def __le__(self, other: object) -> bool:
+        return self == other or self < other
+
+    def __getitem__(self, index: int) -> str:
+        return self.__doc_title[index]
+
+    def __gt__(self, other: object) -> bool:
+        if not isinstance(other, TextParser):
+            return NotImplemented
+        return self.file_size > other.file_size
+
+    def __ge__(self, other: object) -> bool:
+        return self == other or self > other

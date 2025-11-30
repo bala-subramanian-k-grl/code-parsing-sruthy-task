@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import time
+from abc import ABC, abstractmethod
 from collections.abc import Callable
 from functools import wraps
 from typing import Any
@@ -10,7 +11,25 @@ from typing import Any
 from src.utils.logger import Logger
 
 
-class Timer:
+class BaseTimer(ABC):
+    """Abstract base class for all timers."""
+
+    @abstractmethod
+    def start(self) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def stop(self) -> None:
+        raise NotImplementedError
+
+    def __str__(self) -> str:
+        return f"{self.__class__.__name__}()"
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}()"
+
+
+class Timer(BaseTimer):
     """Context manager for timing operations with extendable behaviors."""
 
     def __init__(self, name: str, logger: Logger | None = None) -> None:

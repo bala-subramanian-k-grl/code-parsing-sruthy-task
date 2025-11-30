@@ -50,6 +50,42 @@ class BaseParser(ParserInterface, ABC):
             else 0
         )
 
+    @property
+    def file_size_kb(self) -> float:
+        return self.file_size / 1024
+
+    @property
+    def file_size_mb(self) -> float:
+        return self.file_size / (1024 * 1024)
+
+    @property
+    def file_exists(self) -> bool:
+        return self.__file_path.exists()
+
+    @property
+    def file_is_file(self) -> bool:
+        return self.__file_path.is_file()
+
+    @property
+    def file_stem(self) -> str:
+        return self.__file_path.stem
+
+    @property
+    def file_parent(self) -> str:
+        return str(self.__file_path.parent)
+
+    @property
+    def file_absolute(self) -> str:
+        return str(self.__file_path.absolute())
+
+    @property
+    def is_pdf(self) -> bool:
+        return self.file_suffix == ".pdf"
+
+    @property
+    def is_txt(self) -> bool:
+        return self.file_suffix == ".txt"
+
     # ---------------------------------------------------------
     # Polymorphism (subclass-specific behavior)
     # ---------------------------------------------------------
@@ -96,22 +132,6 @@ class BaseParser(ParserInterface, ABC):
         """Parse file and return result - implemented by subclasses."""
         raise NotImplementedError
 
-    # ---------------------------------------------------------
-    # ParserInterface implementation
-    # ---------------------------------------------------------
-
-    def open(self) -> None:
-        """Open parser resources."""
-        # Kept minimal; subclasses may override if needed.
-
-    def close(self) -> None:
-        """Close parser resources."""
-        # Kept minimal; subclasses may override if needed.
-
-    def reset(self) -> None:
-        """Reset parser state."""
-        # Kept minimal; subclasses may override if needed.
-
     # ---------------- get_info (Overloaded) -------------------
 
     @overload
@@ -140,12 +160,13 @@ class BaseParser(ParserInterface, ABC):
             )
         return info
 
-    # ---------------- supports_format ------------
+    # ---------------- _supports_format (protected) ------------
 
-    def supports_format(self, *formats: str) -> bool:
+    def _supports_format(self, format_type: str, *formats: str) -> bool:
         """Check if parser supports one or more formats."""
+        all_formats = (format_type,) + formats
         suffix = self.file_suffix.lstrip(".")
-        return suffix in [fmt.lower().lstrip(".") for fmt in formats]
+        return suffix in [fmt.lower().lstrip(".") for fmt in all_formats]
 
     # ---------------------------------------------------------
     # Magic Methods (clean and consistent)
@@ -196,3 +217,22 @@ class BaseParser(ParserInterface, ABC):
 
     def __float__(self) -> float:
         return float(self.file_size)
+
+    def __le__(self, other: object) -> bool:
+        return self == other or self < other
+
+    def __gt__(self, other: object) -> bool:
+        if not isinstance(other, BaseParser):
+            return NotImplemented
+        return self.file_size > other.file_size
+
+    def __ge__(self, other: object) -> bool:
+        return self == other or self > other
+
+    def __add__(self, other: object) -> int:
+        if isinstance(other, int):
+            return self.file_size + other
+        return NotImplemented
+
+    def __getitem__(self, index: int) -> str:
+        return str(self.__file_path)[index]

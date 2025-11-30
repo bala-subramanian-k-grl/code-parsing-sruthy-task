@@ -86,6 +86,82 @@ class PipelineOrchestrator(PipelineInterface):
     def error_count(self) -> int:
         return self.__errors
 
+    @property
+    def file_name(self) -> str:
+        return self.__file_path.name
+
+    @property
+    def file_stem(self) -> str:
+        return self.__file_path.stem
+
+    @property
+    def file_suffix(self) -> str:
+        return self.__file_path.suffix
+
+    @property
+    def file_exists(self) -> bool:
+        return self.__file_path.exists()
+
+    @property
+    def file_size(self) -> int:
+        return self.__file_path.stat().st_size if self.file_exists else 0
+
+    @property
+    def file_size_kb(self) -> float:
+        return self.file_size / 1024
+
+    @property
+    def file_size_mb(self) -> float:
+        return self.file_size / (1024 * 1024)
+
+    @property
+    def output_exists(self) -> bool:
+        return self.__output_dir.exists()
+
+    @property
+    def output_name(self) -> str:
+        return self.__output_dir.name
+
+    @property
+    def mode_value(self) -> str:
+        return self.__mode.value
+
+    @property
+    def mode_name(self) -> str:
+        return self.__mode.name
+
+    @property
+    def is_full_mode(self) -> bool:
+        return self.__mode == ParserMode.FULL
+
+    @property
+    def is_toc_mode(self) -> bool:
+        return self.__mode == ParserMode.TOC
+
+    @property
+    def is_content_mode(self) -> bool:
+        return self.__mode == ParserMode.CONTENT
+
+    @property
+    def has_executions(self) -> bool:
+        return self.__exec_count > 0
+
+    @property
+    def has_successes(self) -> bool:
+        return self.__success > 0
+
+    @property
+    def has_errors(self) -> bool:
+        return self.__errors > 0
+
+    @property
+    def success_rate(self) -> float:
+        return self.__success / self.__exec_count if self.__exec_count > 0 else 0.0
+
+    @property
+    def error_rate(self) -> float:
+        return self.__errors / self.__exec_count if self.__exec_count > 0 else 0.0
+
     # ==========================================================
     # VALIDATION
     # ==========================================================
@@ -266,3 +342,58 @@ class PipelineOrchestrator(PipelineInterface):
 
     def __bool__(self) -> bool:
         return self.file_path.exists()
+
+    def __eq__(self, other: object) -> bool:
+        return (
+            isinstance(other, PipelineOrchestrator)
+            and self.__file_path == other.__file_path
+        )
+
+    def __hash__(self) -> int:
+        return hash((type(self).__name__, self.__file_path))
+
+    def __call__(self) -> ParserResult:
+        """Make orchestrator callable."""
+        return self.execute()
+
+    def __enter__(self) -> "PipelineOrchestrator":
+        """Context manager support."""
+        self.prepare()
+        return self
+
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: object
+    ) -> None:
+        """Context manager cleanup."""
+        self.cleanup()
+
+    def __int__(self) -> int:
+        return self.__exec_count
+
+    def __float__(self) -> float:
+        return float(self.__success)
+
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, PipelineOrchestrator):
+            return NotImplemented
+        return self.__exec_count < other.__exec_count
+
+    def __le__(self, other: object) -> bool:
+        return self == other or self < other
+
+    def __gt__(self, other: object) -> bool:
+        if not isinstance(other, PipelineOrchestrator):
+            return NotImplemented
+        return self.__exec_count > other.__exec_count
+
+    def __ge__(self, other: object) -> bool:
+        return self == other or self > other
+
+    def __contains__(self, item: str) -> bool:
+        return item in str(self.__file_path)
+
+    def __getitem__(self, index: int) -> str:
+        return str(self.__file_path)[index]
