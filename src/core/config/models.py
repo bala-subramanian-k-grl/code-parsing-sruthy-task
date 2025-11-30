@@ -6,10 +6,9 @@ Clean, minimal, and professionally structured.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
 from collections.abc import Iterator
+from dataclasses import dataclass, field
 from typing import Any
-
 
 # ======================================================================
 # ABSTRACT BASE MODEL

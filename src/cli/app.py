@@ -16,7 +16,6 @@ from src.core.config.models import ParserResult
 from src.orchestrator.pipeline_orchestrator import PipelineOrchestrator
 from src.utils.logger import logger
 
-
 # ======================================================================
 # ABSTRACT BASE TYPES
 # ======================================================================
