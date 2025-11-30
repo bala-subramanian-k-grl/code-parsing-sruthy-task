@@ -118,7 +118,8 @@ class BaseConfigLoader(ABC):
 
     def __call__(self, key: str, default: Any = None) -> Any:
         """Make loader callable for getting values."""
-        return self.get(key, default)
+        result: Any = self.get(key, default)
+        return result
 
     def __iter__(self):
         """Iterate over config keys."""

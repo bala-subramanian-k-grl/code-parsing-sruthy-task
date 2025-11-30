@@ -64,8 +64,8 @@ class BaseEnum(str, Enum):
     def __le__(self, other: object) -> bool:
         return self == other or self < other
 
-    def __contains__(self, text: str) -> bool:
-        return text in str(self.value)
+    def __contains__(self, text: object) -> bool:  # type: ignore[override]
+        return isinstance(text, str) and text in str(self.value)
 
     def __int__(self) -> int:
         return len(str(self.value))
@@ -73,16 +73,16 @@ class BaseEnum(str, Enum):
     def __float__(self) -> float:
         return float(len(str(self.value)))
 
-    def __iter__(self):
+    def __iter__(self):  # type: ignore[override]
         return iter(str(self.value))
 
-    def __getitem__(self, index: int) -> str:
+    def __getitem__(self, index: int) -> str:  # type: ignore[override]
         return str(self.value)[index]
 
-    def __add__(self, other: str) -> str:
+    def __add__(self, other: str) -> str:  # type: ignore[override]
         return str(self.value) + other
 
-    def __mul__(self, other: int) -> str:
+    def __mul__(self, other: int) -> str:  # type: ignore[override]
         return str(self.value) * other
 
 
@@ -116,10 +116,10 @@ class ParserMode(BaseEnum):
     def is_content(self) -> bool:
         return self is ParserMode.CONTENT
 
-    def __getitem__(self, index: int) -> str:
+    def __getitem__(self, index: int) -> str:  # type: ignore[override]
         return str(self.value)[index]
 
-    def __iter__(self):
+    def __iter__(self):  # type: ignore[override]
         return iter(str(self.value))
 
     def __gt__(self, other: object) -> bool:
@@ -130,10 +130,10 @@ class ParserMode(BaseEnum):
     def __ge__(self, other: object) -> bool:
         return self == other or self > other
 
-    def __add__(self, other: str) -> str:
+    def __add__(self, other: str) -> str:  # type: ignore[override]
         return str(self.value) + other
 
-    def __mul__(self, other: int) -> str:
+    def __mul__(self, other: int) -> str:  # type: ignore[override]
         return str(self.value) * other
 
 

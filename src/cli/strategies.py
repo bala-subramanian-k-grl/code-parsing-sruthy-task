@@ -88,7 +88,7 @@ class BaseModeStrategy(ABC):
 
     @property
     def has_usage(self) -> bool:
-        return self._BaseModeStrategy__usage_count > 0
+        return self.__usage_count > 0
 
     @property
     def name_upper(self) -> str:
@@ -102,9 +102,9 @@ class BaseModeStrategy(ABC):
         return self.name[index]
 
     def __gt__(self, other: object) -> bool:
-        if not isinstance(other, self.__class__):
+        if not isinstance(other, BaseModeStrategy):
             return NotImplemented
-        return self._BaseModeStrategy__usage_count > other._BaseModeStrategy__usage_count
+        return self.__usage_count > other.__usage_count
 
     def __ge__(self, other: object) -> bool:
         return self == other or self > other
@@ -228,7 +228,7 @@ class ModeStrategyFactory(FactoryInterface[BaseModeStrategy]):
     def __gt__(self, other: object) -> bool:
         if not isinstance(other, ModeStrategyFactory):
             return NotImplemented
-        return self._ModeStrategyFactory__creation_count > other._ModeStrategyFactory__creation_count
+        return self.__creation_count > other.__creation_count
 
     def __ge__(self, other: object) -> bool:
         return self == other or self > other

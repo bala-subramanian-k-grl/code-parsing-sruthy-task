@@ -268,8 +268,8 @@ class BaseConfig(BaseConfigInterface):
     def mode_name(self) -> str:
         return self.__mode.name
 
-    def __getitem__(self, key: str) -> Any:
-        attrs = {
+    def __getitem__(self, key: str) -> Path | ParserMode | bool | None:
+        attrs: dict[str, Path | ParserMode | bool] = {
             "input": self.__input_path,
             "output": self.__output_dir,
             "mode": self.__mode,

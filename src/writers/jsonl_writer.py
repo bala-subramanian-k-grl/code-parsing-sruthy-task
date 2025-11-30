@@ -235,4 +235,4 @@ class JSONLWriter(WriterInterface):
         return self.__doc_title % other
 
     def __pow__(self, other: int) -> int:
-        return len(self.__doc_title) ** other
+        return int(len(self.__doc_title) ** other)
