@@ -262,11 +262,11 @@ class BaseConfig(BaseConfigInterface):
 
     @property
     def mode_value(self) -> str:
-        return self.__mode.value
+        return str(self.__mode.value)
 
     @property
     def mode_name(self) -> str:
-        return self.__mode.name
+        return str(self.__mode.name)
 
     def __getitem__(self, key: str) -> Path | ParserMode | bool | None:
         attrs: dict[str, Path | ParserMode | bool] = {

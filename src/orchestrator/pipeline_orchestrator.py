@@ -124,11 +124,11 @@ class PipelineOrchestrator(PipelineInterface):
 
     @property
     def mode_value(self) -> str:
-        return self.__mode.value
+        return str(self.__mode.value)
 
     @property
     def mode_name(self) -> str:
-        return self.__mode.name
+        return str(self.__mode.name)
 
     @property
     def is_full_mode(self) -> bool:
