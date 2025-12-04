@@ -7,7 +7,7 @@ from typing import Any
 
 # type: ignore[import-untyped]
 # pyright: ignore[reportMissingTypeStubs]
-import fitz
+import fitz  # type: ignore[import-untyped]
 
 from src.core.config.models import TOCEntry
 from src.extractors.extractor_interface import ExtractorInterface

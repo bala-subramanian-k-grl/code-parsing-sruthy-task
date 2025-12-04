@@ -216,9 +216,16 @@ class StrictValidator(ResultValidator):
         return self.__strict
 
     # ------------ Override validate() (Polymorphism) ------------
-    # type: ignore[override]
+    @overload
+    def validate(self, data: ParserResult) -> ValidationResult: ...
+
+    @overload
     def validate(
-        self, data: ParserResult
+        self, data: ParserResult, *, strict: bool
+    ) -> ValidationResult: ...
+
+    def validate(  # type: ignore[override]
+        self, data: ParserResult, *, strict: bool = True
     ) -> ValidationResult:
         """
         Strict override → always strict=True
