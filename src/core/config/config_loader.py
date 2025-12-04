@@ -34,6 +34,7 @@ def protected_access(
     func: Callable[..., t_config]
 ) -> Callable[..., t_config]:
     def wrapper(self: Any, *args: Any, **kwargs: Any) -> t_config:
+        """Method implementation."""
         return func(self, *args, **kwargs)
     return wrapper
 
@@ -47,26 +48,31 @@ class BaseConfigLoader(ABC):
     """Abstract loader interface."""
 
     def __init__(self, config_path: Path | None = None):
+        """Method implementation."""
         self.__config_path = config_path
         self._config: dict[str, Any] = {}
 
     # ---------- Abstract Methods ----------
     @abstractmethod
     def load(self) -> dict[str, Any]:
+        """Method implementation."""
         raise NotImplementedError
 
     @abstractmethod
     def source_name(self) -> str:
+        """Method implementation."""
         raise NotImplementedError
 
     # ---------- Shared Protected Methods ----------
     @protected_access
     def _validate_path(self) -> None:
+        """Method implementation."""
         if self.__config_path and not self.__config_path.exists():
             raise FileNotFoundError(f"Config not found: {self.__config_path}")
 
     @protected_access
     def _read_file(self) -> str:
+        """Method implementation."""
         if not self.__config_path:
             raise ValueError("Config path is not set")
         with self.__config_path.open("r", encoding="utf-8") as f:
@@ -75,10 +81,12 @@ class BaseConfigLoader(ABC):
     # ---------- Public Accessors ----------
     @property
     def config_path(self) -> Path | None:
+        """Method implementation."""
         return self.__config_path
 
     @property
     def config(self) -> dict[str, Any]:
+        """Method implementation."""
         return self._config
 
     # ---------- Overloaded Getters ----------
@@ -88,6 +96,7 @@ class BaseConfigLoader(ABC):
     def get(self, key: str, default: Any) -> Any: ...
 
     def get(self, key: str, default: Any = None) -> Any:
+        """Method implementation."""
         # Handle nested keys like "input.pdf_path"
         if "." in key:
             keys = key.split(".")
@@ -104,18 +113,23 @@ class BaseConfigLoader(ABC):
 
     # ---------- Magic Methods (Polymorphism) ----------
     def __len__(self) -> int:
+        """Method implementation."""
         return len(self._config)
 
     def __str__(self) -> str:
+        """Method implementation."""
         return f"{self.source_name()}Loader(path={self.__config_path})"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}(path={self.__config_path!r})"
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return bool(self._config)
 
     def __contains__(self, item: str) -> bool:
+        """Method implementation."""
         return item in self._config
 
     def __call__(self, key: str, default: Any = None) -> Any:
@@ -132,29 +146,37 @@ class BaseConfigLoader(ABC):
         return self._config[key]
 
     def __eq__(self, other: object) -> bool:
+        """Method implementation."""
         return isinstance(other, self.__class__)
 
     def __hash__(self) -> int:
+        """Method implementation."""
         return hash(type(self).__name__)
 
     def __lt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, BaseConfigLoader):
             return NotImplemented
         return len(self) < len(other)
 
     def __le__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self < other
 
     def __int__(self) -> int:
+        """Method implementation."""
         return len(self._config)
 
     def __float__(self) -> float:
+        """Method implementation."""
         return float(len(self._config))
 
     def __setitem__(self, key: str, value: Any) -> None:
+        """Method implementation."""
         self._config[key] = value
 
     def __delitem__(self, key: str) -> None:
+        """Method implementation."""
         del self._config[key]
 
 
@@ -164,12 +186,14 @@ class BaseConfigLoader(ABC):
 
 class YAMLConfigLoader(BaseConfigLoader):
     def load(self) -> dict[str, Any]:
+        """Method implementation."""
         self._validate_path()
         data: Any = yaml.safe_load(self._read_file())
         self._config = data if isinstance(data, dict) else {}
         return self._config
 
     def source_name(self) -> str:
+        """Method implementation."""
         return "YAML"
 
 
@@ -179,6 +203,7 @@ class YAMLConfigLoader(BaseConfigLoader):
 
 class JSONConfigLoader(BaseConfigLoader):
     def load(self) -> dict[str, Any]:
+        """Method implementation."""
         self._validate_path()
         try:
             self._config = json.loads(self._read_file()) or {}
@@ -187,6 +212,7 @@ class JSONConfigLoader(BaseConfigLoader):
         return self._config
 
     def source_name(self) -> str:
+        """Method implementation."""
         return "JSON"
 
 
@@ -196,6 +222,7 @@ class JSONConfigLoader(BaseConfigLoader):
 
 class EnvConfigLoader(BaseConfigLoader):
     def load(self) -> dict[str, Any]:
+        """Method implementation."""
         self._config = {
             "input": {"pdf_path": os.getenv("PDF_PATH")},
             "output": {"base_dir": os.getenv("OUTPUT_DIR")},
@@ -208,6 +235,7 @@ class EnvConfigLoader(BaseConfigLoader):
         return self._config
 
     def source_name(self) -> str:
+        """Method implementation."""
         return "ENVIRONMENT"
 
 
@@ -231,27 +259,35 @@ class ConfigLoaderFactory(FactoryInterface[BaseConfigLoader]):
         raise ValueError(f"Unsupported config format: {ext}")
 
     def __str__(self) -> str:
+        """Method implementation."""
         return "ConfigLoaderFactory"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return "ConfigLoaderFactory()"
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return True
 
     def __len__(self) -> int:
+        """Method implementation."""
         return 3
 
     def __eq__(self, other: object) -> bool:
+        """Method implementation."""
         return isinstance(other, ConfigLoaderFactory)
 
     def __hash__(self) -> int:
+        """Method implementation."""
         return hash("ConfigLoaderFactory")
 
     def __int__(self) -> int:
+        """Method implementation."""
         return 3
 
     def __float__(self) -> float:
+        """Method implementation."""
         return 3.0
 
 
@@ -263,13 +299,16 @@ class ConfigLoader(BaseConfigLoader):
     """User-facing loader (default = YAML)."""
 
     def __init__(self, config_path: Path = Path("application.yml")):
+        """Method implementation."""
         super().__init__(config_path)
         self.__factory = ConfigLoaderFactory()
         self.__loader = self.__factory.create(config_path)
         self._config = self.__loader.load()
 
     def load(self) -> dict[str, Any]:
+        """Method implementation."""
         return self.__loader.load()
 
     def source_name(self) -> str:
+        """Method implementation."""
         return self.__loader.source_name()

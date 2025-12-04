@@ -20,6 +20,7 @@ class PDFParser(BaseParser):
     # INIT (Encapsulation)
     # ---------------------------------------------------------
     def __init__(self, file_path: Path, doc_title: str = "Document") -> None:
+        """Method implementation."""
         super().__init__(file_path)
         self.__doc_title = doc_title
 
@@ -28,6 +29,7 @@ class PDFParser(BaseParser):
     # ---------------------------------------------------------
     @property
     def parser_type(self) -> str:
+        """Method implementation."""
         return "PDF"
 
     def supports(self, extension: str) -> bool:
@@ -44,36 +46,44 @@ class PDFParser(BaseParser):
     # ---------------------------------------------------------
     @property
     def doc_title(self) -> str:
+        """Method implementation."""
         return self.__doc_title
 
     @doc_title.setter
     def doc_title(self, value: str) -> None:
+        """Method implementation."""
         if not value.strip():
             raise ValueError("Document title cannot be empty.")
         self.__doc_title = value
 
     @property
     def title_length(self) -> int:
+        """Method implementation."""
         return len(self.__doc_title)
 
     @property
     def title_words(self) -> int:
+        """Method implementation."""
         return len(self.__doc_title.split())
 
     @property
     def title_upper(self) -> str:
+        """Method implementation."""
         return self.__doc_title.upper()
 
     @property
     def title_lower(self) -> str:
+        """Method implementation."""
         return self.__doc_title.lower()
 
     @property
     def has_title(self) -> bool:
+        """Method implementation."""
         return bool(self.__doc_title.strip())
 
     @property
     def title_is_empty(self) -> bool:
+        """Method implementation."""
         return not self.__doc_title.strip()
 
     # ---------------------------------------------------------
@@ -149,18 +159,21 @@ class PDFParser(BaseParser):
     # Magic Methods
     # ---------------------------------------------------------
     def __str__(self) -> str:
+        """Method implementation."""
         return (
             f"PDFParser(file={self.file_path.name}, "
             f"title={self.__doc_title})"
         )
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return (
             f"PDFParser(file_path={self.file_path!r}, "
             f"doc_title={self.__doc_title!r})"
         )
 
     def __eq__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, PDFParser):
             return NotImplemented
         return (
@@ -169,20 +182,25 @@ class PDFParser(BaseParser):
         )
 
     def __hash__(self) -> int:
+        """Method implementation."""
         return hash((type(self).__name__, self.file_path, self.__doc_title))
 
     def __contains__(self, text: str) -> bool:
+        """Method implementation."""
         return text.lower() in self.__doc_title.lower()
 
     def __len__(self) -> int:
+        """Method implementation."""
         return len(self.__doc_title)
 
     def __lt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, PDFParser):
             return NotImplemented
         return self.file_size < other.file_size
 
     def __getitem__(self, index: int) -> str:
+        """Method implementation."""
         return self.__doc_title[index]
 
     def __enter__(self) -> "PDFParser":
@@ -199,21 +217,27 @@ class PDFParser(BaseParser):
         return self.parse()
 
     def __int__(self) -> int:
+        """Method implementation."""
         return self.file_size
 
     def __float__(self) -> float:
+        """Method implementation."""
         return float(self.file_size)
 
     def __le__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self < other
 
     def __iter__(self):
+        """Method implementation."""
         return iter([self.parser_type, self.doc_title])
 
     def __gt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, PDFParser):
             return NotImplemented
         return self.file_size > other.file_size
 
     def __ge__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self > other

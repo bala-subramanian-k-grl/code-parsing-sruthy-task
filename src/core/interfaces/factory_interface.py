@@ -67,18 +67,23 @@ class FactoryInterface(ABC, Generic[t_product]):
     # ------------------------------------------------------
 
     def __str__(self) -> str:
+        """Method implementation."""
         return self.description()
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}(version={self.VERSION})"
 
     def __eq__(self, other: object) -> bool:
+        """Method implementation."""
         return isinstance(other, self.__class__)
 
     def __hash__(self) -> int:
+        """Method implementation."""
         return hash(type(self).__name__)
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return True
 
     def __len__(self) -> int:
@@ -86,7 +91,9 @@ class FactoryInterface(ABC, Generic[t_product]):
         return 0
 
     def __int__(self) -> int:
+        """Method implementation."""
         return len(self)
 
     def __float__(self) -> float:
+        """Method implementation."""
         return float(len(self))

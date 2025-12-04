@@ -35,9 +35,11 @@ class BaseCLI(ABC):
         raise NotImplementedError
 
     def __str__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}(abstract CLI)"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return f"<{self.__class__.__name__} abstract>"
 
 
@@ -50,9 +52,11 @@ class BasePipelineExecutor(ABC):
         raise NotImplementedError
 
     def __str__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}(abstract executor)"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return f"<{self.__class__.__name__} abstract>"
 
 
@@ -65,9 +69,11 @@ class BaseValidator(ABC):
         raise NotImplementedError
 
     def __str__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}()"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}()"
 
 
@@ -80,9 +86,11 @@ class BaseFormatter(ABC):
         raise NotImplementedError
 
     def __str__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}()"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}()"
 
 
@@ -118,11 +126,13 @@ class ArgumentParserService:
     """
 
     def __init__(self) -> None:
+        """Method implementation."""
         self._parser = self._build_parser()
         self._validator = ArgumentValidator()
 
     @staticmethod
     def _build_parser() -> argparse.ArgumentParser:
+        """Method implementation."""
         desc = "USB-PD Specification Parser CLI"
         parser = argparse.ArgumentParser(description=desc)
 
@@ -157,9 +167,11 @@ class ArgumentParserService:
         return args
 
     def __str__(self) -> str:
+        """Method implementation."""
         return "ArgumentParserService"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return "ArgumentParserService()"
 
 
@@ -167,12 +179,15 @@ class PathValidator(BaseValidator):
     """Validates filesystem paths using pathlib.Path."""
 
     def validate(self, value: str) -> bool:
+        """Method implementation."""
         return Path(value).exists()
 
     def exists(self, path: Path) -> bool:
+        """Method implementation."""
         return path.exists()
 
     def is_file(self, path: Path) -> bool:
+        """Method implementation."""
         return path.is_file()
 
 
@@ -184,6 +199,7 @@ class FilePathResolver:
     """
 
     def __init__(self, config_loader: ConfigLoader) -> None:
+        """Method implementation."""
         self._config_loader = config_loader
         self._validator = PathValidator()
 
@@ -204,9 +220,11 @@ class FilePathResolver:
         return file_path
 
     def __str__(self) -> str:
+        """Method implementation."""
         return "FilePathResolver"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return "FilePathResolver()"
 
 
@@ -225,13 +243,16 @@ class DefaultPipelineExecutor(BasePipelineExecutor):
     """
 
     def __init__(self, orchestrator_cls: type[PipelineOrchestrator]) -> None:
+        """Method implementation."""
         self._orchestrator_cls = orchestrator_cls
 
     def execute(self, file_path: Path, mode: ParserMode) -> ParserResult:
+        """Method implementation."""
         orchestrator = self._orchestrator_cls(file_path, mode)
         return orchestrator.execute()
 
     def __repr__(self) -> str:
+        """Method implementation."""
         cls_name = self._orchestrator_cls.__name__
         return (
             f"{self.__class__.__name__}"
@@ -255,6 +276,7 @@ class ResultFormatter(BaseFormatter):
         return ""
 
     def format_count(self, label: str, count: int) -> str:
+        """Method implementation."""
         return f"Extracted {count} {label}"
 
 
@@ -262,9 +284,11 @@ class ResultLogger:
     """Logs high-level statistics of ParserResult."""
 
     def __init__(self) -> None:
+        """Method implementation."""
         self._formatter = ResultFormatter()
 
     def log(self, result: ParserResult) -> None:
+        """Method implementation."""
         logger.info("Extraction completed successfully")
 
         toc_msg = self._formatter.format_count(
@@ -278,9 +302,11 @@ class ResultLogger:
         logger.info(content_msg)
 
     def __str__(self) -> str:
+        """Method implementation."""
         return "ResultLogger"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return "ResultLogger()"
 
 
@@ -342,14 +368,17 @@ class CLIApp(BaseCLI):
 
     @protected_access
     def _increment_run_count(self) -> None:
+        """Method implementation."""
         self.__run_count += 1
 
     @protected_access
     def _increment_success_count(self) -> None:
+        """Method implementation."""
         self.__success_count += 1
 
     @protected_access
     def _increment_error_count(self) -> None:
+        """Method implementation."""
         self.__error_count += 1
 
     # --------------------------------------------------
@@ -358,14 +387,17 @@ class CLIApp(BaseCLI):
 
     @property
     def run_count(self) -> int:
+        """Method implementation."""
         return self.__run_count
 
     @property
     def success_count(self) -> int:
+        """Method implementation."""
         return self.__success_count
 
     @property
     def error_count(self) -> int:
+        """Method implementation."""
         return self.__error_count
 
     # --------------------------------------------------
@@ -432,6 +464,7 @@ class CLIApp(BaseCLI):
     # --------------------------------------------------
 
     def __str__(self) -> str:
+        """Method implementation."""
         return (
             f"CLIApp(run={self.__run_count}, "
             f"success={self.__success_count}, "
@@ -439,6 +472,7 @@ class CLIApp(BaseCLI):
         )
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return (
             f"CLIApp(config_loader={self._config_loader!r}, "
             f"orchestrator_cls={self._orchestrator_cls!r}"

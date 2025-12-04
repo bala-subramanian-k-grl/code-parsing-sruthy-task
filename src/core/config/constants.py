@@ -22,17 +22,21 @@ class BaseEnum(str, Enum):
     """Base enum with extended behavior."""
 
     def label(self) -> str:
+        """Method implementation."""
         raise NotImplementedError("Subclasses must override label()")
 
     def is_valid(self, value: str) -> bool:
+        """Method implementation."""
         return bool(value.lower() == str(self.value).lower())
 
     @classmethod
     def list_values(cls) -> list[str]:
+        """Method implementation."""
         return [m.value for m in cls]
 
     @classmethod
     def from_string(cls, value: str) -> "BaseEnum":
+        """Method implementation."""
         for member in cls:
             if member.value.lower() == value.lower():
                 return member
@@ -40,38 +44,48 @@ class BaseEnum(str, Enum):
 
     # Polymorphic magic methods
     def __str__(self) -> str:
+        """Method implementation."""
         return str(self.value)
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}({self.value!r})"
 
     def __eq__(self, other: object) -> bool:
+        """Method implementation."""
         return isinstance(other, self.__class__) and self.value == other.value
 
     def __hash__(self) -> int:
+        """Method implementation."""
         return hash((self.__class__.__name__, self.value))
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return True
 
     def __len__(self) -> int:
+        """Method implementation."""
         return len(str(self.value))
 
     def __lt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, self.__class__):
             return NotImplemented
         return str(self.value) < str(other.value)
 
     def __le__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self < other
 
     def __contains__(self, text: object) -> bool:  # type: ignore[override]
         return isinstance(text, str) and text in str(self.value)
 
     def __int__(self) -> int:
+        """Method implementation."""
         return len(str(self.value))
 
     def __float__(self) -> float:
+        """Method implementation."""
         return float(len(str(self.value)))
 
     def __iter__(self):  # type: ignore[override]
@@ -99,6 +113,7 @@ class ParserMode(BaseEnum):
     FULL = "full"
 
     def label(self) -> str:
+        """Method implementation."""
         if self is ParserMode.TOC:
             return "Table of Contents Extraction"
         elif self is ParserMode.CONTENT:
@@ -109,12 +124,15 @@ class ParserMode(BaseEnum):
 
     # Behavior helpers
     def is_full(self) -> bool:
+        """Method implementation."""
         return self is ParserMode.FULL
 
     def is_toc(self) -> bool:
+        """Method implementation."""
         return self is ParserMode.TOC
 
     def is_content(self) -> bool:
+        """Method implementation."""
         return self is ParserMode.CONTENT
 
     def __getitem__(self, index: int) -> str:  # type: ignore[override]
@@ -124,11 +142,13 @@ class ParserMode(BaseEnum):
         return iter(str(self.value))
 
     def __gt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, ParserMode):
             return NotImplemented
         return str(self.value) > str(other.value)
 
     def __ge__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self > other
 
     def __add__(self, other: str) -> str:  # type: ignore[override]
@@ -157,39 +177,48 @@ class ConstantManager:
     # ---------- Safe getters (Encapsulation) ----------
     @classmethod
     def default_pdf(cls) -> Path:
+        """Method implementation."""
         return cls.__default_pdf_path
 
     @classmethod
     def output_dir(cls) -> Path:
+        """Method implementation."""
         return cls.__default_output_dir
 
     @classmethod
     def max_file_size(cls) -> int:
+        """Method implementation."""
         return cls.__max_file_size
 
     @classmethod
     def supported_formats(cls) -> list[str]:
+        """Method implementation."""
         return list(cls.__supported_formats)
 
     @classmethod
     def encoding(cls) -> str:
+        """Method implementation."""
         return cls.__encoding
 
     @classmethod
     def timeout(cls) -> int:
+        """Method implementation."""
         return cls.__timeout
 
     @classmethod
     def max_pages(cls) -> int:
+        """Method implementation."""
         return cls.__max_pages
 
     @classmethod
     def buffer_size(cls) -> int:
+        """Method implementation."""
         return cls.__buffer_size
 
     # ---------- Validation ----------
     @classmethod
     def validate_paths(cls) -> None:
+        """Method implementation."""
         if not cls.__default_pdf_path.exists():
             msg = f"Missing default PDF: {cls.__default_pdf_path}"
             raise FileNotFoundError(msg)
@@ -202,41 +231,53 @@ class ConstantManager:
 
     # ---------- Polymorphic Magic Methods ----------
     def __str__(self) -> str:
+        """Method implementation."""
         return "ConstantManager"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return "ConstantManager()"
 
     def __eq__(self, other: object) -> bool:
+        """Method implementation."""
         return isinstance(other, ConstantManager)
 
     def __hash__(self) -> int:
+        """Method implementation."""
         return hash("ConstantManager")
 
     def __len__(self) -> int:
+        """Method implementation."""
         return 8  # number of constants
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return True  # Always available
 
     def __lt__(self, other: object) -> bool:
+        """Method implementation."""
         return False  # ConstantManager instances are not comparable
 
     def __le__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other
 
     def __int__(self) -> int:
+        """Method implementation."""
         return len(self)
 
     def __float__(self) -> float:
+        """Method implementation."""
         return float(len(self))
 
     def __gt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, ConstantManager):
             return NotImplemented
         return False
 
     def __ge__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other
 
     @classmethod
@@ -256,6 +297,7 @@ class ConstantManager:
 
     @classmethod
     def __contains__(cls, key: str) -> bool:
+        """Method implementation."""
         return key in [
             "pdf_path", "output_dir", "max_file_size",
             "supported_formats", "encoding", "timeout",
@@ -264,6 +306,7 @@ class ConstantManager:
 
     @classmethod
     def __iter__(cls):
+        """Method implementation."""
         return iter([
             "pdf_path", "output_dir", "max_file_size",
             "supported_formats", "encoding", "timeout",

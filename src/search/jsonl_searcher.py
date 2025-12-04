@@ -23,12 +23,15 @@ class BaseSearcher(ABC):
 
     @abstractmethod
     def validate(self) -> bool:
+        """Method implementation."""
         raise NotImplementedError
 
     def __str__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}()"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}()"
 
 
@@ -36,6 +39,7 @@ class JSONLSearcher(BaseSearcher):
     """Search JSONL files for keywords."""
 
     def __init__(self, file_path: Path) -> None:
+        """Method implementation."""
         self.__file_path = file_path
         self.__search_count = 0
         self.__total_matches = 0
@@ -47,22 +51,27 @@ class JSONLSearcher(BaseSearcher):
 
     @property
     def file_path(self) -> Path:
+        """Method implementation."""
         return self.__file_path
 
     @property
     def file_exists(self) -> bool:
+        """Method implementation."""
         return self.__file_path.exists()
 
     @property
     def file_name(self) -> str:
+        """Method implementation."""
         return self.__file_path.name
 
     @property
     def file_suffix(self) -> str:
+        """Method implementation."""
         return self.__file_path.suffix.lower()
 
     @property
     def file_size(self) -> int:
+        """Method implementation."""
         return self.__file_path.stat().st_size if self.file_exists else 0
 
     # =========================================================
@@ -71,12 +80,15 @@ class JSONLSearcher(BaseSearcher):
 
     @property
     def searcher_type(self) -> str:
+        """Method implementation."""
         return "JSONL"
 
     def supports(self, ext: str) -> bool:
+        """Method implementation."""
         return ext.lower() == ".jsonl"
 
     def validate(self) -> bool:
+        """Method implementation."""
         return self.file_exists and self.file_suffix == ".jsonl"
 
     # =========================================================
@@ -193,17 +205,21 @@ class JSONLSearcher(BaseSearcher):
     # =========================================================
 
     def __str__(self) -> str:
+        """Method implementation."""
         return f"JSONLSearcher({self.file_name})"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return f"JSONLSearcher(path={self.__file_path!r})"
 
     def __eq__(self, other: object) -> bool:
+        """Method implementation."""
         return isinstance(other, JSONLSearcher) and (
             self.__file_path == other.__file_path
         )
 
     def __hash__(self) -> int:
+        """Method implementation."""
         return hash((type(self).__name__, self.__file_path))
 
     def __len__(self) -> int:
@@ -215,6 +231,7 @@ class JSONLSearcher(BaseSearcher):
         return self.search(keyword) > 0
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return self.file_exists
 
     def __getitem__(self, index: int) -> dict[str, Any]:

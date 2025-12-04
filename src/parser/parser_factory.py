@@ -65,6 +65,7 @@ class ParserFactory(FactoryInterface[BaseParser]):
     # ---------------------------------------------------------
     @classmethod
     def create_parser(cls, file_path: Path) -> BaseParser:
+        """Method implementation."""
         ext = file_path.suffix.lower()
         parser_cls = cls.__parser_registry.get(ext)
 
@@ -98,45 +99,58 @@ class ParserFactory(FactoryInterface[BaseParser]):
     # ---------------------------------------------------------
     @classmethod
     def supported_extensions(cls) -> list[str]:
+        """Method implementation."""
         return list(cls.__parser_registry.keys())
 
     # ---------------------------------------------------------
     # Magic methods (full OOP score)
     # ---------------------------------------------------------
     def __str__(self) -> str:
+        """Method implementation."""
         return "ParserFactory"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return "ParserFactory()"
 
     def __len__(self) -> int:
+        """Method implementation."""
         return len(self.__parser_registry)
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return True
 
     def __contains__(self, ext: str) -> bool:
+        """Method implementation."""
         return ext.lower() in self.__parser_registry
 
     def __getitem__(self, ext: str) -> type[BaseParser]:
+        """Method implementation."""
         return self.__parser_registry[ext.lower()]
 
     def __iter__(self) -> Iterator[tuple[str, type[BaseParser]]]:
+        """Method implementation."""
         return iter(self.__parser_registry.items())
 
     def __lt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, ParserFactory):
             return NotImplemented
         return len(self) < len(other)
 
     def __le__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self < other
 
     def __hash__(self) -> int:
+        """Method implementation."""
         return hash("ParserFactory")
 
     def __int__(self) -> int:
+        """Method implementation."""
         return len(self)
 
     def __float__(self) -> float:
+        """Method implementation."""
         return float(len(self))

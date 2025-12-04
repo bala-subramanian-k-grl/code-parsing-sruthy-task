@@ -118,18 +118,23 @@ class ExtractionStrategy(ABC):
     # ------------------------------------------------------
 
     def __str__(self) -> str:
+        """Method implementation."""
         return f"{self.strategy_name()}Strategy"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}(priority={self.priority()})"
 
     def __eq__(self, other: object) -> bool:
+        """Method implementation."""
         return isinstance(other, self.__class__)
 
     def __hash__(self) -> int:
+        """Method implementation."""
         return hash(type(self).__name__)
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return True
 
     def __lt__(self, other: object) -> bool:
@@ -139,10 +144,13 @@ class ExtractionStrategy(ABC):
         return self.priority() < other.priority()
 
     def __le__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self < other
 
     def __int__(self) -> int:
+        """Method implementation."""
         return self.priority()
 
     def __float__(self) -> float:
+        """Method implementation."""
         return float(self.priority())

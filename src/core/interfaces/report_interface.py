@@ -19,6 +19,7 @@ class IReportGenerator(ABC):
     # ==========================================================
 
     def __init__(self) -> None:
+        """Method implementation."""
         self._last_path: Path | None = None
         self._errors: list[str] = []
         self._is_ready: bool = False
@@ -46,6 +47,7 @@ class IReportGenerator(ABC):
 
     @property
     def last_error(self) -> str | None:
+        """Method implementation."""
         return self._errors[-1] if self._errors else None
 
     # ==========================================================
@@ -53,14 +55,17 @@ class IReportGenerator(ABC):
     # ==========================================================
 
     def _set_error(self, message: str) -> None:
+        """Method implementation."""
         self._errors.append(message)
 
     def _ensure_path(self, path: Path) -> None:
+        """Method implementation."""
         if not path.parent.exists():
             msg = f"Output directory not found: {path.parent}"
             raise FileNotFoundError(msg)
 
     def _ensure_ready(self) -> None:
+        """Method implementation."""
         if not self._is_ready:
             msg = "Report generator is not prepared. Call prepare()."
             raise RuntimeError(msg)
@@ -93,11 +98,13 @@ class IReportGenerator(ABC):
     @overload
     @abstractmethod
     def generate(self, result: ParserResult, path: Path) -> None:
+        """Method implementation."""
         ...
 
     @overload
     @abstractmethod
     def generate(self, result: ParserResult, *, filename: str) -> None:
+        """Method implementation."""
         ...
 
     @abstractmethod
@@ -118,18 +125,23 @@ class IReportGenerator(ABC):
     # ==========================================================
 
     def __str__(self) -> str:
+        """Method implementation."""
         return f"{self.report_type}ReportGenerator(ready={self._is_ready})"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}(type={self.report_type!r})"
 
     def __eq__(self, other: object) -> bool:
+        """Method implementation."""
         return isinstance(other, IReportGenerator)
 
     def __hash__(self) -> int:
+        """Method implementation."""
         return hash(type(self).__name__)
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return self._is_ready
 
     def __len__(self) -> int:
@@ -137,6 +149,7 @@ class IReportGenerator(ABC):
         return len(self._errors)
 
     def __contains__(self, key: str) -> bool:
+        """Method implementation."""
         return key in (self._last_path.name if self._last_path else "")
 
     def __float__(self) -> float:

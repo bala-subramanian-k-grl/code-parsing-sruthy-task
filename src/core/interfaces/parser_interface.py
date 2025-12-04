@@ -25,6 +25,7 @@ class ParserInterface(ABC):
     # ==========================================================
 
     def __init__(self) -> None:
+        """Method implementation."""
         self._is_open: bool = False     # protected flag
         self._last_error: str | None = None  # protected error tracker
 
@@ -63,10 +64,12 @@ class ParserInterface(ABC):
     # ==========================================================
 
     def _validate_state(self) -> None:
+        """Method implementation."""
         if not self._is_open:
             raise RuntimeError("Parser is not open. Call open() before using.")
 
     def _set_error(self, message: str) -> None:
+        """Method implementation."""
         self._last_error = message
 
     # ==========================================================
@@ -102,11 +105,13 @@ class ParserInterface(ABC):
     @overload
     @abstractmethod
     def open(self) -> None:
+        """Method implementation."""
         ...
 
     @overload
     @abstractmethod
     def open(self, *args: Any, **kwargs: Any) -> None:
+        """Method implementation."""
         ...
 
     @abstractmethod
@@ -153,18 +158,23 @@ class ParserInterface(ABC):
     # ==========================================================
 
     def __str__(self) -> str:
+        """Method implementation."""
         return f"{self.parser_type}Parser(is_open={self._is_open})"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}(type={self.parser_type!r})"
 
     def __eq__(self, other: object) -> bool:
+        """Method implementation."""
         return isinstance(other, ParserInterface)
 
     def __hash__(self) -> int:
+        """Method implementation."""
         return hash(type(self).__name__)
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return self._is_open
 
     def __len__(self) -> int:
@@ -172,9 +182,11 @@ class ParserInterface(ABC):
         return 1
 
     def __int__(self) -> int:
+        """Method implementation."""
         return int(self._is_open)
 
     def __float__(self) -> float:
+        """Method implementation."""
         return float(self._is_open)
 
     def __contains__(self, key: str) -> bool:

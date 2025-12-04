@@ -32,6 +32,7 @@ class ContentExtractor(ExtractorInterface):
     # INITIALIZATION
     # ==========================================================
     def __init__(self, doc_title: str) -> None:
+        """Method implementation."""
         self.__doc_title = doc_title.strip()
         self.__text_extractor = TextExtractor()
         self._validate_init()
@@ -47,10 +48,12 @@ class ContentExtractor(ExtractorInterface):
     # ==========================================================
     @property
     def extractor_type(self) -> str:
+        """Method implementation."""
         return "ContentExtractor"
 
     @property
     def is_stateful(self) -> bool:
+        """Method implementation."""
         return True  # holds document title
 
     # ==========================================================
@@ -70,6 +73,7 @@ class ContentExtractor(ExtractorInterface):
     # VALIDATION HOOK
     # ==========================================================
     def validate(self) -> None:
+        """Method implementation."""
         if not self.__doc_title:
             msg = "ContentExtractor validation failed: Missing title"
             raise ValueError(msg)
@@ -131,9 +135,11 @@ class ContentExtractor(ExtractorInterface):
     # VALIDATION HELPERS
     # ==========================================================
     def _is_valid_block(self, block: dict[str, Any]) -> bool:
+        """Method implementation."""
         return "lines" in block
 
     def _is_valid_text(self, text: str) -> bool:
+        """Method implementation."""
         return len(text.strip()) >= self._MIN_TEXT_LENGTH
 
     # ==========================================================
@@ -160,6 +166,7 @@ class ContentExtractor(ExtractorInterface):
 
     @staticmethod
     def _generate_block_id(page_num: int, block_num: int) -> str:
+        """Method implementation."""
         return f"p{page_num}_{block_num}"
 
     # ==========================================================
@@ -167,121 +174,153 @@ class ContentExtractor(ExtractorInterface):
     # ==========================================================
     @property
     def doc_title(self) -> str:
+        """Method implementation."""
         return self.__doc_title
 
     @property
     def title_length(self) -> int:
+        """Method implementation."""
         return len(self.__doc_title)
 
     @property
     def has_title(self) -> bool:
+        """Method implementation."""
         return bool(self.__doc_title)
 
     @property
     def title_words(self) -> int:
+        """Method implementation."""
         return len(self.__doc_title.split())
 
     @property
     def title_chars(self) -> int:
+        """Method implementation."""
         return len(self.__doc_title)
 
     @property
     def title_upper(self) -> str:
+        """Method implementation."""
         return self.__doc_title.upper()
 
     @property
     def title_lower(self) -> str:
+        """Method implementation."""
         return self.__doc_title.lower()
 
     @property
     def title_capitalized(self) -> str:
+        """Method implementation."""
         return self.__doc_title.capitalize()
 
     @property
     def title_stripped(self) -> str:
+        """Method implementation."""
         return self.__doc_title.strip()
 
     @property
     def title_is_empty(self) -> bool:
+        """Method implementation."""
         return not self.__doc_title.strip()
 
     @property
     def title_is_uppercase(self) -> bool:
+        """Method implementation."""
         return self.__doc_title.isupper()
 
     @property
     def title_is_lowercase(self) -> bool:
+        """Method implementation."""
         return self.__doc_title.islower()
 
     @property
     def title_first_char(self) -> str:
+        """Method implementation."""
         return self.__doc_title[0] if self.__doc_title else ""
 
     @property
     def title_last_char(self) -> str:
+        """Method implementation."""
         return self.__doc_title[-1] if self.__doc_title else ""
 
     @property
     def title_reversed(self) -> str:
+        """Method implementation."""
         return self.__doc_title[::-1]
 
     # ==========================================================
     # MAGIC METHODS (CLEAN + CONSISTENT)
     # ==========================================================
     def __str__(self) -> str:
+        """Method implementation."""
         return f"ContentExtractor(title={self.__doc_title})"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return f"ContentExtractor(doc_title={self.__doc_title!r})"
 
     def __eq__(self, other: object) -> bool:
+        """Method implementation."""
         return (
             isinstance(other, ContentExtractor)
             and self.__doc_title == other.__doc_title
         )
 
     def __hash__(self) -> int:
+        """Method implementation."""
         return hash((type(self).__name__, self.__doc_title))
 
     def __len__(self) -> int:
+        """Method implementation."""
         return len(self.__doc_title)
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return bool(self.__doc_title)
 
     def __lt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, ContentExtractor):
             return NotImplemented
         return self.__doc_title < other.__doc_title
 
     def __le__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self < other
 
     def __gt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, ContentExtractor):
             return NotImplemented
         return self.__doc_title > other.__doc_title
 
     def __ge__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self > other
 
     def __add__(self, other: str) -> str:
+        """Method implementation."""
         return self.__doc_title + other
 
     def __mul__(self, other: int) -> str:
+        """Method implementation."""
         return self.__doc_title * other
 
     def __getitem__(self, index: int) -> str:
+        """Method implementation."""
         return self.__doc_title[index]
 
     def __contains__(self, text: str) -> bool:
+        """Method implementation."""
         return text.lower() in self.__doc_title.lower()
 
     def __enter__(self) -> "ContentExtractor":
+        """Method implementation."""
         return self
 
     def __int__(self) -> int:
+        """Method implementation."""
         return len(self.__doc_title)
 
     def __float__(self) -> float:
+        """Method implementation."""
         return float(len(self.__doc_title))

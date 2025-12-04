@@ -14,6 +14,7 @@ class BaseParser(ParserInterface, ABC):
     """Abstract base class for all parsers with full OOP support."""
 
     def __init__(self, file_path: Path) -> None:
+        """Method implementation."""
         self.__file_path = file_path
 
         # Use overloaded validate() with raise_on_error=True
@@ -52,38 +53,47 @@ class BaseParser(ParserInterface, ABC):
 
     @property
     def file_size_kb(self) -> float:
+        """Method implementation."""
         return self.file_size / 1024
 
     @property
     def file_size_mb(self) -> float:
+        """Method implementation."""
         return self.file_size / (1024 * 1024)
 
     @property
     def file_exists(self) -> bool:
+        """Method implementation."""
         return self.__file_path.exists()
 
     @property
     def file_is_file(self) -> bool:
+        """Method implementation."""
         return self.__file_path.is_file()
 
     @property
     def file_stem(self) -> str:
+        """Method implementation."""
         return self.__file_path.stem
 
     @property
     def file_parent(self) -> str:
+        """Method implementation."""
         return str(self.__file_path.parent)
 
     @property
     def file_absolute(self) -> str:
+        """Method implementation."""
         return str(self.__file_path.absolute())
 
     @property
     def is_pdf(self) -> bool:
+        """Method implementation."""
         return self.file_suffix == ".pdf"
 
     @property
     def is_txt(self) -> bool:
+        """Method implementation."""
         return self.file_suffix == ".txt"
 
     # ---------------------------------------------------------
@@ -173,34 +183,43 @@ class BaseParser(ParserInterface, ABC):
     # ---------------------------------------------------------
 
     def __str__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}(file={self.file_name})"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}(file_path={self.__file_path!r})"
 
     def __eq__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, BaseParser):
             return NotImplemented
         return self.__file_path == other.__file_path
 
     def __hash__(self) -> int:
+        """Method implementation."""
         return hash((type(self).__name__, self.__file_path))
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return self.__file_path.exists()
 
     def __len__(self) -> int:
+        """Method implementation."""
         return self.file_size
 
     def __lt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, BaseParser):
             return NotImplemented
         return self.file_size < other.file_size
 
     def __contains__(self, text: str) -> bool:
+        """Method implementation."""
         return text in str(self.__file_path)
 
     def __enter__(self) -> "BaseParser":
+        """Method implementation."""
         self.open()
         return self
 
@@ -213,26 +232,33 @@ class BaseParser(ParserInterface, ABC):
         self.close()
 
     def __int__(self) -> int:
+        """Method implementation."""
         return self.file_size
 
     def __float__(self) -> float:
+        """Method implementation."""
         return float(self.file_size)
 
     def __le__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self < other
 
     def __gt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, BaseParser):
             return NotImplemented
         return self.file_size > other.file_size
 
     def __ge__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self > other
 
     def __add__(self, other: object) -> int:
+        """Method implementation."""
         if isinstance(other, int):
             return self.file_size + other
         return NotImplemented
 
     def __getitem__(self, index: int) -> str:
+        """Method implementation."""
         return str(self.__file_path)[index]

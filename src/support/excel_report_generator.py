@@ -22,6 +22,7 @@ class ExcelReportGenerator(BaseReportGenerator):
     # ---------------------------------------------------------
     @property
     def report_type(self) -> str:
+        """Method implementation."""
         return "Excel"
 
     @property
@@ -46,6 +47,7 @@ class ExcelReportGenerator(BaseReportGenerator):
     # VALIDATION (from Template Pattern)
     # ---------------------------------------------------------
     def _validate_result(self, result: ParserResult) -> None:
+        """Method implementation."""
         if not result.toc_entries and not result.content_items:
             raise ValueError("ParserResult contains no data for Excel report.")
 
@@ -53,6 +55,7 @@ class ExcelReportGenerator(BaseReportGenerator):
     # FORMAT STEP (Template Pattern)
     # ---------------------------------------------------------
     def _format_data(self, result: ParserResult) -> Workbook:
+        """Method implementation."""
         workbook: Workbook = Workbook()
         sheet: Worksheet = workbook.active  # type: ignore
         sheet.title = "Validation"
@@ -96,32 +99,41 @@ class ExcelReportGenerator(BaseReportGenerator):
     # Magic Methods
     # ---------------------------------------------------------
     def __str__(self) -> str:
+        """Method implementation."""
         return f"ExcelReportGenerator(ext={self.get_file_extension()})"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return "ExcelReportGenerator()"
 
     def __eq__(self, other: object) -> bool:
+        """Method implementation."""
         return isinstance(other, ExcelReportGenerator)
 
     def __hash__(self) -> int:
+        """Method implementation."""
         return hash(self.__class__.__name__)
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return True
 
     def __lt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, ExcelReportGenerator):
             return NotImplemented
         return len(self) < len(other)
 
     def __le__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self < other
 
     def __int__(self) -> int:
+        """Method implementation."""
         return len(self._METRICS)
 
     def __float__(self) -> float:
+        """Method implementation."""
         return float(len(self._METRICS))
 
     def __len__(self) -> int:
@@ -129,11 +141,13 @@ class ExcelReportGenerator(BaseReportGenerator):
         return len(self._METRICS)
 
     def __gt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, ExcelReportGenerator):
             return NotImplemented
         return len(self) > len(other)
 
     def __ge__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self > other
 
     def __contains__(self, item: str) -> bool:

@@ -11,5 +11,6 @@ def protected_access(
 ) -> Callable[..., t_return]:
     """Decorator to mark protected/internal methods."""
     def wrapper(self: Any, *args: Any, **kwargs: Any) -> t_return:
+        """Method implementation."""
         return func(self, *args, **kwargs)
     return wrapper

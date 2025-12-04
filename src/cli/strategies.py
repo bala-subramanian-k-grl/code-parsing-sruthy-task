@@ -22,6 +22,7 @@ class BaseModeStrategy(ABC):
     """
 
     def __init__(self) -> None:
+        """Method implementation."""
         self.__usage_count = 0
 
     # ---------- Abstract Interface ----------
@@ -41,6 +42,7 @@ class BaseModeStrategy(ABC):
 
     @protected_access
     def _increment_usage(self) -> None:
+        """Method implementation."""
         self.__usage_count += 1
 
     # ---------- Encapsulation: Property Getter ----------
@@ -53,61 +55,78 @@ class BaseModeStrategy(ABC):
     # ---------- Base Polymorphism (Magic Methods) ----------
 
     def __str__(self) -> str:
+        """Method implementation."""
         return f"{self.name.capitalize()}ModeStrategy"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}(usage={self.usage_count})"
 
     def __eq__(self, other: object) -> bool:
+        """Method implementation."""
         return isinstance(other, self.__class__)
 
     def __hash__(self) -> int:
+        """Method implementation."""
         return hash(type(self).__name__)
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return True
 
     def __len__(self) -> int:
+        """Method implementation."""
         return self.usage_count
 
     def __int__(self) -> int:
+        """Method implementation."""
         return self.usage_count
 
     def __float__(self) -> float:
+        """Method implementation."""
         return float(self.usage_count)
 
     def __lt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, self.__class__):
             return NotImplemented
         return self.usage_count < other.usage_count
 
     def __le__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self < other
 
     def __contains__(self, text: str) -> bool:
+        """Method implementation."""
         return text.lower() in self.name.lower()
 
     @property
     def has_usage(self) -> bool:
+        """Method implementation."""
         return self.__usage_count > 0
 
     @property
     def name_upper(self) -> str:
+        """Method implementation."""
         return self.name.upper()
 
     @property
     def name_capitalized(self) -> str:
+        """Method implementation."""
         return self.name.capitalize()
 
     def __getitem__(self, index: int) -> str:
+        """Method implementation."""
         return self.name[index]
 
     def __gt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, BaseModeStrategy):
             return NotImplemented
         return self.__usage_count > other.__usage_count
 
     def __ge__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self > other
 
 
@@ -119,13 +138,16 @@ class FullModeStrategy(BaseModeStrategy):
 
     @property
     def name(self) -> str:
+        """Method implementation."""
         return "full"
 
     def get_mode(self) -> ParserMode:
+        """Method implementation."""
         self._increment_usage()
         return ParserMode.FULL
 
     def __call__(self) -> ParserMode:
+        """Method implementation."""
         return self.get_mode()
 
 
@@ -133,13 +155,16 @@ class TocModeStrategy(BaseModeStrategy):
 
     @property
     def name(self) -> str:
+        """Method implementation."""
         return "toc"
 
     def get_mode(self) -> ParserMode:
+        """Method implementation."""
         self._increment_usage()
         return ParserMode.TOC
 
     def __call__(self) -> ParserMode:
+        """Method implementation."""
         return self.get_mode()
 
 
@@ -147,13 +172,16 @@ class ContentModeStrategy(BaseModeStrategy):
 
     @property
     def name(self) -> str:
+        """Method implementation."""
         return "content"
 
     def get_mode(self) -> ParserMode:
+        """Method implementation."""
         self._increment_usage()
         return ParserMode.CONTENT
 
     def __call__(self) -> ParserMode:
+        """Method implementation."""
         return self.get_mode()
 
 
@@ -173,14 +201,17 @@ class ModeStrategyFactory(FactoryInterface[BaseModeStrategy]):
     }
 
     def __init__(self) -> None:
+        """Method implementation."""
         self.__creation_count = 0
 
     @property
     def creation_count(self) -> int:
+        """Method implementation."""
         return self.__creation_count
 
     @protected_access
     def _increment_creation(self) -> None:
+        """Method implementation."""
         self.__creation_count += 1
 
     # ---------- Factory Logic ----------
@@ -197,65 +228,84 @@ class ModeStrategyFactory(FactoryInterface[BaseModeStrategy]):
     # ---------- Polymorphism ----------
 
     def __str__(self) -> str:
+        """Method implementation."""
         return "ModeStrategyFactory"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return f"ModeStrategyFactory(created={self.creation_count})"
 
     def __eq__(self, other: object) -> bool:
+        """Method implementation."""
         return isinstance(other, ModeStrategyFactory)
 
     def __hash__(self) -> int:
+        """Method implementation."""
         return hash(type(self).__name__)
 
     def __len__(self) -> int:
+        """Method implementation."""
         return self.__creation_count
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return True
 
     def __call__(self, mode_str: str) -> BaseModeStrategy:
+        """Method implementation."""
         return self.create(mode_str)
 
     def __getitem__(self, mode_str: str) -> type[BaseModeStrategy]:
+        """Method implementation."""
         return self._mode_map.get(mode_str.lower(), self._default_strategy)
 
     def __contains__(self, mode_str: str) -> bool:
+        """Method implementation."""
         return mode_str.lower() in self._mode_map
 
     def __iter__(self):
+        """Method implementation."""
         return iter(self._mode_map.keys())
 
     def __gt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, ModeStrategyFactory):
             return NotImplemented
         return self.__creation_count > other.__creation_count
 
     def __ge__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self > other
 
     def __int__(self) -> int:
+        """Method implementation."""
         return self.__creation_count
 
     def __float__(self) -> float:
+        """Method implementation."""
         return float(self.__creation_count)
 
     def __lt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, ModeStrategyFactory):
             return NotImplemented
         return self.__creation_count < other.__creation_count
 
     def __le__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self < other
 
     @property
     def has_creations(self) -> bool:
+        """Method implementation."""
         return self.__creation_count > 0
 
     @property
     def supported_modes(self) -> list[str]:
+        """Method implementation."""
         return list(self._mode_map.keys())
 
     @property
     def mode_count(self) -> int:
+        """Method implementation."""
         return len(self._mode_map)

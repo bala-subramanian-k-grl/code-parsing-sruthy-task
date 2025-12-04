@@ -21,50 +21,64 @@ class BaseValidator(ABC):
     @property
     @abstractmethod
     def validator_type(self) -> str:
+        """Method implementation."""
         raise NotImplementedError
 
     @abstractmethod
     def validate(self, data: ParserResult) -> ValidationResult:
+        """Method implementation."""
         raise NotImplementedError
 
     # ---------- Polymorphic Helper ----------
     def validator_name(self) -> str:
+        """Method implementation."""
         return self.__class__.__name__
 
     # ---------- Magic Methods ----------
     def __str__(self) -> str:
+        """Method implementation."""
         return f"{self.validator_type}"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}()"
 
     def __eq__(self, other: object) -> bool:
+        """Method implementation."""
         return isinstance(other, self.__class__)
 
     def __hash__(self) -> int:
+        """Method implementation."""
         return hash(type(self).__name__)
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return True
 
     def __len__(self) -> int:
+        """Method implementation."""
         return 1
 
     def __lt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, BaseValidator):
             return NotImplemented
         return self.validator_type < other.validator_type
 
     def __le__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self < other
 
     def __contains__(self, item: str) -> bool:
+        """Method implementation."""
         return item in self.validator_type
 
     def __int__(self) -> int:
+        """Method implementation."""
         return 1
 
     def __float__(self) -> float:
+        """Method implementation."""
         return 1.0
 
 
@@ -76,19 +90,23 @@ class ResultValidator(BaseValidator):
     """Validates parser results for TOC OR Content availability."""
 
     def __init__(self) -> None:
+        """Method implementation."""
         self.__count = 0  # encapsulated counter
 
     # ---------- Polymorphism ----------
     @property
     def validator_type(self) -> str:
+        """Method implementation."""
         return "ResultValidator"
 
     # ---------- Encapsulated Properties ----------
     @property
     def validation_count(self) -> int:
+        """Method implementation."""
         return self.__count
 
     def _increment(self) -> None:
+        """Method implementation."""
         self.__count += 1
 
     # ============================================================
@@ -165,26 +183,33 @@ class ResultValidator(BaseValidator):
 
     # ---------- Magic Methods ----------
     def __str__(self) -> str:
+        """Method implementation."""
         return "ResultValidator(requires_toc_or_content)"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return "ResultValidator()"
 
     def __len__(self) -> int:
+        """Method implementation."""
         return self.__count
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return True
 
     def __lt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, ResultValidator):
             return NotImplemented
         return self.__count < other.__count
 
     def __int__(self) -> int:
+        """Method implementation."""
         return self.__count
 
     def __float__(self) -> float:
+        """Method implementation."""
         return float(self.__count)
 
     def __call__(self, data: ParserResult) -> ValidationResult:
@@ -204,15 +229,18 @@ class StrictValidator(ResultValidator):
     """Strict validator requiring BOTH TOC AND Content."""
 
     def __init__(self) -> None:
+        """Method implementation."""
         super().__init__()
         self.__strict = True
 
     @property
     def validator_type(self) -> str:
+        """Method implementation."""
         return "StrictValidator"
 
     @property
     def strict_mode(self) -> bool:
+        """Method implementation."""
         return self.__strict
 
     # ------------ Override validate() (Polymorphism) ------------
@@ -234,19 +262,25 @@ class StrictValidator(ResultValidator):
 
     # ---------- Magic Methods ----------
     def __str__(self) -> str:
+        """Method implementation."""
         return "StrictValidator(requires_both_toc_and_content)"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return "StrictValidator()"
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return self.__strict
 
     def __contains__(self, item: str) -> bool:
+        """Method implementation."""
         return item in "strict"
 
     def __le__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self < other
 
     def __getitem__(self, index: int) -> str:
+        """Method implementation."""
         return "strict"[index]

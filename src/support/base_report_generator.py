@@ -29,6 +29,7 @@ class BaseReportGenerator(IReportGenerator, ABC):
     # INIT (State Encapsulation)
     # ---------------------------------------------------------
     def __init__(self) -> None:
+        """Method implementation."""
         self.__generation_count = 0
         self.__last_output_path: Path | None = None
         self.__last_success = False
@@ -41,42 +42,52 @@ class BaseReportGenerator(IReportGenerator, ABC):
     # ---------------------------------------------------------
     @property
     def generation_count(self) -> int:
+        """Method implementation."""
         return self.__generation_count
 
     @property
     def last_output_path(self) -> Path | None:
+        """Method implementation."""
         return self.__last_output_path
 
     @property
     def last_success(self) -> bool:
+        """Method implementation."""
         return self.__last_success
 
     @property
     def error_count(self) -> int:
+        """Method implementation."""
         return self.__error_count
 
     @property
     def total_bytes_written(self) -> int:
+        """Method implementation."""
         return self.__total_bytes_written
 
     @property
     def is_initialized(self) -> bool:
+        """Method implementation."""
         return self.__initialized
 
     @property
     def has_generations(self) -> bool:
+        """Method implementation."""
         return self.__generation_count > 0
 
     @property
     def has_errors(self) -> bool:
+        """Method implementation."""
         return self.__error_count > 0
 
     @property
     def has_successes(self) -> bool:
+        """Method implementation."""
         return self.__last_success
 
     @property
     def success_rate(self) -> float:
+        """Method implementation."""
         if self.__generation_count > 0:
             return (
                 (self.__generation_count - self.__error_count)
@@ -86,12 +97,14 @@ class BaseReportGenerator(IReportGenerator, ABC):
 
     @property
     def error_rate(self) -> float:
+        """Method implementation."""
         if self.__generation_count > 0:
             return self.__error_count / self.__generation_count
         return 0.0
 
     @property
     def avg_bytes_per_generation(self) -> float:
+        """Method implementation."""
         if self.__generation_count > 0:
             return (
                 self.__total_bytes_written / self.__generation_count
@@ -100,10 +113,12 @@ class BaseReportGenerator(IReportGenerator, ABC):
 
     @property
     def total_kb_written(self) -> float:
+        """Method implementation."""
         return self.__total_bytes_written / 1024
 
     @property
     def total_mb_written(self) -> float:
+        """Method implementation."""
         return self.__total_bytes_written / (1024 * 1024)
 
     # ---------------------------------------------------------
@@ -183,10 +198,12 @@ class BaseReportGenerator(IReportGenerator, ABC):
     # ---------------------------------------------------------
     @abstractmethod
     def _validate_result(self, result: ParserResult) -> None:
+        """Method implementation."""
         pass
 
     @abstractmethod
     def _format_data(self, result: ParserResult) -> Any:
+        """Method implementation."""
         pass
 
     @abstractmethod
@@ -197,24 +214,31 @@ class BaseReportGenerator(IReportGenerator, ABC):
     # Magic Methods (clean + helpful)
     # ---------------------------------------------------------
     def __str__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}(ext={self.get_file_extension()})"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}()"
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return self.__initialized
 
     def __int__(self) -> int:
+        """Method implementation."""
         return self.__generation_count
 
     def __float__(self) -> float:
+        """Method implementation."""
         return float(self.__generation_count)
 
     def __eq__(self, other: object) -> bool:
+        """Method implementation."""
         return isinstance(other, self.__class__)
 
     def __hash__(self) -> int:
+        """Method implementation."""
         return hash(type(self).__name__)
 
     def __call__(self, result: ParserResult, path: Path | str) -> None:
@@ -222,35 +246,45 @@ class BaseReportGenerator(IReportGenerator, ABC):
         return self.generate(result, path)
 
     def __len__(self) -> int:
+        """Method implementation."""
         return self.__generation_count
 
     def __lt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, BaseReportGenerator):
             return NotImplemented
         return self.__generation_count < other.__generation_count
 
     def __le__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self < other
 
     def __contains__(self, item: str) -> bool:
+        """Method implementation."""
         return item in self.report_type
 
     def __getitem__(self, index: int) -> str:
+        """Method implementation."""
         return self.report_type[index]
 
     def __iter__(self):
+        """Method implementation."""
         return iter([self.report_type, self.get_file_extension()])
 
     def __gt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, BaseReportGenerator):
             return NotImplemented
         return self.__generation_count > other.__generation_count
 
     def __ge__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self > other
 
     def __add__(self, other: int) -> int:
+        """Method implementation."""
         return self.__generation_count + other
 
     def __sub__(self, other: int) -> int:
+        """Method implementation."""
         return self.__generation_count - other

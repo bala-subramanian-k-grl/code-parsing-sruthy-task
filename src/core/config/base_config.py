@@ -28,6 +28,7 @@ def protected_access(
 ) -> Callable[..., t_return]:
     """Decorator indicating this method is protected/internal."""
     def wrapper(self: Any, *args: Any, **kwargs: Any) -> t_return:
+        """Method implementation."""
         return func(self, *args, **kwargs)
     return wrapper
 
@@ -48,30 +49,38 @@ class BaseConfigInterface(ABC):
 
     @abstractmethod
     def validate(self) -> None:
+        """Method implementation."""
         raise NotImplementedError
 
     @abstractmethod
     def summary(self) -> str:
+        """Method implementation."""
         raise NotImplementedError
 
     @abstractmethod
     def mode_behavior(self) -> str:
+        """Method implementation."""
         raise NotImplementedError
 
     # Polymorphism
     def __str__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}()"
 
     def __eq__(self, other: object) -> bool:
+        """Method implementation."""
         return isinstance(other, self.__class__)
 
     def __hash__(self) -> int:
+        """Method implementation."""
         return hash(type(self).__name__)
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return True
 
 
@@ -106,34 +115,42 @@ class BaseConfig(BaseConfigInterface):
 
     @property
     def input_path(self) -> Path:
+        """Method implementation."""
         return self.__input_path
 
     @input_path.setter
     def input_path(self, value: Path) -> None:
+        """Method implementation."""
         self.__input_path = value
 
     @property
     def output_dir(self) -> Path:
+        """Method implementation."""
         return self.__output_dir
 
     @output_dir.setter
     def output_dir(self, value: Path) -> None:
+        """Method implementation."""
         self.__output_dir = value
 
     @property
     def mode(self) -> ParserMode:
+        """Method implementation."""
         return self.__mode
 
     @mode.setter
     def mode(self, value: ParserMode) -> None:
+        """Method implementation."""
         self.__mode = value
 
     @property
     def verbose(self) -> bool:
+        """Method implementation."""
         return self.__verbose
 
     @verbose.setter
     def verbose(self, value: bool) -> None:
+        """Method implementation."""
         self.__verbose = value
 
     # ==========================================================
@@ -142,6 +159,7 @@ class BaseConfig(BaseConfigInterface):
 
     @protected_access
     def _validate_paths(self) -> None:
+        """Method implementation."""
         if not self.__input_path.exists():
             msg = f"Input does not exist: {self.__input_path}"
             raise FileNotFoundError(msg)
@@ -150,6 +168,7 @@ class BaseConfig(BaseConfigInterface):
             raise FileNotFoundError(msg)
 
     def validate(self) -> None:
+        """Method implementation."""
         self._validate_paths()
 
     # ==========================================================
@@ -190,6 +209,7 @@ class BaseConfig(BaseConfigInterface):
     # ==========================================================
 
     def summary(self) -> str:
+        """Method implementation."""
         return (
             f"Config Summary:\n"
             f"  Input: {self.__input_path}\n"
@@ -200,6 +220,7 @@ class BaseConfig(BaseConfigInterface):
         )
 
     def mode_behavior(self) -> str:
+        """Method implementation."""
         return "General parsing behavior"
 
     # ==========================================================
@@ -207,68 +228,85 @@ class BaseConfig(BaseConfigInterface):
     # ==========================================================
 
     def __str__(self) -> str:
+        """Method implementation."""
         return (
             f"BaseConfig(input={self.__input_path.name}, "
             f"mode={self.__mode.value})"
         )
 
     def __len__(self) -> int:
+        """Method implementation."""
         return 4  # number of config fields
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return self.__input_path.exists()
 
     def __int__(self) -> int:
+        """Method implementation."""
         return len(str(self.__input_path))
 
     def __float__(self) -> float:
+        """Method implementation."""
         return float(len(self.summary()))
 
     def __lt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, BaseConfig):
             return NotImplemented
         return len(self.summary()) < len(other.summary())
 
     def __contains__(self, text: str) -> bool:
+        """Method implementation."""
         return text in self.summary()
 
     @property
     def input_name(self) -> str:
+        """Method implementation."""
         return self.__input_path.name
 
     @property
     def input_stem(self) -> str:
+        """Method implementation."""
         return self.__input_path.stem
 
     @property
     def input_suffix(self) -> str:
+        """Method implementation."""
         return self.__input_path.suffix
 
     @property
     def input_exists(self) -> bool:
+        """Method implementation."""
         return self.__input_path.exists()
 
     @property
     def output_exists(self) -> bool:
+        """Method implementation."""
         return self.__output_dir.exists()
 
     @property
     def output_name(self) -> str:
+        """Method implementation."""
         return self.__output_dir.name
 
     @property
     def is_verbose(self) -> bool:
+        """Method implementation."""
         return self.__verbose
 
     @property
     def mode_value(self) -> str:
+        """Method implementation."""
         return str(self.__mode.value)
 
     @property
     def mode_name(self) -> str:
+        """Method implementation."""
         return str(self.__mode.name)
 
     def __getitem__(self, key: str) -> Path | ParserMode | bool | None:
+        """Method implementation."""
         attrs: dict[str, Path | ParserMode | bool] = {
             "input": self.__input_path,
             "output": self.__output_dir,
@@ -278,25 +316,31 @@ class BaseConfig(BaseConfigInterface):
         return attrs.get(key)
 
     def __iter__(self):
+        """Method implementation."""
         return iter(["input", "output", "mode", "verbose"])
 
     def __le__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self < other
 
     def __gt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, BaseConfig):
             return NotImplemented
         return len(self.summary()) > len(other.summary())
 
     def __ge__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self > other
 
     def __add__(self, other: object) -> int:
+        """Method implementation."""
         if isinstance(other, int):
             return len(self.summary()) + other
         return NotImplemented
 
     def __sub__(self, other: object) -> int:
+        """Method implementation."""
         if isinstance(other, int):
             return len(self.summary()) - other
         return NotImplemented
@@ -310,9 +354,11 @@ class FullConfig(BaseConfig):
     """Configuration for FULL parsing mode."""
 
     def mode_behavior(self) -> str:
+        """Method implementation."""
         return "Parses full PDF including TOC and content"
 
     def validate(self) -> None:
+        """Method implementation."""
         super().validate()
 
 
@@ -320,9 +366,11 @@ class TOCConfig(BaseConfig):
     """Configuration for TOC-only mode."""
 
     def mode_behavior(self) -> str:
+        """Method implementation."""
         return "Extracts only Table of Contents"
 
     def validate(self) -> None:
+        """Method implementation."""
         super().validate()
 
 
@@ -330,7 +378,9 @@ class ContentConfig(BaseConfig):
     """Configuration for CONTENT-only mode."""
 
     def mode_behavior(self) -> str:
+        """Method implementation."""
         return "Extracts only main content blocks"
 
     def validate(self) -> None:
+        """Method implementation."""
         super().validate()

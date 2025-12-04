@@ -41,15 +41,19 @@ class BaseModel(ABC):
 
     # -------- Meaningful magic methods --------
     def __str__(self) -> str:
+        """Method implementation."""
         return f"{self.item_type()}: {self.summary()}"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}()"
 
     def __eq__(self, other: object) -> bool:
+        """Method implementation."""
         return isinstance(other, self.__class__)
 
     def __hash__(self) -> int:
+        """Method implementation."""
         return hash(self.__class__.__name__)
 
 
@@ -68,28 +72,34 @@ class TOCEntry(BaseModel):
 
     # -------- Polymorphic behavior --------
     def validate(self) -> None:
+        """Method implementation."""
         if not self.section_id:
             raise ValueError("section_id cannot be empty")
         if self.page < 0:
             raise ValueError("page must be >= 0")
 
     def summary(self) -> str:
+        """Method implementation."""
         return f"{self.title} (page={self.page}, level={self.level})"
 
     def item_type(self) -> str:
+        """Method implementation."""
         return "TOCEntry"
 
     # -------- Encapsulated helpers --------
     @property
     def is_top_level(self) -> bool:
+        """Method implementation."""
         return self.level == 1
 
     @property
     def has_parent(self) -> bool:
+        """Method implementation."""
         return self.parent_id is not None
 
     # -------- Minimal magic methods --------
     def __lt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, TOCEntry):
             return NotImplemented
         return self.page < other.page
@@ -115,33 +125,40 @@ class ContentItem(BaseModel):
 
     # -------- Polymorphic behavior --------
     def validate(self) -> None:
+        """Method implementation."""
         if not self.title:
             raise ValueError("title cannot be empty")
         if self.page < 0:
             raise ValueError("page must be >= 0")
 
     def summary(self) -> str:
+        """Method implementation."""
         preview = self.content[:50] + ("..." if len(self.content) > 50 else "")
         return f"{self.title} → {preview}"
 
     def item_type(self) -> str:
+        """Method implementation."""
         return "ContentItem"
 
     # -------- Encapsulated helpers --------
     @property
     def word_count(self) -> int:
+        """Method implementation."""
         return len(self.content.split())
 
     @property
     def is_empty(self) -> bool:
+        """Method implementation."""
         return not self.content.strip()
 
     @property
     def has_bbox(self) -> bool:
+        """Method implementation."""
         return bool(self.bbox)
 
     # -------- Minimal magic method --------
     def __lt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, ContentItem):
             return NotImplemented
         return self.page < other.page
@@ -160,10 +177,12 @@ class Metadata(BaseModel):
     content_types: dict[str, int] = field(default_factory=dict)
 
     def validate(self) -> None:
+        """Method implementation."""
         if self.total_pages < 0:
             raise ValueError("total_pages must be >= 0")
 
     def summary(self) -> str:
+        """Method implementation."""
         return (
             f"pages={self.total_pages}, "
             f"toc={self.total_toc_entries}, "
@@ -171,13 +190,16 @@ class Metadata(BaseModel):
         )
 
     def item_type(self) -> str:
+        """Method implementation."""
         return "Metadata"
 
     @property
     def total_items(self) -> int:
+        """Method implementation."""
         return self.total_toc_entries + self.total_content_items
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return self.total_pages > 0
 
 
@@ -192,6 +214,7 @@ class ParserResult(BaseModel):
     metadata: Metadata = field(default_factory=Metadata)
 
     def validate(self) -> None:
+        """Method implementation."""
         for e in self.toc_entries:
             e.validate()
         for c in self.content_items:
@@ -199,24 +222,30 @@ class ParserResult(BaseModel):
         self.metadata.validate()
 
     def summary(self) -> str:
+        """Method implementation."""
         return (
             f"{len(self.toc_entries)} TOC entries, "
             f"{len(self.content_items)} content items"
         )
 
     def item_type(self) -> str:
+        """Method implementation."""
         return "ParserResult"
 
     @property
     def is_empty(self) -> bool:
+        """Method implementation."""
         return not self.toc_entries and not self.content_items
 
     def __len__(self) -> int:
+        """Method implementation."""
         return len(self.toc_entries) + len(self.content_items)
 
     def __iter__(self) -> Iterator[TOCEntry | ContentItem]:
+        """Method implementation."""
         yield from self.toc_entries
         yield from self.content_items
 
     def __contains__(self, item: Any) -> bool:
+        """Method implementation."""
         return item in self.toc_entries or item in self.content_items

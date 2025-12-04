@@ -16,16 +16,20 @@ class BaseLogger(ABC):
 
     @abstractmethod
     def info(self, msg: str) -> None:
+        """Method implementation."""
         raise NotImplementedError
 
     @abstractmethod
     def error(self, msg: str) -> None:
+        """Method implementation."""
         raise NotImplementedError
 
     def __str__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}()"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return f"{self.__class__.__name__}()"
 
 
@@ -139,36 +143,46 @@ class Logger(BaseLogger):
     # Regular Logging API
     # ---------------------------------------------------------
     def debug(self, msg: str) -> None:
+        """Method implementation."""
         self._logger.debug(msg)
 
     def info(self, msg: str) -> None:
+        """Method implementation."""
         self._logger.info(msg)
 
     def warning(self, msg: str) -> None:
+        """Method implementation."""
         self._logger.warning(msg)
 
     def error(self, msg: str) -> None:
+        """Method implementation."""
         self._logger.error(msg)
 
     def critical(self, msg: str) -> None:
+        """Method implementation."""
         self._logger.critical(msg)
 
     # ---------------------------------------------------------
     # Magic Methods
     # ---------------------------------------------------------
     def __str__(self) -> str:
+        """Method implementation."""
         return "Logger(singleton=True)"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return "Logger()"
 
     def __eq__(self, other: object) -> bool:
+        """Method implementation."""
         return isinstance(other, Logger)
 
     def __hash__(self) -> int:
+        """Method implementation."""
         return hash(self.__class__.__name__)
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return True
 
 

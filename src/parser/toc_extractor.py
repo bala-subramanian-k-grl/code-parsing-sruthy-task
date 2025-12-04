@@ -20,6 +20,7 @@ class TOCExtractor(ExtractorInterface):
     # INIT (ENCAPSULATION)
     # ----------------------------------------------------------------------
     def __init__(self, file_path: Path) -> None:
+        """Method implementation."""
         self.__file_path = file_path
         self.__extraction_count = 0
 
@@ -28,67 +29,82 @@ class TOCExtractor(ExtractorInterface):
     # ----------------------------------------------------------------------
     @property
     def file_path(self) -> Path:
+        """Method implementation."""
         return self.__file_path
 
     @property
     def file_exists(self) -> bool:
+        """Method implementation."""
         return self.__file_path.exists()
 
     @property
     def file_suffix(self) -> str:
+        """Method implementation."""
         return self.__file_path.suffix.lower()
 
     @property
     def extractor_type(self) -> str:
+        """Method implementation."""
         return "TOC"
 
     @property
     def extraction_count(self) -> int:
+        """Method implementation."""
         return self.__extraction_count
 
     @property
     def has_extractions(self) -> bool:
+        """Method implementation."""
         return self.__extraction_count > 0
 
     @property
     def file_name(self) -> str:
+        """Method implementation."""
         return self.file_path.name
 
     @property
     def file_stem(self) -> str:
+        """Method implementation."""
         return self.file_path.stem
 
     @property
     def file_parent(self) -> str:
+        """Method implementation."""
         return str(self.file_path.parent)
 
     @property
     def file_size_kb(self) -> float:
+        """Method implementation."""
         if self.file_exists:
             return self.file_path.stat().st_size / 1024
         return 0.0
 
     @property
     def file_size_mb(self) -> float:
+        """Method implementation."""
         if self.file_exists:
             return self.file_path.stat().st_size / (1024 * 1024)
         return 0.0
 
     @property
     def is_pdf(self) -> bool:
+        """Method implementation."""
         return self.file_suffix == ".pdf"
 
     @property
     def file_absolute_path(self) -> str:
+        """Method implementation."""
         return str(self.file_path.absolute())
 
     # ----------------------------------------------------------------------
     # Protected Validation Methods
     # ----------------------------------------------------------------------
     def _supports(self, extension: str) -> bool:
+        """Method implementation."""
         return extension.lower() == ".pdf"
 
     def _validate(self) -> bool:
+        """Method implementation."""
         return self.file_exists and self.file_suffix == ".pdf"
 
     # ----------------------------------------------------------------------
@@ -121,6 +137,7 @@ class TOCExtractor(ExtractorInterface):
             raise ValueError(f"Failed to read TOC: {e}") from e
 
     def _build_entries(self, toc: list[Any]) -> list[TOCEntry]:
+        """Method implementation."""
         parent_stack: list[tuple[int, str]] = []
         entries: list[TOCEntry] = []
 
@@ -154,6 +171,7 @@ class TOCExtractor(ExtractorInterface):
     # Protected helper functions
     # ----------------------------------------------------------------------
     def _extract_section_id(self, title: str, idx: int) -> str:
+        """Method implementation."""
         parts = title.split()
         first = parts[0].rstrip(".") if parts else ""
         if self._is_section_number(first):
@@ -161,6 +179,7 @@ class TOCExtractor(ExtractorInterface):
         return f"section_{idx}"
 
     def _is_section_number(self, text: str) -> bool:
+        """Method implementation."""
         return all(p.isdigit() for p in text.split(".") if p)
 
     def _get_parent_id(
@@ -172,57 +191,72 @@ class TOCExtractor(ExtractorInterface):
         return None
 
     def _build_full_path(self, title: str) -> str:
+        """Method implementation."""
         return title
 
     # ----------------------------------------------------------------------
     # Magic Methods
     # ----------------------------------------------------------------------
     def __str__(self) -> str:
+        """Method implementation."""
         return f"TOCExtractor(file={self.file_path.name})"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return f"TOCExtractor(file_path={self.file_path!r})"
 
     def __eq__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, TOCExtractor):
             return NotImplemented
         return self.file_path == other.file_path
 
     def __hash__(self) -> int:
+        """Method implementation."""
         return hash((type(self).__name__, self.file_path))
 
     def __len__(self) -> int:
+        """Method implementation."""
         return self.extraction_count
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return self.file_exists
 
     def __contains__(self, text: str) -> bool:
+        """Method implementation."""
         return text.lower() in str(self.file_path).lower()
 
     def __int__(self) -> int:
+        """Method implementation."""
         return self.extraction_count
 
     def __float__(self) -> float:
+        """Method implementation."""
         return float(self.extraction_count)
 
     def __getitem__(self, index: int) -> str:
+        """Method implementation."""
         return str(self.file_path)[index]
 
     def __lt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, TOCExtractor):
             return NotImplemented
         return self.file_path < other.file_path
 
     def __le__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self < other
 
     def __gt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, TOCExtractor):
             return NotImplemented
         return self.file_path > other.file_path
 
     def __ge__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self > other
 
     def __enter__(self) -> "TOCExtractor":

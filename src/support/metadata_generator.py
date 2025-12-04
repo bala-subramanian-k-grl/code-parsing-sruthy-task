@@ -22,6 +22,7 @@ class MetadataGenerator(BaseReportGenerator):
     """Generate metadata JSONL using full OOP and extensibility."""
 
     def __init__(self, config: ConfigLoader | None = None) -> None:
+        """Method implementation."""
         super().__init__()
         self.__config = config or ConfigLoader()
 
@@ -30,10 +31,12 @@ class MetadataGenerator(BaseReportGenerator):
     # ---------------------------------------------------------
     @property
     def report_type(self) -> str:
+        """Method implementation."""
         return "Metadata"
 
     @property
     def output_extension(self) -> str:
+        """Method implementation."""
         return ".jsonl"
 
     def get_file_extension(self) -> str:
@@ -50,6 +53,7 @@ class MetadataGenerator(BaseReportGenerator):
             raise ValueError(msg)
 
     def _extract_pages(self, result: ParserResult) -> list[int]:
+        """Method implementation."""
         return [item.page for item in result.content_items]
 
     def _count_toc_levels(self, result: ParserResult) -> dict[str, int]:
@@ -95,6 +99,7 @@ class MetadataGenerator(BaseReportGenerator):
     # FORMAT DATA (Template Method Hook)
     # ---------------------------------------------------------
     def _format_data(self, result: ParserResult) -> dict[str, Any]:
+        """Method implementation."""
         pages = self._extract_pages(result)
 
         metadata = Metadata(
@@ -157,6 +162,7 @@ class MetadataGenerator(BaseReportGenerator):
     # MUST RETURN BYTES WRITTEN
     # ---------------------------------------------------------
     def _write_to_file(self, data: dict[str, Any], path: Path) -> int:
+        """Method implementation."""
         serialized = self.serialize(data)
 
         try:
@@ -172,44 +178,57 @@ class MetadataGenerator(BaseReportGenerator):
     # Magic Methods
     # ---------------------------------------------------------
     def __str__(self) -> str:
+        """Method implementation."""
         return "MetadataGenerator(.jsonl)"
 
     def __repr__(self) -> str:
+        """Method implementation."""
         return "MetadataGenerator()"
 
     def __eq__(self, other: object) -> bool:
+        """Method implementation."""
         return isinstance(other, MetadataGenerator)
 
     def __hash__(self) -> int:
+        """Method implementation."""
         return hash(self.__class__.__name__)
 
     def __bool__(self) -> bool:
+        """Method implementation."""
         return True
 
     def __len__(self) -> int:
+        """Method implementation."""
         return 1
 
     def __lt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, MetadataGenerator):
             return NotImplemented
         return self.report_type < other.report_type
 
     def __le__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self < other
 
     def __contains__(self, item: str) -> bool:
+        """Method implementation."""
         return item in self.report_type
 
     def __int__(self) -> int:
+        """Method implementation."""
         return 1
 
     def __float__(self) -> float:
+        """Method implementation."""
         return 1.0
 
     def __gt__(self, other: object) -> bool:
+        """Method implementation."""
         if not isinstance(other, MetadataGenerator):
             return NotImplemented
         return self.report_type > other.report_type
 
     def __ge__(self, other: object) -> bool:
+        """Method implementation."""
         return self == other or self > other
