@@ -225,7 +225,7 @@ class ResultValidator(BaseValidator, ABC):
 # STRICT VALIDATOR (OVERRIDING)
 # ================================================================
 
-class StrictValidator(ResultValidator):
+class StrictValidator(ResultValidator, ABC):
     """Strict validator requiring BOTH TOC AND Content."""
 
     def __init__(self) -> None:

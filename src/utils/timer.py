@@ -33,7 +33,7 @@ class BaseTimer(ABC):
         return f"{self.__class__.__name__}()"
 
 
-class Timer(BaseTimer):
+class Timer(BaseTimer, ABC):
     """Context manager for timing operations with extendable behaviors."""
 
     def __init__(self, name: str, logger: Logger | None = None) -> None:

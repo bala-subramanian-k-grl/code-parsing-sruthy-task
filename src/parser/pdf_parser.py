@@ -13,7 +13,7 @@ from src.parser.base_parser import BaseParser
 from src.parser.toc_extractor import TOCExtractor
 
 
-class PDFParser(BaseParser):
+class PDFParser(BaseParser, ABC):
     """Concrete PDF parser (TOC + Content Extraction)."""
 
     # ---------------------------------------------------------

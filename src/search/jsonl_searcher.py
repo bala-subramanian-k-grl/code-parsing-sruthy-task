@@ -35,7 +35,7 @@ class BaseSearcher(ABC):
         return f"{self.__class__.__name__}()"
 
 
-class JSONLSearcher(BaseSearcher):
+class JSONLSearcher(BaseSearcher, ABC):
     """Search JSONL files for keywords."""
 
     def __init__(self, file_path: Path) -> None:

@@ -13,7 +13,7 @@ from src.core.config.models import ParserResult
 from src.support.base_report_generator import BaseReportGenerator
 
 
-class JSONReportGenerator(BaseReportGenerator):
+class JSONReportGenerator(BaseReportGenerator, ABC):
     """Generate structured JSON summary report."""
 
     # ---------------------------------------------------------

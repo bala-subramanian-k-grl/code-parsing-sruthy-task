@@ -19,7 +19,7 @@ from src.extractors.extractor_interface import ExtractorInterface
 from src.extractors.text_extractor import TextExtractor
 
 
-class ContentExtractor(ExtractorInterface):
+class ContentExtractor(ExtractorInterface, ABC):
     """Extract structured content items from PDF documents."""
 
     # ==========================================================

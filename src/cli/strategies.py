@@ -134,7 +134,7 @@ class BaseModeStrategy(ABC):
 # Concrete Strategies
 # =====================================================
 
-class FullModeStrategy(BaseModeStrategy):
+class FullModeStrategy(BaseModeStrategy, ABC):
 
     @property
     def name(self) -> str:
@@ -151,7 +151,7 @@ class FullModeStrategy(BaseModeStrategy):
         return self.get_mode()
 
 
-class TocModeStrategy(BaseModeStrategy):
+class TocModeStrategy(BaseModeStrategy, ABC):
 
     @property
     def name(self) -> str:
@@ -168,7 +168,7 @@ class TocModeStrategy(BaseModeStrategy):
         return self.get_mode()
 
 
-class ContentModeStrategy(BaseModeStrategy):
+class ContentModeStrategy(BaseModeStrategy, ABC):
 
     @property
     def name(self) -> str:
@@ -189,7 +189,7 @@ class ContentModeStrategy(BaseModeStrategy):
 # Factory Class
 # =====================================================
 
-class ModeStrategyFactory(FactoryInterface[BaseModeStrategy]):
+class ModeStrategyFactory(FactoryInterface[BaseModeStrategy], ABC):
     """Factory to create strategies based on a mode string."""
 
     _default_strategy: type[BaseModeStrategy] = FullModeStrategy

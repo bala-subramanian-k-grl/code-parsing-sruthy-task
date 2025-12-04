@@ -94,12 +94,63 @@ class BaseFormatter(ABC):
         return f"{self.__class__.__name__}()"
 
 
+class BaseService(ABC):
+    """Abstract base for service classes."""
+
+    @abstractmethod
+    def execute(self, *args: object, **kwargs: object) -> object:
+        """Execute service operation."""
+        raise NotImplementedError
+
+    def __str__(self) -> str:
+        """Method implementation."""
+        return f"{self.__class__.__name__}()"
+
+    def __repr__(self) -> str:
+        """Method implementation."""
+        return f"{self.__class__.__name__}()"
+
+
+class BaseResolver(ABC):
+    """Abstract base for resolver classes."""
+
+    @abstractmethod
+    def resolve(self, *args: object, **kwargs: object) -> object:
+        """Resolve and return result."""
+        raise NotImplementedError
+
+    def __str__(self) -> str:
+        """Method implementation."""
+        return f"{self.__class__.__name__}()"
+
+    def __repr__(self) -> str:
+        """Method implementation."""
+        return f"{self.__class__.__name__}()"
+
+
+class BaseLogger(ABC):
+    """Abstract base for logger classes."""
+
+    @abstractmethod
+    def log(self, *args: object, **kwargs: object) -> None:
+        """Log information."""
+        raise NotImplementedError
+
+    def __str__(self) -> str:
+        """Method implementation."""
+        return f"{self.__class__.__name__}()"
+
+    def __repr__(self) -> str:
+        """Method implementation."""
+        return f"{self.__class__.__name__}()"
+
+
 # ======================================================================
 # VALIDATORS & ARGUMENT SERVICES
 # ======================================================================
 
 
-class ArgumentValidator(BaseValidator):
+class ArgumentValidator(BaseValidator, ABC):
     """Helper class for validating CLI input strings (paths, modes)."""
 
     def validate(self, value: str) -> bool:
@@ -115,7 +166,7 @@ class ArgumentValidator(BaseValidator):
         return mode in {"full", "toc", "content"}
 
 
-class ArgumentParserService:
+class ArgumentParserService(BaseService):
     """
     Service that encapsulates argument parsing logic.
 
@@ -153,6 +204,10 @@ class ArgumentParserService:
 
         return parser
 
+    def execute(self, *args: object, **kwargs: object) -> argparse.Namespace:
+        """Execute service - parse arguments."""
+        return self.parse()
+
     def parse(self) -> argparse.Namespace:
         """Parse CLI arguments and apply basic validation."""
         args = self._parser.parse_args()
@@ -175,7 +230,7 @@ class ArgumentParserService:
         return "ArgumentParserService()"
 
 
-class PathValidator(BaseValidator):
+class PathValidator(BaseValidator, ABC):
     """Validates filesystem paths using pathlib.Path."""
 
     def validate(self, value: str) -> bool:
@@ -191,7 +246,7 @@ class PathValidator(BaseValidator):
         return path.is_file()
 
 
-class FilePathResolver:
+class FilePathResolver(BaseResolver):
     """
     Resolves input file path using precedence:
         1. CLI argument
@@ -203,7 +258,7 @@ class FilePathResolver:
         self._config_loader = config_loader
         self._validator = PathValidator()
 
-    def resolve(self, file_arg: str | None) -> Path:
+    def resolve(self, file_arg: str | None = None, *args: object, **kwargs: object) -> Path:  # type: ignore[override]
         """Resolve final file path to use for parsing."""
         file_path_raw = file_arg or self._config_loader.get("input.pdf_path")
         if not file_path_raw:
@@ -233,7 +288,7 @@ class FilePathResolver:
 # ======================================================================
 
 
-class DefaultPipelineExecutor(BasePipelineExecutor):
+class DefaultPipelineExecutor(BasePipelineExecutor, ABC):
     """
     Default implementation of pipeline executor.
 
@@ -260,7 +315,7 @@ class DefaultPipelineExecutor(BasePipelineExecutor):
         )
 
 
-class ResultFormatter(BaseFormatter):
+class ResultFormatter(BaseFormatter, ABC):
     """Formats counts and messages for result logging."""
 
     def format(self, *args: object, **kwargs: object) -> str:
@@ -280,14 +335,14 @@ class ResultFormatter(BaseFormatter):
         return f"Extracted {count} {label}"
 
 
-class ResultLogger:
+class ResultLogger(BaseLogger):
     """Logs high-level statistics of ParserResult."""
 
     def __init__(self) -> None:
         """Method implementation."""
         self._formatter = ResultFormatter()
 
-    def log(self, result: ParserResult) -> None:
+    def log(self, result: ParserResult, *args: object, **kwargs: object) -> None:  # type: ignore[override]
         """Method implementation."""
         logger.info("Extraction completed successfully")
 
@@ -315,7 +370,7 @@ class ResultLogger:
 # ======================================================================
 
 
-class CLIApp(BaseCLI):
+class CLIApp(BaseCLI, ABC):
     """
     Main CLI application.
 

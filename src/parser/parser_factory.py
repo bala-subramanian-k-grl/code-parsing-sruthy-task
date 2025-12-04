@@ -15,7 +15,7 @@ from src.parser.pdf_parser import PDFParser
 from src.parser.text_parser import TextParser
 
 
-class ParserFactory(FactoryInterface[BaseParser]):
+class ParserFactory(FactoryInterface[BaseParser], ABC):
     """Flexible factory for parser creation with full OOP support."""
 
     # ---------------------------------------------------------

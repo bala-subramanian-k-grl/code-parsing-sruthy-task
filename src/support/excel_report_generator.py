@@ -14,7 +14,7 @@ from src.core.config.models import ParserResult
 from src.support.base_report_generator import BaseReportGenerator
 
 
-class ExcelReportGenerator(BaseReportGenerator):
+class ExcelReportGenerator(BaseReportGenerator, ABC):
     """Generate Excel validation report."""
 
     # ---------------------------------------------------------

@@ -10,6 +10,7 @@ Includes:
 
 from __future__ import annotations
 
+from abc import ABC
 from enum import Enum
 from pathlib import Path
 
@@ -162,7 +163,7 @@ class ParserMode(BaseEnum):
 # 3. CONSTANT MANAGER (Encapsulation + Clean API)
 # ==========================================================
 
-class ConstantManager:
+class ConstantManager(ABC):
     """Encapsulated constants with safe access."""
 
     __default_pdf_path = Path("assets/USB_PD_R3_2 V1.1 2024-10.pdf")

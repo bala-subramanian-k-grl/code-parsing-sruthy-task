@@ -13,7 +13,7 @@ from src.writers.writer_interface import WriterInterface
 T = TypeVar("T", TOCEntry, ContentItem)
 
 
-class JSONLWriter(WriterInterface):
+class JSONLWriter(WriterInterface, ABC):
     """Writes TOC and Content to JSONL files with improved OOP principles."""
 
     # -------------------------------------------------------------------------

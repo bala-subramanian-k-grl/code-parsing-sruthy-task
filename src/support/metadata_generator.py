@@ -18,7 +18,7 @@ from src.support.base_report_generator import BaseReportGenerator
 MAX_CONTENT_ITEMS_FOR_KEYWORDS = 100
 
 
-class MetadataGenerator(BaseReportGenerator):
+class MetadataGenerator(BaseReportGenerator, ABC):
     """Generate metadata JSONL using full OOP and extensibility."""
 
     def __init__(self, config: ConfigLoader | None = None) -> None:

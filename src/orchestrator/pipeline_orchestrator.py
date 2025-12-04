@@ -19,7 +19,7 @@ from src.utils.logger import logger
 from src.writers.jsonl_writer import JSONLWriter
 
 
-class PipelineOrchestrator(PipelineInterface):
+class PipelineOrchestrator(PipelineInterface, ABC):
     """Main enterprise pipeline orchestrator."""
 
     # ==========================================================

@@ -351,7 +351,7 @@ class BaseConfig(BaseConfigInterface, ABC):
 # MODE-SPECIFIC CONFIG CLASSES
 # ==========================================================
 
-class FullConfig(BaseConfig):
+class FullConfig(BaseConfig, ABC):
     """Configuration for FULL parsing mode."""
 
     def mode_behavior(self) -> str:
@@ -363,7 +363,7 @@ class FullConfig(BaseConfig):
         super().validate()
 
 
-class TOCConfig(BaseConfig):
+class TOCConfig(BaseConfig, ABC):
     """Configuration for TOC-only mode."""
 
     def mode_behavior(self) -> str:
@@ -375,7 +375,7 @@ class TOCConfig(BaseConfig):
         super().validate()
 
 
-class ContentConfig(BaseConfig):
+class ContentConfig(BaseConfig, ABC):
     """Configuration for CONTENT-only mode."""
 
     def mode_behavior(self) -> str:

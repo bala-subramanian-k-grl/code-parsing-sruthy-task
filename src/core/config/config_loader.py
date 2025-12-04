@@ -184,7 +184,7 @@ class BaseConfigLoader(ABC):
 # YAML LOADER
 # ======================================================
 
-class YAMLConfigLoader(BaseConfigLoader):
+class YAMLConfigLoader(BaseConfigLoader, ABC):
     def load(self) -> dict[str, Any]:
         """Method implementation."""
         self._validate_path()
@@ -201,7 +201,7 @@ class YAMLConfigLoader(BaseConfigLoader):
 # JSON LOADER
 # ======================================================
 
-class JSONConfigLoader(BaseConfigLoader):
+class JSONConfigLoader(BaseConfigLoader, ABC):
     def load(self) -> dict[str, Any]:
         """Method implementation."""
         self._validate_path()
@@ -220,7 +220,7 @@ class JSONConfigLoader(BaseConfigLoader):
 # ENVIRONMENT LOADER
 # ======================================================
 
-class EnvConfigLoader(BaseConfigLoader):
+class EnvConfigLoader(BaseConfigLoader, ABC):
     def load(self) -> dict[str, Any]:
         """Method implementation."""
         self._config = {
@@ -243,7 +243,7 @@ class EnvConfigLoader(BaseConfigLoader):
 # FACTORY PATTERN (Polymorphism + Overloading)
 # ======================================================
 
-class ConfigLoaderFactory(FactoryInterface[BaseConfigLoader]):
+class ConfigLoaderFactory(FactoryInterface[BaseConfigLoader], ABC):
     """Create appropriate config loader based on file extension."""
 
     def create(  # type: ignore[override]
@@ -295,7 +295,7 @@ class ConfigLoaderFactory(FactoryInterface[BaseConfigLoader]):
 # HIGH-LEVEL WRAPPER (Simple Public API)
 # ======================================================
 
-class ConfigLoader(BaseConfigLoader):
+class ConfigLoader(BaseConfigLoader, ABC):
     """User-facing loader (default = YAML)."""
 
     def __init__(self, config_path: Path = Path("application.yml")):

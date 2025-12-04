@@ -9,7 +9,7 @@ from typing import Any
 from src.extractors.extractor_interface import ExtractorInterface
 
 
-class TextExtractor(ExtractorInterface):
+class TextExtractor(ExtractorInterface, ABC):
     """Extract text from PDF blocks and line spans."""
 
     # ==========================================================

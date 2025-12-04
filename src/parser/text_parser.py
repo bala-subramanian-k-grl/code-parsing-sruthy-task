@@ -9,7 +9,7 @@ from src.core.config.models import ContentItem, ParserResult
 from src.parser.base_parser import BaseParser
 
 
-class TextParser(BaseParser):
+class TextParser(BaseParser, ABC):
     """Concrete text parser."""
 
     # ---------------------------------------------------------

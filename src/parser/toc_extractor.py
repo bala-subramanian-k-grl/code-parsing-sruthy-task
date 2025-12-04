@@ -13,7 +13,7 @@ from src.core.config.models import TOCEntry
 from src.extractors.extractor_interface import ExtractorInterface
 
 
-class TOCExtractor(ExtractorInterface):
+class TOCExtractor(ExtractorInterface, ABC):
     """Extract hierarchical Table of Contents from a PDF file."""
 
     # ----------------------------------------------------------------------

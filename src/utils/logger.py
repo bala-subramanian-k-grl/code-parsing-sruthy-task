@@ -33,7 +33,7 @@ class BaseLogger(ABC):
         return f"{self.__class__.__name__}()"
 
 
-class Logger(BaseLogger):
+class Logger(BaseLogger, ABC):
     """Thread-safe Singleton Logger with full OOP design."""
 
     _instance: "Logger | None" = None
