@@ -178,7 +178,9 @@ class BaseConfig(BaseConfigInterface, ABC):
     def with_mode(
         self, mode: str | ParserMode
     ) -> "FullConfig | TOCConfig | ContentConfig":
-        """Create a new config object for a different mode (polymorphic)."""
+        """
+        Create a new config object for a different mode (polymorphic).
+        """
         from src.core.config.base_config import (ContentConfig, FullConfig,
                                                  TOCConfig)
 
@@ -221,7 +223,10 @@ class BaseConfig(BaseConfigInterface, ABC):
 
     @abstractmethod
     def mode_behavior(self) -> str:
-        """Return mode-specific behavior description. Must be implemented by subclasses."""
+        """
+        Return mode-specific behavior description.
+        Must be implemented by subclasses.
+        """
         raise NotImplementedError
 
     # ==========================================================
