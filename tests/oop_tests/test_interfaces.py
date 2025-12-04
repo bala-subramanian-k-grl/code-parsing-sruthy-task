@@ -8,6 +8,7 @@ from typing import Protocol, runtime_checkable
 # Protocol Interfaces (Abstraction)
 # ============================================================
 
+
 @runtime_checkable
 class ReaderProtocol(Protocol):
     """Reader interface protocol specifying read operation."""

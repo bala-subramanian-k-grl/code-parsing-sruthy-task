@@ -134,7 +134,8 @@ class PDFParser(BaseParser):
     def _extract_raw_text(self) -> str:
         """Protected: extract raw text only."""
         try:
-            with fitz.open(str(self.file_path)) as doc:  # type: ignore[attr-defined]
+            # type: ignore[attr-defined]
+            with fitz.open(str(self.file_path)) as doc:
                 text: str = ""
                 for page in doc:  # type: ignore[attr-defined]
                     page_text = page.get_text()  # type: ignore[attr-defined]

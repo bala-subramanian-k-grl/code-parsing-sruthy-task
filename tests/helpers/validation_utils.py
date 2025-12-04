@@ -21,6 +21,7 @@ from typing import Any, Callable, List
 # Logger (Composition)
 # ============================================================
 
+
 class BaseValidationLogger(ABC):
     """Abstract base logger."""
 

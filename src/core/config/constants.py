@@ -17,6 +17,7 @@ from pathlib import Path
 # 1. ABSTRACT BASE ENUM (Abstraction + Polymorphism)
 # ==========================================================
 
+
 class BaseEnum(str, Enum):
     """Base enum with extended behavior."""
 

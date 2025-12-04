@@ -21,6 +21,7 @@ from typing import Any, Callable
 # Logger (Composition)
 # ============================================================
 
+
 class BasePerformanceLogger(ABC):
     """Abstract base logger for performance."""
 

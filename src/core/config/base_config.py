@@ -13,7 +13,6 @@ from typing import TYPE_CHECKING, Any, TypeVar
 from .constants import ParserMode
 
 if TYPE_CHECKING:
-    from typing import TypeVar
     ConfigType = TypeVar("ConfigType", bound="BaseConfig")
 
 
@@ -22,6 +21,7 @@ if TYPE_CHECKING:
 # ==========================================================
 
 t_return = TypeVar('t_return')
+
 
 def protected_access(
     func: Callable[..., t_return]

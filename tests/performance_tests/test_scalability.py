@@ -18,6 +18,7 @@ from abc import ABC, abstractmethod
 # Logger (Composition)
 # ============================================================
 
+
 class ScalabilityLogger:
     """Logger used inside scalability tests."""
 

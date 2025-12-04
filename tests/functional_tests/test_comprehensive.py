@@ -19,6 +19,7 @@ from typing import List, Optional
 # Composition Helper (Shared Logger)
 # ================================================================
 
+
 class TestLogger:
     """Lightweight logger for functional testing."""
 

@@ -14,6 +14,7 @@ from src.core.interfaces.pipeline_interface import ValidationResult
 # BASE VALIDATOR (ABSTRACTION + POLYMORPHISM)
 # ================================================================
 
+
 class BaseValidator(ABC):
     """Abstract base validator for parser results."""
 
@@ -105,22 +106,28 @@ class ResultValidator(BaseValidator):
     def validate(  # type: ignore[override]
         self, data: ParserResult, *, strict: bool = False
     ) -> ValidationResult:
-        """
-        validate(result)
-        validate(result, strict=True)
-        """
+        """Validate parser result."""
         self._increment()
-        errors: list[str] = []
-
         if strict:
-            if not data.toc_entries:
-                errors.append("Missing TOC entries (strict mode)")
-            if not data.content_items:
-                errors.append("Missing content items (strict mode)")
-        elif not data.toc_entries and not data.content_items:
-            errors.append("No TOC entries or content items found")
-
+            errors = self._check_strict(data)
+        else:
+            errors = self._check_any(data)
         return ValidationResult(is_valid=(not errors), errors=errors)
+
+    def _check_strict(self, data: ParserResult) -> list[str]:
+        """Check strict mode: both TOC and content required."""
+        errors: list[str] = []
+        if not data.toc_entries:
+            errors.append("Missing TOC entries (strict mode)")
+        if not data.content_items:
+            errors.append("Missing content items (strict mode)")
+        return errors
+
+    def _check_any(self, data: ParserResult) -> list[str]:
+        """Check any mode: TOC or content required."""
+        if not data.toc_entries and not data.content_items:
+            return ["No TOC entries or content items found"]
+        return []
 
     # ============================================================
     # OVERLOADED TOC VALIDATION
@@ -209,7 +216,10 @@ class StrictValidator(ResultValidator):
         return self.__strict
 
     # ------------ Override validate() (Polymorphism) ------------
-    def validate(self, data: ParserResult) -> ValidationResult:  # type: ignore[override]
+    # type: ignore[override]
+    def validate(
+        self, data: ParserResult
+    ) -> ValidationResult:
         """
         Strict override → always strict=True
         """

@@ -19,6 +19,7 @@ from typing import Any
 # Logger (Composition)
 # ============================================================
 
+
 class ValidationLogger:
     """Simple logger injected via composition."""
 

@@ -5,7 +5,9 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-import fitz  # type: ignore[import-untyped]  # pyright: ignore[reportMissingTypeStubs]
+# type: ignore[import-untyped]
+# pyright: ignore[reportMissingTypeStubs]
+import fitz
 
 from src.core.config.models import TOCEntry
 from src.extractors.extractor_interface import ExtractorInterface
@@ -62,11 +64,15 @@ class TOCExtractor(ExtractorInterface):
 
     @property
     def file_size_kb(self) -> float:
-        return self.file_path.stat().st_size / 1024 if self.file_exists else 0.0
+        if self.file_exists:
+            return self.file_path.stat().st_size / 1024
+        return 0.0
 
     @property
     def file_size_mb(self) -> float:
-        return self.file_path.stat().st_size / (1024 * 1024) if self.file_exists else 0.0
+        if self.file_exists:
+            return self.file_path.stat().st_size / (1024 * 1024)
+        return 0.0
 
     @property
     def is_pdf(self) -> bool:
@@ -107,7 +113,8 @@ class TOCExtractor(ExtractorInterface):
     def _read_toc(self) -> list[Any]:
         """Read raw TOC from PDF."""
         try:
-            with fitz.open(str(self.file_path)) as doc:  # type: ignore[attr-defined]
+            # type: ignore[attr-defined]
+            with fitz.open(str(self.file_path)) as doc:
                 toc_data = doc.get_toc()  # type: ignore[attr-defined]
                 return list(toc_data) if toc_data else []
         except Exception as e:

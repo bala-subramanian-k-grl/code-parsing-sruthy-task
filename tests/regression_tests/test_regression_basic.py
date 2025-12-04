@@ -20,6 +20,7 @@ from typing import Any
 # Logger (Composition)
 # ===============================================================
 
+
 class RegressionLogger:
     """Logger used for regression testing."""
 

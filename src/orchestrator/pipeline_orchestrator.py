@@ -156,11 +156,15 @@ class PipelineOrchestrator(PipelineInterface):
 
     @property
     def success_rate(self) -> float:
-        return self.__success / self.__exec_count if self.__exec_count > 0 else 0.0
+        if self.__exec_count > 0:
+            return self.__success / self.__exec_count
+        return 0.0
 
     @property
     def error_rate(self) -> float:
-        return self.__errors / self.__exec_count if self.__exec_count > 0 else 0.0
+        if self.__exec_count > 0:
+            return self.__errors / self.__exec_count
+        return 0.0
 
     # ==========================================================
     # VALIDATION

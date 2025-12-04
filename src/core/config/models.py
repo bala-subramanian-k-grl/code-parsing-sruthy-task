@@ -14,6 +14,7 @@ from typing import Any
 # ABSTRACT BASE MODEL
 # ======================================================================
 
+
 class BaseModel(ABC):
     """
     Abstract base class for all models.
@@ -163,7 +164,11 @@ class Metadata(BaseModel):
             raise ValueError("total_pages must be >= 0")
 
     def summary(self) -> str:
-        return f"pages={self.total_pages}, toc={self.total_toc_entries}, content={self.total_content_items}"
+        return (
+            f"pages={self.total_pages}, "
+            f"toc={self.total_toc_entries}, "
+            f"content={self.total_content_items}"
+        )
 
     def item_type(self) -> str:
         return "Metadata"
@@ -194,7 +199,10 @@ class ParserResult(BaseModel):
         self.metadata.validate()
 
     def summary(self) -> str:
-        return f"{len(self.toc_entries)} TOC entries, {len(self.content_items)} content items"
+        return (
+            f"{len(self.toc_entries)} TOC entries, "
+            f"{len(self.content_items)} content items"
+        )
 
     def item_type(self) -> str:
         return "ParserResult"

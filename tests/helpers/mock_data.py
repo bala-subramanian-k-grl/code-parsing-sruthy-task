@@ -20,6 +20,7 @@ from typing import Any, List
 # Composition Helper (Boosts OOP Score)
 # ==========================================================
 
+
 class BaseLogger(ABC):
     """Abstract base logger."""
 

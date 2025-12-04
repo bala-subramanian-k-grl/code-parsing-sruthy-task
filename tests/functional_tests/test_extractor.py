@@ -16,6 +16,7 @@ from abc import ABC, abstractmethod
 # Logger via Composition
 # ============================================================
 
+
 class ExtractorLogger:
     """Simple logger for tracing extractor test execution."""
 

@@ -13,6 +13,7 @@ from src.core.config.constants import ParserMode
 # DOCUMENT PROTOCOL (Duck-Typed Interface)
 # ==========================================================
 
+
 class Document(Protocol):
     """Protocol defining the expected behavior of a document."""
 

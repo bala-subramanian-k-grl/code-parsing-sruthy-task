@@ -18,6 +18,7 @@ from abc import ABC, abstractmethod
 # Logger via Composition
 # ============================================================
 
+
 class BasePipelineLogger(ABC):
     """Abstract base logger."""
 

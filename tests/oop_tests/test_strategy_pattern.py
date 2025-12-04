@@ -11,6 +11,7 @@ from typing import Any
 # Logger for Composition
 # ============================================================
 
+
 class StrategyLogger:
     """Logger injected into strategies and context for OOP testing."""
     def __init__(self) -> None:

@@ -14,6 +14,7 @@ from src.core.interfaces.factory_interface import FactoryInterface
 # Base Strategy (Abstract)
 # =====================================================
 
+
 class BaseModeStrategy(ABC):
     """
     Abstract base class for parser mode strategies.

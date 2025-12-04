@@ -72,22 +72,24 @@ class MetadataGenerator(BaseReportGenerator):
         """Major sections: TOC entries with level 1"""
         return sum(1 for e in result.toc_entries if e.level == 1)
 
-    def _extract_key_terms(self, result: ParserResult, limit: int) -> set[str]:
+    def _extract_key_terms(
+        self, result: ParserResult, limit: int
+    ) -> set[str]:
         """Extract configured keywords from content."""
-        meta_cfg = self.__config.get("metadata", {})
-        keywords_data = meta_cfg.get("keywords", [])
-        keywords: list[str] = (
-            [str(k) for k in keywords_data] if keywords_data else []
-        )
+        keywords = self._get_keywords()
         found_terms: set[str] = set()
 
         for item in result.content_items[:limit]:
             text = item.content.lower()
-            for k in keywords:
-                if k.lower() in text:
-                    found_terms.add(k)
+            found_terms.update(k for k in keywords if k.lower() in text)
 
         return found_terms
+
+    def _get_keywords(self) -> list[str]:
+        """Get keywords from config."""
+        meta_cfg = self.__config.get("metadata", {})
+        keywords_data = meta_cfg.get("keywords", [])
+        return [str(k) for k in keywords_data] if keywords_data else []
 
     # ---------------------------------------------------------
     # FORMAT DATA (Template Method Hook)

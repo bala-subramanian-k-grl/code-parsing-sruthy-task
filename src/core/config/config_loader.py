@@ -29,6 +29,7 @@ from src.core.interfaces.factory_interface import FactoryInterface
 
 t_config = TypeVar('t_config')
 
+
 def protected_access(
     func: Callable[..., t_config]
 ) -> Callable[..., t_config]:
@@ -40,6 +41,7 @@ def protected_access(
 # ======================================================
 # ABSTRACT BASE LOADER (Abstraction + Encapsulation)
 # ======================================================
+
 
 class BaseConfigLoader(ABC):
     """Abstract loader interface."""

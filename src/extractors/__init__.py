@@ -6,12 +6,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from src.extractors.extractor_interface import ExtractorInterface
-
 from src.extractors.content_extractor import ContentExtractor
 from src.extractors.extractor_interface import ExtractorInterface
 from src.extractors.text_extractor import TextExtractor
+
+if TYPE_CHECKING:
+    pass
 
 # ==========================================================
 # PACKAGE METADATA

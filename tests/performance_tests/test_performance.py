@@ -12,6 +12,7 @@ from abc import ABC, abstractmethod
 # Logger (Composition)
 # =========================================================
 
+
 class PerformanceTestLogger:
     """Logger injected via composition inside performance tests."""
     def __init__(self) -> None:

@@ -134,15 +134,21 @@ class TextExtractor(ExtractorInterface):
 
     @property
     def avg_chars_per_extraction(self) -> float:
-        return self.__total_chars / self.__extraction_count if self.__extraction_count > 0 else 0.0
+        if self.__extraction_count > 0:
+            return self.__total_chars / self.__extraction_count
+        return 0.0
 
     @property
     def avg_lines_per_extraction(self) -> float:
-        return self.__total_lines / self.__extraction_count if self.__extraction_count > 0 else 0.0
+        if self.__extraction_count > 0:
+            return self.__total_lines / self.__extraction_count
+        return 0.0
 
     @property
     def avg_chars_per_line(self) -> float:
-        return self.__total_chars / self.__total_lines if self.__total_lines > 0 else 0.0
+        if self.__total_lines > 0:
+            return self.__total_chars / self.__total_lines
+        return 0.0
 
     @property
     def extraction_stats(self) -> dict[str, int]:

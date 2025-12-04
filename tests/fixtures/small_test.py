@@ -18,6 +18,7 @@ from ..common.base_fixture import BaseFixture
 # Composition Helper (HAS-A Relationship)
 # ================================================================
 
+
 class FixtureLogger:
     """Simple logger to demonstrate composition within fixtures."""
 

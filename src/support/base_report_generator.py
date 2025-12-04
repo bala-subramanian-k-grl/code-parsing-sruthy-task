@@ -77,15 +77,26 @@ class BaseReportGenerator(IReportGenerator, ABC):
 
     @property
     def success_rate(self) -> float:
-        return (self.__generation_count - self.__error_count) / self.__generation_count if self.__generation_count > 0 else 0.0
+        if self.__generation_count > 0:
+            return (
+                (self.__generation_count - self.__error_count)
+                / self.__generation_count
+            )
+        return 0.0
 
     @property
     def error_rate(self) -> float:
-        return self.__error_count / self.__generation_count if self.__generation_count > 0 else 0.0
+        if self.__generation_count > 0:
+            return self.__error_count / self.__generation_count
+        return 0.0
 
     @property
     def avg_bytes_per_generation(self) -> float:
-        return self.__total_bytes_written / self.__generation_count if self.__generation_count > 0 else 0.0
+        if self.__generation_count > 0:
+            return (
+                self.__total_bytes_written / self.__generation_count
+            )
+        return 0.0
 
     @property
     def total_kb_written(self) -> float:
@@ -115,17 +126,23 @@ class BaseReportGenerator(IReportGenerator, ABC):
     # Overloaded generate() for flexibility
     # ---------------------------------------------------------
     @overload
-    def generate(self, result: ParserResult, path: Path) -> None:  # type: ignore[override]
+    def generate(
+        self, result: ParserResult, path: Path
+    ) -> None:  # type: ignore[override]
         ...
 
     @overload
-    def generate(self, result: ParserResult, path: str) -> None:  # type: ignore[override]
+    def generate(
+        self, result: ParserResult, path: str
+    ) -> None:  # type: ignore[override]
         ...
 
     # ---------------------------------------------------------
     # FINAL Template Method Pattern
     # ---------------------------------------------------------
-    def generate(self, result: ParserResult, path: Path | str) -> None:  # type: ignore[override]
+    def generate(
+        self, result: ParserResult, path: Path | str
+    ) -> None:  # type: ignore[override]
         """Do NOT override in subclasses."""
         self.__generation_count += 1
 

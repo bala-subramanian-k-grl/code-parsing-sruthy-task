@@ -10,6 +10,7 @@ from abc import ABC, abstractmethod
 # Logger (Composition)
 # ============================================================
 
+
 class ExtractorLogger:
     """Simple logger used to demonstrate composition."""
     def __init__(self) -> None:

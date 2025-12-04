@@ -232,7 +232,11 @@ class DefaultPipelineExecutor(BasePipelineExecutor):
         return orchestrator.execute()
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}(orchestrator_cls={self._orchestrator_cls.__name__})"
+        cls_name = self._orchestrator_cls.__name__
+        return (
+            f"{self.__class__.__name__}"
+            f"(orchestrator_cls={cls_name})"
+        )
 
 
 class ResultFormatter(BaseFormatter):
@@ -316,11 +320,14 @@ class CLIApp(BaseCLI):
         # Core collaborators (composition)
         self._config_loader = config_loader or ConfigLoader()
         self._orchestrator_cls = orchestrator_cls or PipelineOrchestrator
-        self._arg_parser_service = arg_parser_service or ArgumentParserService()
+        self._arg_parser_service = (
+            arg_parser_service or ArgumentParserService()
+        )
         self._mode_factory = mode_factory or ModeStrategyFactory()
         self._file_resolver = FilePathResolver(self._config_loader)
         self._pipeline_executor = (
-            pipeline_executor or DefaultPipelineExecutor(self._orchestrator_cls)
+            pipeline_executor
+            or DefaultPipelineExecutor(self._orchestrator_cls)
         )
         self._result_logger = result_logger or ResultLogger()
 
@@ -385,7 +392,10 @@ class CLIApp(BaseCLI):
 
         try:
             # 1. Resolve arguments
-            parsed_args = args[0] if args and isinstance(args[0], argparse.Namespace) else None
+            if args and isinstance(args[0], argparse.Namespace):
+                parsed_args = args[0]
+            else:
+                parsed_args = None
             if parsed_args is None:
                 parsed_args = self.parse_args()
 
@@ -397,7 +407,8 @@ class CLIApp(BaseCLI):
             file_path = self._file_resolver.resolve(parsed_args.file)
 
             logger.info(
-                f"Processing {file_path} in {mode_strategy.name} ({mode.value}) mode"
+                f"Processing {file_path} in {mode_strategy.name} "
+                f"({mode.value}) mode"
             )
 
             # 4. Execute pipeline
@@ -430,7 +441,7 @@ class CLIApp(BaseCLI):
     def __repr__(self) -> str:
         return (
             f"CLIApp(config_loader={self._config_loader!r}, "
-            f"orchestrator_cls={self._orchestrator_cls!r})"
+            f"orchestrator_cls={self._orchestrator_cls!r}"
         )
 
     def __len__(self) -> int:

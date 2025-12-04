@@ -14,6 +14,7 @@ from typing import Any, Optional
 # Logger via Composition
 # ======================================================
 
+
 class BaseEdgeLogger(ABC):
     """Abstract base logger."""
 

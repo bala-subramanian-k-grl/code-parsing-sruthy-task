@@ -13,6 +13,7 @@ from src.core.config.models import ParserResult
 # VALIDATION RESULT (Dataclass + Polymorphism)
 # ==========================================================
 
+
 @dataclass
 class ValidationResult:
     """Result of pipeline validation."""

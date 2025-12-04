@@ -30,6 +30,7 @@ from tests.helpers.mock_data import generate_mock_metadata
 # Base Abstraction for Coverage Tests
 # ============================================================
 
+
 class BaseCoverageTest(ABC):
     """Abstract base class for coverage tests demonstrating abstraction."""
 

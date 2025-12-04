@@ -39,12 +39,18 @@ class ParserFactory(FactoryInterface[BaseParser]):
     # Overloaded create() method
     # ---------------------------------------------------------
     @overload
-    def create(self, file_path: Path) -> BaseParser: ...  # type: ignore[override]
+    def create(
+        self, file_path: Path
+    ) -> BaseParser: ...  # type: ignore[override]
 
     @overload
-    def create(self, file_path: Path, *, strict: bool) -> BaseParser: ...  # type: ignore[override]
+    def create(
+        self, file_path: Path, *, strict: bool
+    ) -> BaseParser: ...  # type: ignore[override]
 
-    def create(self, file_path: Path, *args: Any, **kwargs: Any) -> BaseParser:  # type: ignore[override]
+    def create(
+        self, file_path: Path, *args: Any, **kwargs: Any
+    ) -> BaseParser:  # type: ignore[override]
         """
         Overloaded factory method.
 
