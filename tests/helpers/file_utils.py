@@ -96,17 +96,17 @@ class BaseFileManager(ABC):
     def cleanup(self) -> None:
         """Delete all tracked temporary files."""
         self._logger.log("Starting cleanup of temporary files...")
-        for f in list(self._files):
-            if f.exists():
+        for file_path in list(self._files):
+            if file_path.exists():
                 try:
-                    self._delete_file(f)
-                    self._logger.log(f"Deleted temp file: {f}")
+                    self._delete_file(file_path)
+                    self._logger.log(f"Deleted temp file: {file_path}")
                 except OSError as e:
-                    msg = f"Warning: Could not delete {f}: {e}"
+                    msg = f"Warning: Could not delete {file_path}: {e}"
                     self._logger.log(msg)
                     self._errors.append(msg)
                 except Exception as e:
-                    msg = f"Unexpected error deleting {f}: {e}"
+                    msg = f"Unexpected error deleting {file_path}: {e}"
                     self._logger.log(msg)
                     self._errors.append(msg)
         self._files.clear()
