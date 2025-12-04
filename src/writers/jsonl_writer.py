@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from abc import ABC
 import json
+from abc import ABC
 from collections.abc import Callable, Iterable
 from pathlib import Path
 from typing import Any, TypeVar, cast

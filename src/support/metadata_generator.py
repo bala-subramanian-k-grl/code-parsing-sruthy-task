@@ -6,8 +6,8 @@ Template Method Pattern.
 
 from __future__ import annotations
 
-from abc import ABC
 import json
+from abc import ABC
 from dataclasses import asdict
 from pathlib import Path
 from typing import Any, overload
