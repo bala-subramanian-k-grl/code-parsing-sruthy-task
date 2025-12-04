@@ -176,15 +176,10 @@ class PDFParser(BaseParser, ABC):
         """Reset parser state."""
         pass
 
-    @overload
-    def supports_format(self, format_type: str) -> bool: ...
-
-    @overload
-    def supports_format(self, *formats: str) -> bool: ...
-
-    def supports_format(self, *args: str) -> bool:
+    def supports_format(self, format_type: str = "", *formats: str) -> bool:
         """Check if format is supported."""
-        return any(self.supports(fmt) for fmt in args)
+        all_formats = (format_type,) + formats if format_type else formats
+        return any(self.supports(fmt) for fmt in all_formats) if all_formats else False
 
     # ---------------------------------------------------------
     # Magic Methods
