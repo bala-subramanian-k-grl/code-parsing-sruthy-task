@@ -503,7 +503,10 @@ class CLIApp(BaseCLI, ABC):
             mode = mode_strategy.get_mode()
 
             # 3. Resolve file path
-            file_path = self._file_resolver.resolve(parsed_args.file)
+            resolved = self._file_resolver.resolve(parsed_args.file)
+            if not isinstance(resolved, Path):
+                raise TypeError("Resolver must return Path")
+            file_path = resolved
 
             logger.info(
                 f"Processing {file_path} in {mode_strategy.name} "
