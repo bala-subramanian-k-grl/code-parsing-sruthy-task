@@ -86,8 +86,8 @@ class BaseValidator(ABC):
 # RESULT VALIDATOR (INHERITANCE + OVERLOADING + ENCAPSULATION)
 # ================================================================
 
-class ResultValidator(BaseValidator):
-    """Validates parser results for TOC OR Content availability."""
+class ResultValidator(BaseValidator, ABC):
+    """Abstract validator for parser results with configurable strictness."""
 
     def __init__(self) -> None:
         """Method implementation."""

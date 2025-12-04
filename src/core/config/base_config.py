@@ -88,12 +88,12 @@ class BaseConfigInterface(ABC):
 # BASE CONFIG CLASS (Encapsulation + Polymorphism)
 # ==========================================================
 
-class BaseConfig(BaseConfigInterface):
+class BaseConfig(BaseConfigInterface, ABC):
     """
-    Base configuration with full OOP improvements.
+    Abstract base configuration with full OOP improvements.
 
     - Encapsulation: private attributes + property getters/setters
-    - Abstraction: inherited abstract interface
+    - Abstraction: abstract mode_behavior() method
     - Polymorphism: mode_behavior(), summary(), validation
     """
 
@@ -219,9 +219,10 @@ class BaseConfig(BaseConfigInterface):
             f"  Behavior: {self.mode_behavior()}\n"
         )
 
+    @abstractmethod
     def mode_behavior(self) -> str:
-        """Method implementation."""
-        return "General parsing behavior"
+        """Return mode-specific behavior description. Must be implemented by subclasses."""
+        raise NotImplementedError
 
     # ==========================================================
     # ADDITIONAL POLYMORPHISM (Magic Methods)
