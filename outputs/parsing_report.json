@@ -1,0 +1,14 @@
+{
+  "timestamp": "2025-12-05T00:12:01.321790",
+  "report_type": "JSON",
+  "status": "success",
+  "statistics": {
+    "total_pages": 1047,
+    "toc_entries": 1360,
+    "content_items": 25760
+  },
+  "validation": {
+    "toc_extracted": true,
+    "content_extracted": true
+  }
+}

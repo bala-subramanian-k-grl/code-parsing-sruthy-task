@@ -167,6 +167,30 @@ class TextParser(BaseParser, ABC):
         return content.split("\n", 1)[0] if content else ""
 
     # ---------------------------------------------------------
+    # Required abstract methods from ParserInterface
+    # ---------------------------------------------------------
+
+    def open(self, mode: str = "r") -> None:
+        """Open parser resources."""
+        pass
+
+    def close(self) -> None:
+        """Close parser resources."""
+        pass
+
+    def read(self) -> Any:
+        """Read and return parsed data."""
+        return self.parse()
+
+    def reset(self) -> None:
+        """Reset parser state."""
+        pass
+
+    def supports_format(self, format_ext: str) -> bool:
+        """Check if format is supported."""
+        return self.supports(format_ext)
+
+    # ---------------------------------------------------------
     # Magic Methods
     # ---------------------------------------------------------
     def __str__(self) -> str:
