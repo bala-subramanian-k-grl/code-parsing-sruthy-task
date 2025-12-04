@@ -3,14 +3,14 @@
 from collections.abc import Callable
 from typing import Any, TypeVar
 
-t_return = TypeVar('t_return')
+TReturn = TypeVar('TReturn')
 
 
 def protected_access(
-    func: Callable[..., t_return]
-) -> Callable[..., t_return]:
+    func: Callable[..., TReturn]
+) -> Callable[..., TReturn]:
     """Decorator to mark protected/internal methods."""
-    def wrapper(self: Any, *args: Any, **kwargs: Any) -> t_return:
+    def wrapper(self: Any, *args: Any, **kwargs: Any) -> TReturn:
         """Method implementation."""
         return func(self, *args, **kwargs)
     return wrapper
