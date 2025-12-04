@@ -189,7 +189,9 @@ class TextParser(BaseParser, ABC):
     def supports_format(self, format_type: str = "", *formats: str) -> bool:
         """Check if format is supported."""
         all_formats = (format_type,) + formats if format_type else formats
-        return any(self.supports(fmt) for fmt in all_formats) if all_formats else False
+        if not all_formats:
+            return False
+        return any(self.supports(fmt) for fmt in all_formats)
 
     # ---------------------------------------------------------
     # Magic Methods

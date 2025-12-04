@@ -11,8 +11,16 @@ This package contains various types of tests:
 - regression_tests: Tests to prevent bug reintroduction
 """
 
-from . import (common, coverage_tests, fixtures, functional_tests, helpers,
-               oop_tests, performance_tests, regression_tests)
+from . import (
+               common,
+               coverage_tests,
+               fixtures,
+               functional_tests,
+               helpers,
+               oop_tests,
+               performance_tests,
+               regression_tests,
+)
 
 __all__ = [
     "common",

@@ -121,8 +121,10 @@ class ValidationStructureTest(BaseValidationTest):
     def run_test(self) -> bool:
         self._logger.log("Running ValidationStructureTest...")
 
-        from tests.helpers.validation_utils import (validate_content_item,
-                                                    validate_toc_entry)
+        from tests.helpers.validation_utils import (
+            validate_content_item,
+            validate_toc_entry,
+        )
 
         toc_entry: dict[str, Any] = {
             "section_id": "s1",
