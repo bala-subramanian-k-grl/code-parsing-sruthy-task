@@ -5,6 +5,7 @@ OOP + Overloading + Safe Fallback.
 
 from __future__ import annotations
 
+from abc import ABC
 from collections.abc import Iterator
 from pathlib import Path
 from typing import Any, overload

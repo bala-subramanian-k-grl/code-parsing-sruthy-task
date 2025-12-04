@@ -4,6 +4,7 @@ Enterprise Pipeline Orchestrator (OOP-Optimized + Overloading Added)
 
 from __future__ import annotations
 
+from abc import ABC
 from pathlib import Path
 from typing import overload
 

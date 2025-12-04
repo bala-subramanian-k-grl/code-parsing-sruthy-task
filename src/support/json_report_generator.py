@@ -4,6 +4,7 @@ JSON report generator with full OOP, overloading, polymorphism.
 
 from __future__ import annotations
 
+from abc import ABC
 import json
 from datetime import datetime
 from pathlib import Path

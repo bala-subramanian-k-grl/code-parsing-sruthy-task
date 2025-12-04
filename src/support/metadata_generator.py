@@ -6,6 +6,7 @@ Template Method Pattern.
 
 from __future__ import annotations
 
+from abc import ABC
 import json
 from dataclasses import asdict
 from pathlib import Path

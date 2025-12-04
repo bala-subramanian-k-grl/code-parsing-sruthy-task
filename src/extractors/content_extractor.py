@@ -12,6 +12,7 @@ Implements:
 
 from __future__ import annotations
 
+from abc import ABC
 from typing import Any
 
 from src.core.config.models import ContentItem

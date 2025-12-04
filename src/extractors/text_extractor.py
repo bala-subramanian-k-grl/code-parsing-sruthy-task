@@ -4,6 +4,7 @@ Enterprise-level TextExtractor with full OOP enhancements.
 
 from __future__ import annotations
 
+from abc import ABC
 from typing import Any
 
 from src.extractors.extractor_interface import ExtractorInterface
