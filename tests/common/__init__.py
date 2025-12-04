@@ -4,8 +4,11 @@ from .base_fixture import BaseFixture
 from .base_suite import BaseSuite
 from .base_test import BaseTest
 from .mixins import CleanupMixin, TimerMixin
-from .strategies import (AttributeSetterStrategy, TestStrategy,
-                         ValidationStrategy)
+from .strategies import (
+    AttributeSetterStrategy,
+    TestStrategy,
+    ValidationStrategy,
+)
 
 __all__ = [
     "AttributeSetterStrategy",
