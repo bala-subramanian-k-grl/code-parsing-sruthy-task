@@ -23,8 +23,8 @@ class ParserFactory(FactoryInterface[BaseParser], ABC):
     # PRIVATE REGISTRY (Encapsulation)
     # ---------------------------------------------------------
     __parser_registry: dict[str, type[BaseParser]] = {
-        ".pdf": PDFParser,  # type: ignore[type-abstract]
-        ".txt": TextParser,  # type: ignore[type-abstract]
+        ".pdf": PDFParser,
+        ".txt": TextParser,
     }
 
     # ---------------------------------------------------------
@@ -42,16 +42,16 @@ class ParserFactory(FactoryInterface[BaseParser], ABC):
     @overload
     def create(
         self, file_path: Path
-    ) -> BaseParser: ...  # type: ignore[override]
+    ) -> BaseParser: ...
 
     @overload
     def create(
         self, file_path: Path, *, strict: bool
-    ) -> BaseParser: ...  # type: ignore[override]
+    ) -> BaseParser: ...
 
     def create(
         self, file_path: Path, *args: Any, **kwargs: Any
-    ) -> BaseParser:  # type: ignore[override]
+    ) -> BaseParser:
         """
         Overloaded factory method.
 

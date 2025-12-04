@@ -15,7 +15,6 @@ class BaseSearcher(ABC):
     """Abstract base class for all searchers."""
 
     @abstractmethod
-    # type: ignore[misc]
     def search(
         self, keyword: str | Iterable[str], **kwargs
     ) -> int:
@@ -130,26 +129,25 @@ class JSONLSearcher(BaseSearcher, ABC):
 
     # 1) search("keyword")
     @overload
-    def search(self, keyword: str) -> int: ...  # type: ignore[override]
+    def search(self, keyword: str) -> int: ...
 
     # 2) search(["word1","word2"])
     @overload
     def search(
         self, keyword: Iterable[str]
     ) -> int: ...
-    # type: ignore[override]
 
     # 3) search("keyword", case_sensitive=True)
     @overload
     def search(
         self, keyword: str, *, case_sensitive: bool
-    ) -> int: ...  # type: ignore[override]
+    ) -> int: ...
 
     # 4) search("keyword", field="title")
     @overload
     def search(
         self, keyword: str, *, field: str
-    ) -> int: ...  # type: ignore[override]
+    ) -> int: ...
 
     def search(
         self,

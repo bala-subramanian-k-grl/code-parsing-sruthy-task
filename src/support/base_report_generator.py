@@ -143,13 +143,13 @@ class BaseReportGenerator(IReportGenerator, ABC):
     @overload
     def generate(
         self, result: ParserResult, path: Path
-    ) -> None:  # type: ignore[override]
+    ) -> None:
         ...
 
     @overload
     def generate(
         self, result: ParserResult, path: str
-    ) -> None:  # type: ignore[override]
+    ) -> None:
         ...
 
     # ---------------------------------------------------------
@@ -157,7 +157,7 @@ class BaseReportGenerator(IReportGenerator, ABC):
     # ---------------------------------------------------------
     def generate(
         self, result: ParserResult, path: Path | str
-    ) -> None:  # type: ignore[override]
+    ) -> None:
         """Do NOT override in subclasses."""
         self.__generation_count += 1
 

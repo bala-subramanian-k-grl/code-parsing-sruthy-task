@@ -78,7 +78,7 @@ class BaseEnum(str, Enum):
         """Method implementation."""
         return self == other or self < other
 
-    def __contains__(self, text: object) -> bool:  # type: ignore[override]
+    def __contains__(self, text: object) -> bool:
         return isinstance(text, str) and text in str(self.value)
 
     def __int__(self) -> int:
@@ -89,22 +89,14 @@ class BaseEnum(str, Enum):
         """Method implementation."""
         return float(len(str(self.value)))
 
-    def __iter__(self):  # type: ignore[override]
-        return iter(str(self.value))
-
     def __getitem__(self, index: int) -> str:  # type: ignore[override]
         return str(self.value)[index]
 
-    def __add__(self, other: str) -> str:  # type: ignore[override]
+    def __add__(self, other: str) -> str:
         return str(self.value) + other
 
     def __mul__(self, other: int) -> str:  # type: ignore[override]
         return str(self.value) * other
-
-
-# ==========================================================
-# 2. PARSER MODE ENUM (Inheritance + Polymorphism)
-# ==========================================================
 
 class ParserMode(BaseEnum):
     """Parser operation modes."""
@@ -139,7 +131,7 @@ class ParserMode(BaseEnum):
     def __getitem__(self, index: int) -> str:  # type: ignore[override]
         return str(self.value)[index]
 
-    def __iter__(self):  # type: ignore[override]
+    def __iter__(self):
         return iter(str(self.value))
 
     def __gt__(self, other: object) -> bool:
@@ -152,7 +144,7 @@ class ParserMode(BaseEnum):
         """Method implementation."""
         return self == other or self > other
 
-    def __add__(self, other: str) -> str:  # type: ignore[override]
+    def __add__(self, other: str) -> str:
         return str(self.value) + other
 
     def __mul__(self, other: int) -> str:  # type: ignore[override]

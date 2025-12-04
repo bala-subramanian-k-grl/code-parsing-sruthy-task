@@ -8,8 +8,8 @@ from abc import ABC
 from collections.abc import Callable
 from pathlib import Path
 
-from openpyxl import Workbook  # type: ignore[import-untyped]
-from openpyxl.worksheet.worksheet import Worksheet  # type: ignore
+from openpyxl import Workbook
+from openpyxl.worksheet.worksheet import Worksheet
 
 from src.core.config.models import ParserResult
 from src.support.base_report_generator import BaseReportGenerator

@@ -6,9 +6,7 @@ from abc import ABC
 from pathlib import Path
 from typing import Any
 
-# type: ignore[import-untyped]
-# pyright: ignore[reportMissingTypeStubs]
-import fitz  # type: ignore[import-untyped]
+import fitz
 
 from src.core.config.models import TOCEntry
 from src.extractors.extractor_interface import ExtractorInterface
@@ -130,9 +128,8 @@ class TOCExtractor(ExtractorInterface, ABC):
     def _read_toc(self) -> list[Any]:
         """Read raw TOC from PDF."""
         try:
-            # type: ignore[attr-defined]
             with fitz.open(str(self.file_path)) as doc:
-                toc_data = doc.get_toc()  # type: ignore[attr-defined]
+                toc_data = doc.get_toc()
                 return list(toc_data) if toc_data else []
         except Exception as e:
             raise ValueError(f"Failed to read TOC: {e}") from e

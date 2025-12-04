@@ -121,7 +121,7 @@ class ResultValidator(BaseValidator, ABC):
         self, data: ParserResult, *, strict: bool
     ) -> ValidationResult: ...
 
-    def validate(  # type: ignore[override]
+    def validate(
         self, data: ParserResult, *, strict: bool = False
     ) -> ValidationResult:
         """Validate parser result."""
@@ -252,7 +252,7 @@ class StrictValidator(ResultValidator, ABC):
         self, data: ParserResult, *, strict: bool
     ) -> ValidationResult: ...
 
-    def validate(  # type: ignore[override]
+    def validate(
         self, data: ParserResult, *, strict: bool = True
     ) -> ValidationResult:
         """

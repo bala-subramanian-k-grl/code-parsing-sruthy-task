@@ -6,7 +6,7 @@ from abc import ABC
 from pathlib import Path
 from typing import Any, overload
 
-import fitz  # type: ignore[import-untyped]
+import fitz
 
 from src.core.config.models import ParserResult
 from src.extractors.content_extractor import ContentExtractor
@@ -126,7 +126,7 @@ class PDFParser(BaseParser, ABC):
     def _extract_content(self) -> list[Any]:
         """Protected: Extract content from PDF."""
         try:
-            with fitz.open(str(self.file_path)) as doc:  # type: ignore
+            with fitz.open(str(self.file_path)) as doc:
                 extractor = ContentExtractor(self.__doc_title)
                 return extractor.extract(doc)
         except Exception as e:
@@ -138,18 +138,17 @@ class PDFParser(BaseParser, ABC):
     def _read(self) -> Any:
         """Protected: Read raw PDF document."""
         try:
-            return fitz.open(str(self.file_path))  # type: ignore[attr-defined]
+            return fitz.open(str(self.file_path))
         except Exception as e:
             raise ValueError(f"Failed to read PDF: {e}") from e
 
     def _extract_raw_text(self) -> str:
         """Protected: extract raw text only."""
         try:
-            # type: ignore[attr-defined]
             with fitz.open(str(self.file_path)) as doc:
                 text: str = ""
-                for page in doc:  # type: ignore[attr-defined]
-                    page_text = page.get_text()  # type: ignore[attr-defined]
+                for page in doc:
+                    page_text = page.get_text()
                     if isinstance(page_text, str):
                         text += page_text
                 return text
