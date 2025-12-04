@@ -12,14 +12,14 @@ This package contains various types of tests:
 """
 
 from . import (
-               common,
-               coverage_tests,
-               fixtures,
-               functional_tests,
-               helpers,
-               oop_tests,
-               performance_tests,
-               regression_tests,
+    common,
+    coverage_tests,
+    fixtures,
+    functional_tests,
+    helpers,
+    oop_tests,
+    performance_tests,
+    regression_tests,
 )
 
 __all__ = [
