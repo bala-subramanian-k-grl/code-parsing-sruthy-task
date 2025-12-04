@@ -186,9 +186,10 @@ class TextParser(BaseParser, ABC):
         """Reset parser state."""
         pass
 
-    def supports_format(self, format_ext: str) -> bool:
+    def supports_format(self, format_type: str, *formats: str) -> bool:
         """Check if format is supported."""
-        return self.supports(format_ext)
+        all_formats = (format_type,) + formats
+        return any(self.supports(fmt) for fmt in all_formats)
 
     # ---------------------------------------------------------
     # Magic Methods

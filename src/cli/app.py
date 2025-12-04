@@ -263,7 +263,7 @@ class FilePathResolver(BaseResolver):
         file_arg: str | None = None,
         *args: object,
         **kwargs: object
-    ) -> Path:  # type: ignore[override]
+    ) -> object:
         """Resolve final file path to use for parsing."""
         file_path_raw = file_arg or self._config_loader.get("input.pdf_path")
         if not file_path_raw:
@@ -349,11 +349,13 @@ class ResultLogger(BaseLogger):
 
     def log(
         self,
-        result: ParserResult,
         *args: object,
         **kwargs: object
-    ) -> None:  # type: ignore[override]
+    ) -> None:
         """Method implementation."""
+        if not args or not isinstance(args[0], ParserResult):
+            return
+        result = args[0]
         logger.info("Extraction completed successfully")
 
         toc_msg = self._formatter.format_count(
