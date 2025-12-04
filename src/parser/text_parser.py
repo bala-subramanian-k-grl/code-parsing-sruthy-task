@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from abc import ABC
 from pathlib import Path
-from typing import overload
+from typing import Any, overload
 
 from src.core.config.models import ContentItem, ParserResult
 from src.parser.base_parser import BaseParser
