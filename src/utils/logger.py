@@ -11,9 +11,9 @@ from pathlib import Path
 from typing import overload
 
 try:
-    import psutil
+    import psutil  # type: ignore[import-untyped]
 except ImportError:
-    psutil = None  # type: ignore[assignment]
+    psutil = None
 
 
 class BaseLogger(ABC):
