@@ -10,6 +10,8 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import overload
 
+import psutil
+
 
 class BaseLogger(ABC):
     """Abstract base class for all loggers."""
@@ -135,7 +137,6 @@ class Logger(BaseLogger, ABC):
 
         self._logger.setLevel(level)
 
-        # Update formatter for all handlers
         for handler in self._logger.handlers:
             handler.setFormatter(self._get_formatter())
 
@@ -161,6 +162,13 @@ class Logger(BaseLogger, ABC):
     def critical(self, msg: str) -> None:
         """Method implementation."""
         self._logger.critical(msg)
+
+    def log_memory(self) -> None:
+        """Log current memory usage."""
+        process = psutil.Process()
+        mem_info = process.memory_info()
+        mem_mb = mem_info.rss / (1024 * 1024)
+        self._logger.info(f"Memory usage: {mem_mb:.2f} MB")
 
     # ---------------------------------------------------------
     # Magic Methods

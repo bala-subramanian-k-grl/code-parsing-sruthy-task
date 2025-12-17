@@ -6,12 +6,13 @@ from abc import ABC
 from pathlib import Path
 from typing import Any, overload
 
-import fitz
+import fitz  # type: ignore[import-not-found]
 
 from src.core.config.models import ParserResult
 from src.extractors.content_extractor import ContentExtractor
 from src.parser.base_parser import BaseParser
 from src.parser.toc_extractor import TOCExtractor
+from src.utils.logger import logger
 
 
 class PDFParser(BaseParser, ABC):
@@ -57,35 +58,7 @@ class PDFParser(BaseParser, ABC):
             raise ValueError("Document title cannot be empty.")
         self.__doc_title = value
 
-    @property
-    def title_length(self) -> int:
-        """Method implementation."""
-        return len(self.__doc_title)
 
-    @property
-    def title_words(self) -> int:
-        """Method implementation."""
-        return len(self.__doc_title.split())
-
-    @property
-    def title_upper(self) -> str:
-        """Method implementation."""
-        return self.__doc_title.upper()
-
-    @property
-    def title_lower(self) -> str:
-        """Method implementation."""
-        return self.__doc_title.lower()
-
-    @property
-    def has_title(self) -> bool:
-        """Method implementation."""
-        return bool(self.__doc_title.strip())
-
-    @property
-    def title_is_empty(self) -> bool:
-        """Method implementation."""
-        return not self.__doc_title.strip()
 
     # ---------------------------------------------------------
     #  OVERLOADED parse() for polymorphic usage
@@ -102,16 +75,25 @@ class PDFParser(BaseParser, ABC):
             parse()                        → TOC + content
             parse(include_toc=False)       → content only
         """
+        msg = (f"PDF parsing started: {self.file_path.name} "
+               f"(size: {self.file_size_mb:.2f} MB)")
+        logger.info(msg)
         toc_entries = []
         if include_toc:
             toc_entries = self._extract_toc()
+            logger.info(f"TOC entries extracted: {len(toc_entries)}")
 
         content_items = self._extract_content()
+        logger.info(f"Content items extracted: {len(content_items)}")
 
-        return ParserResult(
+        result = ParserResult(
             toc_entries=toc_entries,
             content_items=content_items
         )
+        msg = (f"PDF parsing completed: {len(toc_entries)} TOC + "
+               f"{len(content_items)} content items")
+        logger.info(msg)
+        return result
 
     # ---------------------------------------------------------
     # Protected Internal Methods
@@ -121,15 +103,17 @@ class PDFParser(BaseParser, ABC):
         try:
             return TOCExtractor(self.file_path).extract()
         except Exception as e:
+            logger.error(f"TOC extraction failed: {e}")
             raise ValueError(f"Failed to extract TOC: {e}") from e
 
     def _extract_content(self) -> list[Any]:
         """Protected: Extract content from PDF."""
         try:
-            with fitz.open(str(self.file_path)) as doc:
+            with fitz.open(str(self.file_path)) as doc:  # type: ignore[attr-defined]
                 extractor = ContentExtractor(self.__doc_title)
                 return extractor.extract(doc)
         except Exception as e:
+            logger.error(f"Content extraction failed: {e}")
             raise ValueError(f"Failed to extract content: {e}") from e
 
     # ---------------------------------------------------------
@@ -138,22 +122,11 @@ class PDFParser(BaseParser, ABC):
     def _read(self) -> Any:
         """Protected: Read raw PDF document."""
         try:
-            return fitz.open(str(self.file_path))
+            return fitz.open(str(self.file_path))  # type: ignore[attr-defined]
         except Exception as e:
             raise ValueError(f"Failed to read PDF: {e}") from e
 
-    def _extract_raw_text(self) -> str:
-        """Protected: extract raw text only."""
-        try:
-            with fitz.open(str(self.file_path)) as doc:
-                text: str = ""
-                for page in doc:
-                    page_text = page.get_text()
-                    if isinstance(page_text, str):
-                        text += page_text
-                return text
-        except Exception as e:
-            raise ValueError(f"Unable to extract raw text: {e}") from e
+
 
     # ---------------------------------------------------------
     # Required abstract methods from ParserInterface

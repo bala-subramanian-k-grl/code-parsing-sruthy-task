@@ -18,6 +18,7 @@ from typing import Any
 from src.core.config.models import ContentItem
 from src.extractors.extractor_interface import ExtractorInterface
 from src.extractors.text_extractor import TextExtractor
+from src.utils.logger import logger
 
 
 class ContentExtractor(ExtractorInterface, ABC):
@@ -63,11 +64,20 @@ class ContentExtractor(ExtractorInterface, ABC):
     def extract(self, data: Any) -> list[ContentItem]:
         """Extract content from entire PDF document."""
         results: list[ContentItem] = []
+        page_count = len(data) if hasattr(data, '__len__') else 0
+        logger.info(f"Content extraction started: {page_count} pages")
 
         for page_num, page in enumerate(data, start=1):
             processed_page = self._preprocess_page(page)
-            results.extend(self._extract_from_page(processed_page, page_num))
+            page_items = self._extract_from_page(processed_page, page_num)
+            results.extend(page_items)
+            if page_num % 10 == 0:
+                msg = (f"Processed {page_num}/{page_count} pages, "
+                       f"{len(results)} items extracted")
+                logger.info(msg)
 
+        msg = f"Content extraction completed: {len(results)} total items"
+        logger.info(msg)
         return results
 
     # ==========================================================
@@ -178,75 +188,7 @@ class ContentExtractor(ExtractorInterface, ABC):
         """Method implementation."""
         return self.__doc_title
 
-    @property
-    def title_length(self) -> int:
-        """Method implementation."""
-        return len(self.__doc_title)
 
-    @property
-    def has_title(self) -> bool:
-        """Method implementation."""
-        return bool(self.__doc_title)
-
-    @property
-    def title_words(self) -> int:
-        """Method implementation."""
-        return len(self.__doc_title.split())
-
-    @property
-    def title_chars(self) -> int:
-        """Method implementation."""
-        return len(self.__doc_title)
-
-    @property
-    def title_upper(self) -> str:
-        """Method implementation."""
-        return self.__doc_title.upper()
-
-    @property
-    def title_lower(self) -> str:
-        """Method implementation."""
-        return self.__doc_title.lower()
-
-    @property
-    def title_capitalized(self) -> str:
-        """Method implementation."""
-        return self.__doc_title.capitalize()
-
-    @property
-    def title_stripped(self) -> str:
-        """Method implementation."""
-        return self.__doc_title.strip()
-
-    @property
-    def title_is_empty(self) -> bool:
-        """Method implementation."""
-        return not self.__doc_title.strip()
-
-    @property
-    def title_is_uppercase(self) -> bool:
-        """Method implementation."""
-        return self.__doc_title.isupper()
-
-    @property
-    def title_is_lowercase(self) -> bool:
-        """Method implementation."""
-        return self.__doc_title.islower()
-
-    @property
-    def title_first_char(self) -> str:
-        """Method implementation."""
-        return self.__doc_title[0] if self.__doc_title else ""
-
-    @property
-    def title_last_char(self) -> str:
-        """Method implementation."""
-        return self.__doc_title[-1] if self.__doc_title else ""
-
-    @property
-    def title_reversed(self) -> str:
-        """Method implementation."""
-        return self.__doc_title[::-1]
 
     # ==========================================================
     # MAGIC METHODS (CLEAN + CONSISTENT)

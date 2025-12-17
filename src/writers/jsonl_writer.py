@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any, TypeVar, cast
 
 from src.core.config.models import ContentItem, TOCEntry
+from src.utils.logger import logger
 from src.writers.writer_interface import WriterInterface
 
 T = TypeVar("T", TOCEntry, ContentItem)
@@ -133,10 +134,18 @@ class JSONLWriter(WriterInterface, ABC):
     ) -> None:
         """Write serialized JSON lines to file."""
         path.parent.mkdir(parents=True, exist_ok=True)
+        item_count = 0
+        logger.info(f"Writing JSONL to: {path.name}")
 
         with path.open("w", encoding="utf-8") as f:
             for item in data:
                 f.write(json.dumps(serializer(item)) + "\n")
+                item_count += 1
+
+        file_size_kb = path.stat().st_size / 1024 if path.exists() else 0
+        msg = (f"JSONL write completed: {item_count} items, "
+               f"{file_size_kb:.2f} KB")
+        logger.info(msg)
 
     # -------------------------------------------------------------------------
     # Hooks (Polymorphic extension points)

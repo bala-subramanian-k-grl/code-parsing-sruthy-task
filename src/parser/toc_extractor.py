@@ -6,10 +6,11 @@ from abc import ABC
 from pathlib import Path
 from typing import Any
 
-import fitz
+import fitz  # type: ignore[import-not-found]
 
 from src.core.config.models import TOCEntry
 from src.extractors.extractor_interface import ExtractorInterface
+from src.utils.logger import logger
 
 
 class TOCExtractor(ExtractorInterface, ABC):
@@ -72,28 +73,11 @@ class TOCExtractor(ExtractorInterface, ABC):
         return str(self.file_path.parent)
 
     @property
-    def file_size_kb(self) -> float:
-        """Method implementation."""
-        if self.file_exists:
-            return self.file_path.stat().st_size / 1024
-        return 0.0
-
-    @property
     def file_size_mb(self) -> float:
         """Method implementation."""
         if self.file_exists:
             return self.file_path.stat().st_size / (1024 * 1024)
         return 0.0
-
-    @property
-    def is_pdf(self) -> bool:
-        """Method implementation."""
-        return self.file_suffix == ".pdf"
-
-    @property
-    def file_absolute_path(self) -> str:
-        """Method implementation."""
-        return str(self.file_path.absolute())
 
     # ----------------------------------------------------------------------
     # Protected Validation Methods
@@ -117,8 +101,14 @@ class TOCExtractor(ExtractorInterface, ABC):
             msg = f"Invalid file for TOC extraction: {self.file_path}"
             raise ValueError(msg)
 
+        msg = (f"TOC extraction started: {self.file_path.name} "
+               f"({self.file_size_mb:.2f} MB)")
+        logger.info(msg)
         raw_toc = self._read_toc()
+        logger.info(f"Raw TOC entries read: {len(raw_toc)}")
         entries = self._build_entries(raw_toc)
+        msg = f"TOC extraction completed: {len(entries)} entries extracted"
+        logger.info(msg)
 
         return entries
 
@@ -128,8 +118,8 @@ class TOCExtractor(ExtractorInterface, ABC):
     def _read_toc(self) -> list[Any]:
         """Read raw TOC from PDF."""
         try:
-            with fitz.open(str(self.file_path)) as doc:
-                toc_data = doc.get_toc()
+            with fitz.open(str(self.file_path)) as doc:  # type: ignore[attr-defined]
+                toc_data = doc.get_toc()  # type: ignore[attr-defined]
                 return list(toc_data) if toc_data else []
         except Exception as e:
             raise ValueError(f"Failed to read TOC: {e}") from e

@@ -123,78 +123,14 @@ class PipelineOrchestrator(PipelineInterface, ABC):
         return self.__file_path.stat().st_size if self.file_exists else 0
 
     @property
-    def file_size_kb(self) -> float:
-        """Method implementation."""
-        return self.file_size / 1024
-
-    @property
     def file_size_mb(self) -> float:
         """Method implementation."""
         return self.file_size / (1024 * 1024)
 
     @property
-    def output_exists(self) -> bool:
-        """Method implementation."""
-        return self.__output_dir.exists()
-
-    @property
-    def output_name(self) -> str:
-        """Method implementation."""
-        return self.__output_dir.name
-
-    @property
-    def mode_value(self) -> str:
-        """Method implementation."""
-        return str(self.__mode.value)
-
-    @property
     def mode_name(self) -> str:
         """Method implementation."""
         return str(self.__mode.name)
-
-    @property
-    def is_full_mode(self) -> bool:
-        """Method implementation."""
-        return self.__mode == ParserMode.FULL
-
-    @property
-    def is_toc_mode(self) -> bool:
-        """Method implementation."""
-        return self.__mode == ParserMode.TOC
-
-    @property
-    def is_content_mode(self) -> bool:
-        """Method implementation."""
-        return self.__mode == ParserMode.CONTENT
-
-    @property
-    def has_executions(self) -> bool:
-        """Method implementation."""
-        return self.__exec_count > 0
-
-    @property
-    def has_successes(self) -> bool:
-        """Method implementation."""
-        return self.__success > 0
-
-    @property
-    def has_errors(self) -> bool:
-        """Method implementation."""
-        return self.__errors > 0
-
-    @property
-    def success_rate(self) -> float:
-        """Method implementation."""
-        if self.__exec_count > 0:
-            return self.__success / self.__exec_count
-        return 0.0
-
-    @property
-    def error_rate(self) -> float:
-        """Method implementation."""
-        if self.__exec_count > 0:
-            return self.__errors / self.__exec_count
-        return 0.0
 
     # ==========================================================
     # VALIDATION
@@ -228,13 +164,20 @@ class PipelineOrchestrator(PipelineInterface, ABC):
         try:
             self.prepare()
             self._ensure_valid()
+            logger.log_memory()
 
             result = self._parse()
+            msg = (f"Parse result: {len(result.toc_entries)} TOC, "
+                   f"{len(result.content_items)} content")
+            logger.info(msg)
+            logger.log_memory()
+
             self._write_outputs(result)      # overloaded version inside
             self._generate_reports(result)
 
             self.__success += 1
             self._on_complete()
+            logger.log_memory()
             return result
 
         except Exception as e:
@@ -270,7 +213,9 @@ class PipelineOrchestrator(PipelineInterface, ABC):
     # ==========================================================
     def _on_start(self) -> None:
         """Method implementation."""
-        logger.info("Pipeline started.")
+        msg = (f"Pipeline started: {self.file_path.name} "
+               f"(mode: {self.mode_name})")
+        logger.info(msg)
 
     def _on_complete(self) -> None:
         """Method implementation."""
@@ -292,7 +237,9 @@ class PipelineOrchestrator(PipelineInterface, ABC):
         """Method implementation."""
         from src.parser.parser_factory import ParserFactory
         parser = ParserFactory.create_parser(self.__file_path)
-        logger.info("Parsing PDF...")
+        msg = (f"Parsing PDF: {self.file_path.name} "
+               f"({self.file_size_mb:.2f} MB)")
+        logger.info(msg)
         return parser.parse()
 
     # ==========================================================
@@ -341,9 +288,11 @@ class PipelineOrchestrator(PipelineInterface, ABC):
     def _generate_reports(self, result: ParserResult) -> None:
         """Method implementation."""
         out = self.__output_dir
+        logger.info("Generating reports...")
         MetadataGenerator().generate(result, out / "usb_pd_metadata.jsonl")
         JSONReportGenerator().generate(result, out / "parsing_report.json")
         ExcelReportGenerator().generate(result, out / "validation_report.xlsx")
+        logger.info("Reports generated successfully")
 
     # ==========================================================
     # CLEANUP
