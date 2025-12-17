@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import overload
 
 try:
-    import psutil  # type: ignore[import-untyped]
+    import psutil
 except ImportError:
     psutil = None  # type: ignore[assignment]
 
