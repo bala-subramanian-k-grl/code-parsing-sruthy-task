@@ -10,7 +10,7 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import overload
 
-import psutil
+import psutil  # type: ignore[import-untyped]
 
 
 class BaseLogger(ABC):
