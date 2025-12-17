@@ -10,7 +10,10 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import overload
 
-import psutil  # type: ignore[import-untyped]
+try:
+    import psutil  # type: ignore[import-untyped]
+except ImportError:
+    psutil = None  # type: ignore[assignment]
 
 
 class BaseLogger(ABC):
@@ -165,6 +168,8 @@ class Logger(BaseLogger, ABC):
 
     def log_memory(self) -> None:
         """Log current memory usage."""
+        if psutil is None:
+            return
         process = psutil.Process()
         mem_info = process.memory_info()
         mem_mb = mem_info.rss / (1024 * 1024)
