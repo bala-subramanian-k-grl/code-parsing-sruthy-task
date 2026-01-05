@@ -105,7 +105,6 @@ class TOCExtractor(ExtractorInterface, ABC):
                f"({self.file_size_mb:.2f} MB)")
         logger.info(msg)
         raw_toc = self._read_toc()
-        logger.info(f"Raw TOC entries read: {len(raw_toc)}")
         entries = self._build_entries(raw_toc)
         msg = f"TOC extraction completed: {len(entries)} entries extracted"
         logger.info(msg)

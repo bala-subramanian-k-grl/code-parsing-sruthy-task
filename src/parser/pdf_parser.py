@@ -81,7 +81,6 @@ class PDFParser(BaseParser, ABC):
         toc_entries = []
         if include_toc:
             toc_entries = self._extract_toc()
-            logger.info(f"TOC entries extracted: {len(toc_entries)}")
 
         content_items = self._extract_content()
         logger.info(f"Content items extracted: {len(content_items)}")
@@ -110,7 +109,7 @@ class PDFParser(BaseParser, ABC):
         """Protected: Extract content from PDF."""
         try:
             with fitz.open(str(self.file_path)) as doc:
-                extractor = ContentExtractor(self.__doc_title)
+                extractor = ContentExtractor(self.__doc_title, str(self.file_path))
                 return extractor.extract(doc)
         except Exception as e:
             logger.error(f"Content extraction failed: {e}")

@@ -1,0 +1,12 @@
+{
+  "extraction_summary": {
+    "total_tables": 1431,
+    "pages_with_tables": 657,
+    "extraction_timestamp": "2026-01-05T20:47:58.591900"
+  },
+  "table_statistics": {
+    "avg_rows_per_table": 7.56533892382949,
+    "avg_columns_per_table": 3.975541579315164,
+    "largest_table": 1562
+  }
+}

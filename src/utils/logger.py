@@ -99,6 +99,8 @@ class Logger(BaseLogger, ABC):
         handler = logging.StreamHandler()
         handler.setLevel(logging.INFO)
         handler.setFormatter(self._get_formatter())
+        # Filter out progress messages from console
+        handler.addFilter(lambda record: not record.getMessage().startswith("Processed "))
         self._logger.addHandler(handler)
 
     # ---------------------------------------------------------
