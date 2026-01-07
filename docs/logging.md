@@ -128,6 +128,8 @@ logger.info("Processing: documents/usb_pd.pdf")
 logger.info("Success: Extracted 25760 items")
 logger.info("Successfully extracted 1431 tables")
 logger.info("Extracted 362 figures metadata")
+logger.info("Searching for 'usb' in usb_pd_spec.jsonl")
+logger.info("Found 'usb' 3120 times in usb_pd_spec.jsonl")
 ```
 
 Output:
@@ -137,6 +139,23 @@ Output:
 2024-01-15 14:32:49,567 | INFO | __main__ | Success: Extracted 25760 items
 2024-01-15 14:32:54,123 | INFO | __main__ | Successfully extracted 1431 tables
 2024-01-15 14:32:54,456 | INFO | __main__ | Extracted 362 figures metadata
+2024-01-15 14:32:55,123 | INFO | __main__ | Searching for 'usb' in usb_pd_spec.jsonl
+2024-01-15 14:32:55,789 | INFO | __main__ | Found 'usb' 3120 times in usb_pd_spec.jsonl
+```
+
+## Search Logging
+
+**Search Operations:**
+```python
+logger.info(f"Searching for '{keyword}' in {file_path.name}")
+logger.info(f"Found '{keyword}' {count} times in {file_path.name}")
+logger.error(f"Search failed: {error}")
+```
+
+**Example Output:**
+```
+2024-01-15 14:35:10,123 | INFO | search | Searching for 'voltage' in extracted_tables.jsonl
+2024-01-15 14:35:10,234 | INFO | search | Found 'voltage' 0 times in extracted_tables.jsonl
 ```
 
 ## Summary

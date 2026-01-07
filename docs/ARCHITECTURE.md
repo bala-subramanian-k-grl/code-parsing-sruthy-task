@@ -152,7 +152,44 @@ outputs/
 
 ---
 
-### 5. Support Layer
+### 6. Search Layer
+
+**Responsibility:** Search through extracted content
+
+**Components:**
+
+**SearchConfig:**
+- Validates search parameters
+- Maps file types to paths
+- Encapsulates search configuration
+
+**SearchExecutor:**
+- Executes search operations
+- Tracks result counts
+- Provides metadata
+
+**SearchCLI:**
+- Command-line interface
+- Argument parsing
+- User-friendly output
+
+**Supported Search Types:**
+- `content` - Full document content (usb_pd_spec.jsonl)
+- `tables` - Extracted tables (extracted_tables.jsonl)
+- `figures` - Figure metadata (extracted_figures.jsonl)
+- `toc` - Table of contents (usb_pd_toc.jsonl)
+
+**Usage:**
+```bash
+python search.py "keyword"           # Search in content
+python search.py voltage tables      # Search in tables
+python search.py diagram figures     # Search in figures
+python search.py section toc         # Search in TOC
+```
+
+---
+
+### 7. Support Layer
 
 **Configuration Module:**
 - ConfigLoader - Dynamic settings
@@ -397,7 +434,8 @@ pip install -r requirements.txt
 python main.py                    # TOC + Content + Figures
 python extract_tables.py          # Tables + Figures
 python -m src.cli.app --file <pdf> --mode full  # CLI
-python search.py "keyword" outputs/usb_pd_spec.jsonl  # Search
+python search.py "keyword"        # Search in content
+python search.py voltage tables   # Search in tables
 ```
 
 ---

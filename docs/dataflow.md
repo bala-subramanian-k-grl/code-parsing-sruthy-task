@@ -83,5 +83,32 @@
 │    ├─ JSON reports (comprehensive)                          │
 │    ├─ Excel dashboard (visual analysis)                     │
 │    └─ Log file (execution trace)                            │
+└────────────────────┬────────────────────────────────────────┘
+                     │
+┌────────────────────▼────────────────────────────────────────┐
+│ 8. SEARCH: Query Extracted Data                             │
+│                                                              │
+│ SearchCLI:                                                   │
+│ ├─ Parse arguments (keyword, file_type)                     │
+│ └─ Create SearchConfig                                      │
+│                                                              │
+│ SearchConfig:                                                │
+│ ├─ Validate keyword and file type                           │
+│ ├─ Map file type to path:                                   │
+│ │  ├─ content → usb_pd_spec.jsonl                           │
+│ │  ├─ tables → extracted_tables.jsonl                       │
+│ │  ├─ figures → extracted_figures.jsonl                     │
+│ │  └─ toc → usb_pd_toc.jsonl                                │
+│ └─ Return file path                                         │
+│                                                              │
+│ SearchExecutor:                                              │
+│ ├─ Open JSONL file                                          │
+│ ├─ Search line by line                                      │
+│ ├─ Count matches                                            │
+│ └─ Return result count                                      │
+│                                                              │
+│ Output: Search results with match count                     │
+│                                                              │
+│ Performance: ~5,000 lines/sec, <50MB memory                 │
 └─────────────────────────────────────────────────────────────┘
 ```

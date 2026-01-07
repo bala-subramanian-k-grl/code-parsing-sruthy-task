@@ -57,7 +57,17 @@ python -m src.cli.app --file assets/USB_PD_R3_2\ V1.1\ 2024-10.pdf --mode conten
 
 **Search:**
 ```bash
-python search.py "Power Delivery" outputs/usb_pd_spec.jsonl
+# Search in content (default)
+python search.py "Power Delivery"
+
+# Search in tables
+python search.py voltage tables
+
+# Search in figures
+python search.py diagram figures
+
+# Search in TOC
+python search.py section toc
 ```
 
 ---
@@ -104,7 +114,7 @@ result = orchestrator.execute()
 | `usb_pd_metadata.jsonl` | Document statistics |
 | `parsing_report.json` | Detailed processing report |
 | `validation_report.xlsx` | Excel validation dashboard |
-| `USB_PD_Spec_table.jsonl` | Extracted tables (1,431 tables) |
+| `extracted_tables.jsonl` | Extracted tables (1,431 tables) |
 | `extracted_figures.jsonl` | Figure metadata (362 figures) |
 | `figures_summary.json` | Figure extraction summary |
 

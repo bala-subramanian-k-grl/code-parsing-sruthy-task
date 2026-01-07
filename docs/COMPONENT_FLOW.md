@@ -160,6 +160,51 @@ title: str              # Figure title
 
 ---
 
+## Module 4: SearchHandler (Search)
+
+**Purpose:** Search through extracted content
+
+**Input:** Search keyword and file type
+
+**Processing:**
+
+**Search Configuration:**
+```python
+config = SearchConfig(keyword, file_type)
+config.validate()  # Validate keyword and file type
+file_path = config.file_path  # Map type to file
+```
+
+**Search Execution:**
+```python
+searcher = JSONLSearcher(file_path)
+count = searcher.search(keyword)  # Search in JSONL
+return count  # Number of matches
+```
+
+**Supported File Types:**
+- `content` → usb_pd_spec.jsonl
+- `tables` → extracted_tables.jsonl
+- `figures` → extracted_figures.jsonl
+- `toc` → usb_pd_toc.jsonl
+
+**Output:** Match count and search results
+
+**Performance:**
+- Search speed: ~5,000 lines/sec
+- Memory: <50MB
+
+**Usage:**
+```bash
+python search.py "keyword"           # Search in content
+python search.py voltage tables      # Search in tables
+python search.py diagram figures     # Search in figures
+```
+
+**Errors:** SearchError, FileNotFoundError, ValueError
+
+---
+
 ## Flow Summary
 
 ```
@@ -172,4 +217,8 @@ DetectionEngine (Extract TOC, Content, Tables, Figures)
 OutputHandler (Write JSONL, JSON, Excel)
     ↓
 Output Files
+    ↓
+SearchHandler (Search in extracted content)
+    ↓
+Search Results
 ```
