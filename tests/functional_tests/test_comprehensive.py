@@ -13,7 +13,6 @@ Enhancements:
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import List, Optional
 
 # ================================================================
 # Composition Helper (Shared Logger)
@@ -76,8 +75,8 @@ class BaseE2ETest(ABC):
 
     def __init__(self) -> None:
         self._logger = TestLogger()
-        self._result: Optional[bool] = None
-        self._errors: List[str] = []
+        self._result: bool | None = None
+        self._errors: list[str] = []
         self.__instance_id = id(self)
         self.__created = True
 
@@ -279,7 +278,7 @@ class E2ETestRunner:
     """Executes all E2E tests using polymorphic dispatch."""
 
     def __init__(self) -> None:
-        self._tests: List[BaseE2ETest] = []
+        self._tests: list[BaseE2ETest] = []
         self.__instance_id = id(self)
         self.__created = True
 

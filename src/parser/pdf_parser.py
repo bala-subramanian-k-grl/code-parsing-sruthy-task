@@ -197,7 +197,7 @@ class PDFParser(BaseParser, ABC):
         """Method implementation."""
         return self.__doc_title[index]
 
-    def __enter__(self) -> "PDFParser":
+    def __enter__(self) -> PDFParser:
         """Context manager: open parser."""
         self.open()
         return self

@@ -8,7 +8,7 @@ import os
 import tempfile
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any, List
+from typing import Any
 
 # ============================================================
 # Logger (Composition)
@@ -69,8 +69,8 @@ class BaseFileManager(ABC):
 
     def __init__(self, logger: FileManagerLogger | None = None) -> None:
         self._logger: FileManagerLogger = logger or FileManagerLogger()
-        self._files: List[Path] = []    # Encapsulation
-        self._errors: List[str] = []    # Encapsulation
+        self._files: list[Path] = []    # Encapsulation
+        self._errors: list[str] = []    # Encapsulation
         self.__instance_id = id(self)
         self.__created = True
 
@@ -131,12 +131,12 @@ class BaseFileManager(ABC):
     # --------------- Introspection Helpers ------------
 
     @property
-    def files(self) -> List[Path]:
+    def files(self) -> list[Path]:
         """Get list of tracked files (read-only usage)."""
         return list(self._files)
 
     @property
-    def errors(self) -> List[str]:
+    def errors(self) -> list[str]:
         """Get list of errors encountered during cleanup."""
         return list(self._errors)
 

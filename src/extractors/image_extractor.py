@@ -8,7 +8,7 @@ import json
 import re
 from io import BytesIO
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 import fitz  # type: ignore
 from pdfminer.high_level import extract_pages
@@ -120,7 +120,7 @@ class ImageExtractor:
         self,
         pdf_path: str | Path,
         output_dir: str | Path = "outputs",
-        max_pages: Optional[int] = None
+        max_pages: int | None = None
     ) -> None:
         """Initialize image extractor."""
         self._pdf_path = Path(pdf_path)
@@ -209,7 +209,7 @@ class ImageExtractor:
 
     def _save_image(
         self, image: LTImage, page_num: int, img_idx: int
-    ) -> Optional[dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """Save image to file."""
         try:
             img_data = image.stream.get_data()

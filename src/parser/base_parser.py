@@ -218,7 +218,7 @@ class BaseParser(ParserInterface, ABC):
         """Method implementation."""
         return text in str(self.__file_path)
 
-    def __enter__(self) -> "BaseParser":
+    def __enter__(self) -> BaseParser:
         """Method implementation."""
         self.open()
         return self

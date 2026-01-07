@@ -8,7 +8,7 @@ from __future__ import annotations
 import time
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 # ======================================================
 # Logger via Composition
@@ -86,10 +86,10 @@ class BaseEdgeTest(ABC):
     - timestamps
     """
 
-    def __init__(self, logger: Optional[EdgeLogger] = None) -> None:
+    def __init__(self, logger: EdgeLogger | None = None) -> None:
         self.__logger = logger or EdgeLogger()  # Composition
         self.__errors: list[str] = []
-        self.__result: Optional[bool] = None
+        self.__result: bool | None = None
         self.__start_time: float = 0.0
         self.__end_time: float = 0.0
         self.__instance_id = id(self)
@@ -140,7 +140,7 @@ class BaseEdgeTest(ABC):
         return list(self.__errors)
 
     @property
-    def result(self) -> Optional[bool]:
+    def result(self) -> bool | None:
         return self.__result
 
     @property

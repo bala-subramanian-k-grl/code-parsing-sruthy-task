@@ -7,7 +7,6 @@ from __future__ import annotations
 
 import time
 from abc import ABC, abstractmethod
-from pathlib import Path
 
 
 class TableTestLogger:
@@ -60,7 +59,7 @@ class TableExtractorInitTest(BaseTableTest):
     def run_test(self) -> bool:
         self._logger.log("Testing TableExtractor initialization...")
         from src.extractors.table_extractor import TableExtractor
-        
+
         extractor = TableExtractor()
         return (
             hasattr(extractor, "extract") and
@@ -75,7 +74,7 @@ class TableExtractorMethodsTest(BaseTableTest):
     def run_test(self) -> bool:
         self._logger.log("Testing TableExtractor methods...")
         from src.extractors.table_extractor import TableExtractor
-        
+
         return (
             hasattr(TableExtractor, "extract") and
             hasattr(TableExtractor, "get_metadata") and
@@ -88,8 +87,10 @@ class TablePipelineInitTest(BaseTableTest):
 
     def run_test(self) -> bool:
         self._logger.log("Testing TableExtractionPipeline initialization...")
-        from src.orchestrator.table_extraction_pipeline import TableExtractionPipeline
-        
+        from src.orchestrator.table_extraction_pipeline import (
+            TableExtractionPipeline,
+        )
+
         return (
             hasattr(TableExtractionPipeline, "extract_and_save") and
             hasattr(TableExtractionPipeline, "validate_pipeline")
@@ -102,7 +103,7 @@ class TableWriterInitTest(BaseTableTest):
     def run_test(self) -> bool:
         self._logger.log("Testing TableWriter initialization...")
         from src.writers.table_writer import TableWriter
-        
+
         writer = TableWriter("test_doc")
         return (
             hasattr(writer, "write_tables") and
@@ -132,10 +133,10 @@ class TableTestRunner:
 def test_table_extraction_suite():
     """Pytest entry point for table extraction tests."""
     runner = TableTestRunner()
-    
+
     runner.add_test(TableExtractorInitTest())
     runner.add_test(TableExtractorMethodsTest())
     runner.add_test(TablePipelineInitTest())
     runner.add_test(TableWriterInitTest())
-    
+
     assert runner.run_all()

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Any, Optional
+from typing import Any
 
 
 class BaseFixture(ABC):
@@ -46,7 +46,7 @@ class BaseFixture(ABC):
         """Hook for logging teardown failures."""
         print(f"[Fixture Teardown Warning] {error}")
 
-    def __enter__(self) -> "BaseFixture":
+    def __enter__(self) -> BaseFixture:
         """Context entry: calls setup()."""
         try:
             self.setup()
@@ -58,9 +58,9 @@ class BaseFixture(ABC):
 
     def __exit__(
         self,
-        exc_type: Optional[type],
-        exc_val: Optional[BaseException],
-        exc_tb: Optional[Any]
+        exc_type: type | None,
+        exc_val: BaseException | None,
+        exc_tb: Any | None
     ) -> None:
         """
         Context exit: safely executes teardown().

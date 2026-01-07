@@ -348,7 +348,7 @@ class ContentExtractor(ExtractorInterface, ABC):
         """Method implementation."""
         return text.lower() in self.__doc_title.lower()
 
-    def __enter__(self) -> "ContentExtractor":
+    def __enter__(self) -> ContentExtractor:
         """Method implementation."""
         return self
 

@@ -41,7 +41,7 @@ class BaseLogger(ABC):
 class Logger(BaseLogger, ABC):
     """Thread-safe Singleton Logger with full OOP design."""
 
-    _instance: "Logger | None" = None
+    _instance: Logger | None = None
     _lock = threading.Lock()
     _DEFAULT_NAME = "PDFParser"
 
@@ -51,7 +51,7 @@ class Logger(BaseLogger, ABC):
     def __new__(
         cls,
         log_file: Path = Path("outputs") / "parser.log"
-    ) -> "Logger":
+    ) -> Logger:
         """Create only one Logger instance (thread-safe)."""
         with cls._lock:
             if cls._instance is None:

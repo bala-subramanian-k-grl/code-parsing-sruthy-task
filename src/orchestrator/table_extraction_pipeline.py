@@ -5,7 +5,7 @@ Table extraction pipeline with enhanced OOP design and error handling.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from src.extractors.table_extractor import TableExtractionError, TableExtractor
 from src.utils.logger import logger
@@ -25,10 +25,10 @@ class TableExtractionPipeline:
         self._doc_title = self._validate_doc_title(doc_title)
         self._output_dir = self._validate_output_dir(output_dir)
         self._pdf_path = self._validate_pdf_path(pdf_path)
-        
-        self._extractor: Optional[TableExtractor] = None
-        self._writer: Optional[TableWriter] = None
-        self._extraction_metadata: Optional[dict[str, Any]] = None
+
+        self._extractor: TableExtractor | None = None
+        self._writer: TableWriter | None = None
+        self._extraction_metadata: dict[str, Any] | None = None
 
     @property
     def doc_title(self) -> str:
@@ -46,7 +46,7 @@ class TableExtractionPipeline:
         return self._pdf_path
 
     @property
-    def extraction_metadata(self) -> Optional[dict[str, Any]]:
+    def extraction_metadata(self) -> dict[str, Any] | None:
         """Get extraction metadata."""
         return self._extraction_metadata
 
@@ -54,23 +54,23 @@ class TableExtractionPipeline:
         """Extract tables and save with comprehensive error handling."""
         try:
             logger.info(f"Starting table extraction pipeline for {self._pdf_path.name}")
-            
+
             # Extract tables
             tables = self._extract_tables()
-            
+
             if not tables:
                 logger.warning(f"No tables found in {self._pdf_path.name}")
                 return self._create_result_metadata(0, None)
-            
+
             # Save tables
             output_path = self._save_tables(tables)
-            
+
             # Collect metadata
             result = self._create_result_metadata(len(tables), output_path)
             logger.info(f"Pipeline completed successfully: {len(tables)} tables saved to {output_path.name}")
-            
+
             return result
-            
+
         except (TableExtractionError, WriterError) as e:
             logger.error(f"Pipeline failed: {str(e)}")
             raise PipelineError(f"Table extraction pipeline failed: {str(e)}") from e
@@ -81,7 +81,7 @@ class TableExtractionPipeline:
     def _extract_tables(self) -> list[dict[str, Any]]:
         """Extract tables using the table extractor."""
         self._extractor = TableExtractor()
-        
+
         try:
             tables = self._extractor.extract(self._pdf_path)
             self._extraction_metadata = self._extractor.get_metadata()
@@ -93,14 +93,14 @@ class TableExtractionPipeline:
         """Save tables using the table writer."""
         self._writer = TableWriter(self._doc_title)
         output_path = self._output_dir / f"{self._doc_title}_table.jsonl"
-        
+
         try:
             self._writer.write_tables(tables, output_path)
             return output_path
         except Exception as e:
             raise WriterError(f"Failed to save tables: {str(e)}") from e
 
-    def _create_result_metadata(self, table_count: int, output_path: Optional[Path]) -> dict[str, Any]:
+    def _create_result_metadata(self, table_count: int, output_path: Path | None) -> dict[str, Any]:
         """Create result metadata."""
         return {
             "success": True,
@@ -122,28 +122,28 @@ class TableExtractionPipeline:
         """Validate and prepare output directory."""
         if not isinstance(output_dir, Path):
             raise TypeError("Output directory must be a Path object")
-        
+
         try:
             output_dir.mkdir(parents=True, exist_ok=True)
         except OSError as e:
             raise PipelineError(f"Cannot create output directory {output_dir}: {str(e)}") from e
-        
+
         return output_dir
 
     def _validate_pdf_path(self, pdf_path: Path) -> Path:
         """Validate PDF path."""
         if not isinstance(pdf_path, Path):
             raise TypeError("PDF path must be a Path object")
-        
+
         if not pdf_path.exists():
             raise FileNotFoundError(f"PDF file not found: {pdf_path}")
-        
+
         if not pdf_path.is_file():
             raise ValueError(f"PDF path is not a file: {pdf_path}")
-        
+
         if pdf_path.suffix.lower() != '.pdf':
             raise ValueError(f"File is not a PDF: {pdf_path}")
-        
+
         return pdf_path
 
     def validate_pipeline(self) -> bool:

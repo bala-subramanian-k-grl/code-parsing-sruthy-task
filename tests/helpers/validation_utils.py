@@ -15,7 +15,8 @@ from __future__ import annotations
 
 import time
 from abc import ABC, abstractmethod
-from typing import Any, Callable, List
+from collections.abc import Callable
+from typing import Any
 
 # ============================================================
 # Logger (Composition)
@@ -78,7 +79,7 @@ class BaseValidator(ABC):
 
     def __init__(self, logger: ValidationLogger | None = None) -> None:
         self._logger = logger or ValidationLogger()  # Composition
-        self._errors: List[str] = []                # Encapsulation
+        self._errors: list[str] = []                # Encapsulation
         self._start_time: float = 0.0               # Encapsulation
         self._end_time: float = 0.0                 # Encapsulation
         self.__instance_id = id(self)
@@ -119,7 +120,7 @@ class BaseValidator(ABC):
             self.teardown()
 
     @property
-    def errors(self) -> List[str]:
+    def errors(self) -> list[str]:
         return list(self._errors)
 
     def __str__(self) -> str:

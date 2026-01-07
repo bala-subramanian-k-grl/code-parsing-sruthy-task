@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import time
 from abc import ABC, abstractmethod
-from typing import Any, List
+from typing import Any
 
 # ==========================================================
 # Composition Helper (Boosts OOP Score)
@@ -89,7 +89,7 @@ class BaseMockDataGenerator(ABC):
 
         self._count: int | None = count        # Encapsulation
         self._logger = logger or MockDataLogger()   # Composition
-        self._errors: List[str] = []           # Encapsulation
+        self._errors: list[str] = []           # Encapsulation
         self._start_time: float = 0.0          # Encapsulation
         self._end_time: float = 0.0            # Encapsulation
         self.__instance_id = id(self)

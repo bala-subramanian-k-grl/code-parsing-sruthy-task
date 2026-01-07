@@ -246,7 +246,7 @@ class TOCExtractor(ExtractorInterface, ABC):
         """Method implementation."""
         return self == other or self > other
 
-    def __enter__(self) -> "TOCExtractor":
+    def __enter__(self) -> TOCExtractor:
         """Context manager support."""
         return self
 

@@ -356,7 +356,7 @@ class PipelineOrchestrator(PipelineInterface, ABC):
         """Make orchestrator callable."""
         return self.execute()
 
-    def __enter__(self) -> "PipelineOrchestrator":
+    def __enter__(self) -> PipelineOrchestrator:
         """Context manager support."""
         self.prepare()
         return self

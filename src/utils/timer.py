@@ -72,7 +72,7 @@ class Timer(BaseTimer, ABC):
     # -------------------------------------------------------------------------
     # Context manager hooks
     # -------------------------------------------------------------------------
-    def __enter__(self) -> "Timer":
+    def __enter__(self) -> Timer:
         """Method implementation."""
         self.start()
         return self

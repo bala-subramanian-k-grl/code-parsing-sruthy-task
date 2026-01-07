@@ -239,7 +239,7 @@ class JSONLWriter(WriterInterface, ABC):
         """Method implementation."""
         return text.lower() in self.__doc_title.lower()
 
-    def __enter__(self) -> "JSONLWriter":
+    def __enter__(self) -> JSONLWriter:
         """Method implementation."""
         return self
 

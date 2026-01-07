@@ -5,7 +5,7 @@ Table extraction using pdfplumber with enhanced OOP design.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 import pdfplumber
 
@@ -24,7 +24,7 @@ class TableExtractor(ExtractorInterface):
     def __init__(self) -> None:
         """Initialize table extractor."""
         self._table_count: int = 0
-        self._last_extraction_path: Optional[Path] = None
+        self._last_extraction_path: Path | None = None
 
     @property
     def extractor_type(self) -> str:
@@ -45,9 +45,9 @@ class TableExtractor(ExtractorInterface):
         """Extract tables from PDF with comprehensive error handling."""
         pdf_path = Path(data)
         self._last_extraction_path = pdf_path
-        
+
         self._validate_input(pdf_path)
-        
+
         try:
             return self._extract_tables_from_pdf(pdf_path)
         except Exception as e:
@@ -58,27 +58,27 @@ class TableExtractor(ExtractorInterface):
         """Validate input PDF file."""
         if not pdf_path.exists():
             raise FileNotFoundError(f"PDF file not found: {pdf_path}")
-        
+
         if not pdf_path.is_file():
             raise ValueError(f"Path is not a file: {pdf_path}")
-        
+
         if pdf_path.suffix.lower() != '.pdf':
             raise ValueError(f"File is not a PDF: {pdf_path}")
 
     def _extract_tables_from_pdf(self, pdf_path: Path) -> list[dict[str, Any]]:
         """Extract tables from PDF file."""
         tables: list[dict[str, Any]] = []
-        
+
         try:
             with pdfplumber.open(pdf_path) as pdf:
                 for page_num, page in enumerate(pdf.pages, 1):
                     page_tables = self._extract_page_tables(page, page_num)
                     tables.extend(page_tables)
-                    
+
             self._table_count = len(tables)
             logger.info(f"Successfully extracted {len(tables)} tables from {pdf_path.name}")
             return tables
-            
+
         except PermissionError:
             raise TableExtractionError(f"Permission denied accessing PDF: {pdf_path}")
         except Exception as e:
@@ -87,7 +87,7 @@ class TableExtractor(ExtractorInterface):
     def _extract_page_tables(self, page: Any, page_num: int) -> list[dict[str, Any]]:
         """Extract tables from a single page."""
         page_tables = []
-        
+
         try:
             extracted_tables = page.extract_tables()
             if extracted_tables:
@@ -102,19 +102,19 @@ class TableExtractor(ExtractorInterface):
                         })
         except Exception as e:
             logger.warning(f"Failed to extract tables from page {page_num}: {str(e)}")
-            
+
         return page_tables
 
     def _is_valid_table(self, table: list[list[Any]]) -> bool:
         """Validate if extracted table is meaningful."""
         if not table or len(table) < 2:  # At least header + 1 row
             return False
-        
+
         # Check if table has consistent column count
         first_row_cols = len(table[0]) if table[0] else 0
         if first_row_cols < 2:  # At least 2 columns
             return False
-            
+
         return True
 
     def validate(self) -> None:

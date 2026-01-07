@@ -232,7 +232,7 @@ class TextParser(BaseParser, ABC):
         """Method implementation."""
         return text.lower() in self.__doc_title.lower()
 
-    def __enter__(self) -> "TextParser":
+    def __enter__(self) -> TextParser:
         """Context manager: open parser."""
         self.open()
         return self

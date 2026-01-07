@@ -8,8 +8,9 @@ import cProfile
 import logging
 import pstats
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from io import StringIO
-from typing import Any, Callable
+from typing import Any
 
 
 class BaseProfiler(ABC):  # Abstraction

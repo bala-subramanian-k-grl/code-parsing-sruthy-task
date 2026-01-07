@@ -177,7 +177,7 @@ class BaseConfig(BaseConfigInterface, ABC):
 
     def with_mode(
         self, mode: str | ParserMode
-    ) -> "FullConfig | TOCConfig | ContentConfig":
+    ) -> FullConfig | TOCConfig | ContentConfig:
         """
         Create a new config object for a different mode (polymorphic).
         """

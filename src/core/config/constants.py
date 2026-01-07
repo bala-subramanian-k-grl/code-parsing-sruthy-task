@@ -36,7 +36,7 @@ class BaseEnum(str, Enum):
         return [m.value for m in cls]
 
     @classmethod
-    def from_string(cls, value: str) -> "BaseEnum":
+    def from_string(cls, value: str) -> BaseEnum:
         """Method implementation."""
         for member in cls:
             if member.value.lower() == value.lower():
