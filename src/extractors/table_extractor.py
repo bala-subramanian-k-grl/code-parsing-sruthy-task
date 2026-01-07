@@ -29,7 +29,7 @@ class TableExtractor(ExtractorInterface):
     @property
     def extractor_type(self) -> str:
         """Return extractor type."""
-        return "TableExtractor"
+        return "table"
 
     @property
     def is_stateful(self) -> bool:
