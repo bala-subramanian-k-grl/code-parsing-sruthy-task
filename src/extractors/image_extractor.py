@@ -10,7 +10,7 @@ from io import BytesIO
 from pathlib import Path
 from typing import Any
 
-import fitz  # type: ignore
+import fitz
 from pdfminer.high_level import extract_pages
 from pdfminer.layout import LTFigure, LTImage
 from PIL import Image
