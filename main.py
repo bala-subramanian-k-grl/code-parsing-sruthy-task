@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Optional
+from pathlib import Path
 
 from src.cli.app import CLIApp
+from src.extractors.image_extractor import ImageExtractor
 from src.utils.logger import logger
 from src.utils.timer import timer
 
@@ -17,7 +18,7 @@ class BaseRunner(ABC):
     """Abstract application runner with lifecycle hooks."""
 
     def __init__(self) -> None:
-        self._app: Optional[CLIApp] = None  # Protected attribute
+        self._app: CLIApp | None = None  # Protected attribute
 
     # ---------- Polymorphic Factory Method ----------
     @abstractmethod
@@ -38,6 +39,15 @@ class BaseRunner(ABC):
 
     def _after_run(self) -> None:
         logger.info("Application runner completed.")
+
+        try:
+            pdf_path = Path("assets/USB_PD_R3_2 V1.1 2024-10.pdf")
+            output_dir = Path("outputs")
+            if pdf_path.exists():
+                extractor = ImageExtractor(pdf_path, output_dir)
+                extractor.extract_figures_metadata()
+        except Exception as e:
+            logger.error(f"Figure extraction failed: {e}")
 
     def _execute(self) -> None:
         """Execute the created application."""

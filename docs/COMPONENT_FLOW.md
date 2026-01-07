@@ -45,16 +45,37 @@ for page in document:
         create ContentItem
 ```
 
+**Path C - Table Extraction:**
+```python
+with pdfplumber.open(pdf_path) as pdf:
+    for page in pdf.pages:
+        tables = page.extract_tables()
+        validate tables
+        create TableData
+```
+
+**Path D - Figure Metadata Extraction:**
+```python
+for page in range(18, 30):  # List of Figures section
+    text = page.get_text()
+    matches = re.findall(pattern, text)
+    create FigureMetadata
+```
+
 **Output:** `ParserResult` with:
 - `toc_entries`: Hierarchical TOC
 - `content_items`: Page content
+- `tables`: Extracted tables
+- `figures`: Figure metadata
 - `page_count`: Total pages
 - `extraction_time`: Duration
 
 **Performance:**
 - TOC: 0.8s
 - Content: 3.1s
-- Total: ~4s
+- Tables: 4.5s (1,431 tables)
+- Figures: 0.3s (362 figures)
+- Total: ~9s
 - Speed: ~1,000 items/sec
 
 **Errors:** ValueError, IndexError, AttributeError, MemoryError
@@ -92,6 +113,9 @@ save_file()  # validation_report.xlsx
 - `usb_pd_metadata.jsonl` - Document stats
 - `parsing_report.json` - Processing report
 - `validation_report.xlsx` - Excel dashboard
+- `USB_PD_Spec_table.jsonl` - Extracted tables
+- `extracted_figures.jsonl` - Figure metadata
+- `figures_summary.json` - Figure summary
 
 ---
 
@@ -118,6 +142,22 @@ block_id: str           # Block identifier
 bbox: list              # Bounding box coordinates
 ```
 
+**TableData:**
+```python
+page: int               # Page number
+table_index: int        # Index on page
+data: list[list]        # Table rows and columns
+row_count: int          # Number of rows
+column_count: int       # Number of columns
+```
+
+**FigureMetadata:**
+```python
+page: int               # Page number
+figure_id: str          # "2.1", "5.3"
+title: str              # Figure title
+```
+
 ---
 
 ## Flow Summary
@@ -127,7 +167,7 @@ PDF File
     ↓
 InputHandler (Validate & Load)
     ↓
-DetectionEngine (Extract TOC & Content)
+DetectionEngine (Extract TOC, Content, Tables, Figures)
     ↓
 OutputHandler (Write JSONL, JSON, Excel)
     ↓

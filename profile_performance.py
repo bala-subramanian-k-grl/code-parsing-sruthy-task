@@ -2,6 +2,8 @@
 # USB PD Specification Parser - Performance Profiler
 """Performance profiler with OOP principles."""
 
+from __future__ import annotations
+
 import cProfile
 import logging
 import pstats
@@ -73,12 +75,12 @@ class ConfigProfiler(BaseProfiler):  # Inheritance
 
     def _config_operations(self) -> int:  # Encapsulation
         """Perform config operations."""
-        from src.config import Config
+        from src.core.config.config_loader import ConfigLoader
 
         count = 0
         for _ in range(self._operations):
-            config: Config = Config("application.yml")
-            _ = config.pdf_input_file
+            config = ConfigLoader()
+            _ = config.get("input.pdf_path")
             count += 1
         return count
 
@@ -104,19 +106,24 @@ class ModelProfiler(BaseProfiler):  # Inheritance
 
     def _model_operations(self) -> int:  # Encapsulation
         """Perform model operations."""
-        from src.core.models import BaseContent, TOCEntry
+        from src.core.config.models import ContentItem, TOCEntry
 
         count = 0
         for i in range(self._operations):
-            BaseContent(page=i + 1, content=f"test {i}")
+            ContentItem(
+                doc_title="Profile",
+                section_id=f"S{i}",
+                title=f"Title {i}",
+                content=f"test {i}",
+                page=i + 1,
+                level=1
+            )
             if i % 20 == 0:
                 TOCEntry(
-                    doc_title="Profile",
                     section_id=f"S{i}",
                     title=f"Title {i}",
-                    full_path=f"Path {i}",
                     page=i + 1,
-                    level=1,
+                    level=1
                 )
             count += 1
         return count

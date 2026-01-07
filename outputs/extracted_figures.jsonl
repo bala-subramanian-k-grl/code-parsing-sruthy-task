@@ -1,0 +1,362 @@
+{"page": 55, "figure_id": "2.1", "title": "Logical Structure of USB Power Delivery Capable Devices"}
+{"page": 58, "figure_id": "2.2", "title": "Example SOP' Communication between VCONN Source and Cable Plug(s)"}
+{"page": 67, "figure_id": "2.3", "title": "USB Power Delivery Communications Stack"}
+{"page": 68, "figure_id": "2.4", "title": "USB Power Delivery Communication Over USB"}
+{"page": 74, "figure_id": "2.6", "title": "Example of a Normal EPR Mode Operational Flow"}
+{"page": 81, "figure_id": "5.1", "title": "Interpretation of ordered sets"}
+{"page": 83, "figure_id": "5.2", "title": "Transmit Order for Various Sizes of Data"}
+{"page": 84, "figure_id": "5.3", "title": "USB Power Delivery Packet Format"}
+{"page": 88, "figure_id": "5.4", "title": "CRC-32 Generation"}
+{"page": 89, "figure_id": "5.5", "title": "Line format of Hard Reset"}
+{"page": 90, "figure_id": "5.6", "title": "Line format of Cable Reset"}
+{"page": 92, "figure_id": "5.7", "title": "BMC Example"}
+{"page": 92, "figure_id": "5.8", "title": "BMC Transmitter Block Diagram"}
+{"page": 93, "figure_id": "5.9", "title": "BMC Receiver Block Diagram"}
+{"page": 93, "figure_id": "5.10", "title": "BMC Encoded Start of Preamble"}
+{"page": 96, "figure_id": "5.15", "title": "BMC Tx 'ONE' Mask"}
+{"page": 97, "figure_id": "5.16", "title": "BMC Tx 'ZERO' Mask"}
+{"page": 99, "figure_id": "5.17", "title": "BMC Rx 'ONE' Mask when Sourcing Power"}
+{"page": 100, "figure_id": "5.18", "title": "BMC Rx 'ZERO' Mask when Sourcing Power"}
+{"page": 100, "figure_id": "5.19", "title": "BMC Rx 'ONE' Mask when Power neutral"}
+{"page": 101, "figure_id": "5.20", "title": "BMC Rx 'ZERO' Mask when Power neutral"}
+{"page": 101, "figure_id": "5.21", "title": "BMC Rx 'ONE' Mask when Sinking Power"}
+{"page": 102, "figure_id": "5.22", "title": "BMC Rx 'ZERO' Mask when Sinking Power"}
+{"page": 103, "figure_id": "5.23", "title": "Transmitter Load Model for BMC Tx from a Source"}
+{"page": 103, "figure_id": "5.24", "title": "Transmitter Load Model for BMC Tx from a Sink"}
+{"page": 107, "figure_id": "5.25", "title": "Transmitter diagram illustrating zDriver"}
+{"page": 108, "figure_id": "5.26", "title": "Inter-Frame Gap Timings"}
+{"page": 111, "figure_id": "5.27", "title": "Example Multi-Drop Configuration showing two DRPs"}
+{"page": 111, "figure_id": "5.28", "title": "Example Multi-Drop Configuration showing a DFP and UFP"}
+{"page": 113, "figure_id": "5.29", "title": "Test Frame"}
+{"page": 115, "figure_id": "6.1", "title": "USB Power Delivery Packet Format for a Control Message"}
+{"page": 116, "figure_id": "6.2", "title": "USB Power Delivery Packet Format including Data Message Payload"}
+{"page": 123, "figure_id": "6.4", "title": "Example Security_Request sequence Unchunked (Chunked bit = 0)"}
+{"page": 125, "figure_id": "6.7", "title": "Example Security_Request sequence Chunked (Chunked bit = 1)"}
+{"page": 126, "figure_id": "6.8", "title": "Example Security_Request Message of Data Size 7 (Chunked bit set to 1)"}
+{"page": 152, "figure_id": "6.12", "title": "SPR Capabilities Message Construction"}
+{"page": 152, "figure_id": "6.13", "title": "Example Capabilities Message with 2 Power Data Objects"}
+{"page": 159, "figure_id": "6.14", "title": "BIST Message"}
+{"page": 162, "figure_id": "6.15", "title": "Vendor Defined Message"}
+{"page": 169, "figure_id": "6.16", "title": "Discover Identity Command response"}
+{"page": 169, "figure_id": "6.17", "title": "Discover Identity Command response for a DRD"}
+{"page": 186, "figure_id": "6.18", "title": "Example Discover SVIDs response with 3 SVIDs"}
+{"page": 187, "figure_id": "6.19", "title": "Example Discover SVIDs response with 4 SVIDs"}
+{"page": 187, "figure_id": "6.20", "title": "Example Discover SVIDs response with 12 SVIDs followed by an empty response"}
+{"page": 188, "figure_id": "6.21", "title": "Example Discover Modes response for a given SVID with 3 Modes"}
+{"page": 189, "figure_id": "6.22", "title": "Successful Enter Mode sequence"}
+{"page": 190, "figure_id": "6.23", "title": "Unsuccessful Enter Mode sequence due to NAK"}
+{"page": 191, "figure_id": "6.24", "title": "Exit Mode sequence"}
+{"page": 192, "figure_id": "6.25", "title": "Attention Command request/response sequence"}
+{"page": 193, "figure_id": "6.26", "title": "Command request/response sequence"}
+{"page": 195, "figure_id": "6.27", "title": "Enter/Exit Mode Process"}
+{"page": 196, "figure_id": "6.28", "title": "Battery_Status Message"}
+{"page": 198, "figure_id": "6.29", "title": "Alert Message"}
+{"page": 201, "figure_id": "6.30", "title": "Get_Country_Info Message"}
+{"page": 203, "figure_id": "6.31", "title": "Enter_USB Message"}
+{"page": 205, "figure_id": "6.32", "title": "EPR_Request Message"}
+{"page": 206, "figure_id": "6.33", "title": "EPR Mode DO Message"}
+{"page": 208, "figure_id": "6.34", "title": "Illustration of process to enter EPR Mode"}
+{"page": 212, "figure_id": "6.35", "title": "Source_Info Message"}
+{"page": 214, "figure_id": "6.36", "title": "Revision Message Data Object"}
+{"page": 216, "figure_id": "6.37", "title": "Source_Capabilities_Extended Message"}
+{"page": 221, "figure_id": "6.38", "title": "SOP Status Message"}
+{"page": 226, "figure_id": "6.39", "title": "SOP'/SOP'' Status Message"}
+{"page": 227, "figure_id": "6.40", "title": "Get_Battery_Cap Message"}
+{"page": 227, "figure_id": "6.41", "title": "Get_Battery_Status Message"}
+{"page": 228, "figure_id": "6.42", "title": "Battery_Capabilities Message"}
+{"page": 230, "figure_id": "6.43", "title": "Get_Manufacturer_Info Message"}
+{"page": 231, "figure_id": "6.44", "title": "Manufacturer_Info Message"}
+{"page": 233, "figure_id": "6.45", "title": "Security_Request Message"}
+{"page": 233, "figure_id": "6.46", "title": "Security_Response Message"}
+{"page": 234, "figure_id": "6.47", "title": "Firmware_Update_Request Message"}
+{"page": 234, "figure_id": "6.48", "title": "Firmware_Update_Response Message"}
+{"page": 235, "figure_id": "6.49", "title": "PPS_Status Message"}
+{"page": 237, "figure_id": "6.50", "title": "Country_Codes Message"}
+{"page": 238, "figure_id": "6.51", "title": "Country_Info Message"}
+{"page": 239, "figure_id": "6.52", "title": "Sink_Capabilities_Extended Message"}
+{"page": 244, "figure_id": "6.53", "title": "Extended_Control Message"}
+{"page": 245, "figure_id": "6.54", "title": "Mapping SPR Capabilities to EPR Capabilities"}
+{"page": 246, "figure_id": "6.55", "title": "EPR_Source_Capabilities message with no EPR PDOs"}
+{"page": 247, "figure_id": "6.56", "title": "Vendor_Defined_Extended Message"}
+{"page": 275, "figure_id": "6.57", "title": "Outline of States"}
+{"page": 275, "figure_id": "6.58", "title": "References to states"}
+{"page": 277, "figure_id": "6.59", "title": "Chunking architecture Showing Message and Control Flow"}
+{"page": 278, "figure_id": "6.60", "title": "Chunked Rx State Diagram"}
+{"page": 281, "figure_id": "6.61", "title": "Chunked Tx State Diagram"}
+{"page": 284, "figure_id": "6.62", "title": "Chunked Message Router State Diagram"}
+{"page": 286, "figure_id": "6.63", "title": "Common Protocol Layer Message Transmission State Diagram"}
+{"page": 289, "figure_id": "6.64", "title": "Source Protocol Layer Message Transmission State Diagram"}
+{"page": 291, "figure_id": "6.65", "title": "Sink Protocol Layer Message Transmission State Diagram"}
+{"page": 293, "figure_id": "6.66", "title": "Protocol layer Message reception"}
+{"page": 295, "figure_id": "6.67", "title": "Hard/Cable Reset"}
+{"page": 312, "figure_id": "7.1", "title": "Placement of Source Bulk Capacitance"}
+{"page": 313, "figure_id": "7.2", "title": "Transition Envelope for Positive Voltage Transitions"}
+{"page": 314, "figure_id": "7.3", "title": "Transition Envelope for Negative Voltage Transitions"}
+{"page": 315, "figure_id": "7.4", "title": "PPS Positive Voltage Transitions"}
+{"page": 316, "figure_id": "7.5", "title": "PPS Negative Voltage Transitions"}
+{"page": 318, "figure_id": "7.6", "title": "SPR PPS Programmable Voltage and Current Limit"}
+{"page": 319, "figure_id": "7.7", "title": "SPR PPS Constant Power"}
+{"page": 321, "figure_id": "7.8", "title": "AVS Positive Voltage Transitions"}
+{"page": 321, "figure_id": "7.9", "title": "AVS Negative Voltage Transitions"}
+{"page": 323, "figure_id": "7.10", "title": "Source VBUS and VCONN Response to Hard Reset"}
+{"page": 325, "figure_id": "7.11", "title": "Application of vSrcNew and vSrcValid limits after tSrcReady"}
+{"page": 326, "figure_id": "7.12", "title": "Expected AVS/PPS Ripple Relative to an LSB"}
+{"page": 327, "figure_id": "7.13", "title": "Allowed DNL errors and tolerance of Voltage and Current in AVS/PPS mode"}
+{"page": 329, "figure_id": "7.14", "title": "Source Peak Current Overload"}
+{"page": 330, "figure_id": "7.15", "title": "Holdup Time Measurement"}
+{"page": 331, "figure_id": "7.16", "title": "VBUS Power during Fast Role Swap"}
+{"page": 333, "figure_id": "7.19", "title": "Data Reset UFP VCONN Power Cycle"}
+{"page": 334, "figure_id": "7.20", "title": "Data Reset DFP VCONN Power Cycle"}
+{"page": 335, "figure_id": "7.21", "title": "Placement of Sink Bulk Capacitance"}
+{"page": 342, "figure_id": "7.22", "title": "Transition Diagram for Increasing the Voltage"}
+{"page": 345, "figure_id": "7.23", "title": "Transition Diagram for Increasing the Voltage and Current"}
+{"page": 348, "figure_id": "7.24", "title": "Transition Diagram for Increasing the Voltage and Decreasing the Current"}
+{"page": 351, "figure_id": "7.25", "title": "Transition Diagram for Decreasing the Voltage and Increasing the Current"}
+{"page": 354, "figure_id": "7.26", "title": "Transition Diagram for Decreasing the Voltage"}
+{"page": 357, "figure_id": "7.27", "title": "Transition Diagram for Decreasing the Voltage and the Current"}
+{"page": 360, "figure_id": "7.28", "title": "Transition Diagram for no change in Current or Voltage"}
+{"page": 362, "figure_id": "7.29", "title": "Transition Diagram for Increasing the Current"}
+{"page": 365, "figure_id": "7.30", "title": "Transition Diagram for Decreasing the Current"}
+{"page": 368, "figure_id": "7.31", "title": "Transition Diagram for Increasing the Programmable Power Supply Voltage"}
+{"page": 371, "figure_id": "7.32", "title": "Transition Diagram for Decreasing the Programmable Power Supply Voltage"}
+{"page": 374, "figure_id": "7.33", "title": "Transition Diagram for increasing the Current in PPS mode"}
+{"page": 377, "figure_id": "7.34", "title": "Transition Diagram for decreasing the Current in PPS mode"}
+{"page": 380, "figure_id": "7.35", "title": "Transition Diagram for no change in Current or Voltage in PPS mode"}
+{"page": 382, "figure_id": "7.36", "title": "Transition Diagram for Increasing the Adjustable Power Supply Voltage"}
+{"page": 385, "figure_id": "7.37", "title": "Transition Diagram for Decreasing the Adjustable Voltage Supply Voltage"}
+{"page": 387, "figure_id": "7.38", "title": "Transition Diagram for no change in Current or Voltage in AVS mode"}
+{"page": 389, "figure_id": "7.39", "title": "Transition Diagram for a Sink Requested Power Role Swap"}
+{"page": 393, "figure_id": "7.40", "title": "Transition Diagram for a Source Requested Power Role Swap"}
+{"page": 397, "figure_id": "7.41", "title": "Transition Diagram for a Source Initiated Hard Reset"}
+{"page": 399, "figure_id": "7.42", "title": "Transition Diagram for a Sink Initiated Hard Reset"}
+{"page": 401, "figure_id": "7.43", "title": "Transition Diagram for Fast Role Swap"}
+{"page": 422, "figure_id": "8.1", "title": "Example of daisy chained displays"}
+{"page": 426, "figure_id": "8.2", "title": "Basic Message Exchange (Successful)"}
+{"page": 427, "figure_id": "8.3", "title": "Basic Message flow indicating possible errors"}
+{"page": 428, "figure_id": "8.4", "title": "Basic Message Flow with Bad followed by a Retry"}
+{"page": 448, "figure_id": "8.5", "title": "Successful Fixed, Variable or Battery SPR Power Negotiation"}
+{"page": 452, "figure_id": "8.6", "title": "Rejected Fixed, Variable or Battery SPR Power Negotiation"}
+{"page": 455, "figure_id": "8.7", "title": "Wait response to Fixed, Variable or Battery SPR Power Negotiation"}
+{"page": 458, "figure_id": "8.8", "title": "SPR PPS Keep Alive"}
+{"page": 461, "figure_id": "8.9", "title": "SPR Sink Makes Request (Accept)"}
+{"page": 464, "figure_id": "8.10", "title": "SPR Sink Makes Request (Reject)"}
+{"page": 467, "figure_id": "8.11", "title": "SPR Sink Makes Request (Wait)"}
+{"page": 470, "figure_id": "8.12", "title": "Entering EPR Mode (Success)"}
+{"page": 473, "figure_id": "8.13", "title": "Entering EPR Mode (Failure due to non-EPR cable)"}
+{"page": 476, "figure_id": "8.14", "title": "Entering EPR Mode (Failure of VCONN Swap)"}
+{"page": 480, "figure_id": "8.15", "title": "Successful Fixed EPR Power Negotiation"}
+{"page": 484, "figure_id": "8.16", "title": "Rejected Fixed EPR Power Negotiation"}
+{"page": 487, "figure_id": "8.17", "title": "Wait response to Fixed EPR Power Negotiation"}
+{"page": 490, "figure_id": "8.18", "title": "EPR Keep Alive"}
+{"page": 493, "figure_id": "8.19", "title": "Exiting EPR Mode (Sink Initiated)"}
+{"page": 496, "figure_id": "8.20", "title": "Exiting EPR Mode (Source Initiated)"}
+{"page": 499, "figure_id": "8.21", "title": "EPR Sink Makes Request (Accept)"}
+{"page": 502, "figure_id": "8.22", "title": "EPR Sink Makes Request (Reject)"}
+{"page": 505, "figure_id": "8.23", "title": "EPR Sink Makes Request (Wait)"}
+{"page": 508, "figure_id": "8.24", "title": "Unsupported message"}
+{"page": 511, "figure_id": "8.25", "title": "Soft Reset"}
+{"page": 514, "figure_id": "8.26", "title": "DFP Initiated Data Reset where the DFP is the VCONN Source"}
+{"page": 517, "figure_id": "8.27", "title": "DFP Receives Data Reset where the DFP is the VCONN Source"}
+{"page": 520, "figure_id": "8.28", "title": "DFP Initiated Data Reset where the UFP is the VCONN Source"}
+{"page": 524, "figure_id": "8.29", "title": "DFP Receives a Data Reset where the UFP is the VCONN Source"}
+{"page": 528, "figure_id": "8.30", "title": "Source initiated Hard Reset"}
+{"page": 531, "figure_id": "8.31", "title": "Sink Initiated Hard Reset"}
+{"page": 534, "figure_id": "8.32", "title": "Source initiated reset - Sink long reset"}
+{"page": 538, "figure_id": "8.33", "title": "Successful Power Role Swap Sequence Initiated by the Source"}
+{"page": 542, "figure_id": "8.34", "title": "Rejected Power Role Swap Sequence Initiated by the Source"}
+{"page": 545, "figure_id": "8.35", "title": "Power Role Swap Sequence with wait Initiated by the Source"}
+{"page": 549, "figure_id": "8.36", "title": "Successful Power Role Swap Sequence Initiated by the Sink"}
+{"page": 553, "figure_id": "8.37", "title": "Rejected Power Role Swap Sequence Initiated by the Sink"}
+{"page": 556, "figure_id": "8.38", "title": "Power Role Swap Sequence with wait Initiated by the Sink"}
+{"page": 560, "figure_id": "8.39", "title": "Successful Fast Role Swap Sequence"}
+{"page": 564, "figure_id": "8.40", "title": "Data Role Swap, UFP operating as Sink initiates"}
+{"page": 567, "figure_id": "8.41", "title": "Rejected Data Role Swap, UFP operating as Sink initiates"}
+{"page": 570, "figure_id": "8.42", "title": "Data Role Swap with Wait, UFP operating as Sink initiates"}
+{"page": 573, "figure_id": "8.43", "title": "Data Role Swap, UFP operating as Source initiates"}
+{"page": 576, "figure_id": "8.44", "title": "Rejected Data Role Swap, UFP operating as Source initiates"}
+{"page": 579, "figure_id": "8.45", "title": "Data Role Swap with Wait, UFP operating as Source initiates"}
+{"page": 582, "figure_id": "8.46", "title": "Data Role Swap, DFP operating as Source initiates"}
+{"page": 585, "figure_id": "8.47", "title": "Rejected Data Role Swap, DFP operating as Source initiates"}
+{"page": 588, "figure_id": "8.48", "title": "Data Role Swap with Wait, DFP operating as Source initiates"}
+{"page": 591, "figure_id": "8.49", "title": "Data Role Swap, DFP operating as Sink initiates"}
+{"page": 594, "figure_id": "8.50", "title": "Rejected Data Role Swap, DFP operating as Sink initiates"}
+{"page": 597, "figure_id": "8.51", "title": "Data Role Swap with Wait, DFP operating as Sink initiates"}
+{"page": 600, "figure_id": "8.52", "title": "Successful VCONN Source Swap, initiated by VCONN Source"}
+{"page": 603, "figure_id": "8.53", "title": "Rejected VCONN Source Swap, initiated by VCONN Source"}
+{"page": 606, "figure_id": "8.54", "title": "VCONN Source Swap with Wait, initiated by VCONN Source"}
+{"page": 609, "figure_id": "8.55", "title": "VCONN Source Swap, initiated by non-VCONN Source"}
+{"page": 612, "figure_id": "8.56", "title": "Rejected VCONN Source Swap, initiated by non-VCONN Source"}
+{"page": 615, "figure_id": "8.57", "title": "VCONN Source Swap with Wait"}
+{"page": 618, "figure_id": "8.58", "title": "Source Alert to Sink"}
+{"page": 620, "figure_id": "8.59", "title": "Sink Alert to Source"}
+{"page": 622, "figure_id": "8.60", "title": "Sink Gets Source Status"}
+{"page": 625, "figure_id": "8.61", "title": "Source Gets Sink Status"}
+{"page": 628, "figure_id": "8.62", "title": "VCONN Source Gets Cable Plug Status"}
+{"page": 631, "figure_id": "8.63", "title": "Sink Gets Source PPS Status"}
+{"page": 634, "figure_id": "8.64", "title": "Sink Gets Source's Capabilities"}
+{"page": 637, "figure_id": "8.65", "title": "Dual-Role Source Gets Dual-Role Sink's Capabilities as a Source"}
+{"page": 640, "figure_id": "8.66", "title": "Source Gets Sink's Capabilities"}
+{"page": 643, "figure_id": "8.67", "title": "Dual-Role Sink Gets Dual-Role Source's Capabilities as a Sink"}
+{"page": 646, "figure_id": "8.68", "title": "Sink Gets Source's EPR Capabilities"}
+{"page": 649, "figure_id": "8.69", "title": "Dual-Role Source Gets Dual-Role Sink's Capabilities as an EPR Source"}
+{"page": 652, "figure_id": "8.70", "title": "Source Gets Sink's EPR Capabilities"}
+{"page": 655, "figure_id": "8.71", "title": "Dual-Role Sink Gets Dual-Role Source's Capabilities as an EPR Sink"}
+{"page": 658, "figure_id": "8.72", "title": "Sink Gets Source's Extended Capabilities"}
+{"page": 661, "figure_id": "8.73", "title": "Dual-Role Source Gets Dual-Role Sink's Extended Capabilities"}
+{"page": 664, "figure_id": "8.74", "title": "Source Gets Sink's Extended Capabilities"}
+{"page": 667, "figure_id": "8.75", "title": "Dual-Role Sink Gets Dual-Role Source's Extended Capabilities"}
+{"page": 670, "figure_id": "8.76", "title": "Sink Gets Source's Battery Capabilities"}
+{"page": 673, "figure_id": "8.77", "title": "Source Gets Sink's Battery Capabilities"}
+{"page": 676, "figure_id": "8.78", "title": "Sink Gets Source's Battery Status"}
+{"page": 679, "figure_id": "8.79", "title": "Source Gets Sink's Battery Status"}
+{"page": 682, "figure_id": "8.80", "title": "Source Gets Sink's Port Manufacturer Information"}
+{"page": 685, "figure_id": "8.81", "title": "Sink Gets Source's Port Manufacturer Information"}
+{"page": 688, "figure_id": "8.82", "title": "Source Gets Sink's Battery Manufacturer Information"}
+{"page": 691, "figure_id": "8.83", "title": "Sink Gets Source's Battery Manufacturer Information"}
+{"page": 694, "figure_id": "8.84", "title": "VCONN Source Gets Cable Plug's Manufacturer Information"}
+{"page": 697, "figure_id": "8.85", "title": "Source Gets Sink's Country Codes"}
+{"page": 700, "figure_id": "8.86", "title": "Sink Gets Source's Country Codes"}
+{"page": 703, "figure_id": "8.87", "title": "VCONN Source Gets Cable Plug's Country Codes"}
+{"page": 706, "figure_id": "8.88", "title": "Source Gets Sink's Country Information"}
+{"page": 709, "figure_id": "8.89", "title": "Sink Gets Source's Country Information"}
+{"page": 712, "figure_id": "8.90", "title": "VCONN Source Gets Cable Plug's Country Information"}
+{"page": 715, "figure_id": "8.91", "title": "Source Gets Sink's Revision Information"}
+{"page": 718, "figure_id": "8.92", "title": "Sink Gets Source's Revision Information"}
+{"page": 721, "figure_id": "8.93", "title": "VCONN Source Gets Cable Plug's Revision Information"}
+{"page": 724, "figure_id": "8.94", "title": "Sink Gets Source's Information"}
+{"page": 727, "figure_id": "8.95", "title": "Dual-Role Source Gets Dual-Role Sink's Information as a Source"}
+{"page": 730, "figure_id": "8.96", "title": "Source requests security exchange with Sink"}
+{"page": 733, "figure_id": "8.97", "title": "Sink requests security exchange with Source"}
+{"page": 736, "figure_id": "8.98", "title": "VCONN Source requests security exchange with Cable Plug"}
+{"page": 739, "figure_id": "8.99", "title": "Source requests firmware update exchange with Sink"}
+{"page": 742, "figure_id": "8.100", "title": "Sink requests firmware update exchange with Source"}
+{"page": 745, "figure_id": "8.101", "title": "VCONN Source requests firmware update exchange with Cable Plug"}
+{"page": 748, "figure_id": "8.102", "title": "Initiator to Responder Discover Identity (ACK)"}
+{"page": 751, "figure_id": "8.103", "title": "Initiator to Responder Discover Identity (NAK)"}
+{"page": 754, "figure_id": "8.104", "title": "Initiator to Responder Discover Identity (BUSY)"}
+{"page": 757, "figure_id": "8.105", "title": "Initiator to Responder Discover SVIDs (ACK)"}
+{"page": 760, "figure_id": "8.106", "title": "Initiator to Responder Discover SVIDs (NAK)"}
+{"page": 763, "figure_id": "8.107", "title": "Initiator to Responder Discover SVIDs (BUSY)"}
+{"page": 766, "figure_id": "8.108", "title": "Initiator to Responder Discover Modes (ACK)"}
+{"page": 769, "figure_id": "8.109", "title": "Initiator to Responder Discover Modes (NAK)"}
+{"page": 772, "figure_id": "8.110", "title": "Initiator to Responder Discover Modes (BUSY)"}
+{"page": 775, "figure_id": "8.111", "title": "DFP to UFP Enter Mode"}
+{"page": 778, "figure_id": "8.112", "title": "DFP to UFP Exit Mode"}
+{"page": 781, "figure_id": "8.113", "title": "DFP to Cable Plug Enter Mode"}
+{"page": 784, "figure_id": "8.114", "title": "DFP to Cable Plug Exit Mode"}
+{"page": 787, "figure_id": "8.115", "title": "Initiator to Responder Attention"}
+{"page": 789, "figure_id": "8.116", "title": "BIST Carrier Mode Test"}
+{"page": 792, "figure_id": "8.117", "title": "BIST Test Data Test"}
+{"page": 795, "figure_id": "8.118", "title": "BIST Share Capacity Mode Test"}
+{"page": 798, "figure_id": "8.119", "title": "UFP Entering USB4 Mode (Accept)"}
+{"page": 801, "figure_id": "8.120", "title": "UFP Entering USB4 Mode (Reject)"}
+{"page": 804, "figure_id": "8.121", "title": "UFP Entering USB4 Mode (Wait)"}
+{"page": 807, "figure_id": "8.122", "title": "Cable Plug Entering USB4 Mode (Accept)"}
+{"page": 810, "figure_id": "8.123", "title": "Cable Plug Entering USB4 Mode (Reject)"}
+{"page": 813, "figure_id": "8.124", "title": "Cable Plug Entering USB4 Mode (Wait)"}
+{"page": 816, "figure_id": "8.125", "title": "Unstructured VDM Message Sequence"}
+{"page": 819, "figure_id": "8.126", "title": "VDEM Message Sequence"}
+{"page": 822, "figure_id": "8.127", "title": "Outline of States"}
+{"page": 823, "figure_id": "8.128", "title": "References to states"}
+{"page": 823, "figure_id": "8.129", "title": "Example of state reference with conditions"}
+{"page": 823, "figure_id": "8.130", "title": "Example of state reference with the same entry and exit"}
+{"page": 825, "figure_id": "8.131", "title": "SenderResponseTimer Policy Engine State Diagram"}
+{"page": 827, "figure_id": "8.132", "title": "Source Port State Diagram"}
+{"page": 835, "figure_id": "8.133", "title": "Sink Port State Diagram"}
+{"page": 841, "figure_id": "8.134", "title": "SOP Source Port Soft Reset and Protocol Error State Diagram"}
+{"page": 843, "figure_id": "8.135", "title": "Sink Port Soft Reset and Protocol Error Diagram"}
+{"page": 845, "figure_id": "8.136", "title": "DFP Data_Reset Message State Diagram"}
+{"page": 847, "figure_id": "8.137", "title": "UFP Data_Reset Message State Diagram"}
+{"page": 850, "figure_id": "8.138", "title": "Source Port Not Supported Message State Diagram"}
+{"page": 852, "figure_id": "8.139", "title": "Sink Port Not Supported Message State Diagram"}
+{"page": 854, "figure_id": "8.140", "title": "Source Port Source Alert State Diagram"}
+{"page": 855, "figure_id": "8.141", "title": "Sink Port Source Alert State Diagram"}
+{"page": 856, "figure_id": "8.142", "title": "Sink Port Sink Alert State Diagram"}
+{"page": 857, "figure_id": "8.143", "title": "Source Port Sink Alert State Diagram"}
+{"page": 858, "figure_id": "8.144", "title": "Sink Port Get Source Capabilities Extended State Diagram"}
+{"page": 859, "figure_id": "8.145", "title": "Source Give Source Capabilities Extended State Diagram"}
+{"page": 860, "figure_id": "8.146", "title": "Source Port Get Sink Capabilities Extended State Diagram"}
+{"page": 861, "figure_id": "8.147", "title": "Sink Give Sink Capabilities Extended State Diagram"}
+{"page": 862, "figure_id": "8.148", "title": "Sink Port Get Source Information State Diagram"}
+{"page": 863, "figure_id": "8.149", "title": "Source Give Source Information State Diagram"}
+{"page": 864, "figure_id": "8.150", "title": "Get Status State Diagram"}
+{"page": 865, "figure_id": "8.151", "title": "Give Status State Diagram"}
+{"page": 866, "figure_id": "8.152", "title": "Sink Port Get Source PPS Status State Diagram"}
+{"page": 867, "figure_id": "8.153", "title": "Source Give Source PPS Status State Diagram"}
+{"page": 868, "figure_id": "8.154", "title": "Get Battery Capabilities State Diagram"}
+{"page": 869, "figure_id": "8.155", "title": "Give Battery Capabilities State Diagram"}
+{"page": 870, "figure_id": "8.156", "title": "Get Battery Status State Diagram"}
+{"page": 871, "figure_id": "8.157", "title": "Give Battery Status State Diagram"}
+{"page": 872, "figure_id": "8.158", "title": "Get Manufacturer Information State Diagram"}
+{"page": 873, "figure_id": "8.159", "title": "Give Manufacturer Information State Diagram"}
+{"page": 874, "figure_id": "8.160", "title": "Get Country Codes State Diagram"}
+{"page": 875, "figure_id": "8.161", "title": "Give Country Codes State Diagram"}
+{"page": 876, "figure_id": "8.162", "title": "Get Country Information State Diagram"}
+{"page": 877, "figure_id": "8.163", "title": "Give Country Information State Diagram"}
+{"page": 878, "figure_id": "8.164", "title": "Get Revision State Diagram"}
+{"page": 879, "figure_id": "8.165", "title": "Give Revision State Diagram"}
+{"page": 880, "figure_id": "8.166", "title": "DFP Enter_USB Message State Diagram"}
+{"page": 881, "figure_id": "8.167", "title": "UFP Enter_USB Message State Diagram"}
+{"page": 882, "figure_id": "8.168", "title": "Send security request State Diagram"}
+{"page": 883, "figure_id": "8.169", "title": "Send security response State Diagram"}
+{"page": 884, "figure_id": "8.170", "title": "Security response received State Diagram"}
+{"page": 885, "figure_id": "8.171", "title": "Send firmware update request State Diagram"}
+{"page": 886, "figure_id": "8.172", "title": "Send firmware update response State Diagram"}
+{"page": 887, "figure_id": "8.173", "title": "Firmware update response received State Diagram"}
+{"page": 888, "figure_id": "8.174", "title": "DFP to UFP Data Role Swap State Diagram"}
+{"page": 891, "figure_id": "8.175", "title": "UFP to DFP Data Role Swap State Diagram"}
+{"page": 894, "figure_id": "8.176", "title": "Dual-Role Port in Source to Sink Power Role Swap State Diagram"}
+{"page": 898, "figure_id": "8.177", "title": "Dual-role Port in Sink to Source Power Role Swap State Diagram"}
+{"page": 902, "figure_id": "8.178", "title": "Dual-Role Port in Source to Sink Fast Role Swap State Diagram"}
+{"page": 906, "figure_id": "8.179", "title": "Dual-role Port in Sink to Source Fast Role Swap State Diagram"}
+{"page": 909, "figure_id": "8.180", "title": "Dual-Role (Source) Get Source Capabilities diagram"}
+{"page": 910, "figure_id": "8.181", "title": "Dual-Role (Source) Give Sink Capabilities diagram"}
+{"page": 911, "figure_id": "8.182", "title": "Dual-Role (Sink) Get Sink Capabilities State Diagram"}
+{"page": 912, "figure_id": "8.183", "title": "Dual-Role (Sink) Give Source Capabilities State Diagram"}
+{"page": 913, "figure_id": "8.184", "title": "Dual-Role (Source) Get Source Capabilities Extended State Diagram"}
+{"page": 914, "figure_id": "8.185", "title": "Dual-Role (Sink) Give Source Capabilities Extended diagram"}
+{"page": 915, "figure_id": "8.186", "title": "Dual-Role (Sink) Get Sink Capabilities Extended State Diagram"}
+{"page": 916, "figure_id": "8.187", "title": "Dual-Role (Source) Give Sink Capabilities Extended diagram"}
+{"page": 917, "figure_id": "8.188", "title": "Dual-Role (Source) Get Source Information State Diagram"}
+{"page": 918, "figure_id": "8.189", "title": "Dual-Role (Source) Give Source Information diagram"}
+{"page": 919, "figure_id": "8.190", "title": "VCONN Swap State Diagram"}
+{"page": 922, "figure_id": "8.191", "title": "Initiator to Port VDM Discover Identity State Diagram"}
+{"page": 924, "figure_id": "8.192", "title": "Initiator VDM Discover SVIDs State Diagram"}
+{"page": 926, "figure_id": "8.193", "title": "Initiator VDM Discover Modes State Diagram"}
+{"page": 928, "figure_id": "8.194", "title": "Initiator VDM Attention State Diagram"}
+{"page": 929, "figure_id": "8.195", "title": "Responder Structured VDM Discover Identity State Diagram"}
+{"page": 930, "figure_id": "8.196", "title": "Responder Structured VDM Discover SVIDs State Diagram"}
+{"page": 931, "figure_id": "8.197", "title": "Responder Structured VDM Discover Modes State Diagram"}
+{"page": 932, "figure_id": "8.198", "title": "Receiving a Structured VDM Attention State Diagram"}
+{"page": 933, "figure_id": "8.199", "title": "DFP VDM Mode Entry State Diagram"}
+{"page": 935, "figure_id": "8.200", "title": "DFP VDM Mode Exit State Diagram"}
+{"page": 937, "figure_id": "8.201", "title": "UFP Structured VDM Enter Mode State Diagram"}
+{"page": 939, "figure_id": "8.202", "title": "UFP Structured VDM Exit Mode State Diagram"}
+{"page": 941, "figure_id": "8.203", "title": "Cable Ready State Diagram"}
+{"page": 942, "figure_id": "8.204", "title": "Cable Plug Soft Reset State Diagram"}
+{"page": 943, "figure_id": "8.205", "title": "Cable Plug Hard Reset State Diagram"}
+{"page": 944, "figure_id": "8.206", "title": "DFP/VCONN Source Soft Reset or Cable Reset of a Cable Plug or VPD State Diagram"}
+{"page": 946, "figure_id": "8.207", "title": "UFP/VCONN Source Soft Reset of a Cable Plug or VPD State Diagram"}
+{"page": 947, "figure_id": "8.208", "title": "Source Startup Structured VDM Discover Identity State Diagram"}
+{"page": 949, "figure_id": "8.209", "title": "Cable Plug Structured VDM Enter Mode State Diagram"}
+{"page": 951, "figure_id": "8.210", "title": "Cable Plug Structured VDM Exit Mode State Diagram"}
+{"page": 953, "figure_id": "8.211", "title": "Source EPR Mode Entry State Diagram"}
+{"page": 956, "figure_id": "8.212", "title": "Sink EPR Mode Entry State Diagram"}
+{"page": 958, "figure_id": "8.213", "title": "Source EPR Mode Exit State Diagram"}
+{"page": 959, "figure_id": "8.214", "title": "Sink EPR Mode Exit State Diagram"}
+{"page": 960, "figure_id": "8.215", "title": "BIST Carrier Mode State Diagram"}
+{"page": 962, "figure_id": "8.216", "title": "BIST Test Data Mode State Diagram"}
+{"page": 964, "figure_id": "8.217", "title": "BIST Shared Capacity Test Mode State Diagram"}
+{"page": 976, "figure_id": "9.1", "title": "Example PD Topology"}
+{"page": 977, "figure_id": "9.2", "title": "Mapping of PD Topology to USB"}
+{"page": 978, "figure_id": "9.3", "title": "Use of SPM in the PD System"}
+{"page": 980, "figure_id": "9.4", "title": "USB Attached to USB Powered State Transition"}
+{"page": 981, "figure_id": "9.5", "title": "Any USB State to USB Attached State Transition (When operating as a Consumer)"}
+{"page": 981, "figure_id": "9.6", "title": "Any USB State to USB Attached State Transition (When operating as a Provider)"}
+{"page": 982, "figure_id": "9.7", "title": "Any USB State to USB Attached State Transition (After a USB Type-C Data Role Swap)"}
+{"page": 983, "figure_id": "9.8", "title": "Software stack on a PD aware OS"}
+{"page": 984, "figure_id": "9.9", "title": "Enumeration of a PDUSB Device"}
+{"page": 1000, "figure_id": "10.1", "title": "SPR Source Power Rule Illustration for Fixed Supply PDOs"}
+{"page": 1001, "figure_id": "10.2", "title": "SPR Source Power Rule Example For Fixed Supply PDOs"}
+{"page": 1011, "figure_id": "10.6", "title": "Valid EPR AVS Operating Region"}
+{"page": 1012, "figure_id": "10.7", "title": "EPR Source Power Rule Illustration for Fixed PDOs"}

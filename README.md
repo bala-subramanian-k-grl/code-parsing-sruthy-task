@@ -1,18 +1,10 @@
 # USB-PD Specification Parser
 
-[![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://python.org)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/Tests-24%20Passing-success.svg)](#testing)
-
-Enterprise-grade Python toolkit for parsing USB Power Delivery specification documents. Extracts structured content with 75.2% coverage, hierarchical TOC, and multiple output formats.
-
-[Quick Start](#quick-start) • [Documentation](#documentation) • [API](#python-api) • [Testing](#testing)
-
----
-
 ## Features
 
 - **PDF Parsing** - Extract structured content from complex USB-PD specs
+- **Table Extraction** - Extract 1,400+ tables with metadata
+- **Figure Metadata** - Extract 360+ figure references from List of Figures
 - **Hierarchical TOC** - Build complete table of contents with parent-child relationships
 - **Multiple Formats** - Generate JSONL, JSON, and Excel reports
 - **High Performance** - O(n) algorithms, ~1,000 items/sec processing speed
@@ -41,9 +33,14 @@ pip install -r requirements.txt
 
 ### Usage
 
-**Interactive Mode:**
+**Main Pipeline (TOC + Content + Figures):**
 ```bash
 python main.py
+```
+
+**Table & Figure Extraction:**
+```bash
+python extract_tables.py
 ```
 
 **CLI Mode:**
@@ -107,6 +104,9 @@ result = orchestrator.execute()
 | `usb_pd_metadata.jsonl` | Document statistics |
 | `parsing_report.json` | Detailed processing report |
 | `validation_report.xlsx` | Excel validation dashboard |
+| `USB_PD_Spec_table.jsonl` | Extracted tables (1,431 tables) |
+| `extracted_figures.jsonl` | Figure metadata (362 figures) |
+| `figures_summary.json` | Figure extraction summary |
 
 **Sample Output:**
 ```json
@@ -161,19 +161,27 @@ export USB_PD_OUTPUT_DIR="/path/to/outputs"
 usb-pd-parser/
 ├── src/
 │   ├── cli/              # Command-line interface
+│   │   ├── app.py        # Main CLI application
+│   │   └── run_extraction.py  # Table & figure extraction
 │   ├── core/             # Core business logic
 │   ├── extractors/       # Content extraction
+│   │   ├── image_extractor.py  # Figure metadata extraction
+│   │   └── table_extractor.py  # Table extraction
 │   ├── orchestrator/     # Pipeline coordination
+│   │   ├── pipeline_orchestrator.py  # Main pipeline
+│   │   └── table_extraction_pipeline.py  # Table pipeline
 │   ├── parser/           # PDF parsing
 │   ├── search/           # Content search
 │   ├── support/          # Report generation
 │   ├── utils/            # Utilities (logger, timer)
 │   └── writers/          # Output writers
+│       └── table_writer.py  # Table JSONL writer
 ├── tests/                # Test suite (24 tests, 95%+ coverage)
 ├── docs/                 # Documentation
 ├── assets/               # Sample PDFs
 ├── outputs/              # Generated reports
 ├── main.py               # Entry point
+├── extract_tables.py     # Table extraction entry point
 ├── search.py             # Search tool
 ├── requirements.txt      # Dependencies
 └── README.md             # This file

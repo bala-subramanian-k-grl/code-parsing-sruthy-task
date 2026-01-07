@@ -126,6 +126,8 @@ logger = get_logger(__name__)
 logger.info("Application started")
 logger.info("Processing: documents/usb_pd.pdf")
 logger.info("Success: Extracted 25760 items")
+logger.info("Successfully extracted 1431 tables")
+logger.info("Extracted 362 figures metadata")
 ```
 
 Output:
@@ -133,6 +135,8 @@ Output:
 2024-01-15 14:32:45,123 | INFO | __main__ | Application started
 2024-01-15 14:32:45,234 | INFO | __main__ | Processing: documents/usb_pd.pdf
 2024-01-15 14:32:49,567 | INFO | __main__ | Success: Extracted 25760 items
+2024-01-15 14:32:54,123 | INFO | __main__ | Successfully extracted 1431 tables
+2024-01-15 14:32:54,456 | INFO | __main__ | Extracted 362 figures metadata
 ```
 
 ## Summary

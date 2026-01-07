@@ -15,7 +15,7 @@ USB-PD Parser transforms unstructured PDF content into structured, hierarchical 
 ```
 User Interface (CLI, API)
     ↓
-Orchestration (PipelineOrchestrator)
+Orchestration (PipelineOrchestrator, ExtractionOrchestrator)
     ↓
 Processing (Parser, Extractors, Writers)
     ↓
@@ -68,6 +68,18 @@ PDF File → ParserFactory → PDFParser → ParserResult
 - Generates bounding boxes
 - Output: `List[ContentItem]`
 
+**TableExtractor:**
+- Extracts tables using pdfplumber
+- Validates table structure
+- Tracks row/column counts
+- Output: `List[TableData]`
+
+**ImageExtractor:**
+- **FigureMetadataExtractor** - Extracts figure list from TOC
+- Parses figure IDs, titles, and page numbers
+- Generates JSONL and summary JSON
+- Output: `dict[str, int]`
+
 **TextExtractor:**
 - Low-level text extraction from blocks
 
@@ -79,6 +91,7 @@ PDF File → ParserFactory → PDFParser → ParserResult
 
 **Components:**
 - **JSONLWriter** - Line-delimited JSON (streaming-friendly)
+- **TableWriter** - Table data to JSONL with validation
 - **ExcelReportGenerator** - Validation dashboard
 - **JSONReportGenerator** - Comprehensive report
 - **MetadataGenerator** - Document statistics
@@ -91,6 +104,9 @@ outputs/
 ├── usb_pd_metadata.jsonl     # Statistics
 ├── parsing_report.json       # Detailed report
 ├── validation_report.xlsx    # Excel dashboard
+├── USB_PD_Spec_table.jsonl   # Extracted tables
+├── extracted_figures.jsonl   # Figure metadata
+├── figures_summary.json      # Figure summary
 └── parser.log                # Execution log
 ```
 
@@ -98,7 +114,7 @@ outputs/
 
 ### 4. Orchestration Layer
 
-**PipelineOrchestrator** - Coordinates entire workflow
+**PipelineOrchestrator** - Coordinates TOC/Content workflow
 
 **Execution Flow:**
 ```
@@ -108,15 +124,31 @@ outputs/
 4. Parse document
 5. Write JSONL files
 6. Generate reports
-7. Log completion
-8. Cleanup
+7. Extract figures metadata
+8. Log completion
+9. Cleanup
+```
+
+**ExtractionOrchestrator** - Coordinates Table/Figure workflow
+
+**Execution Flow:**
+```
+1. Validate PDF and output directory
+2. Run TableExtractionRunner
+   - Extract tables via TableExtractor
+   - Write via TableWriter
+3. Run FigureExtractionRunner
+   - Extract figures via FigureMetadataExtractor
+   - Write JSONL and summary JSON
+4. Return combined results
 ```
 
 **Key Features:**
 - Lifecycle management
-- Error handling
+- Error handling with custom exceptions
 - Progress tracking
 - Configuration management
+- OOP design with runner classes
 
 ---
 
@@ -169,6 +201,22 @@ block_id: str           # Block identifier
 bbox: list              # Bounding box [x1, y1, x2, y2]
 ```
 
+**TableData:**
+```python
+page: int               # Page number
+table_index: int        # Index on page
+data: list[list]        # Table rows and columns
+row_count: int          # Number of rows
+column_count: int       # Number of columns
+```
+
+**FigureMetadata:**
+```python
+page: int               # Page number
+figure_id: str          # "2.1", "5.3"
+title: str              # Figure title
+```
+
 ---
 
 ## Performance
@@ -185,11 +233,19 @@ bbox: list              # Bounding box [x1, y1, x2, y2]
 | Parsing | 2.3s | 45MB |
 | TOC Extraction | 0.8s | 12MB |
 | Content Extraction | 3.1s | 120MB |
+| Table Extraction | 4.5s | 85MB |
+| Figure Extraction | 0.3s | 5MB |
 | JSONL Writing | 1.2s | 8MB |
 | Report Generation | 0.6s | 15MB |
-| **Total** | **~8s** | **<500MB** |
+| **Total** | **~13s** | **<500MB** |
 
 **Processing Speed:** ~1,000 items/sec
+
+**Extraction Results:**
+- TOC Entries: 25,760+
+- Content Items: 25,760+
+- Tables: 1,431
+- Figures: 362
 
 ---
 
@@ -234,6 +290,16 @@ PipelineOrchestrator
 ├─ MetadataGenerator
 ├─ JSONReportGenerator
 └─ ExcelReportGenerator
+
+ExtractionOrchestrator
+├─ TableExtractionRunner
+│  ├─ TableExtractionPipeline
+│  │  ├─ TableExtractor
+│  │  └─ TableWriter
+│  └─ PipelineError
+└─ FigureExtractionRunner
+   ├─ FigureMetadataExtractor
+   └─ ImageExtractionError
 
 All depend on:
 ├─ ConfigLoader
@@ -328,7 +394,8 @@ pip install -r requirements.txt
 
 **Usage:**
 ```bash
-python main.py                    # Interactive
+python main.py                    # TOC + Content + Figures
+python extract_tables.py          # Tables + Figures
 python -m src.cli.app --file <pdf> --mode full  # CLI
 python search.py "keyword" outputs/usb_pd_spec.jsonl  # Search
 ```

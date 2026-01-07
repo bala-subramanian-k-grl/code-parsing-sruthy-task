@@ -1,13 +1,8 @@
 # Byte-compiled / optimized / DLL files
-# Add to .gitignore
-htmlcov/
-.coverage
-*.pyc
 __pycache__/
-.pytest_cache/
-*.egg-info/
-dist/
-build/
+*.py[cod]
+*$py.class
+*.pyc
 
 # C extensions
 *.so
@@ -59,17 +54,17 @@ cover/
 *.mo
 *.pot
 
-# Django stuff:
+# Django stuff
 *.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
-# Flask stuff:
+# Flask stuff
 instance/
 .webassets-cache
 
-# Scrapy stuff:
+# Scrapy stuff
 .scrapy
 
 # Sphinx documentation
@@ -147,16 +142,27 @@ cython_debug/
 # VS Code
 .vscode/
 
-# Project specific
-# Keep sample output files for demonstration
+# Ruff cache
+.ruff_cache/
+
+# Project specific outputs
+outputs/*.log
+outputs/images/
+temp_files.txt
+
+# Keep sample output files
 !outputs/usb_pd_metadata.jsonl
 !outputs/usb_pd_toc.jsonl
 !outputs/usb_pd_spec.jsonl
 !outputs/parsing_report.json
 !outputs/validation_report.xlsx
-temp_files.txt
+!outputs/extracted_tables.jsonl
+!outputs/extracted_figures.jsonl
+!outputs/figures_summary.json
+
+# PDF files (except in assets)
 *.pdf
-.ruff_cache/
+!assets/*.pdf
 
 # OS specific
 .DS_Store
