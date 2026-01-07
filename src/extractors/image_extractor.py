@@ -239,3 +239,29 @@ class ImageExtractor:
             "images_extracted": self._image_count,
             "max_pages": self._max_pages
         }
+
+    def __str__(self) -> str:
+        """String representation."""
+        return f"ImageExtractor(pdf={self._pdf_path.name}, images={self._image_count})"
+
+    def __repr__(self) -> str:
+        """Detailed representation."""
+        return f"ImageExtractor(pdf_path={self._pdf_path!r}, output_dir={self._output_dir!r})"
+
+    def __len__(self) -> int:
+        """Return number of extracted images."""
+        return self._image_count
+
+    def __bool__(self) -> bool:
+        """Return True if images were extracted."""
+        return self._image_count > 0
+
+    def __eq__(self, other: object) -> bool:
+        """Check equality based on PDF path."""
+        if not isinstance(other, ImageExtractor):
+            return NotImplemented
+        return self._pdf_path == other._pdf_path
+
+    def __hash__(self) -> int:
+        """Hash based on PDF path."""
+        return hash(self._pdf_path)

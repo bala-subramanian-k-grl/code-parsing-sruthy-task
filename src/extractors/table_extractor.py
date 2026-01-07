@@ -139,3 +139,31 @@ class TableExtractor(ExtractorInterface):
         """Reset extractor state."""
         self._table_count = 0
         self._last_extraction_path = None
+
+    def __str__(self) -> str:
+        """String representation."""
+        return f"TableExtractor(tables={self._table_count})"
+
+    def __repr__(self) -> str:
+        """Detailed representation."""
+        return f"TableExtractor(table_count={self._table_count}, last_file={self._last_extraction_path})"
+
+    def __len__(self) -> int:
+        """Return number of extracted tables."""
+        return self._table_count
+
+    def __bool__(self) -> bool:
+        """Return True if tables were extracted."""
+        return self._table_count > 0
+
+    def __eq__(self, other: object) -> bool:
+        """Check equality based on type."""
+        return isinstance(other, TableExtractor)
+
+    def __hash__(self) -> int:
+        """Hash based on class name."""
+        return hash(self.__class__.__name__)
+
+    def __call__(self, pdf_path: str | Path) -> list[dict[str, Any]]:
+        """Make extractor callable."""
+        return self.extract(pdf_path)

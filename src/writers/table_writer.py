@@ -68,21 +68,12 @@ class TableWriter:
 
     def _validate_inputs(self, tables: list[dict[str, Any]], path: Path) -> None:
         """Validate input parameters."""
-        if not isinstance(tables, list):
-            raise TypeError("Tables must be a list")
-
         if not tables:
             logger.warning("No tables to write")
             return
 
-        if not isinstance(path, Path):
-            raise TypeError("Path must be a Path object")
-
         # Validate table structure
         for i, table in enumerate(tables):
-            if not isinstance(table, dict):
-                raise ValueError(f"Table {i} is not a dictionary")
-
             required_keys = {'page', 'data'}
             if not required_keys.issubset(table.keys()):
                 missing = required_keys - table.keys()
@@ -109,8 +100,6 @@ class TableWriter:
 
         except OSError as e:
             raise WriterError(f"File I/O error: {str(e)}") from e
-        except PermissionError as e:
-            raise WriterError(f"Permission denied: {str(e)}") from e
 
     def get_metadata(self) -> dict[str, Any]:
         """Get writer metadata."""
@@ -119,3 +108,33 @@ class TableWriter:
             "tables_written": self._tables_written,
             "writer_type": "TableWriter"
         }
+
+    def __str__(self) -> str:
+        """String representation."""
+        return f"TableWriter(doc={self._doc_title}, tables={self._tables_written})"
+
+    def __repr__(self) -> str:
+        """Detailed representation."""
+        return f"TableWriter(doc_title={self._doc_title!r}, tables_written={self._tables_written})"
+
+    def __len__(self) -> int:
+        """Return number of tables written."""
+        return self._tables_written
+
+    def __bool__(self) -> bool:
+        """Return True if tables were written."""
+        return self._tables_written > 0
+
+    def __eq__(self, other: object) -> bool:
+        """Check equality based on doc_title."""
+        if not isinstance(other, TableWriter):
+            return NotImplemented
+        return self._doc_title == other._doc_title
+
+    def __hash__(self) -> int:
+        """Hash based on doc_title."""
+        return hash(self._doc_title)
+
+    def __call__(self, tables: list[dict[str, Any]], path: Path) -> None:
+        """Make writer callable."""
+        self.write_tables(tables, path)
