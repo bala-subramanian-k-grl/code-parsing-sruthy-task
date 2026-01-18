@@ -1,0 +1,3 @@
+security:
+  ignore-vulnerabilities:
+    - 82754: "TOCTOU vulnerability in filelock 3.19.1 - requires Python 3.10+ to fix. Acceptable risk for current usage."
