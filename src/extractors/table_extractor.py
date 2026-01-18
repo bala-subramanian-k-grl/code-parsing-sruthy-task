@@ -52,7 +52,9 @@ class TableExtractor(ExtractorInterface):
             return self._extract_tables_from_pdf(pdf_path)
         except Exception as e:
             logger.error(f"Table extraction failed for {pdf_path}: {str(e)}")
-            raise TableExtractionError(f"Failed to extract tables: {str(e)}") from e
+            raise TableExtractionError(
+                f"Failed to extract tables: {str(e)}"
+            ) from e
 
     def _validate_input(self, pdf_path: Path) -> None:
         """Validate input PDF file."""
@@ -65,7 +67,9 @@ class TableExtractor(ExtractorInterface):
         if pdf_path.suffix.lower() != '.pdf':
             raise ValueError(f"File is not a PDF: {pdf_path}")
 
-    def _extract_tables_from_pdf(self, pdf_path: Path) -> list[dict[str, Any]]:
+    def _extract_tables_from_pdf(
+        self, pdf_path: Path
+    ) -> list[dict[str, Any]]:
         """Extract tables from PDF file."""
         tables: list[dict[str, Any]] = []
 
@@ -76,58 +80,111 @@ class TableExtractor(ExtractorInterface):
                     tables.extend(page_tables)
 
             self._table_count = len(tables)
-            logger.info(f"Successfully extracted {len(tables)} tables from {pdf_path.name}")
+            logger.info(
+                f"Successfully extracted {len(tables)} tables "
+                f"from {pdf_path.name}"
+            )
             return tables
 
         except PermissionError:
-            raise TableExtractionError(f"Permission denied accessing PDF: {pdf_path}")
+            raise TableExtractionError(
+                f"Permission denied accessing PDF: {pdf_path}"
+            )
         except Exception as e:
-            raise TableExtractionError(f"PDF processing error: {str(e)}") from e
+            raise TableExtractionError(
+                f"PDF processing error: {str(e)}"
+            ) from e
 
-    def _extract_page_tables(self, page: Any, page_num: int) -> list[dict[str, Any]]:
+    def _extract_page_tables(
+        self, page: Any, page_num: int
+    ) -> list[dict[str, Any]]:
         """Extract tables from a single page."""
-        page_tables = []
+        page_tables: list[dict[str, Any]] = []
 
         try:
-            extracted_tables = page.extract_tables()
-            if extracted_tables:
-                for table_idx, table in enumerate(extracted_tables):
-                    if table and self._is_valid_table(table):
-                        page_tables.append({
-                            "page": page_num,
-                            "table_index": table_idx,
-                            "data": table,
-                            "row_count": len(table),
-                            "column_count": len(table[0]) if table else 0
-                        })
+            tables = page.find_tables()
+
+            for table_obj in tables:
+                extracted = table_obj.extract()
+                if (
+                    extracted
+                    and self._is_valid_table(extracted)
+                    and not self._is_paragraph(extracted)
+                ):
+                    table_entry = self._create_table_entry(
+                        page_num, len(page_tables), extracted
+                    )
+                    page_tables.append(table_entry)
+
         except Exception as e:
-            logger.warning(f"Failed to extract tables from page {page_num}: {str(e)}")
+            logger.warning(
+                f"Failed to extract tables from page {page_num}: {str(e)}"
+            )
 
         return page_tables
 
+    def _is_paragraph(self, table: list[list[Any]]) -> bool:
+        """Detect if table is actually paragraph text."""
+        if not table:
+            return True
+
+        # Count cells with long continuous text
+        long_cells = 0
+        total_cells = 0
+
+        for row in table[:5]:
+            for cell in row:
+                if cell and str(cell).strip():
+                    total_cells += 1
+                    if len(str(cell).strip()) > 60:
+                        long_cells += 1
+
+        # If most cells are long text, it's a paragraph
+        return total_cells > 0 and (long_cells / total_cells) > 0.5
+
+    def _create_table_entry(
+        self, page_num: int, table_idx: int, table: list[list[Any]]
+    ) -> dict[str, Any]:
+        """Create standardized table entry."""
+        return {
+            "page": page_num,
+            "table_index": table_idx,
+            "data": table,
+            "row_count": len(table),
+            "column_count": len(table[0]) if table else 0
+        }
+
+
+
     def _is_valid_table(self, table: list[list[Any]]) -> bool:
         """Validate if extracted table is meaningful."""
-        if not table or len(table) < 2:  # At least header + 1 row
+        if not table or len(table) < 2:
             return False
 
-        # Check if table has consistent column count
-        first_row_cols = len(table[0]) if table[0] else 0
-        if first_row_cols < 2:  # At least 2 columns
+        if not table[0] or len(table[0]) < 2:
             return False
 
         return True
 
     def validate(self) -> None:
         """Validate extractor state."""
-        if self._last_extraction_path and not self._last_extraction_path.exists():
-            raise TableExtractionError("Last processed file no longer exists")
+        if (
+            self._last_extraction_path 
+            and not self._last_extraction_path.exists()
+        ):
+            raise TableExtractionError(
+                "Last processed file no longer exists"
+            )
 
     def get_metadata(self) -> dict[str, Any]:
         """Return extraction metadata."""
         return {
             "type": self.extractor_type,
             "tables_extracted": self._table_count,
-            "last_file": str(self._last_extraction_path) if self._last_extraction_path else None,
+            "last_file": (
+                str(self._last_extraction_path) 
+                if self._last_extraction_path else None
+            ),
             "is_stateful": self.is_stateful
         }
 
@@ -146,7 +203,10 @@ class TableExtractor(ExtractorInterface):
 
     def __repr__(self) -> str:
         """Detailed representation."""
-        return f"TableExtractor(table_count={self._table_count}, last_file={self._last_extraction_path})"
+        return (
+            f"TableExtractor(table_count={self._table_count}, "
+            f"last_file={self._last_extraction_path})"
+        )
 
     def __len__(self) -> int:
         """Return number of extracted tables."""
