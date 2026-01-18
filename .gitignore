@@ -149,6 +149,7 @@ cython_debug/
 outputs/*.log
 outputs/images/
 temp_files.txt
+table_summary.txt
 
 # Keep sample output files
 !outputs/usb_pd_metadata.jsonl
