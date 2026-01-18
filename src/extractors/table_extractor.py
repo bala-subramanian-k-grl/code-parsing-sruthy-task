@@ -169,7 +169,7 @@ class TableExtractor(ExtractorInterface):
     def validate(self) -> None:
         """Validate extractor state."""
         if (
-            self._last_extraction_path 
+            self._last_extraction_path
             and not self._last_extraction_path.exists()
         ):
             raise TableExtractionError(
@@ -182,7 +182,7 @@ class TableExtractor(ExtractorInterface):
             "type": self.extractor_type,
             "tables_extracted": self._table_count,
             "last_file": (
-                str(self._last_extraction_path) 
+                str(self._last_extraction_path)
                 if self._last_extraction_path else None
             ),
             "is_stateful": self.is_stateful
