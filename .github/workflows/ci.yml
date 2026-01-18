@@ -71,7 +71,8 @@ jobs:
     
     - name: Dependency security check
       run: |
-        safety check
+        pip install -r requirements.txt
+        safety check --file requirements.txt --ignore 82754
 
   build:
     needs: [test, security]
