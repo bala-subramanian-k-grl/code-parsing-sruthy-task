@@ -1,0 +1,27 @@
+20 Table Structure Summary
+==================================================
+
+Table No.  Page   Rows   Columns  Expected Cells  Actual Cells   Verification         
+------------------------------------------------------------------------------------
+1          2      19     4        76              72           Partially Correct
+2          3      6      4        24              21           Partially Correct  
+3          4      3      4        12              12             Correct
+4          36     16     2        32              31           Partially Correct
+5          37     18     2        36              36             Correct
+6          38     8      2        16              16           Partially Correct
+7          39     20     2        40              40           Partially Correct
+8          40     26     2        52              50             Correct  
+9          41     28     2        56              56           Partially Correct
+10         42     29     2        58              58           Partially Correct
+11         43     31     2        62              62           Partially Correct  
+12         44     22     2        44              44           Partially Correct  
+13         45     25     2        50              50           Partially Correct
+14         46     28     2        56              56           Partially Correct
+15         47     27     2        54              54           Partially Correct
+16         48     31     2        62              62           Partially Correct
+17         49     32     2        64              64           Partially Correct
+18         50     31     2        62              62           Partially Correct
+19         51     23     2        46              46           Partially Correct
+20         52     16     2        32              32           Partially Correct
+21         301    26     7        182             131          Partially Correct
+
